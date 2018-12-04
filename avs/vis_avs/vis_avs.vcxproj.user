@@ -11,4 +11,12 @@
     <LocalDebuggerCommand>C:\Soft\Winamp\winamp.exe</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Laser Release|Win32'">
+    <LocalDebuggerCommand>C:\Soft\Winamp\winamp.exe</LocalDebuggerCommand>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoMMX Release|Win32'">
+    <LocalDebuggerCommand>C:\Soft\Winamp\winamp.exe</LocalDebuggerCommand>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
 </Project>

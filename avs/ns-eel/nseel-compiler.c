@@ -35,6 +35,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <malloc.h>
 #endif
 #include <assert.h>
+#include <stdint.h>
 
 static int nseel_evallib_stats[ 5 ]; // source bytes, static code bytes, call code bytes, data bytes, segments
 int *NSEEL_getstats()
@@ -212,8 +213,7 @@ void NSEEL_quit()
 }
 
 //---------------------------------------------------------------------------------------------------------------
-// static void *realAddress( void *fn, void *fn_e, int *size )
-static void *realAddress( void( *fn )(), void( *fn_e )(), int *size )
+/* static void *realAddress( void *fn, void *fn_e, int *size )
 {
 #ifdef DISABLED_DEBUG
 	char *ptr = (char *)fn;
@@ -230,6 +230,33 @@ static void *realAddress( void( *fn )(), void( *fn_e )(), int *size )
 	assert( *size > 0 );
 	return fn;
 #endif
+} */
+
+static void* unwrapJumpAddress( void *f )
+{
+	// https://stackoverflow.com/a/53609125/126995
+	uint8_t* pb = (uint8_t*)f;
+	if( *pb == 0xE9 )	// JMP: http://felixcloutier.com/x86/JMP.html
+	{
+		const int offset = *(const int*)( pb + 1 );
+		return pb + 5 + offset;	// The jump offset is relative to the start of the next instruction. This JMP takes 5 bytes.
+	}
+	return f;
+}
+
+static void *realAddress( void *fn, void *fn_e, int *pSize )
+{
+	fn = unwrapJumpAddress( fn );
+	fn_e = unwrapJumpAddress( fn_e );
+	int size = (int)fn_e - (int)fn;
+	assert( size > 0 );
+	// Trim extra 0xCC = __asm int 3 padding bytes inserted by the the modern VC++ compiler between begin/end functions.
+	// BTW, this method is not 100% reliable: the 0xCC byte can be a part of the last instruction. If this happens you'll see crash in runtime, probably saying "invalid instruction".
+	const uint8_t* code = (const uint8_t*)fn;
+	while( size > 0 && code[ size - 1 ] == 0xCC )
+		size--;
+	*pSize = size;
+	return fn;
 }
 
 //---------------------------------------------------------------------------------------------------------------

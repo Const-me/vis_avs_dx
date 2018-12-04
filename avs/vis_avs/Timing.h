@@ -11,10 +11,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-void _timingInit(void);
-void _timingPrint(void);
-void _timingEnter(int);
-void _timingLeave(int);
+	void _timingInit( void );
+	void _timingPrint( void );
+	void _timingEnter( int );
+	void _timingLeave( int );
 #ifdef __cplusplus
 }
 #endif

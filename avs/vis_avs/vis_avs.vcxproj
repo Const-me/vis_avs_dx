@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Laser Release|Win32">
+      <Configuration>Laser Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="NoMMX Release|Win32">
+      <Configuration>NoMMX Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName>"$/vis_avs", RDAAAAAA</SccProjectName>
+    <SccLocalPath>.</SccLocalPath>
+    <ProjectGuid>{73652E08-183F-40C1-BD4A-01733C9DA502}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Laser Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoMMX Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Laser Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='NoMMX Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\Debug\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoMMX Release|Win32'">
+    <OutDir>.\vis_avs___Win32_NoMMX_Release\</OutDir>
+    <IntDir>.\vis_avs___Win32_NoMMX_Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Laser Release|Win32'">
+    <OutDir>.\vis_avs___Win32_Laser_Release\</OutDir>
+    <IntDir>.\vis_avs___Win32_Laser_Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <MinimalRebuild>true</MinimalRebuild>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>evallib/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;WA2_EMBED;WIN32;_WINDOWS;_USRDLL;VIS_PL_EXPORTS;NSEEL_LOOPFUNC_SUPPORT;AVS_MEGABUF_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Debug\vis_avs.pch</PrecompiledHeaderOutputFile>
+      <ObjectFileName>.\Debug\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Debug\vis_avs.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug\vis_avs.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <LinkDLL>true</LinkDLL>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OutputFile>C:\Soft\Winamp\Plugins\vis_avs.dll</OutputFile>
+      <ImportLibrary>.\Debug\vis_avs.lib</ImportLibrary>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;ddraw.lib;vfw32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>evallib/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;WA2_EMBED;WIN32;_WINDOWS;_USRDLL;VIS_PL_EXPORTS;NSEEL_LOOPFUNC_SUPPORT;AVS_MEGABUF_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Release\vis_avs.pch</PrecompiledHeaderOutputFile>
+      <ObjectFileName>.\Release\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Release\vis_avs.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release\vis_avs.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <LinkDLL>true</LinkDLL>
+      <SubSystem>Console</SubSystem>
+      <OutputFile>C:\Soft\Winamp\Plugins\vis_avs.dll</OutputFile>
+      <ImportLibrary>.\Release\vis_avs.lib</ImportLibrary>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;ddraw.lib;vfw32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='NoMMX Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>evallib/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;NO_MMX;WIN32;_WINDOWS;_USRDLL;VIS_PL_EXPORTS;NSEEL_LOOPFUNC_SUPPORT;AVS_MEGABUF_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\vis_avs___Win32_NoMMX_Release\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\vis_avs___Win32_NoMMX_Release\vis_avs.pch</PrecompiledHeaderOutputFile>
+      <ObjectFileName>.\vis_avs___Win32_NoMMX_Release\</ObjectFileName>
+      <ProgramDataBaseFileName>.\vis_avs___Win32_NoMMX_Release\</ProgramDataBaseFileName>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\vis_avs___Win32_NoMMX_Release\vis_avs.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\vis_avs___Win32_NoMMX_Release\vis_avs.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <LinkDLL>true</LinkDLL>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OutputFile>C:\Soft\Winamp\Plugins\vis_avs.dll</OutputFile>
+      <ImportLibrary>.\vis_avs___Win32_NoMMX_Release\vis_avs.lib</ImportLibrary>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;ddraw.lib;vfw32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Laser Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>evallib/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;LASER;WIN32;_WINDOWS;_USRDLL;VIS_PL_EXPORTS;NSEEL_LOOPFUNC_SUPPORT;AVS_MEGABUF_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\vis_avs___Win32_Laser_Release\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\vis_avs___Win32_Laser_Release\vis_avs.pch</PrecompiledHeaderOutputFile>
+      <ObjectFileName>.\vis_avs___Win32_Laser_Release\</ObjectFileName>
+      <ProgramDataBaseFileName>.\vis_avs___Win32_Laser_Release\</ProgramDataBaseFileName>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\vis_avs___Win32_Laser_Release\vis_avs.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;LASER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\vis_avs___Win32_Laser_Release\vis_avs.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <LinkDLL>true</LinkDLL>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OutputFile>C:\Soft\Winamp\Plugins\vis_avs.dll</OutputFile>
+      <ImportLibrary>.\vis_avs___Win32_Laser_Release\vis_avs_laser.lib</ImportLibrary>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;ddraw.lib;vfw32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\ns-eel\megabuf.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="..\ns-eel\nseel-caltab.c" />
+    <ClCompile Include="..\ns-eel\nseel-cfunc.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="..\ns-eel\nseel-compiler.c" />
+    <ClCompile Include="..\ns-eel\nseel-eval.c" />
+    <ClCompile Include="..\ns-eel\nseel-lextab.c" />
+    <ClCompile Include="..\ns-eel\nseel-yylex.c" />
+    <ClCompile Include="avs_eelif.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="bpm.cpp" />
+    <ClCompile Include="cfgwin.cpp" />
+    <ClCompile Include="draw.cpp" />
+    <ClCompile Include="laser\laser.cpp" />
+    <ClCompile Include="laser\laserline.cpp" />
+    <ClCompile Include="laser\ld32.c" />
+    <ClCompile Include="laser\linelist.cpp" />
+    <ClCompile Include="laser\rl_beathold.cpp" />
+    <ClCompile Include="laser\rl_bren.cpp" />
+    <ClCompile Include="laser\rl_cones.cpp" />
+    <ClCompile Include="laser\rl_line.cpp" />
+    <ClCompile Include="laser\rl_trans.cpp" />
+    <ClCompile Include="linedraw.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="matrix.cpp" />
+    <ClCompile Include="render.cpp" />
+    <ClCompile Include="rlib.cpp" />
+    <ClCompile Include="r_avi.cpp" />
+    <ClCompile Include="r_blit.cpp" />
+    <ClCompile Include="r_blur.cpp" />
+    <ClCompile Include="r_bpm.cpp" />
+    <ClCompile Include="r_bright.cpp" />
+    <ClCompile Include="r_bspin.cpp" />
+    <ClCompile Include="r_bump.cpp" />
+    <ClCompile Include="r_chanshift.cpp" />
+    <ClCompile Include="r_clear.cpp" />
+    <ClCompile Include="r_colorfade.cpp" />
+    <ClCompile Include="r_colorreduction.cpp" />
+    <ClCompile Include="r_comment.cpp" />
+    <ClCompile Include="r_contrast.cpp" />
+    <ClCompile Include="r_dcolormod.cpp" />
+    <ClCompile Include="r_ddm.cpp" />
+    <ClCompile Include="r_dmove.cpp" />
+    <ClCompile Include="r_dotfnt.cpp" />
+    <ClCompile Include="r_dotgrid.cpp" />
+    <ClCompile Include="r_dotpln.cpp" />
+    <ClCompile Include="r_fadeout.cpp" />
+    <ClCompile Include="r_fastbright.cpp" />
+    <ClCompile Include="r_grain.cpp" />
+    <ClCompile Include="r_interf.cpp" />
+    <ClCompile Include="r_interleave.cpp" />
+    <ClCompile Include="r_invert.cpp" />
+    <ClCompile Include="r_linemode.cpp" />
+    <ClCompile Include="r_list.cpp" />
+    <ClCompile Include="r_mirror.cpp" />
+    <ClCompile Include="r_mosaic.cpp" />
+    <ClCompile Include="r_multidelay.cpp" />
+    <ClCompile Include="r_multiplier.cpp" />
+    <ClCompile Include="r_nfclr.cpp" />
+    <ClCompile Include="r_onetone.cpp" />
+    <ClCompile Include="r_oscring.cpp" />
+    <ClCompile Include="r_oscstar.cpp" />
+    <ClCompile Include="r_parts.cpp" />
+    <ClCompile Include="r_picture.cpp" />
+    <ClCompile Include="r_rotblit.cpp" />
+    <ClCompile Include="r_rotstar.cpp" />
+    <ClCompile Include="r_scat.cpp" />
+    <ClCompile Include="r_shift.cpp" />
+    <ClCompile Include="r_simple.cpp" />
+    <ClCompile Include="r_sscope.cpp" />
+    <ClCompile Include="r_stack.cpp" />
+    <ClCompile Include="r_stars.cpp" />
+    <ClCompile Include="r_svp.cpp" />
+    <ClCompile Include="r_text.cpp" />
+    <ClCompile Include="r_timescope.cpp" />
+    <ClCompile Include="r_trans.cpp" />
+    <ClCompile Include="r_transition.cpp" />
+    <ClCompile Include="r_unkn.cpp" />
+    <ClCompile Include="r_videodelay.cpp" />
+    <ClCompile Include="r_water.cpp" />
+    <ClCompile Include="r_waterbump.cpp" />
+    <ClCompile Include="TIMING.C" />
+    <ClCompile Include="undo.cpp" />
+    <ClCompile Include="util.cpp" />
+    <ClCompile Include="wnd.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\ns-eel\ns-eel-addfuncs.h" />
+    <ClInclude Include="..\ns-eel\ns-eel-int.h" />
+    <ClInclude Include="..\ns-eel\ns-eel.h" />
+    <ClInclude Include="ape.h" />
+    <ClInclude Include="avs_eelif.h" />
+    <ClInclude Include="bpm.h" />
+    <ClInclude Include="cfgwnd.h" />
+    <ClInclude Include="draw.h" />
+    <ClInclude Include="laser\laserline.h" />
+    <ClInclude Include="laser\Ld32.h" />
+    <ClInclude Include="laser\linelist.h" />
+    <ClInclude Include="render.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="rlib.h" />
+    <ClInclude Include="r_defs.h" />
+    <ClInclude Include="r_list.h" />
+    <ClInclude Include="r_transition.h" />
+    <ClInclude Include="r_unkn.h" />
+    <ClInclude Include="TIMING.H" />
+    <ClInclude Include="undo.h" />
+    <ClInclude Include="wnd.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="vis_avs.txt" />
+    <Text Include="whatsnew.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="avs-hilited.png" />
+    <Image Include="avs-normal.png" />
+    <Image Include="avs-selected.png" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

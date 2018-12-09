@@ -27,6 +27,7 @@
     <ClInclude Include="Render\Binder.h" />
     <ClInclude Include="Render\Renderer.h" />
     <ClInclude Include="Render\Stages.h" />
+    <ClInclude Include="Render\EffectsState.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -50,6 +51,7 @@
     <ClCompile Include="Render\EffectsResources.cpp" />
     <ClCompile Include="Render\Binder.cpp" />
     <ClCompile Include="Render\Renderer.cpp" />
+    <ClCompile Include="Render\EffectsState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -72,6 +74,7 @@
     <FxCompile Include="Effects\Render\SimpleSolidPS.hlsl" />
     <FxCompile Include="Effects\Render\SimpleSolidVS.hlsl" />
     <FxCompile Include="Effects\Trans\ColorModifierPS.hlsl" />
+    <FxCompile Include="Effects\UpdateStateCS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

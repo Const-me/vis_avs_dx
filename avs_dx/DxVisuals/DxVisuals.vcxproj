@@ -92,6 +92,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Render\EffectsState.h" />
     <ClInclude Include="Render\Renderer.h" />
     <ClInclude Include="Render\Binder.h" />
     <ClInclude Include="Render\EffectsResources.h" />
@@ -120,6 +121,7 @@
     <ClInclude Include="Hlsl\Variable.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Render\EffectsState.cpp" />
     <ClCompile Include="Render\Renderer.cpp" />
     <ClCompile Include="Render\Binder.cpp" />
     <ClCompile Include="Render\EffectsResources.cpp" />
@@ -183,6 +185,10 @@
     <None Include="Effects\FrameGlobalData.fx">
       <FileType>Document</FileType>
     </None>
+    <FxCompile Include="Effects\UpdateStateCS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+    </FxCompile>
     <FxCompile Include="Effects\Trans\ColorModifierPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>

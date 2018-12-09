@@ -17,6 +17,7 @@ public:
 
 
 private:
-	fnBuildShaderFunc m_stateUpdate, m_stateBeat;
+	int stateSize = 0;
 	bool m_alwaysUpdateState = true;
+	fnBuildShaderFunc m_stateUpdate, m_stateBeat;
 };

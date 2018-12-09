@@ -1,8 +1,7 @@
 #pragma once
 #include "../EffectBase.h"
 
-class Simple: public EffectBase
+struct Simple: public EffectBase
 {
-public:
 	HRESULT stateDeclarations( EffectStateBuilder &builder ) override;
 };

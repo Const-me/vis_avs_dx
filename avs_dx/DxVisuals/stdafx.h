@@ -37,3 +37,5 @@ extern CComPtr<ID3D11DeviceContext> context;
 #include "Utils/logger.h"
 
 inline HRESULT getLastHr() { return HRESULT_FROM_WIN32( GetLastError() ); }
+
+#define CHECK( hr ) { const HRESULT __hr = ( hr ); if( FAILED( __hr ) ) { logError( __hr, #hr ); return __hr; } }

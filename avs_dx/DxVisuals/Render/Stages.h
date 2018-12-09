@@ -1,6 +1,6 @@
 #pragma once
 
-enum eTarget : uint8_t
+enum eStages : uint8_t
 {
 	Vertex = 1,
 	Pixel = 2,

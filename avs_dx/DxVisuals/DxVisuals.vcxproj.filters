@@ -26,7 +26,7 @@
     <ClInclude Include="Render\EffectsResources.h" />
     <ClInclude Include="Render\Binder.h" />
     <ClInclude Include="Render\Renderer.h" />
-    <ClInclude Include="Render\Target.h" />
+    <ClInclude Include="Render\Stages.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

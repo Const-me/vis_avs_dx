@@ -6,14 +6,14 @@
 
 namespace
 {
-	static const char* targetString( eTarget t )
+	static const char* targetString( eStages t )
 	{
 		switch( t )
 		{
-		case eTarget::Vertex: return "vs_5_0";
-		case eTarget::Pixel: return "ps_5_0";
-		case eTarget::Geometry: return "gs_5_0";
-		case eTarget::Compute: return "cs_5_0";
+		case eStages::Vertex: return "vs_5_0";
+		case eStages::Pixel: return "ps_5_0";
+		case eStages::Geometry: return "gs_5_0";
+		case eStages::Compute: return "cs_5_0";
 		}
 		return nullptr;
 	}
@@ -42,7 +42,7 @@ namespace
 
 namespace Hlsl
 {
-	HRESULT compile( eTarget what, const CStringA& hlsl, std::vector<uint8_t>& binary, CStringA& compilerErrors, Defines* pDefines, Includes* pIncludes )
+	HRESULT compile( eStages what, const CStringA& hlsl, std::vector<uint8_t>& binary, CStringA& compilerErrors, Defines* pDefines, Includes* pIncludes )
 	{
 		// https://docs.microsoft.com/en-us/windows/desktop/api/d3dcompiler/nf-d3dcompiler-d3dcompile
 		ID3DInclude* iInclude = nullptr;

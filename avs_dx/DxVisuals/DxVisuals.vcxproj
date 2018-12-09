@@ -101,7 +101,7 @@
     <ClInclude Include="Effects\Trans\ColorModifier.h" />
     <ClInclude Include="Effects\Trans\DynamicMovement.h" />
     <ClInclude Include="Hlsl\FunctionBuilder.h" />
-    <ClInclude Include="Render\Target.h" />
+    <ClInclude Include="Render\Stages.h" />
     <ClInclude Include="Utils\DirectXErrors\codes.h" />
     <ClInclude Include="Utils\DirectXErrors\DirectXErrors.h" />
     <ClInclude Include="Utils\DirectXErrors\formatMessage.hpp" />

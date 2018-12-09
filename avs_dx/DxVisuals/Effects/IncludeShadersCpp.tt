@@ -60,13 +60,22 @@ namespace
 	}
 
 	template<size_t size>
-	std::array<CStringA, size> decompressStrings( std::array<std::tuple<const uint8_t*, int, int>, size> src )
+	class IncludesMap
 	{
-		std::array<CStringA, size> res;
-		for( size_t i = 0; i < size; i++ )
-			res[ i ] = std::apply( decompressString, src[ i ] );
-		return std::move( res );
-	}
+		void decompress( std::array<const char*, size> names, std::array<std::tuple<const uint8_t*, int, int>, size> compressedValues )
+		{
+			for( size_t i = 0; i < size; i++ )
+				map[ names[ i ] ] = std::apply( decompressString, compressedValues[ i ] );
+		}
+	public:
+		CAtlMap<CStringA, CStringA> map;
+
+		IncludesMap( std::array<const char*, size> names, std::array<std::tuple<const uint8_t*, int, int>, size> compressedValues )
+		{
+			decompress( names, compressedValues );
+			map.Rehash();
+		}
+	};
 }
 
 namespace Hlsl
@@ -84,10 +93,10 @@ static void printBytes( CppBuilder sb, byte[] data )
 	for( int i = 0; true; )
 	{
 		int count = Math.Min( valsPerLine, data.Length - i );
-		sb.append( "\t\t\t\t" );
+		sb.print( "\t\t\t\t" );
 		var values = data.Skip( i ).Take( count );
 		var strings = values.Select( b => string.Format( "0x{0:X2}", b ) );
-		sb.append( string.Join( ", ", strings ) );
+		sb.print( string.Join( ", ", strings ) );
 		i += count;
 		if( i < data.Length ) 
 		{
@@ -125,13 +134,13 @@ string makeStaticShaders()
 	return sb.ToString().Trim();
 }
 
-// TODO [low]: use e.g. Compress/Decompresss from Cabinet.dll to reduce the size of these shades in the resulting binary.
 static void generateNamespaces( CppBuilder sb, NamespaceData ns, int lvl )
 {
+	// TODO [low]: when needed, implement compile-time merging of these includes with ones in the parent namespace
 	if( ns.headers.Length > 0 )
 	{
 		sb.line( lvl );
-		sb.format( "const std::array<CStringA, {0}>& includes()", ns.headers.Length );
+		sb.print( "const CAtlMap<CStringA, CStringA>& includes()" );
 		sb.line( lvl );
 		sb.line( "{" );
 		int[] origSize = new int[ ns.headers.Length ];
@@ -150,20 +159,28 @@ static void generateNamespaces( CppBuilder sb, NamespaceData ns, int lvl )
 		}
 
 		sb.line( lvl + 1 );
-		sb.format( "const std::array<std::tuple<const uint8_t*, int, int>, {0}> tuples = ", ns.headers.Length );
+		sb.print( "const std::array<std::tuple<const uint8_t*, int, int>, {0}> tuples = ", ns.headers.Length );
 		sb.line( lvl + 2 );
-		sb.append( "{ " );
+		sb.print( "{ " );
 		for( int i = 0; i < ns.headers.Length; i++ )
 		{
-			sb.format( "std::make_tuple( &{0}[0], {1}, {2} )", Path.GetFileNameWithoutExtension( ns.headers[ i ] ), cmpSize[ i ], origSize[ i ] );
+			sb.print( "std::make_tuple( &{0}[0], {1}, {2} )", Path.GetFileNameWithoutExtension( ns.headers[ i ] ), cmpSize[ i ], origSize[ i ] );
 			if( i + 1 < ns.headers.Length )
-				sb.append( ", " );
+				sb.print( ", " );
 		}
 		sb.line( " };" );
+
 		sb.tabs( lvl + 1 );
-		sb.line( "static const std::array<CStringA, {0}> result = decompressStrings( tuples );", ns.headers.Length );
+		sb.print( "const std::array<const char*, {0}> names = ", ns.headers.Length );
+		sb.line( lvl + 2 );
+		sb.print( "{ " );
+		sb.print( string.Join( ", ", ns.headers.Select( p => String.Format( @"R""({0})""", Path.GetFileName( p ).ToLowerInvariant() ) ) ) );
+		sb.line( " };" );
+
 		sb.tabs( lvl + 1 );
-		sb.line( "return result;" );
+		sb.line( "static const IncludesMap<{0}> result{{ names, tuples }};", ns.headers.Length );
+		sb.tabs( lvl + 1 );
+		sb.line( "return result.map;" );
 
 		sb.tabs( lvl );
 		sb.line( "};" );
@@ -179,9 +196,9 @@ static void generateNamespaces( CppBuilder sb, NamespaceData ns, int lvl )
 			sb.line( lvl );
 			string name = Path.GetFileNameWithoutExtension( s );
 			string content = File.ReadAllText( s, Encoding.ASCII );
-			sb.format( "const CStringA& {0}()", name );
+			sb.print( "const CStringA& {0}()", name );
 			sb.line( lvl );
-			sb.append( "{" );
+			sb.print( "{" );
 			sb.line( lvl + 1 );
 			sb.line( "const uint8_t src[] =" );
 			printBytes( sb, compressed );
@@ -192,7 +209,7 @@ static void generateNamespaces( CppBuilder sb, NamespaceData ns, int lvl )
 			sb.line( "return result;" );
 
 			sb.tabs( lvl );
-			sb.line( "};" );
+			sb.print( "};" );
 		}
 	}
 }

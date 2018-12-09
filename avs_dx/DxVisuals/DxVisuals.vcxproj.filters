@@ -9,11 +9,9 @@
     <ClInclude Include="Effects\EffectBase.h" />
     <ClInclude Include="Hlsl\Compiler.h" />
     <ClInclude Include="Hlsl\Defines.hpp" />
-    <ClInclude Include="Hlsl\Includes.hpp" />
     <ClInclude Include="Render\FrameGraphBuilder.h" />
     <ClInclude Include="Hlsl\FunctionBuilder.h" />
     <ClInclude Include="Hlsl\ShaderBuilder.h" />
-    <ClInclude Include="Hlsl\Target.h" />
     <ClInclude Include="Render\PassBuilder.h" />
     <ClInclude Include="Utils\logger.h" />
     <ClInclude Include="Utils\DirectXErrors\codes.h" />
@@ -27,6 +25,8 @@
     <ClInclude Include="Render\EffectStateBuilder.h" />
     <ClInclude Include="Render\EffectsResources.h" />
     <ClInclude Include="Render\Binder.h" />
+    <ClInclude Include="Render\Renderer.h" />
+    <ClInclude Include="Render\Target.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -49,6 +49,7 @@
     <ClCompile Include="Render\EffectStateBuilder.cpp" />
     <ClCompile Include="Render\EffectsResources.cpp" />
     <ClCompile Include="Render\Binder.cpp" />
+    <ClCompile Include="Render\Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

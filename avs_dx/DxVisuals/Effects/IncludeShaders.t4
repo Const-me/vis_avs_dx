@@ -57,10 +57,10 @@
 		foreach( var c in ns.children )
 		{
 			sb.line( lvl );
-			sb.format( "namespace {0}", c.name );
+			sb.print( "namespace {0}", c.name );
 
 			sb.line( lvl );
-			sb.append( "{" );
+			sb.print( "{" );
 
 			writeNamespaces( sb, act, c, lvl + 1 );
 
@@ -93,7 +93,11 @@
 			tabs( tabsAfter );
 		}
 		public void line( string s ) { sb.AppendLine( s ); }
-		public void format( string fmt, params object[] argv )
+		public void print( string s )
+		{
+			sb.Append( s );
+		}
+		public void print( string fmt, params object[] argv )
 		{
 			sb.AppendFormat( fmt, argv );
 		}
@@ -102,6 +106,5 @@
 			sb.AppendFormat( fmt, argv );
 			sb.AppendLine();
 		}
-		public void append( string s ) { sb.Append( s ); }
 	}
 #>

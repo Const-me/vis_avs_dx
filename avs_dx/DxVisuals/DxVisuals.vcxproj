@@ -92,6 +92,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Render\Renderer.h" />
     <ClInclude Include="Render\Binder.h" />
     <ClInclude Include="Render\EffectsResources.h" />
     <ClInclude Include="Effects\Render\Simple.h" />
@@ -100,7 +101,7 @@
     <ClInclude Include="Effects\Trans\ColorModifier.h" />
     <ClInclude Include="Effects\Trans\DynamicMovement.h" />
     <ClInclude Include="Hlsl\FunctionBuilder.h" />
-    <ClInclude Include="Hlsl\Target.h" />
+    <ClInclude Include="Render\Target.h" />
     <ClInclude Include="Utils\DirectXErrors\codes.h" />
     <ClInclude Include="Utils\DirectXErrors\DirectXErrors.h" />
     <ClInclude Include="Utils\DirectXErrors\formatMessage.hpp" />
@@ -111,7 +112,6 @@
     <ClInclude Include="Hlsl\Compiler.h" />
     <ClInclude Include="Effects\EffectBase.h" />
     <ClInclude Include="Hlsl\Defines.hpp" />
-    <ClInclude Include="Hlsl\Includes.hpp" />
     <ClInclude Include="Primitives\ColorsTexture.h" />
     <ClInclude Include="Effects\EffectList.h" />
     <ClInclude Include="Hlsl\ShaderBuilder.h" />
@@ -120,6 +120,7 @@
     <ClInclude Include="Hlsl\Variable.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Render\Renderer.cpp" />
     <ClCompile Include="Render\Binder.cpp" />
     <ClCompile Include="Render\EffectsResources.cpp" />
     <ClCompile Include="Effects\Render\Simple.cpp" />

@@ -1,6 +1,6 @@
 #pragma once
 #include "EffectsResources.h"
-#include "../Hlsl/Target.h"
+#include "Target.h"
 
 class Binder
 {

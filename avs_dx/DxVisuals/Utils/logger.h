@@ -23,22 +23,30 @@ inline void logWarning( HRESULT hr, const CStringA& what )
 	logMessage( eLogLevel::Warning, what + ": " + formatted );
 }
 
-inline void logInfo( const char* pszFormat, ... )
+inline void logMessageV( eLogLevel lvl, const char* pszFormat, va_list args )
 {
 	CStringA str;
-	va_list args;
-	va_start( args, pszFormat );
 	str.FormatV( pszFormat, args );
-	va_end( args );
-	logMessage( eLogLevel::Info, str );
+	logMessage( lvl, str );
 }
 
+#define LOG_MESSAGE_FORMAT( lvl ) va_list args; va_start( args, pszFormat ); logMessageV( lvl, pszFormat, args ); va_end( args );
+
+inline void logError( const char* pszFormat, ... )
+{
+	LOG_MESSAGE_FORMAT( eLogLevel::Error );
+}
+inline void logWarning( const char* pszFormat, ... )
+{
+	LOG_MESSAGE_FORMAT( eLogLevel::Warning );
+}
+inline void logInfo( const char* pszFormat, ... )
+{
+	LOG_MESSAGE_FORMAT( eLogLevel::Info );
+}
 inline void logDebug( const char* pszFormat, ... )
 {
-	CStringA str;
-	va_list args;
-	va_start( args, pszFormat );
-	str.FormatV( pszFormat, args );
-	va_end( args );
-	logMessage( eLogLevel::Debug, str );
+	LOG_MESSAGE_FORMAT( eLogLevel::Debug );
 }
+
+#undef LOG_MESSAGE_FORMAT

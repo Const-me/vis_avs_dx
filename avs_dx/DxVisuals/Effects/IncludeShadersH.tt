@@ -25,7 +25,7 @@ static void generateNamespace( CppBuilder sb, NamespaceData ns, int lvl )
 	if( ns.headers.Length > 0 )
 	{
 		sb.line( lvl );
-		sb.line( "const std::array<CStringA, {0}>& includes();", ns.headers.Length );
+		sb.line( "const CAtlMap<CStringA, CStringA>& includes();" );
 	}
 
 	if( ns.sources.Length > 0 )
@@ -33,7 +33,7 @@ static void generateNamespace( CppBuilder sb, NamespaceData ns, int lvl )
 		foreach( string s in ns.sources )
 		{
 			sb.line( lvl );
-			sb.format( "const CStringA& {0}();", Path.GetFileNameWithoutExtension( s ) );
+			sb.print( "const CStringA& {0}();", Path.GetFileNameWithoutExtension( s ) );
 		}
 	}
 }

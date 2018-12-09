@@ -4,6 +4,7 @@
 
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
+#define _CRT_SECURE_NO_WARNINGS
 // Windows headers
 #include <windows.h>
 

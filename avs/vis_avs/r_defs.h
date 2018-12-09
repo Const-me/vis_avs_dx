@@ -729,7 +729,7 @@ public:
 		int l = SendDlgItemMessage( hwnd, dlgItem, WM_GETTEXTLENGTH, 0, 0 );
 		if( l < 256 ) l = 256;
 		resize( l + 1 + 256 );
-		GetDlgItemText( hwnd, dlgItem, m_str, l + 1 );
+		GetDlgItemTextA( hwnd, dlgItem, m_str, l + 1 );
 		m_str[ l ] = 0;
 	}
 private:

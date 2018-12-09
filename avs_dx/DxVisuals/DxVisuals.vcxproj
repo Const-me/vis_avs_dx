@@ -92,6 +92,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Interop\interop.h" />
     <ClInclude Include="Render\EffectsState.h" />
     <ClInclude Include="Render\Renderer.h" />
     <ClInclude Include="Render\Binder.h" />
@@ -122,6 +123,7 @@
     <ClInclude Include="Utils\MiscUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Interop\interop.cpp" />
     <ClCompile Include="Render\EffectsState.cpp" />
     <ClCompile Include="Render\Renderer.cpp" />
     <ClCompile Include="Render\Binder.cpp" />

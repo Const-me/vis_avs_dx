@@ -29,6 +29,7 @@
     <ClInclude Include="Render\Stages.h" />
     <ClInclude Include="Render\EffectsState.h" />
     <ClInclude Include="Utils\MiscUtils.h" />
+    <ClInclude Include="Interop\interop.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -53,6 +54,7 @@
     <ClCompile Include="Render\Binder.cpp" />
     <ClCompile Include="Render\Renderer.cpp" />
     <ClCompile Include="Render\EffectsState.cpp" />
+    <ClCompile Include="Interop\interop.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

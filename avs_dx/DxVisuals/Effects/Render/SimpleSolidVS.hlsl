@@ -12,7 +12,7 @@ struct SimpleVertex
     float2 tc : TEXCOORD0;
 };
 
-SimpleVertex vertexShader(uint id : SV_VertexID)
+SimpleVertex main( uint id : SV_VertexID )
 {
     const float2 xy = float2(id & 1, id >> 1);
     SimpleVertex res;

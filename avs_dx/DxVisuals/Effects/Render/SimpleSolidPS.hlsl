@@ -7,7 +7,7 @@
 
 ByteAddressBuffer effectStates : register(t1);
 
-float4 pixelShader(float2 tc : TEXCOORD0) : SV_Target
+float4 main(float2 tc : TEXCOORD0) : SV_Target
 {
     float val = sampleVisData(float2(tc.x, SIMPLE_READ_V));
     float colorMul = 0;

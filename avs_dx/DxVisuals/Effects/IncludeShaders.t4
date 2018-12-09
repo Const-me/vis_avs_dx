@@ -51,31 +51,59 @@
 			sb.Append( '\t' );
 	}
 
-	static void writeNamespaces( StringBuilder sb, Action<StringBuilder, NamespaceData, int> act, NamespaceData ns, int lvl )
+	static void writeNamespaces( CppBuilder sb, Action<CppBuilder, NamespaceData, int> act, NamespaceData ns, int lvl )
 	{
 		act( sb, ns, lvl );
 		foreach( var c in ns.children )
 		{
-			sb.AppendLine();
-			tabs( sb, lvl );
-			sb.AppendFormat( "namespace {0}", c.name );
+			sb.line( lvl );
+			sb.format( "namespace {0}", c.name );
 
-			sb.AppendLine();
-			tabs( sb, lvl );
-			sb.Append( "{" );
+			sb.line( lvl );
+			sb.append( "{" );
 
 			writeNamespaces( sb, act, c, lvl + 1 );
 
-			sb.AppendLine();
-			tabs( sb, lvl );
+			sb.line( lvl );
 			// sb.AppendFormat( "}}	// namespace {0}", c.name );
 			// sb.AppendLine();
-			sb.AppendLine( "}" );
+			sb.line( "}" );
 		}
 	}
 
-	void writeNamespaces( StringBuilder sb, Action<StringBuilder, NamespaceData, int> act )
+	string writeNamespaces( Action<CppBuilder, NamespaceData, int> act )
 	{
+		CppBuilder sb = new CppBuilder();
 		writeNamespaces( sb, act, root, 0 );
+		return sb.ToString();
+	}
+
+	class CppBuilder
+	{
+		public readonly StringBuilder sb = new StringBuilder();
+		public override string ToString() { return sb.ToString(); }
+
+		public void line() { sb.AppendLine(); }
+		public void tabs( int count )
+		{
+			for( int i = 0; i <= count; i++ )
+				sb.Append( '\t' );
+		}
+		public void line( int tabsAfter )
+		{
+			line();
+			tabs( tabsAfter );
+		}
+		public void line( string s ) { sb.AppendLine( s ); }
+		public void format( string fmt, params object[] argv )
+		{
+			sb.AppendFormat( fmt, argv );
+		}
+		public void line( string fmt, params object[] argv )
+		{
+			sb.AppendFormat( fmt, argv );
+			sb.AppendLine();
+		}
+		public void append( string s ) { sb.Append( s ); }
 	}
 #>

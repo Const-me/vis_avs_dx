@@ -35,3 +35,5 @@ extern CComPtr<ID3D11DeviceContext> context;
 
 #define DXERR_ATL_STRING
 #include "Utils/logger.h"
+
+inline HRESULT getLastHr() { return HRESULT_FROM_WIN32( GetLastError() ); }

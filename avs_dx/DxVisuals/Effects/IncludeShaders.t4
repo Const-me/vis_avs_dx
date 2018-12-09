@@ -1,0 +1,81 @@
+<#+
+	static string[] findFiles( string inputDir, string filter, bool recursive, ref string[] found )
+	{
+		if( null != found )
+			return found;
+		SearchOption opts = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+		found = Directory.EnumerateFiles( inputDir, filter, opts ).ToArray();
+		return found;
+	}
+
+	string sourceDir => Host.ResolveParameterValue( "", "", "SOURCE" );
+	string staticBinaryDir => Host.ResolveParameterValue( "", "", "STATIC" );
+
+	string[] s_static = null;
+	string[] staticShaders => findFiles( staticBinaryDir, "*.cso", false, ref s_static );
+
+	class NamespaceData
+	{
+		public readonly string name;
+		public readonly string[] headers;
+		public readonly string[] sources;
+		public readonly NamespaceData[] children;
+
+		public NamespaceData( string dir, string name = null )
+		{
+			this.name = name;
+			findFiles( dir, "*.fx", false, ref headers );
+			findFiles( dir, "*.hlsl", false, ref sources );
+			List<NamespaceData> subs = new List<NamespaceData>();
+			foreach( var sd in Directory.GetDirectories( dir ) )
+			{
+				var s = new NamespaceData( sd, Path.GetFileNameWithoutExtension( sd ) );
+				if( s.headers.Length > 0 || s.sources.Length > 0 || s.children.Length > 0 )
+					subs.Add( s );
+			}
+			children = subs.ToArray();
+		}
+	}
+
+	NamespaceData s_root = null;
+	NamespaceData root { get { 
+		if( null == s_root )
+			s_root = new NamespaceData( sourceDir );
+		return s_root;
+	} }
+
+	static void tabs( StringBuilder sb, int lvl )
+	{
+		lvl++;
+		for( int i = 0; i < lvl; i++ )
+			sb.Append( '\t' );
+	}
+
+	static void writeNamespaces( StringBuilder sb, Action<StringBuilder, NamespaceData, int> act, NamespaceData ns, int lvl )
+	{
+		act( sb, ns, lvl );
+		foreach( var c in ns.children )
+		{
+			sb.AppendLine();
+			tabs( sb, lvl );
+			sb.AppendFormat( "namespace {0}", c.name );
+
+			sb.AppendLine();
+			tabs( sb, lvl );
+			sb.Append( "{" );
+
+			writeNamespaces( sb, act, c, lvl + 1 );
+
+			sb.AppendLine();
+			tabs( sb, lvl );
+			// sb.AppendFormat( "}}	// namespace {0}", c.name );
+			// sb.AppendLine();
+			sb.AppendLine( "}" );
+		}
+	}
+
+	void writeNamespaces( StringBuilder sb, Action<StringBuilder, NamespaceData, int> act )
+	{
+		writeNamespaces( sb, act, root, 0 );
+	}
+#>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{32301408-2A47-4539-9B8E-6378B7FF4169}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>DxVisuals</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Effects\Render\Simple.h" />
+    <ClInclude Include="Effects\Render\Starfield.h" />
+    <ClInclude Include="Effects\shadersCode.h" />
+    <ClInclude Include="Effects\Trans\ColorModifier.h" />
+    <ClInclude Include="Effects\Trans\DynamicMovement.h" />
+    <ClInclude Include="Hlsl\FunctionBuilder.h" />
+    <ClInclude Include="Hlsl\Target.h" />
+    <ClInclude Include="Utils\DirectXErrors\codes.h" />
+    <ClInclude Include="Utils\DirectXErrors\DirectXErrors.h" />
+    <ClInclude Include="Utils\DirectXErrors\formatMessage.hpp" />
+    <ClInclude Include="Utils\logger.h" />
+    <ClInclude Include="Render\PassBuilder.h" />
+    <ClInclude Include="Render\EffectBuilder.h" />
+    <ClInclude Include="Render\FrameGraphBuilder.h" />
+    <ClInclude Include="Hlsl\Compiler.h" />
+    <ClInclude Include="Effects\EffectBase.h" />
+    <ClInclude Include="Hlsl\Defines.hpp" />
+    <ClInclude Include="Hlsl\Includes.hpp" />
+    <ClInclude Include="Primitives\ColorsTexture.h" />
+    <ClInclude Include="Effects\EffectList.h" />
+    <ClInclude Include="Hlsl\ShaderBuilder.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="Hlsl\Variable.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Effects\Render\Simple.cpp" />
+    <ClCompile Include="Effects\Render\Starfield.cpp" />
+    <ClCompile Include="Effects\shadersCode.cpp" />
+    <ClCompile Include="Effects\Trans\ColorModifier.cpp" />
+    <ClCompile Include="Effects\Trans\DynamicMovement.cpp" />
+    <ClCompile Include="Hlsl\FunctionBuilder.cpp" />
+    <ClCompile Include="Render\PassBuilder.cpp" />
+    <ClCompile Include="Render\EffectBuilder.cpp" />
+    <ClCompile Include="Render\FrameGraphBuilder.cpp" />
+    <ClCompile Include="Hlsl\Compiler.cpp" />
+    <ClCompile Include="Effects\EffectBase.cpp" />
+    <ClCompile Include="Primitives\ColorsTexture.cpp" />
+    <ClCompile Include="Effects\EffectList.cpp" />
+    <ClCompile Include="Hlsl\ShaderBuilder.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Hlsl\Variable.cpp" />
+    <ClCompile Include="Utils\DirectXErrors\DirectXErrors.cpp" />
+    <ClCompile Include="Utils\DirectXErrors\formatCString.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Effects\IncludeShadersCpp.tt">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"C:\Program Files (x86)\Common Files\microsoft shared\TextTemplating\14.0\TextTransform.exe" ^
+"%(FullPath)" -a !!STATIC!$(OutDir)Shaders -a !!SOURCE!$(ProjectDir)Effects -out $(ProjectDir)Effects/shadersCode.cpp</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"C:\Program Files (x86)\Common Files\microsoft shared\TextTemplating\14.0\TextTransform.exe" ^
+"%(FullPath)" -a !!STATIC!$(OutDir)Shaders -a !!SOURCE!$(ProjectDir)Effects -out $(ProjectDir)Effects/shadersCode.cpp</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Effects/shadersCode.cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Effects/shadersCode.cpp</Outputs>
+    </CustomBuild>
+    <None Include="Effects\IncludeShaders.t4" />
+    <CustomBuild Include="Effects\IncludeShadersH.tt">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"C:\Program Files (x86)\Common Files\microsoft shared\TextTemplating\14.0\TextTransform.exe" ^
+"%(FullPath)" -a !!STATIC!$(OutDir)Shaders -a !!SOURCE!$(ProjectDir)Effects -out $(ProjectDir)Effects/shadersCode.h</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Effects/shadersCode.h</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"C:\Program Files (x86)\Common Files\microsoft shared\TextTemplating\14.0\TextTransform.exe" ^
+"%(FullPath)" -a !!STATIC!$(OutDir)Shaders -a !!SOURCE!$(ProjectDir)Effects -out $(ProjectDir)Effects/shadersCode.h</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Effects/shadersCode.h</Outputs>
+    </CustomBuild>
+    <None Include="packages.config" />
+    <None Include="Utils\DirectXErrors\data\d2d.inl" />
+    <None Include="Utils\DirectXErrors\data\d3d10-11.inl" />
+    <None Include="Utils\DirectXErrors\data\d3d9.inl" />
+    <None Include="Utils\DirectXErrors\data\ddraw.inl" />
+    <None Include="Utils\DirectXErrors\data\dinput.inl" />
+    <None Include="Utils\DirectXErrors\data\dsound.inl" />
+    <None Include="Utils\DirectXErrors\data\dxut.inl" />
+    <None Include="Utils\DirectXErrors\data\mf.inl" />
+    <None Include="Utils\DirectXErrors\data\wic.inl" />
+    <None Include="Utils\DirectXErrors\data\win32.inl" />
+    <None Include="Utils\DirectXErrors\data\xaudio.inl" />
+    <None Include="Utils\DirectXErrors\includeData.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Effects\FrameGlobalData.fx">
+      <FileType>Document</FileType>
+    </None>
+    <FxCompile Include="Effects\Render\SimpleSolidPS.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pixelShader</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pixelShader</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Effects</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Effects</AdditionalIncludeDirectories>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Render\SimpleSolidVS.hlsl">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Effects</AdditionalIncludeDirectories>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vertexShader</EntryPointName>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Effects</AdditionalIncludeDirectories>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vertexShader</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+    </FxCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\..\packages\directxtex_desktop_2015.2018.11.20.1\build\native\directxtex_desktop_2015.targets" Condition="Exists('..\..\packages\directxtex_desktop_2015.2018.11.20.1\build\native\directxtex_desktop_2015.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\directxtex_desktop_2015.2018.11.20.1\build\native\directxtex_desktop_2015.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\directxtex_desktop_2015.2018.11.20.1\build\native\directxtex_desktop_2015.targets'))" />
+  </Target>
+</Project>

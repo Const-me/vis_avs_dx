@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="Hlsl\Variable.h" />
+    <ClInclude Include="Effects\EffectList.h" />
+    <ClInclude Include="Primitives\ColorsTexture.h" />
+    <ClInclude Include="Effects\EffectBase.h" />
+    <ClInclude Include="Hlsl\Compiler.h" />
+    <ClInclude Include="Hlsl\Defines.hpp" />
+    <ClInclude Include="Hlsl\Includes.hpp" />
+    <ClInclude Include="Render\FrameGraphBuilder.h" />
+    <ClInclude Include="Render\EffectBuilder.h" />
+    <ClInclude Include="Hlsl\FunctionBuilder.h" />
+    <ClInclude Include="Hlsl\ShaderBuilder.h" />
+    <ClInclude Include="Hlsl\Target.h" />
+    <ClInclude Include="Render\PassBuilder.h" />
+    <ClInclude Include="Utils\logger.h" />
+    <ClInclude Include="Utils\DirectXErrors\codes.h" />
+    <ClInclude Include="Utils\DirectXErrors\DirectXErrors.h" />
+    <ClInclude Include="Utils\DirectXErrors\formatMessage.hpp" />
+    <ClInclude Include="Effects\Render\Simple.h" />
+    <ClInclude Include="Effects\Render\Starfield.h" />
+    <ClInclude Include="Effects\Trans\ColorModifier.h" />
+    <ClInclude Include="Effects\Trans\DynamicMovement.h" />
+    <ClInclude Include="Effects\shadersCode.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Hlsl\Variable.cpp" />
+    <ClCompile Include="Effects\EffectList.cpp" />
+    <ClCompile Include="Primitives\ColorsTexture.cpp" />
+    <ClCompile Include="Effects\EffectBase.cpp" />
+    <ClCompile Include="Hlsl\Compiler.cpp" />
+    <ClCompile Include="Render\FrameGraphBuilder.cpp" />
+    <ClCompile Include="Render\EffectBuilder.cpp" />
+    <ClCompile Include="Hlsl\FunctionBuilder.cpp" />
+    <ClCompile Include="Hlsl\ShaderBuilder.cpp" />
+    <ClCompile Include="Render\PassBuilder.cpp" />
+    <ClCompile Include="Utils\DirectXErrors\DirectXErrors.cpp" />
+    <ClCompile Include="Utils\DirectXErrors\formatCString.cpp" />
+    <ClCompile Include="Effects\Render\Simple.cpp" />
+    <ClCompile Include="Effects\Render\Starfield.cpp" />
+    <ClCompile Include="Effects\Trans\ColorModifier.cpp" />
+    <ClCompile Include="Effects\Trans\DynamicMovement.cpp" />
+    <ClCompile Include="Effects\shadersCode.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Utils\DirectXErrors\includeData.inl" />
+    <None Include="Utils\DirectXErrors\data\d2d.inl" />
+    <None Include="Utils\DirectXErrors\data\d3d9.inl" />
+    <None Include="Utils\DirectXErrors\data\d3d10-11.inl" />
+    <None Include="Utils\DirectXErrors\data\ddraw.inl" />
+    <None Include="Utils\DirectXErrors\data\dinput.inl" />
+    <None Include="Utils\DirectXErrors\data\dsound.inl" />
+    <None Include="Utils\DirectXErrors\data\dxut.inl" />
+    <None Include="Utils\DirectXErrors\data\mf.inl" />
+    <None Include="Utils\DirectXErrors\data\wic.inl" />
+    <None Include="Utils\DirectXErrors\data\win32.inl" />
+    <None Include="Utils\DirectXErrors\data\xaudio.inl" />
+    <None Include="Effects\FrameGlobalData.fx" />
+    <None Include="Effects\IncludeShaders.t4" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Effects\Render\SimpleSolidPS.hlsl" />
+    <FxCompile Include="Effects\Render\SimpleSolidVS.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Effects\IncludeShadersCpp.tt" />
+    <CustomBuild Include="Effects\IncludeShadersH.tt" />
+  </ItemGroup>
+</Project>

@@ -7,6 +7,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vis_avs", "avs\vis_avs\vis_
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DxVisualsShaders", "avs_dx\DxVisualsShaders\DxVisualsShaders.vcxproj", "{ECD3BA77-59D4-47DC-B2EF-C343E675C30A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DxVisuals", "avs_dx\DxVisuals\DxVisuals.vcxproj", "{32301408-2A47-4539-9B8E-6378B7FF4169}"
+	ProjectSection(ProjectDependencies) = postProject
+		{ECD3BA77-59D4-47DC-B2EF-C343E675C30A} = {ECD3BA77-59D4-47DC-B2EF-C343E675C30A}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -31,6 +36,14 @@ Global
 		{ECD3BA77-59D4-47DC-B2EF-C343E675C30A}.NoMMX Release|x86.Build.0 = Release|Win32
 		{ECD3BA77-59D4-47DC-B2EF-C343E675C30A}.Release|x86.ActiveCfg = Release|Win32
 		{ECD3BA77-59D4-47DC-B2EF-C343E675C30A}.Release|x86.Build.0 = Release|Win32
+		{32301408-2A47-4539-9B8E-6378B7FF4169}.Debug|x86.ActiveCfg = Debug|Win32
+		{32301408-2A47-4539-9B8E-6378B7FF4169}.Debug|x86.Build.0 = Debug|Win32
+		{32301408-2A47-4539-9B8E-6378B7FF4169}.Laser Release|x86.ActiveCfg = Release|Win32
+		{32301408-2A47-4539-9B8E-6378B7FF4169}.Laser Release|x86.Build.0 = Release|Win32
+		{32301408-2A47-4539-9B8E-6378B7FF4169}.NoMMX Release|x86.ActiveCfg = Release|Win32
+		{32301408-2A47-4539-9B8E-6378B7FF4169}.NoMMX Release|x86.Build.0 = Release|Win32
+		{32301408-2A47-4539-9B8E-6378B7FF4169}.Release|x86.ActiveCfg = Release|Win32
+		{32301408-2A47-4539-9B8E-6378B7FF4169}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

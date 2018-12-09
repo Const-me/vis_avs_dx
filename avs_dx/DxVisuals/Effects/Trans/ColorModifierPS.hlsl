@@ -1,11 +1,11 @@
 #ifndef AVS_SHADER
 #define SHADER_CODE
-#define BIND_PREVFRAME t1
+#define BIND_TEX_FRAME t1
 #endif
 
-Texture2D<float4> texPrevFrame : register( BIND_PREVFRAME );
+Texture2D<float4> texPrevFrame : register(BIND_TEX_FRAME);
 
-float4 main( float4 screenSpace: SV_Position ) : SV_Target
+float4 main( float4 screenSpace : SV_Position ) : SV_Target
 {
     const float4 color = texPrevFrame.Load( int3( int2( screenSpace.xy ), 0 ) );
     float red = color.x;

@@ -27,3 +27,8 @@ inline float sampleVisData(float2 location)
 #define AVS_SCREEN_WIDTH 1920
 #define AVS_SCREEN_HEIGHT 1080
 #endif
+
+inline float2 screenSizeInv()
+{
+    return float2( 1.0 / AVS_SCREEN_WIDTH, 1.0 / AVS_SCREEN_HEIGHT );
+}

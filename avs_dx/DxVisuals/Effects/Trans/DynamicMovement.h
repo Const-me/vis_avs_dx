@@ -7,5 +7,5 @@ public:
 	DynamicMovement();
 	~DynamicMovement();
 
-	HRESULT build( EffectBuilder &builder ) override;
+	HRESULT stateDeclarations( EffectStateBuilder &builder ) override;
 };

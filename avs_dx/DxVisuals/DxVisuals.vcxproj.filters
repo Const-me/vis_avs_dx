@@ -11,7 +11,6 @@
     <ClInclude Include="Hlsl\Defines.hpp" />
     <ClInclude Include="Hlsl\Includes.hpp" />
     <ClInclude Include="Render\FrameGraphBuilder.h" />
-    <ClInclude Include="Render\EffectBuilder.h" />
     <ClInclude Include="Hlsl\FunctionBuilder.h" />
     <ClInclude Include="Hlsl\ShaderBuilder.h" />
     <ClInclude Include="Hlsl\Target.h" />
@@ -25,6 +24,9 @@
     <ClInclude Include="Effects\Trans\ColorModifier.h" />
     <ClInclude Include="Effects\Trans\DynamicMovement.h" />
     <ClInclude Include="Effects\shadersCode.h" />
+    <ClInclude Include="Render\EffectStateBuilder.h" />
+    <ClInclude Include="Render\EffectsResources.h" />
+    <ClInclude Include="Render\Binder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -34,7 +36,6 @@
     <ClCompile Include="Effects\EffectBase.cpp" />
     <ClCompile Include="Hlsl\Compiler.cpp" />
     <ClCompile Include="Render\FrameGraphBuilder.cpp" />
-    <ClCompile Include="Render\EffectBuilder.cpp" />
     <ClCompile Include="Hlsl\FunctionBuilder.cpp" />
     <ClCompile Include="Hlsl\ShaderBuilder.cpp" />
     <ClCompile Include="Render\PassBuilder.cpp" />
@@ -45,6 +46,9 @@
     <ClCompile Include="Effects\Trans\ColorModifier.cpp" />
     <ClCompile Include="Effects\Trans\DynamicMovement.cpp" />
     <ClCompile Include="Effects\shadersCode.cpp" />
+    <ClCompile Include="Render\EffectStateBuilder.cpp" />
+    <ClCompile Include="Render\EffectsResources.cpp" />
+    <ClCompile Include="Render\Binder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -66,6 +70,7 @@
   <ItemGroup>
     <FxCompile Include="Effects\Render\SimpleSolidPS.hlsl" />
     <FxCompile Include="Effects\Render\SimpleSolidVS.hlsl" />
+    <FxCompile Include="Effects\Trans\ColorModifierPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

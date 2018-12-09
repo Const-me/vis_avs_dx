@@ -1,12 +1,9 @@
 #pragma once
 
-namespace Hlsl
+enum struct eTarget : uint8_t
 {
-	enum struct eTarget : uint8_t
-	{
-		Vertex,
-		Pixel,
-		Geometry,
-		Compute,
-	};
-}
+	Vertex,
+	Pixel,
+	Geometry,
+	Compute,
+};

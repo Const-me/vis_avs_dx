@@ -6,3 +6,5 @@ avs_dx/DxVisualsShaders/Release/
 Debug/
 Release/
 packages/
+avs_dx/DxVisuals/Effects/shadersCode.cpp
+avs_dx/DxVisuals/Effects/shadersCode.h

@@ -65,8 +65,6 @@
 			writeNamespaces( sb, act, c, lvl + 1 );
 
 			sb.line( lvl );
-			// sb.AppendFormat( "}}	// namespace {0}", c.name );
-			// sb.AppendLine();
 			sb.line( "}" );
 		}
 	}

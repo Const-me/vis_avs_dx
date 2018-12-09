@@ -119,6 +119,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Hlsl\Variable.h" />
+    <ClInclude Include="Utils\MiscUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Render\EffectsState.cpp" />

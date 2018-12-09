@@ -28,6 +28,7 @@
     <ClInclude Include="Render\Renderer.h" />
     <ClInclude Include="Render\Stages.h" />
     <ClInclude Include="Render\EffectsState.h" />
+    <ClInclude Include="Utils\MiscUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

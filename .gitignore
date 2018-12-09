@@ -1,3 +1,7 @@
 .vs/
 avs/vis_avs/Debug/
 avs/vis_avs/Release/
+avs_dx/DxVisualsShaders/Debug/
+avs_dx/DxVisualsShaders/Release/
+Debug/
+Release/

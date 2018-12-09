@@ -42,12 +42,11 @@ namespace
 
 namespace Hlsl
 {
-	HRESULT compile( eStages what, const CStringA& hlsl, std::vector<uint8_t>& binary, CStringA& compilerErrors, Defines* pDefines, Includes* pIncludes )
+	HRESULT compile( eStages what, const CStringA& hlsl, std::vector<uint8_t>& binary, CStringA& compilerErrors, Defines* pDefines )
 	{
 		// https://docs.microsoft.com/en-us/windows/desktop/api/d3dcompiler/nf-d3dcompiler-d3dcompile
-		ID3DInclude* iInclude = nullptr;
-		if( nullptr != pIncludes )
-			iInclude = pIncludes;
+		
+		static Includes s_includes;
 
 		const char* const target = targetString( what );
 		if( nullptr == target )
@@ -65,7 +64,7 @@ namespace Hlsl
 #else
 		constexpr UINT flags = D3DCOMPILE_OPTIMIZATION_LEVEL3;
 #endif
-		const HRESULT hr = D3DCompile( hlsl, (size_t)hlsl.GetLength(), nullptr, macros.data(), iInclude, "main", target, flags, 0, &blobBinary, &blobErrors );
+		const HRESULT hr = D3DCompile( hlsl, (size_t)hlsl.GetLength(), nullptr, macros.data(), &s_includes, "main", target, flags, 0, &blobBinary, &blobErrors );
 		if( FAILED( hr ) )
 			logWarning( hr, "D3DCompile" );
 

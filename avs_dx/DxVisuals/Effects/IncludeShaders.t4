@@ -82,9 +82,9 @@
 		public override string ToString() { return sb.ToString(); }
 
 		public void line() { sb.AppendLine(); }
-		public void tabs( int count )
+		public void tabs( int countMinusOne )
 		{
-			for( int i = 0; i <= count; i++ )
+			for( int i = 0; i <= countMinusOne; i++ )
 				sb.Append( '\t' );
 		}
 		public void line( int tabsAfter )

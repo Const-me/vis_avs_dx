@@ -1,7 +1,7 @@
 Some statically-compiled shaders.
 
-VC++ doesn't easily supports resources in statis libraries, that's why we're including the compiler shaders inside the source code.
+VC++ doesn't easily supports resources in static libraries, that's why we're including compiled shaders inside the source code.
 
-Because of this, we need all static shaders to compile before we compile the DxVisuals project.
+Because of this, we need all static shaders to compile before we compile the DxVisuals project that uses them.
 
-A separate static library project is the simple way to do so.
+This separate static library project is one simple way to accomplish that.

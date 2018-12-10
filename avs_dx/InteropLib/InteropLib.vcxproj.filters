@@ -73,8 +73,8 @@
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
-    <ClCompile Include="windowProc.cpp" />
     <ClCompile Include="ConsoleLogger.cpp" />
+    <ClCompile Include="WindowImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -18,9 +18,15 @@ public:
 
 private:
 	HWND m_hWnd = nullptr;
+	CComPtr<IDXGISwapChain> m_swapChain;
+	CComPtr<ID3D11RenderTargetView> m_rtv;
+	CComAutoCriticalSection m_deviceLock;
 
 	int wmCreate( LPCREATESTRUCT lpCreateStruct );
+
+	HRESULT createDevice();
+	void destroyDevice();
 	void wmDestroy();
-	void wmSize( UINT nType, CSize size );
+	HRESULT wmSize( UINT nType, CSize size );
 	LRESULT wmRender( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& handled );
 };

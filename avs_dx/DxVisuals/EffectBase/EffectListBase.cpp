@@ -51,3 +51,19 @@ bool EffectListBase::updateList()
 
 	return result;
 }
+
+bool EffectListBase::updateState()
+{
+	bool result = false;
+	for( auto p : m_effects )
+	{
+		const bool r = p->updateState();
+		result = result || r;
+	}
+	return result;
+}
+
+HRESULT EffectListBase::updateParameters()
+{
+	return apply( []( EffectBase &e ) { return e.updateParameters(); } );
+}

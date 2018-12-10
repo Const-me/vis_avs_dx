@@ -6,8 +6,7 @@ HRESULT EffectsState::create( UINT totalSize )
 	m_srv = nullptr;
 	m_uav = nullptr;
 
-	// "+1" for the frame counter
-	const UINT byteWidth = ( totalSize + 1 ) * 4;
+	const UINT byteWidth = ( totalSize ) * 4;
 	constexpr UINT bindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS;
 	CD3D11_BUFFER_DESC bufferDesc{ byteWidth, bindFlags, D3D11_USAGE_DEFAULT, 0, D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS };
 

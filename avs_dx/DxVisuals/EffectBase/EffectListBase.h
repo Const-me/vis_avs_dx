@@ -50,10 +50,26 @@ public:
 	AvsState* const avs;
 	EffectListBase( AvsState* pState ) : avs( pState ) { }
 
-	HRESULT stateDeclarations( EffectStateBuilder &builder ) { return E_NOTIMPL; }
+	HRESULT stateDeclarations( EffectStateBuilder &builder ) override { return E_NOTIMPL; }
+
+	HRESULT updateParameters() override;
 
 private:
 	std::vector<EffectBase*> m_effects;
+
+	template<class tFunc>
+	HRESULT apply( tFunc fn )
+	{
+		HRESULT res = S_FALSE;
+		for( auto p : m_effects )
+		{
+			const HRESULT hr = fn( *p );
+			CHECK( hr );
+			if( S_FALSE != hr )
+				res = hr;
+		}
+		return res;
+	}
 
 protected:
 
@@ -64,4 +80,6 @@ protected:
 
 	// Collect renderers into the local vector. Return false if the list is unchanged, true if they were added, removed or reordered.
 	bool updateList();
+
+	bool updateState() override;
 };

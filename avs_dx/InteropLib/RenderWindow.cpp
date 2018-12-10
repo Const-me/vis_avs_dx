@@ -129,12 +129,6 @@ HRESULT RenderWindow::present( const RenderTarget& src )
 		return E_INVALIDARG;
 	}
 
-	if( src.getSize() != g_renderSize )
-	{
-		logWarning( "RenderWindow::present: incorrect size" );
-		return E_INVALIDARG;
-	}
-
 	HRESULT hr = E_FAIL;
 	::SendMessage( m_hWnd, WM_RENDER, (WPARAM)&src, (LPARAM)&hr );
 	return hr;

@@ -97,6 +97,7 @@
     <ClInclude Include="Effects\EffectImpl.hpp" />
     <ClInclude Include="EffectBase\RootEffect.h" />
     <ClInclude Include="iEffect.h" />
+    <ClInclude Include="Resources\RenderTargets.hpp" />
     <ClInclude Include="Utils\preciseTickCount.h" />
     <ClInclude Include="Resources\EffectsState.h" />
     <ClInclude Include="Render\Binder.h" />

@@ -2,6 +2,7 @@
 #include "RootEffect.h"
 #include "../Resources/staticResources.h"
 #include "../../InteropLib/interop.h"
+#include "../Render/Binder.h"
 
 // The critical section that guards renderers, linked from deep inside AVS.
 extern CRITICAL_SECTION g_render_cs;
@@ -17,7 +18,7 @@ HRESULT RootEffect::renderRoot( char visdata[ 2 ][ 2 ][ 576 ], int isBeat )
 		CHECK( renderEffects( 0 != isBeat ) );
 	}
 
-	CHECK( present( m_targets[ m_lastTarget ] ) );
+	CHECK( present( m_targets.lastWritten() ) );
 
 	return S_OK;
 }
@@ -29,8 +30,7 @@ HRESULT RootEffect::renderEffects( bool isBeat )
 		const CSize currentSize = getRenderSize();
 		if( m_renderSize != currentSize )
 		{
-			for( auto& t : m_targets )
-				t.destroy();
+			m_targets.destroy();
 			m_renderSize = currentSize;
 		}
 	}
@@ -45,7 +45,8 @@ HRESULT RootEffect::renderEffects( bool isBeat )
 			CHECK( buildState() );
 		}
 
-		CHECK( updateParameters() );
+		Binder binder;
+		CHECK( updateParameters( binder ) );
 	}
 
 	// Run a state update shader
@@ -53,11 +54,8 @@ HRESULT RootEffect::renderEffects( bool isBeat )
 	csSetUav( m_state.uav(), 0 );
 	context->Dispatch( 1, 1, 1 );
 
-	auto& target = m_targets[ m_lastTarget ];
-	if( !target )
-		CHECK( target.create( m_renderSize ) );
-	if( clearfb() )
-		target.clear();
+	CHECK( m_targets.writeToLast( clearfb() ) );
+
 
 	return E_NOTIMPL;
 }

@@ -63,7 +63,12 @@ bool EffectListBase::updateState()
 	return result;
 }
 
-HRESULT EffectListBase::updateParameters()
+HRESULT EffectListBase::updateParameters( Binder& binder )
 {
-	return apply( []( EffectBase &e ) { return e.updateParameters(); } );
+	return apply( [ &binder ]( EffectBase &e ) { return e.updateParameters( binder ); } );
+}
+
+HRESULT EffectListBase::render( RenderTargets& rt )
+{
+	return apply( [ &rt ]( EffectBase &e ) { return e.render( rt ); } );
 }

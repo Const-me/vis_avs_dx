@@ -10,4 +10,6 @@ public:
 	}
 
 	DECLARE_EFFECT( ColorModifier );
+
+	HRESULT render( RenderTargets& rt ) override { return E_NOTIMPL; }
 };

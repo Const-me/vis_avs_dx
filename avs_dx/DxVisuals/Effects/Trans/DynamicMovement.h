@@ -10,4 +10,6 @@ public:
 	{
 		return E_NOTIMPL;
 	}
+
+	HRESULT render( RenderTargets& rt ) override { return E_NOTIMPL; }
 };

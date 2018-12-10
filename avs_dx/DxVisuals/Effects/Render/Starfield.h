@@ -12,4 +12,6 @@ public:
 	DECLARE_EFFECT( Starfield );
 
 	struct StarFormat;
+
+	HRESULT render( RenderTargets& rt ) override { return E_NOTIMPL; }
 };

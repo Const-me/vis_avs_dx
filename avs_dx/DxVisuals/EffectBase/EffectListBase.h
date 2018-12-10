@@ -52,7 +52,9 @@ public:
 
 	HRESULT stateDeclarations( EffectStateBuilder &builder ) override { return E_NOTIMPL; }
 
-	HRESULT updateParameters() override;
+	HRESULT updateParameters( Binder& binder ) override;
+
+	HRESULT render( RenderTargets& rt ) override;
 
 private:
 	std::vector<EffectBase*> m_effects;

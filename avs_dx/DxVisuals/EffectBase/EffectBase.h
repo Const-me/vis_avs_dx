@@ -1,6 +1,8 @@
 #pragma once
 #include "../iEffect.h"
 class EffectStateBuilder;
+class Binder;
+class RenderTargets;
 
 class EffectBase: public iEffect
 {
@@ -21,5 +23,7 @@ public:
 	virtual HRESULT stateDeclarations( EffectStateBuilder &builder ) = 0;
 
 	// If user has changed something with the GUI controls, this method will recompile shaders / update GPU resources accordingly.
-	virtual HRESULT updateParameters() { return S_FALSE; }
+	virtual HRESULT updateParameters( Binder& binder ) { return S_FALSE; }
+
+	virtual HRESULT render( RenderTargets& rt ) = 0;
 };

@@ -15,4 +15,6 @@ public:
 		int colors[ 16 ];
 		int color_pos;
 	};
+
+	HRESULT render( RenderTargets& rt ) override { return E_NOTIMPL; }
 };

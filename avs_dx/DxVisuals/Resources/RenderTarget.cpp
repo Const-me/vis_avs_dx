@@ -15,7 +15,6 @@ HRESULT RenderTarget::create( const CSize& size )
 	CD3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{ D3D11_SRV_DIMENSION_TEXTURE2D, rtFormat };
 	CHECK( device->CreateShaderResourceView( texture, &srvDesc, &m_srv ) );
 
-	m_size = size;
 	return S_OK;
 }
 

@@ -1,13 +1,12 @@
 #pragma once
 #include "EffectListBase.h"
-#include "../Resources/RenderTarget.h"
+#include "../Resources/RenderTargets.hpp"
 #include "../Resources/EffectsState.h"
 
 class RootEffect : public EffectListBase
 {
 	CSize m_renderSize;
-	std::array<RenderTarget, 2> m_targets;
-	size_t m_lastTarget = 0;
+	RenderTargets m_targets;
 
 public:
 	RootEffect( AvsState* pState ) : EffectListBase( pState ), m_renderSize{ 0, 0 }{ }

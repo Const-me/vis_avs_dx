@@ -136,6 +136,6 @@ HRESULT RenderWindow::present( const RenderTarget& src )
 	}
 
 	HRESULT hr = E_FAIL;
-	::SendMessage( m_hWnd, WM_RENDER, &src, &hr );
+	::SendMessage( m_hWnd, WM_RENDER, (WPARAM)&src, (LPARAM)&hr );
 	return hr;
 }

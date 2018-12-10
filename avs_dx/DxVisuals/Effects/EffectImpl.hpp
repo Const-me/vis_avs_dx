@@ -1,5 +1,5 @@
 #pragma once
-#include "EffectBase.h"
+#include "../EffectBase/EffectBase.h"
 #include "../Render/EffectStateBuilder.h"
 
 // Interop with the AVS code

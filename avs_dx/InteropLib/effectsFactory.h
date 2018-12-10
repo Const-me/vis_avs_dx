@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include <type_traits>
-#include "../DxVisuals/Effects/EffectBase.h"
+#include "../DxVisuals/EffectBase/EffectBase.h"
 
 template<class AvxEffect>
 HRESULT createDxEffect( void* pState, std::unique_ptr<EffectBase>& dest );

@@ -1,5 +1,4 @@
 #pragma once
-#include "../Effects/EffectBase.h"
 #include "EffectsState.h"
 
 class Renderer

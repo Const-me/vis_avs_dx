@@ -4,9 +4,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Hlsl\Variable.h" />
-    <ClInclude Include="Effects\EffectList.h" />
     <ClInclude Include="Primitives\ColorsTexture.h" />
-    <ClInclude Include="Effects\EffectBase.h" />
     <ClInclude Include="Hlsl\Compiler.h" />
     <ClInclude Include="Hlsl\Defines.hpp" />
     <ClInclude Include="Render\FrameGraphBuilder.h" />
@@ -34,14 +32,16 @@
     <ClInclude Include="Resources\createShaders.hpp" />
     <ClInclude Include="Resources\SourceData.h" />
     <ClInclude Include="Utils\preciseTickCount.h" />
+    <ClInclude Include="EffectBase\EffectBase.h" />
     <ClInclude Include="Effects\EffectImpl.hpp" />
+    <ClInclude Include="EffectBase\EffectListBase.h" />
+    <ClInclude Include="EffectBase\RootEffect.h" />
+    <ClInclude Include="EffectBase\EffectList.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Hlsl\Variable.cpp" />
-    <ClCompile Include="Effects\EffectList.cpp" />
     <ClCompile Include="Primitives\ColorsTexture.cpp" />
-    <ClCompile Include="Effects\EffectBase.cpp" />
     <ClCompile Include="Hlsl\Compiler.cpp" />
     <ClCompile Include="Render\FrameGraphBuilder.cpp" />
     <ClCompile Include="Hlsl\FunctionBuilder.cpp" />
@@ -63,6 +63,10 @@
     <ClCompile Include="Resources\staticResources.cpp" />
     <ClCompile Include="Resources\SourceData.cpp" />
     <ClCompile Include="Utils\preciseTickCount.cpp" />
+    <ClCompile Include="EffectBase\EffectBase.cpp" />
+    <ClCompile Include="EffectBase\EffectListBase.cpp" />
+    <ClCompile Include="EffectBase\EffectList.cpp" />
+    <ClCompile Include="EffectBase\RootEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

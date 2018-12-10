@@ -93,7 +93,9 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="EffectBase\EffectList.h" />
     <ClInclude Include="Effects\EffectImpl.hpp" />
+    <ClInclude Include="EffectBase\RootEffect.h" />
     <ClInclude Include="Utils\preciseTickCount.h" />
     <ClInclude Include="Render\EffectsState.h" />
     <ClInclude Include="Render\Renderer.h" />
@@ -118,10 +120,10 @@
     <ClInclude Include="Render\EffectStateBuilder.h" />
     <ClInclude Include="Render\FrameGraphBuilder.h" />
     <ClInclude Include="Hlsl\Compiler.h" />
-    <ClInclude Include="Effects\EffectBase.h" />
+    <ClInclude Include="EffectBase\EffectBase.h" />
     <ClInclude Include="Hlsl\Defines.hpp" />
     <ClInclude Include="Primitives\ColorsTexture.h" />
-    <ClInclude Include="Effects\EffectList.h" />
+    <ClInclude Include="EffectBase\EffectListBase.h" />
     <ClInclude Include="Hlsl\ShaderBuilder.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -129,6 +131,8 @@
     <ClInclude Include="Utils\MiscUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EffectBase\EffectList.cpp" />
+    <ClCompile Include="EffectBase\RootEffect.cpp" />
     <ClCompile Include="Utils\preciseTickCount.cpp" />
     <ClCompile Include="Render\EffectsState.cpp" />
     <ClCompile Include="Render\Renderer.cpp" />
@@ -144,9 +148,9 @@
     <ClCompile Include="Render\EffectStateBuilder.cpp" />
     <ClCompile Include="Render\FrameGraphBuilder.cpp" />
     <ClCompile Include="Hlsl\Compiler.cpp" />
-    <ClCompile Include="Effects\EffectBase.cpp" />
+    <ClCompile Include="EffectBase\EffectBase.cpp" />
     <ClCompile Include="Primitives\ColorsTexture.cpp" />
-    <ClCompile Include="Effects\EffectList.cpp" />
+    <ClCompile Include="EffectBase\EffectListBase.cpp" />
     <ClCompile Include="Hlsl\ShaderBuilder.cpp" />
     <ClCompile Include="Resources\RenderTarget.cpp" />
     <ClCompile Include="Resources\SourceData.cpp" />

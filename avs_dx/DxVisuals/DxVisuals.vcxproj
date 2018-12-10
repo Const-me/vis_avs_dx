@@ -104,6 +104,7 @@
     <ClInclude Include="Effects\Trans\DynamicMovement.h" />
     <ClInclude Include="Hlsl\FunctionBuilder.h" />
     <ClInclude Include="Render\Stages.h" />
+    <ClInclude Include="Resources\RenderTarget.h" />
     <ClInclude Include="Utils\DirectXErrors\codes.h" />
     <ClInclude Include="Utils\DirectXErrors\DirectXErrors.h" />
     <ClInclude Include="Utils\DirectXErrors\formatMessage.hpp" />
@@ -141,6 +142,7 @@
     <ClCompile Include="Primitives\ColorsTexture.cpp" />
     <ClCompile Include="Effects\EffectList.cpp" />
     <ClCompile Include="Hlsl\ShaderBuilder.cpp" />
+    <ClCompile Include="Resources\RenderTarget.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

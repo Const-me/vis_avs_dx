@@ -15,7 +15,7 @@ namespace Hlsl
 	{
 <# foreach( string cso in staticShaders ) {
 	   string name = Path.GetFileNameWithoutExtension( cso );
-#>		const std::vector<uint8_t>& <#= name #>();
+#>		std::vector<uint8_t> <#= name #>();
 <# } #>
 	}
 }<#@ include file="IncludeShaders.t4"#><#+

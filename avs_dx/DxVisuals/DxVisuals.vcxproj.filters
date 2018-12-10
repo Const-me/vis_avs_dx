@@ -92,6 +92,8 @@
     <FxCompile Include="Effects\Render\SimpleSolidVS.hlsl" />
     <FxCompile Include="Effects\Trans\ColorModifierPS.hlsl" />
     <FxCompile Include="Effects\UpdateStateCS.hlsl" />
+    <FxCompile Include="Effects\Render\SimpleDotsVS.hlsl" />
+    <FxCompile Include="Effects\Render\SimpleDotsGS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

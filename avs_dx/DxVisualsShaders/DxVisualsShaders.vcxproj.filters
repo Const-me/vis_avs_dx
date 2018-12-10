@@ -6,6 +6,7 @@
   <ItemGroup>
     <FxCompile Include="FullScreenTriangleVS.hlsl" />
     <FxCompile Include="CopyTexturePS.hlsl" />
+    <FxCompile Include="PointSpritePS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />

@@ -105,6 +105,8 @@
     <ClInclude Include="Hlsl\FunctionBuilder.h" />
     <ClInclude Include="Render\Stages.h" />
     <ClInclude Include="Resources\RenderTarget.h" />
+    <ClInclude Include="Resources\createShaders.hpp" />
+    <ClInclude Include="Resources\staticResources.h" />
     <ClInclude Include="Utils\DirectXErrors\codes.h" />
     <ClInclude Include="Utils\DirectXErrors\DirectXErrors.h" />
     <ClInclude Include="Utils\DirectXErrors\formatMessage.hpp" />
@@ -143,6 +145,7 @@
     <ClCompile Include="Effects\EffectList.cpp" />
     <ClCompile Include="Hlsl\ShaderBuilder.cpp" />
     <ClCompile Include="Resources\RenderTarget.cpp" />
+    <ClCompile Include="Resources\staticResources.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "RenderWindow.h"
+#include "../DxVisuals/Resources/staticResources.h"
 
 #pragma comment( lib, "D3D11.lib" )
 CComPtr<ID3D11Device> device;
@@ -43,15 +44,19 @@ HRESULT RenderWindow::createDevice()
 
 	CHECK( device->CreateRenderTargetView( pBB, nullptr, &m_rtv ) );
 
+	CHECK( StaticResources::create() );
+
 	logDebug( "Created device + swap chain" );
 	return S_OK;
 }
 
 void RenderWindow::destroyDevice()
 {
+	StaticResources::destroy();
+	m_rtv = nullptr;
+	m_swapChain = nullptr;
 	device = nullptr;
 	context = nullptr;
-	m_swapChain = nullptr;
 }
 
 HRESULT RenderWindow::wmSize( UINT nType, CSize size )

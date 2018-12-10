@@ -70,6 +70,7 @@
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="windowProc.h" />
     <ClInclude Include="effectsFactory.h" />
+    <ClInclude Include="interop.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

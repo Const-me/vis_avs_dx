@@ -10,6 +10,13 @@ public:
 
 	HRESULT create( const CSize& size );
 
+	void destroy();
+
+	operator bool() const
+	{
+		return nullptr != m_rtv && nullptr != m_srv;
+	}
+
 	void clear( const Vector4& color );
 
 	void clear()

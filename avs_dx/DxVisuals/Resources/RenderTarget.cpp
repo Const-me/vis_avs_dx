@@ -18,6 +18,12 @@ HRESULT RenderTarget::create( const CSize& size )
 	return S_OK;
 }
 
+void RenderTarget::destroy()
+{
+	m_rtv = nullptr;
+	m_srv = nullptr;
+}
+
 void RenderTarget::clear( const Vector4& color )
 {
 	context->ClearRenderTargetView( m_rtv, &color.x );

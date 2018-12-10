@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "RenderWindow.h"
 #include "../DxVisuals/Resources/staticResources.h"
+#include "interop.h"
 
 #pragma comment( lib, "D3D11.lib" )
 CComPtr<ID3D11Device> device;
@@ -59,6 +60,16 @@ void RenderWindow::destroyDevice()
 	context = nullptr;
 }
 
+namespace
+{
+	CSize g_renderSize;
+}
+
+CSize getRendeSize()
+{
+	return g_renderSize;
+}
+
 HRESULT RenderWindow::wmSize( UINT nType, CSize size )
 {
 	logDebug( "WM_SIZE: %i, %i x %i", nType, size.cx, size.cy );
@@ -81,6 +92,7 @@ HRESULT RenderWindow::wmSize( UINT nType, CSize size )
 	context->RSSetViewports( 1, &vp );
 
 	logInfo( "Resized the swap chain to %i x %i", size.cx, size.cy );
+	g_renderSize = size;
 	return S_OK;
 }
 

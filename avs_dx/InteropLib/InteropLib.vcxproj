@@ -84,6 +84,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="effectsFactory.h" />
+    <ClInclude Include="interop.h" />
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Utils\WTL\atlapp.h" />

@@ -251,6 +251,7 @@ C_RenderListClass::C_RenderListClass( int iroot )
 	if( !iroot ) line_save = createLineList();
 	else line_save = NULL;
 #endif
+	CREATE_DX_EFFECT( thisfb );
 }
 
 extern int g_n_buffers_w[ NBUF ], g_n_buffers_h[ NBUF ];

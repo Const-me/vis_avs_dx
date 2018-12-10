@@ -1,4 +1,5 @@
 #pragma once
+#include <functional>
 #include "../Hlsl/FunctionBuilder.h"
 #include "../Hlsl/ShaderBuilder.h"
 

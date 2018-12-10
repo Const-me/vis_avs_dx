@@ -34,6 +34,7 @@
     <ClInclude Include="Resources\createShaders.hpp" />
     <ClInclude Include="Resources\SourceData.h" />
     <ClInclude Include="Utils\preciseTickCount.h" />
+    <ClInclude Include="Effects\EffectImpl.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

@@ -1,7 +1,16 @@
 #pragma once
-class EffectList
+#include "EffectImpl.hpp"
+
+class EffectList: public EffectBase
 {
 public:
-	EffectList();
-	~EffectList();
+	struct AvsState
+	{
+
+	};
+	AvsState* const avs;
+
+	EffectList( AvsState* pState ) : avs( pState ) { }
+
+	HRESULT stateDeclarations( EffectStateBuilder &builder ) { return E_NOTIMPL; }
 };

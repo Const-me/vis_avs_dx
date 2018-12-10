@@ -93,6 +93,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Effects\EffectImpl.hpp" />
     <ClInclude Include="Utils\preciseTickCount.h" />
     <ClInclude Include="Render\EffectsState.h" />
     <ClInclude Include="Render\Renderer.h" />

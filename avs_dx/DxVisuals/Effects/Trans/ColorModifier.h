@@ -1,5 +1,5 @@
 #pragma once
-#include "../EffectBase.h"
+#include "../EffectImpl.hpp"
 
 class ColorModifier : public EffectBase
 {

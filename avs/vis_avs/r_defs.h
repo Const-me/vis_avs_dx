@@ -29,6 +29,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #ifndef _R_DEFS_H_
 #define _R_DEFS_H_
+#include "../../avs_dx/InteropLib/effectsFactory.h"
 
 // base class declaration, compatibility class
 class RString;
@@ -46,6 +47,7 @@ public:
 	void load_string( RString &s, unsigned char *data, int &pos, int len );
 	void save_string( unsigned char *data, int &pos, RString &text );
 
+	std::unique_ptr<EffectBase> dxEffect;
 };
 
 class C_RBASE2 : public C_RBASE {

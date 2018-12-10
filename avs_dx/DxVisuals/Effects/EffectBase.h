@@ -1,5 +1,5 @@
 #pragma once
-#include "../Render/EffectStateBuilder.h"
+class EffectStateBuilder;
 
 class EffectBase
 {

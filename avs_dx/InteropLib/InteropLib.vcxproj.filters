@@ -69,6 +69,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="windowProc.h" />
+    <ClInclude Include="effectsFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

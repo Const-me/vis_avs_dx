@@ -36,14 +36,3 @@ extern CComPtr<ID3D11DeviceContext> context;
 #include "Utils/logger.h"
 
 #include "Utils/MiscUtils.h"
-
-// Interop with the AVS code
-inline int min( int a, int b )
-{
-	return std::min( a, b );
-}
-inline int max( int a, int b )
-{
-	return std::max( a, b );
-}
-#include "../../avs/vis_avs/r_defs.h"

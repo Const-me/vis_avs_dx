@@ -56,8 +56,9 @@ HRESULT RootEffect::renderEffects( bool isBeat )
 
 	CHECK( m_targets.writeToLast( clearfb() ) );
 
+	CHECK( render( m_targets ) );
 
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT RootEffect::buildState()

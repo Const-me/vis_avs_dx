@@ -32,6 +32,8 @@
     <ClInclude Include="Resources\RenderTarget.h" />
     <ClInclude Include="Resources\staticResources.h" />
     <ClInclude Include="Resources\createShaders.hpp" />
+    <ClInclude Include="Resources\SourceData.h" />
+    <ClInclude Include="Utils\preciseTickCount.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -58,6 +60,8 @@
     <ClCompile Include="Render\EffectsState.cpp" />
     <ClCompile Include="Resources\RenderTarget.cpp" />
     <ClCompile Include="Resources\staticResources.cpp" />
+    <ClCompile Include="Resources\SourceData.cpp" />
+    <ClCompile Include="Utils\preciseTickCount.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

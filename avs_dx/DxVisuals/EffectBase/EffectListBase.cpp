@@ -4,7 +4,7 @@
 
 class C_RenderListClass;
 
-template<> HRESULT createDxEffect<C_RenderListClass>( void* pState, std::unique_ptr<EffectBase>& dest ) 
+template<> HRESULT createDxEffect<C_RenderListClass>( void* pState, std::unique_ptr<iEffect>& dest )
 {
 	const EffectListBase::AvsState* pStateBase = ( EffectListBase::AvsState*)pState;
 	if( pStateBase->isroot )

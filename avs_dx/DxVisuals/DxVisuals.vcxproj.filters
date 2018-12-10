@@ -38,6 +38,7 @@
     <ClInclude Include="EffectBase\RootEffect.h" />
     <ClInclude Include="EffectBase\EffectList.h" />
     <ClInclude Include="Resources\Targets.h" />
+    <ClInclude Include="iEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

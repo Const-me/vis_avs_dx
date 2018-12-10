@@ -20,7 +20,9 @@ class EffectImpl : public TEffect
 public:
 	EffectImpl( void* pNative ) : TEffect( ( typename TEffect::AvsState* )( pNative ) ) { }
 
-	static inline HRESULT create( void* pState, std::unique_ptr<EffectBase>& res )
+	~EffectImpl() override = default;
+
+	static inline HRESULT create( void* pState, std::unique_ptr<iEffect>& res )
 	{
 		using tImpl = EffectImpl<TEffect>;
 		res = std::make_unique<tImpl>( pState );
@@ -29,4 +31,4 @@ public:
 };
 
 #define DECLARE_EFFECT( DX ) struct AvsState; AvsState* const avs; DX( AvsState* pState ) : avs( pState ) { }
-#define IMPLEMENT_EFFECT( DX, NATIVE ) class NATIVE; template<> HRESULT createDxEffect<NATIVE>( void* pState, std::unique_ptr<EffectBase>& dest ) { return EffectImpl<DX>::create( pState, dest ); };
+#define IMPLEMENT_EFFECT( DX, NATIVE ) class NATIVE; template<> HRESULT createDxEffect<NATIVE>( void* pState, std::unique_ptr<iEffect>& dest ) { return EffectImpl<DX>::create( pState, dest ); };

@@ -1,11 +1,9 @@
 #pragma once
+#include "../iEffect.h"
 class EffectStateBuilder;
-class RenderTarget;
 
-class EffectBase
+class EffectBase: public iEffect
 {
 public:
-	virtual HRESULT renderRoot( char visdata[ 2 ][ 2 ][ 576 ], int isBeat ) { return CO_E_NOT_SUPPORTED; }
-
 	virtual HRESULT stateDeclarations( EffectStateBuilder &builder ) = 0;
 };

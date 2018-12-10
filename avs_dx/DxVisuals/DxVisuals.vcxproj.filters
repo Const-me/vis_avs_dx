@@ -68,6 +68,8 @@
     <ClCompile Include="EffectBase\EffectListBase.cpp" />
     <ClCompile Include="EffectBase\EffectList.cpp" />
     <ClCompile Include="EffectBase\RootEffect.cpp" />
+    <ClCompile Include="EffectBase\EffectListBase.fact.cpp" />
+    <ClCompile Include="Utils\SimpleMath.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

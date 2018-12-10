@@ -10,6 +10,7 @@ class RootEffect : public EffectListBase
 
 public:
 	RootEffect( AvsState* pState ) : EffectListBase( pState ), m_renderSize{ 0, 0 }{ }
+	const Metadata& metadata() override;
 
 	HRESULT renderRoot( char visdata[ 2 ][ 2 ][ 576 ], int isBeat ) override;
 

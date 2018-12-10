@@ -4,8 +4,6 @@
 class EffectListBase : public EffectBase
 {
 public:
-	DECLARE_EFFECT( EffectListBase );
-
 	struct T_RenderListType
 	{
 		C_RBASE *render;
@@ -49,5 +47,21 @@ public:
 		int fake_enabled;
 	};
 
+	AvsState* const avs;
+	EffectListBase( AvsState* pState ) : avs( pState ) { }
+
 	HRESULT stateDeclarations( EffectStateBuilder &builder ) { return E_NOTIMPL; }
+
+private:
+	std::vector<EffectBase*> m_effects;
+
+protected:
+
+	bool clearfb() const
+	{
+		return 0 != ( avs->mode & 1 );
+	}
+
+	// Collect renderers into the local vector. Return false if the list is unchanged, true if they were added, removed or reordered.
+	bool updateList();
 };

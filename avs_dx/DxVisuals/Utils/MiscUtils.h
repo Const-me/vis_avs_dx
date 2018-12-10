@@ -30,3 +30,17 @@ inline void iaClearBuffers()
 {
 	context->IASetVertexBuffers( 0, D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT, nullptr, nullptr, nullptr );
 }
+
+class LockExternCs
+{
+	CRITICAL_SECTION& m_cs;
+public:
+	LockExternCs( CRITICAL_SECTION& cs ) : m_cs( cs )
+	{
+		EnterCriticalSection( &m_cs );
+	}
+	~LockExternCs()
+	{
+		LeaveCriticalSection( &m_cs );
+	}
+};

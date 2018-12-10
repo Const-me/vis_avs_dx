@@ -133,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EffectBase\EffectList.cpp" />
+    <ClCompile Include="EffectBase\EffectListBase.fact.cpp" />
     <ClCompile Include="EffectBase\RootEffect.cpp" />
     <ClCompile Include="Utils\preciseTickCount.cpp" />
     <ClCompile Include="Render\EffectsState.cpp" />
@@ -163,6 +164,7 @@
     <ClCompile Include="Hlsl\Variable.cpp" />
     <ClCompile Include="Utils\DirectXErrors\DirectXErrors.cpp" />
     <ClCompile Include="Utils\DirectXErrors\formatCString.cpp" />
+    <ClCompile Include="Utils\SimpleMath.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt">

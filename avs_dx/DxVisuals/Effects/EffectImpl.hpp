@@ -30,5 +30,17 @@ public:
 	}
 };
 
-#define DECLARE_EFFECT( DX ) struct AvsState; AvsState* const avs; DX( AvsState* pState ) : avs( pState ) { }
-#define IMPLEMENT_EFFECT( DX, NATIVE ) class NATIVE; template<> HRESULT createDxEffect<NATIVE>( void* pState, std::unique_ptr<iEffect>& dest ) { return EffectImpl<DX>::create( pState, dest ); };
+#define DECLARE_EFFECT( DX )                   \
+struct AvsState;                               \
+AvsState* const avs;                           \
+DX( AvsState* pState ) : avs( pState ) { }     \
+const Metadata& metadata() override;
+
+#define IMPLEMENT_EFFECT( DX, NATIVE )                                                     \
+class NATIVE;                                                                              \
+template<> HRESULT createDxEffect<NATIVE>( void* pState, std::unique_ptr<iEffect>& dest )  \
+{                                                                                          \
+	return EffectImpl<DX>::create( pState, dest );                                         \
+};                                                                                         \
+static const EffectBase::Metadata s_metadada{ #DX, false };                                \
+const EffectBase::Metadata& DX::metadata(){ return s_metadada; }

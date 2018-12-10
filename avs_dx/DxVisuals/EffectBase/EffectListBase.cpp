@@ -1,18 +1,5 @@
 #include "stdafx.h"
-#include "RootEffect.h"
-#include "EffectList.h"
-
-class C_RenderListClass;
-
-// Class factory is slightly more complex here: creating different classes depending on whether this effect is the root or just a list inside the preset.
-template<> HRESULT createDxEffect<C_RenderListClass>( void* pState, std::unique_ptr<iEffect>& dest )
-{
-	const EffectListBase::AvsState* pStateBase = ( EffectListBase::AvsState*)pState;
-	if( pStateBase->isroot )
-		return EffectImpl<RootEffect>::create( pState, dest );
-
-	return EffectImpl<EffectList>::create( pState, dest );
-};
+#include "EffectListBase.h"
 
 EffectBase* EffectListBase::T_RenderListType::dxEffect() const
 {
@@ -20,4 +7,47 @@ EffectBase* EffectListBase::T_RenderListType::dxEffect() const
 		return nullptr;
 	iEffect* p = render->dxEffect.get();
 	return static_cast<EffectBase*>( p );
+}
+
+bool EffectListBase::updateList()
+{
+	bool result = false;
+	size_t nextId = 0;
+	const size_t size = m_effects.size();
+	for( int i = 0; i < avs->num_renders; i++ )
+	{
+		T_RenderListType& item = avs->renders[ i ];
+		if( !item.hasDxEffect() )
+			continue;
+		EffectBase* const pEffect = item.dxEffect();
+
+		if( nextId >= size )
+		{
+			// The new list is longer.
+			result = true;
+			m_effects.push_back( pEffect );
+		}
+		else if( m_effects[ nextId ] != pEffect )
+		{
+			// Another effect at that index
+			result = true;
+			m_effects[ nextId ] = pEffect;
+		}
+		nextId++;
+
+		if( !pEffect->metadata().isList )
+			continue;
+		EffectListBase* pList = static_cast<EffectListBase*>( pEffect );
+		if( pList->updateList() )
+			result = true;
+	}
+
+	if( nextId != m_effects.size() )
+	{
+		// The new list is shorter.
+		result = true;
+		m_effects.resize( nextId );
+	}
+
+	return result;
 }

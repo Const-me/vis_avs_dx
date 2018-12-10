@@ -11,6 +11,12 @@ public:
 		C_RBASE *render;
 		int effect_index;
 		int has_rbase2;
+
+		bool hasDxEffect() const
+		{
+			return render->dxEffect.operator bool();
+		}
+		EffectBase* dxEffect() const;
 	};
 
 	struct AvsState
@@ -42,7 +48,6 @@ public:
 		int beat_render, beat_render_frames;
 		int fake_enabled;
 	};
-
 
 	HRESULT stateDeclarations( EffectStateBuilder &builder ) { return E_NOTIMPL; }
 };

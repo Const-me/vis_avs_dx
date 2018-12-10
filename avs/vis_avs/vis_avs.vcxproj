@@ -383,6 +383,14 @@
     <Image Include="avs-normal.png" />
     <Image Include="avs-selected.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\avs_dx\DxVisuals\DxVisuals.vcxproj">
+      <Project>{32301408-2a47-4539-9b8e-6378b7ff4169}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\avs_dx\InteropLib\InteropLib.vcxproj">
+      <Project>{a90c771b-e993-478a-820a-166757609b62}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

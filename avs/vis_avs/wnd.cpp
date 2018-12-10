@@ -57,8 +57,7 @@ char g_title[ 2048 ];
 #include "ff_ipc.h"
 #endif
 
-// #define WS_EX_LAYERED	0x80000
-// #define LWA_ALPHA		2
+#include "../../avs_dx/InteropLib/windowProc.h"
 
 #define ID_VIS_NEXT                     40382
 #define ID_VIS_PREV                     40383
@@ -1108,6 +1107,8 @@ void DoPopupMenu() {
 
 static LRESULT CALLBACK WndProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
+	dxWndProc( hwnd, message, wParam, lParam );
+
 	if( DDraw_IsFullScreen() &&
 		!cfg_fs_use_overlay &&
 		( ( message == WM_KEYDOWN && wParam == VK_ESCAPE ) ||

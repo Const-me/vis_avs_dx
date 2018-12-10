@@ -19,8 +19,6 @@ using DirectX::SimpleMath::Vector4;
 #include <atltypes.h>
 #include <atlcoll.h>
 #include <atlstr.h>
-#include <atlpath.h>
-#include <atlwin.h>
 // #include <atlcom.h>
 
 // C++

@@ -27,10 +27,6 @@
     <Filter Include="Text files">
       <UniqueIdentifier>{e7c720c3-27ee-4399-aa98-88b535c9e443}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{35f687ff-38eb-4a48-b08e-b56709dd6414}</UniqueIdentifier>
-      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="r_avi.cpp">

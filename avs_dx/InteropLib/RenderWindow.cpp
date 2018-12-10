@@ -2,10 +2,12 @@
 #include "RenderWindow.h"
 #include "../DxVisuals/Resources/staticResources.h"
 #include "interop.h"
+#include "../DxVisuals/Resources/RenderTarget.h"
 
 #pragma comment( lib, "D3D11.lib" )
 CComPtr<ID3D11Device> device;
 CComPtr<ID3D11DeviceContext> context;
+CComAutoCriticalSection renderLock;
 
 int RenderWindow::wmCreate( LPCREATESTRUCT lpCreateStruct )
 {
@@ -65,7 +67,7 @@ namespace
 	CSize g_renderSize;
 }
 
-CSize getRendeSize()
+CSize getRenderSize()
 {
 	return g_renderSize;
 }
@@ -78,7 +80,7 @@ HRESULT RenderWindow::wmSize( UINT nType, CSize size )
 	if( !m_swapChain )
 		return S_FALSE;
 
-	CSLock __lock( m_deviceLock );
+	CSLock __lock( renderLock );
 
 	context->OMSetRenderTargets( 0, nullptr, nullptr );
 	m_rtv = nullptr;
@@ -92,12 +94,48 @@ HRESULT RenderWindow::wmSize( UINT nType, CSize size )
 	context->RSSetViewports( 1, &vp );
 
 	logInfo( "Resized the swap chain to %i x %i", size.cx, size.cy );
+
 	g_renderSize = size;
+
 	return S_OK;
 }
 
 LRESULT RenderWindow::wmRender( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& handled )
 {
+	// No need to lock because the reason why this code run is the rendering thread called SendMessage() API. That thread is now waiting for the result doing nothing.
 	logDebug( "WM_RENDER" );
+
+	const RenderTarget* pSource = (const RenderTarget*)( lParam );
+	HRESULT* pResult = (HRESULT*)lParam;
+
+	setShaders( StaticResources::fullScreenTriangle, nullptr, StaticResources::copyTexture );
+	omSetTarget( m_rtv );
+	context->OMSetBlendState( nullptr, nullptr, 0xffffffff );
+	pSource->bindView( 127 );
+
+	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP );
+	iaClearBuffers();
+	context->Draw( 3, 0 );
+
+	*pResult = m_swapChain->Present( 0, 0 );
 	return 0;
+}
+
+HRESULT RenderWindow::present( const RenderTarget& src )
+{
+	if( !src )
+	{
+		logWarning( "RenderWindow::present: the source is empty" );
+		return E_INVALIDARG;
+	}
+
+	if( src.getSize() != g_renderSize )
+	{
+		logWarning( "RenderWindow::present: incorrect size" );
+		return E_INVALIDARG;
+	}
+
+	HRESULT hr = E_FAIL;
+	::SendMessage( m_hWnd, WM_RENDER, &src, &hr );
+	return hr;
 }

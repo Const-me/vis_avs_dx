@@ -37,7 +37,6 @@
     <ClInclude Include="EffectBase\EffectListBase.h" />
     <ClInclude Include="EffectBase\RootEffect.h" />
     <ClInclude Include="EffectBase\EffectList.h" />
-    <ClInclude Include="Resources\Targets.h" />
     <ClInclude Include="iEffect.h" />
   </ItemGroup>
   <ItemGroup>
@@ -69,7 +68,6 @@
     <ClCompile Include="EffectBase\EffectListBase.cpp" />
     <ClCompile Include="EffectBase\EffectList.cpp" />
     <ClCompile Include="EffectBase\RootEffect.cpp" />
-    <ClCompile Include="Resources\Targets.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

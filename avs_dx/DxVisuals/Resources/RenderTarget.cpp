@@ -15,6 +15,7 @@ HRESULT RenderTarget::create( const CSize& size )
 	CD3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{ D3D11_SRV_DIMENSION_TEXTURE2D, rtFormat };
 	CHECK( device->CreateShaderResourceView( texture, &srvDesc, &m_srv ) );
 
+	m_size = size;
 	return S_OK;
 }
 
@@ -35,7 +36,7 @@ void RenderTarget::bindTarget()
 	context->OMSetRenderTargets( 1, &v, nullptr );
 }
 
-void RenderTarget::bindView( UINT slot )
+void RenderTarget::bindView( UINT slot ) const
 {
 	ID3D11ShaderResourceView* v = m_srv;
 	context->PSSetShaderResources( slot, 1, &v );

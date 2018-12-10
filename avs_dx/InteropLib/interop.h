@@ -1,3 +1,9 @@
 #pragma once
 
-CSize getRendeSize();
+class RenderTarget;
+
+CSize getRenderSize();
+
+extern CComAutoCriticalSection renderLock;
+
+HRESULT present( const RenderTarget& src );

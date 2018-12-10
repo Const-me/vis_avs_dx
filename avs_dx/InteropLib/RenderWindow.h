@@ -1,4 +1,5 @@
 #pragma once
+class RenderTarget;
 
 class RenderWindow
 {
@@ -20,7 +21,6 @@ private:
 	HWND m_hWnd = nullptr;
 	CComPtr<IDXGISwapChain> m_swapChain;
 	CComPtr<ID3D11RenderTargetView> m_rtv;
-	CComAutoCriticalSection m_deviceLock;
 
 	int wmCreate( LPCREATESTRUCT lpCreateStruct );
 
@@ -29,4 +29,8 @@ private:
 	void wmDestroy();
 	HRESULT wmSize( UINT nType, CSize size );
 	LRESULT wmRender( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& handled );
+
+public:
+
+	HRESULT present( const RenderTarget& src );
 };

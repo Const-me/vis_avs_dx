@@ -97,7 +97,6 @@
     <ClInclude Include="Effects\EffectImpl.hpp" />
     <ClInclude Include="EffectBase\RootEffect.h" />
     <ClInclude Include="iEffect.h" />
-    <ClInclude Include="Resources\Targets.h" />
     <ClInclude Include="Utils\preciseTickCount.h" />
     <ClInclude Include="Render\EffectsState.h" />
     <ClInclude Include="Render\Renderer.h" />
@@ -135,7 +134,6 @@
   <ItemGroup>
     <ClCompile Include="EffectBase\EffectList.cpp" />
     <ClCompile Include="EffectBase\RootEffect.cpp" />
-    <ClCompile Include="Resources\Targets.cpp" />
     <ClCompile Include="Utils\preciseTickCount.cpp" />
     <ClCompile Include="Render\EffectsState.cpp" />
     <ClCompile Include="Render\Renderer.cpp" />

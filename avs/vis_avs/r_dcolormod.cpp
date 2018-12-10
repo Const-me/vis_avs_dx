@@ -127,6 +127,8 @@ C_THISCLASS::C_THISCLASS()
 
 	var_beat = 0;
 	m_tab_valid = 0;
+
+	CREATE_DX_EFFECT( effect_exp );
 }
 
 C_THISCLASS::~C_THISCLASS()

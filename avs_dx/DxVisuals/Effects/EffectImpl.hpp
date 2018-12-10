@@ -12,6 +12,7 @@ inline int max( int a, int b )
 	return std::max( a, b );
 }
 #include "../../avs/vis_avs/r_defs.h"
+#include "../InteropLib/effectsFactory.h"
 
 template<class TEffect>
 class EffectImpl : public TEffect
@@ -27,4 +28,5 @@ public:
 	}
 };
 
-#define IMPLEMENT_EFFECT( DX, NATIVE ) class NATIVE; template<> HRESULT createDxEffect<NATIVE>( void* pState, std::unique_ptr<EffectBase>& dest ) { return EffectImpl<DX>::create( pState, dest ); }
+#define DECLARE_EFFECT( DX ) struct AvsState; AvsState* const avs; DX( AvsState* pState ) : avs( pState ) { }
+#define IMPLEMENT_EFFECT( DX, NATIVE ) class NATIVE; template<> HRESULT createDxEffect<NATIVE>( void* pState, std::unique_ptr<EffectBase>& dest ) { return EffectImpl<DX>::create( pState, dest ); };

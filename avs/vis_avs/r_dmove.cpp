@@ -186,6 +186,8 @@ C_THISCLASS::C_THISCLASS()
 	wrap = 0;
 	buffern = 0;
 	nomove = 0;
+
+	CREATE_DX_EFFECT( effect_exp );
 }
 
 C_THISCLASS::~C_THISCLASS()

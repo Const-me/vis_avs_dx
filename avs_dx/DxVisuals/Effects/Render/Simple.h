@@ -1,9 +1,12 @@
 #pragma once
-#include "../EffectBase.h"
+#include "../EffectImpl.hpp"
 
-struct Simple: public EffectBase
+class Simple: public EffectBase
 {
+public:
 	HRESULT stateDeclarations( EffectStateBuilder &builder ) override;
+
+	DECLARE_EFFECT( Simple );
 
 	struct AvsState
 	{

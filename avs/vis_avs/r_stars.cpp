@@ -110,6 +110,8 @@ C_THISCLASS::C_THISCLASS() // set up default configuration
 	spdBeat = 4;
 	durFrames = 15;
 	incBeat = 0;
+
+	CREATE_DX_EFFECT( enabled );
 }
 
 #define GET_INT() (data[pos]|(data[pos+1]<<8)|(data[pos+2]<<16)|(data[pos+3]<<24))

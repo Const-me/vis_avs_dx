@@ -89,6 +89,7 @@ C_THISCLASS::C_THISCLASS()
 	memset( colors, 0, sizeof( colors ) );
 	colors[ 0 ] = RGB( 255, 255, 255 );
 	color_pos = 0;
+	CREATE_DX_EFFECT( effect );
 }
 
 C_THISCLASS::~C_THISCLASS()

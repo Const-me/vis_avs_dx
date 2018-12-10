@@ -54,39 +54,10 @@ const char* getDxErrorStringA( HRESULT hr )
 	return nullptr;
 }
 
-const wchar_t* getDxErrorStringW( HRESULT hr )
-{
-#define CHK_ERR( code, description )      case code: return L#code;
-#define CHK_ERRA( code )                  case code: return L#code;
-#define CHK_ERR_WIN32A( code )            case hresultFromWin32( code ) : return L#code;
-	switch( hr )
-	{
-#include "data/win32.inl"
-#include "includeData.inl"
-	}
-#undef CHK_ERR_WIN32A
-#undef CHK_ERRA
-#undef CHK_ERR
-	return nullptr;
-}
-
 const char* getDxErrorDescriptionA( HRESULT hr )
 {
 #define CHK_ERR( code, description )      case code: return description;
 #define CHK_ERRA( code )                  case code: return #code;
-	switch( hr )
-	{
-#include "includeData.inl"
-	}
-#undef CHK_ERRA
-#undef CHK_ERR
-	return nullptr;
-}
-
-const wchar_t* getDxErrorDescriptionW( HRESULT hr )
-{
-#define CHK_ERR( code, description )      case code: return L##description;
-#define CHK_ERRA( code )                  case code: return L#code;
 	switch( hr )
 	{
 #include "includeData.inl"

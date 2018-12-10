@@ -357,6 +357,9 @@ static int __inline depthof( int c, int i )
 
 int C_RenderListClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
 {
+	if( isroot )
+		dxEffect->renderRoot( visdata, isBeat );
+
 	int is_preinit = ( isBeat & 0x80000000 );
 
 	if( isBeat && beat_render )

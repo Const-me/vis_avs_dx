@@ -1,4 +1,5 @@
 #pragma once
+#include "SourceData.h"
 
 namespace StaticResources
 {
@@ -9,4 +10,6 @@ namespace StaticResources
 	extern CComPtr<ID3D11PixelShader> copyTexture;
 	extern CComPtr<ID3D11SamplerState> sampleBilinear;
 	extern CComPtr<ID3D11BlendState> blendPremultipliedAlpha;
+
+	extern SourceData sourceData;
 };

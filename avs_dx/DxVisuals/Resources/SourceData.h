@@ -24,9 +24,12 @@ class SourceData
 	CComPtr<ID3D11Buffer> m_cbuffer;
 
 	uint32_t m_currentFrame = 0;
+
 public:
 
 	HRESULT create();
+
+	void destroy();
 
 	HRESULT update( char visdata[ 2 ][ 2 ][ bands ], int isBeat );
 };

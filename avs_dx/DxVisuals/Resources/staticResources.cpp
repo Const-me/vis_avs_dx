@@ -36,18 +36,23 @@ namespace StaticResources
 			CHECK( device->CreateBlendState( &blendDesc, &blendPremultipliedAlpha ) );
 		}
 
+		CHECK( sourceData.create() );
+
 		return S_OK;
 	}
+
 	void destroy()
 	{
 		fullScreenTriangle = nullptr;
 		copyTexture = nullptr;
 		sampleBilinear = nullptr;
 		blendPremultipliedAlpha = nullptr;
+		sourceData.destroy();
 	}
 
 	CComPtr<ID3D11VertexShader> fullScreenTriangle;
 	CComPtr<ID3D11PixelShader> copyTexture;
 	CComPtr<ID3D11SamplerState> sampleBilinear;
 	CComPtr<ID3D11BlendState> blendPremultipliedAlpha;
+	SourceData sourceData;
 };

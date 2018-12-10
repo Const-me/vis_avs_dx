@@ -11,7 +11,7 @@ HRESULT SourceData::create()
 
 	constexpr DXGI_FORMAT texFormat = DXGI_FORMAT_R8_SNORM;
 
-	CD3D11_TEXTURE2D_DESC texDesc{ texFormat, bands, 4, 1, 0, D3D11_BIND_SHADER_RESOURCE, D3D11_USAGE_DYNAMIC };
+	CD3D11_TEXTURE2D_DESC texDesc{ texFormat, bands, 4, 1, 1, D3D11_BIND_SHADER_RESOURCE, D3D11_USAGE_DYNAMIC, D3D11_CPU_ACCESS_WRITE };
 	CHECK( device->CreateTexture2D( &texDesc, nullptr, &m_texture ) );
 
 	CD3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{ D3D11_SRV_DIMENSION_TEXTURE2D, texFormat };
@@ -21,6 +21,14 @@ HRESULT SourceData::create()
 	CHECK( device->CreateBuffer( &bufferDesc, nullptr, &m_cbuffer ) );
 
 	return S_OK;
+}
+
+void SourceData::destroy()
+{
+	m_cbuffer = nullptr;
+	m_srv = nullptr;
+	m_texture = nullptr;
+	m_currentFrame = 0;
 }
 
 HRESULT SourceData::update( char visdata[ 2 ][ 2 ][ bands ], int isBeat )

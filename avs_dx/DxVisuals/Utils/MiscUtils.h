@@ -2,7 +2,11 @@
 
 inline HRESULT getLastHr() { return HRESULT_FROM_WIN32( GetLastError() ); }
 
+#ifdef NDEBUG
 #define CHECK( hr ) { const HRESULT __hr = ( hr ); if( FAILED( __hr ) ) { logError( __hr, #hr ); return __hr; } }
+#else
+#define CHECK( hr ) { const HRESULT __hr = ( hr ); if( FAILED( __hr ) ) { __debugbreak(); logError( __hr, #hr ); return __hr; } }
+#endif
 
 inline void csSetUav( ID3D11UnorderedAccessView* uav, UINT slot )
 {

@@ -99,6 +99,7 @@
     <ClInclude Include="Render\Shader.hpp" />
     <ClInclude Include="iEffect.h" />
     <ClInclude Include="Render\EffectRenderer.hpp" />
+    <ClInclude Include="Render\ShaderTemplate.h" />
     <ClInclude Include="Resources\RenderTargets.hpp" />
     <ClInclude Include="Utils\preciseTickCount.h" />
     <ClInclude Include="Resources\EffectsState.h" />

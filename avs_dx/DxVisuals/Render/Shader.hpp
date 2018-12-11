@@ -1,17 +1,12 @@
 #pragma once
+#include "ShaderTemplate.h"
 #include "Stage.h"
 #include "../Hlsl/Defines.h"
 #include "../Hlsl/Compiler.h"
 #include "../Resources/createShaders.hpp"
 
-struct ShaderTemplate
-{
-	const char* const name;
-	const CStringA& hlsl;
-	constexpr ShaderTemplate( const char *n, const CStringA& src ) : name( n ), hlsl( src ) { }
-};
-
-// A shader that's instantiated from a template. Source data is arbitrary type, needs to be copyable and need to have operator==.
+// A shader that's instantiated from a template. Source data is what defines the macros.
+// Source needs to be copyable, needs to have operator==, and needs to have HRESULT defines( Hlsl::Defines &def ); method.
 template<eStage stage, class TSourceData>
 class Shader
 {

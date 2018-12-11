@@ -7,8 +7,7 @@ using PsData = ColorModifierStructs::PsData;
 
 const ShaderTemplate& PsData::shaderTemplate()
 {
-	static const ShaderTemplate res{ "ColorModifierPS", Hlsl::Trans::ColorModifier::ColorModifierPS() };
-	return res;
+	return Hlsl::Trans::ColorModifier::ColorModifierPS();
 }
 
 bool PsData::update( const AvsState& ass, int stateOffset )

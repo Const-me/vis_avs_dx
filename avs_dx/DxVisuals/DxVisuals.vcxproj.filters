@@ -40,6 +40,7 @@
     <ClInclude Include="Render\EffectRenderer.hpp" />
     <ClInclude Include="Render\Shader.hpp" />
     <ClInclude Include="Effects\Trans\ColorModifier\ColorModifier.h" />
+    <ClInclude Include="Render\ShaderTemplate.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

@@ -35,7 +35,7 @@ struct ColorModifierStructs
 	private:
 		// NSEEL expression for the pixel code
 		CStringA expression;
-		// NSEEL expression compiled into the HLSL fragment
+		// The above expression compiled into the HLSL fragment
 		CStringA hlsl;
 	};
 };

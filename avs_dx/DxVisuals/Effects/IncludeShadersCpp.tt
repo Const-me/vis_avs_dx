@@ -196,7 +196,7 @@ static void generateNamespaces( CppBuilder sb, NamespaceData ns, int lvl )
 			sb.line( lvl );
 			string name = Path.GetFileNameWithoutExtension( s );
 			string content = File.ReadAllText( s, Encoding.ASCII );
-			sb.print( "const CStringA& {0}()", name );
+			sb.print( "const ShaderTemplate& {0}()", name );
 			sb.line( lvl );
 			sb.print( "{" );
 			sb.line( lvl + 1 );
@@ -204,7 +204,7 @@ static void generateNamespaces( CppBuilder sb, NamespaceData ns, int lvl )
 			printBytes( sb, compressed );
 
 			sb.tabs( lvl + 1 );
-			sb.line( "static const CStringA result = decompressString( src, {0}, {1} );", compressed.Length, orig.Length );
+			sb.line( "static const ShaderTemplate result{{ R\"({0})\", decompressString( src, {1}, {2} ) }};", Path.GetFileName( s ), compressed.Length, orig.Length );
 			sb.tabs( lvl + 1 );
 			sb.line( "return result;" );
 

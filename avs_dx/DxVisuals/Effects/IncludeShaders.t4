@@ -35,6 +35,10 @@
 			}
 			children = subs.ToArray();
 		}
+
+		public bool anyInclude => headers.Length > 0;
+		public bool anySource => sources.Length > 0;
+		public bool anyChild => children.Length > 0;
 	}
 
 	NamespaceData s_root = null;
@@ -54,17 +58,23 @@
 	static void writeNamespaces( CppBuilder sb, Action<CppBuilder, NamespaceData, int> act, NamespaceData ns, int lvl )
 	{
 		act( sb, ns, lvl );
+
+		if( ( ns.anyInclude || ns.anySource ) && ns.anyChild )
+			sb.line();
+
 		foreach( var c in ns.children )
 		{
-			sb.line( lvl );
-			sb.print( "namespace {0}", c.name );
+			if( c != ns.children[ 0 ] )
+				sb.line();
+			sb.tabs( lvl );
+			sb.line( "namespace {0}", c.name );
 
-			sb.line( lvl );
-			sb.print( "{" );
+			sb.tabs( lvl );
+			sb.line( "{" );
 
 			writeNamespaces( sb, act, c, lvl + 1 );
 
-			sb.line( lvl );
+			sb.tabs( lvl );
 			sb.line( "}" );
 		}
 	}

@@ -1,4 +1,4 @@
-#include "FrameGlobalData.fx"
+#include "VisCommon.fx"
 
 #ifndef AVS_SHADER
 #define SIMPLE_READ_V 0.75f // center channel waveform

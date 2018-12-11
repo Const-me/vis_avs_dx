@@ -1,4 +1,4 @@
-#include "FrameGlobalData.fx"
+#include "VisCommon.fx"
 
 #ifndef AVS_SHADER
 // Centered position

@@ -93,6 +93,7 @@
     <None Include="Effects\IncludeShaders.t4" />
     <None Include="packages.config" />
     <None Include="Render\EffectRenderer.inl" />
+    <None Include="Effects\VisCommon.fx" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Effects\UpdateStateCS.hlsl" />

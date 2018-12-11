@@ -207,6 +207,9 @@
     <None Include="Utils\DirectXErrors\includeData.inl" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Effects\VisCommon.fx">
+      <FileType>Document</FileType>
+    </None>
     <None Include="Effects\FrameGlobalData.fx">
       <FileType>Document</FileType>
     </None>

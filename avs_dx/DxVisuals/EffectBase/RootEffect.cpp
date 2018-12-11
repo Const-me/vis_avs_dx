@@ -39,7 +39,7 @@ HRESULT RootEffect::renderEffects( bool isBeat )
 	{
 		LockExternCs __lock{ g_render_cs };
 		const bool listChanged = updateList();
-		const bool stateChanged = updateState();
+		const bool stateChanged = shouldRebuildState();
 		if( listChanged || stateChanged )
 		{
 			CHECK( buildState() );
@@ -63,5 +63,27 @@ HRESULT RootEffect::renderEffects( bool isBeat )
 
 HRESULT RootEffect::buildState()
 {
+	CAtlMap<CStringA, int> globals;
+	std::vector<CStringA> mainPieces;
+	bool useBeat = false;
+	int stateBufferOffset = 0;
+
+	const HRESULT hr = applyRecursively( [ & ]( EffectBase& e ) 
+	{
+		CStringA hlsl;
+		bool beat = false;
+		int thisSize = 0;
+		CHECK( e.buildState( stateBufferOffset, thisSize, hlsl, beat, globals ) );
+
+		stateBufferOffset += thisSize * 4;
+
+		if( hlsl.GetLength() > 0 )
+			mainPieces.push_back( hlsl );
+
+		useBeat = useBeat || beat;
+		return S_OK;
+	} );
+	CHECK( hr );
+
 	return E_NOTIMPL;
 }

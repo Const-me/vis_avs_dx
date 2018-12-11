@@ -101,6 +101,7 @@
     <ClInclude Include="Render\EffectRenderer.hpp" />
     <ClInclude Include="Render\ShaderTemplate.h" />
     <ClInclude Include="Resources\RenderTargets.hpp" />
+    <ClInclude Include="Hlsl\stateShaderUtils.h" />
     <ClInclude Include="Utils\preciseTickCount.h" />
     <ClInclude Include="Resources\EffectsState.h" />
     <ClInclude Include="Render\Binder.h" />
@@ -139,6 +140,7 @@
     <ClCompile Include="EffectBase\EffectListBase.fact.cpp" />
     <ClCompile Include="EffectBase\RootEffect.cpp" />
     <ClCompile Include="Hlsl\Defines.cpp" />
+    <ClCompile Include="Hlsl\stateShaderUtils.cpp" />
     <ClCompile Include="Utils\preciseTickCount.cpp" />
     <ClCompile Include="Resources\EffectsState.cpp" />
     <ClCompile Include="Render\Binder.cpp" />
@@ -215,6 +217,10 @@
     <FxCompile Include="Effects\Render\Simple\SimpleDotsVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Render\Simple\SimpleStateCS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
     </FxCompile>
     <FxCompile Include="Effects\UpdateStateCS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>

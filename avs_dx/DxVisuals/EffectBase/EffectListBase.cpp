@@ -52,12 +52,12 @@ bool EffectListBase::updateList()
 	return result;
 }
 
-bool EffectListBase::updateState()
+bool EffectListBase::shouldRebuildState()
 {
 	bool result = false;
 	for( auto p : m_effects )
 	{
-		const bool r = p->updateState();
+		const bool r = p->shouldRebuildState();
 		result = result || r;
 	}
 	return result;

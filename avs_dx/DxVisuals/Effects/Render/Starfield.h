@@ -41,10 +41,5 @@ public:
 
 	const Metadata& metadata() override;
 
-	HRESULT stateDeclarations( EffectStateBuilder &builder ) override
-	{
-		return E_NOTIMPL;
-	}
-
 	HRESULT render( RenderTargets& rt ) override { return E_NOTIMPL; }
 };

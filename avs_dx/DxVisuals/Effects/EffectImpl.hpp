@@ -4,6 +4,7 @@
 #include "../Render/EffectRenderer.hpp"
 #include "../Resources/staticResources.h"
 #include "shadersCode.h"
+#include "../Hlsl/stateShaderUtils.h"
 
 // Interop with the AVS code
 inline int min( int a, int b )

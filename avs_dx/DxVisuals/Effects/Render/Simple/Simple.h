@@ -75,7 +75,7 @@ public:
 
 	const Metadata& metadata() override;
 
-	HRESULT stateDeclarations( EffectStateBuilder &builder ) override;
+	HRESULT buildState( int stateBufferOffset, int& thisSize, CStringA& hlsl, bool& useBeat, CAtlMap<CStringA, int>& globals ) override;
 
 	HRESULT render( RenderTargets& rt ) override { return E_NOTIMPL; }
 };

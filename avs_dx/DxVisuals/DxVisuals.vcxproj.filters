@@ -41,6 +41,7 @@
     <ClInclude Include="Render\Shader.hpp" />
     <ClInclude Include="Effects\Trans\ColorModifier\ColorModifier.h" />
     <ClInclude Include="Render\ShaderTemplate.h" />
+    <ClInclude Include="Hlsl\stateShaderUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -73,6 +74,7 @@
     <ClCompile Include="Hlsl\Defines.cpp" />
     <ClCompile Include="Effects\Render\Simple\Simple.cpp" />
     <ClCompile Include="Effects\Trans\ColorModifier\ColorModifier.cpp" />
+    <ClCompile Include="Hlsl\stateShaderUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -99,6 +101,7 @@
     <FxCompile Include="Effects\Render\Simple\SimpleSolidPS.hlsl" />
     <FxCompile Include="Effects\Render\Simple\SimpleSolidVS.hlsl" />
     <FxCompile Include="Effects\Trans\ColorModifier\ColorModifierPS.hlsl" />
+    <FxCompile Include="Effects\Render\Simple\SimpleStateCS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

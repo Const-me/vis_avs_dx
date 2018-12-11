@@ -80,6 +80,7 @@ namespace Hlsl
 			const int cb = (int)blobErrors->GetBufferSize();
 			CopyMemory( compilerErrors.GetBufferSetLength( cb + 1 ), blobErrors->GetBufferPointer(), cb );
 			compilerErrors.ReleaseBuffer( cb );
+			compilerErrors.Trim();
 		}
 		return hr;
 	}

@@ -3,6 +3,7 @@
 #include "../Resources/staticResources.h"
 #include "../../InteropLib/interop.h"
 #include "../Render/Binder.h"
+#include "../Hlsl/Compiler.h"
 
 // The critical section that guards renderers, linked from deep inside AVS.
 extern CRITICAL_SECTION g_render_cs;
@@ -68,7 +69,7 @@ HRESULT RootEffect::buildState()
 	bool useBeat = false;
 	int stateBufferOffset = 0;
 
-	const HRESULT hr = applyRecursively( [ & ]( EffectBase& e ) 
+	HRESULT hr = applyRecursively( [ & ]( EffectBase& e )
 	{
 		CStringA hlsl;
 		bool beat = false;
@@ -85,5 +86,50 @@ HRESULT RootEffect::buildState()
 	} );
 	CHECK( hr );
 
-	return E_NOTIMPL;
+	CStringA hlsl = R"fffuuu(
+#include "FrameGlobalData.fx"
+
+RWByteAddressBuffer effectStates : register(u0);
+)fffuuu";
+
+	for( POSITION pos = globals.GetStartPosition(); nullptr != pos; )
+	{
+		CStringA s = globals.GetNextKey( pos );
+		hlsl += s;
+		hlsl += "\r\n";
+	}
+
+	hlsl += R"fffuuu(
+[numthreads( 1, 1, 1 )]
+void main()
+{
+)fffuuu";
+
+	for( auto& s : mainPieces )
+	{
+		hlsl += s;
+		hlsl += "\r\n";
+	}
+	hlsl += "}";
+
+	std::vector<uint8_t> dxbc;
+	CStringA errors;
+	hr = Hlsl::compile( eStage::Compute, hlsl, dxbc, errors );
+	if( FAILED( hr ) )
+	{
+		logError( hr, "Error compiling state shader." );
+		return hr;
+	}
+
+	CHECK( createShader( dxbc, m_updateState ) );
+
+	// TODO: if useBeat == true, change defines and compile again.
+	m_updateStateBeat = m_updateState;
+
+
+	const UINT newStateSize = (UINT)stateBufferOffset / 4;
+	if( newStateSize != m_state.getSize() )
+		CHECK( m_state.create( newStateSize ) );
+
+	return S_OK;
 }

@@ -13,12 +13,23 @@ HRESULT EffectsState::create( UINT totalSize )
 	CComPtr<ID3D11Buffer> buffer;
 	CHECK( device->CreateBuffer( &bufferDesc, nullptr, &buffer ) );
 
-	CD3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{ D3D11_SRV_DIMENSION_BUFFER, DXGI_FORMAT_R32_TYPELESS };
+	CD3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{ D3D11_SRV_DIMENSION_BUFFEREX, DXGI_FORMAT_R32_TYPELESS };
+	srvDesc.BufferEx.NumElements = totalSize;
+	srvDesc.BufferEx.Flags = D3D11_BUFFEREX_SRV_FLAG_RAW;
 	CHECK( device->CreateShaderResourceView( buffer, &srvDesc, &m_srv ) );
 
 	CD3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc{ D3D11_UAV_DIMENSION_BUFFER, DXGI_FORMAT_R32_TYPELESS };
+	uavDesc.Buffer.NumElements = totalSize;
 	uavDesc.Buffer.Flags = D3D11_BUFFER_UAV_FLAG_RAW;	// Resource contains raw, unstructured data. Requires the UAV format to be DXGI_FORMAT_R32_TYPELESS.
 	CHECK( device->CreateUnorderedAccessView( buffer, &uavDesc, &m_uav ) );
 
+	m_size = totalSize;
 	return S_OK;
+}
+
+void EffectsState::destroy()
+{
+	m_srv = nullptr;
+	m_uav = nullptr;
+	m_size = 0;
 }

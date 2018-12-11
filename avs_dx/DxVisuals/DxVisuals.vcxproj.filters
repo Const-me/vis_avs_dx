@@ -23,7 +23,6 @@
     <ClInclude Include="Render\EffectStateBuilder.h" />
     <ClInclude Include="Render\EffectsResources.h" />
     <ClInclude Include="Render\Binder.h" />
-    <ClInclude Include="Render\Stages.h" />
     <ClInclude Include="Utils\MiscUtils.h" />
     <ClInclude Include="Resources\RenderTarget.h" />
     <ClInclude Include="Resources\staticResources.h" />
@@ -38,6 +37,7 @@
     <ClInclude Include="iEffect.h" />
     <ClInclude Include="Resources\EffectsState.h" />
     <ClInclude Include="Resources\RenderTargets.hpp" />
+    <ClInclude Include="Render\Stage.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

@@ -1,10 +1,11 @@
 #pragma once
 #include "EffectsResources.h"
-#include "Stages.h"
+#include "Stage.h"
 
 class Binder
 {
+	// std::array<>
 public:
 	// Reserve shader slot for the specified resource, return string like "t4" that can be compiled into the shader code to access that resource
-	CStringA bind( ResourceHandle resource, eStages pipelineStage );
+	const CStringA& bind( eStage pipelineStage, ID3D11ShaderResourceView* srv );
 };

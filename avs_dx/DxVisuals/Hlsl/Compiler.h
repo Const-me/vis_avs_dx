@@ -1,8 +1,8 @@
 #pragma once
-#include "../Render/Stages.h"
+#include "../Render/Stage.h"
 #include "Defines.hpp"
 
 namespace Hlsl
 {
-	HRESULT compile( eStages what, const CStringA& hlsl, std::vector<uint8_t>& binary, CStringA& compilerErrors, Defines* pDefines = nullptr );
+	HRESULT compile( eStage what, const CStringA& hlsl, std::vector<uint8_t>& binary, CStringA& compilerErrors, Defines* pDefines = nullptr );
 }

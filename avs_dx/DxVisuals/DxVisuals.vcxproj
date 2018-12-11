@@ -108,7 +108,7 @@
     <ClInclude Include="Effects\Trans\ColorModifier.h" />
     <ClInclude Include="Effects\Trans\DynamicMovement.h" />
     <ClInclude Include="Hlsl\FunctionBuilder.h" />
-    <ClInclude Include="Render\Stages.h" />
+    <ClInclude Include="Render\Stage.h" />
     <ClInclude Include="Resources\RenderTarget.h" />
     <ClInclude Include="Resources\createShaders.hpp" />
     <ClInclude Include="Resources\SourceData.h" />

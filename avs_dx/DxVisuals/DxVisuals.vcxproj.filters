@@ -36,10 +36,10 @@
     <ClInclude Include="Resources\EffectsState.h" />
     <ClInclude Include="Resources\RenderTargets.hpp" />
     <ClInclude Include="Render\Stage.h" />
-    <ClInclude Include="Hlsl\Shader.hpp" />
     <ClInclude Include="Hlsl\Defines.h" />
     <ClInclude Include="Effects\Render\Simple\Simple.h" />
     <ClInclude Include="Render\EffectRenderer.hpp" />
+    <ClInclude Include="Render\Shader.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -89,6 +89,7 @@
     <None Include="Effects\FrameGlobalData.fx" />
     <None Include="Effects\IncludeShaders.t4" />
     <None Include="packages.config" />
+    <None Include="Render\EffectRenderer.inl" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Effects\Trans\ColorModifierPS.hlsl" />

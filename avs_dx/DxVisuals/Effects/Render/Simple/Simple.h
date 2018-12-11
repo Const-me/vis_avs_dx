@@ -17,6 +17,8 @@ public:
 	{
 		struct VsData
 		{
+			static const ShaderTemplate& shaderTemplate();
+
 			// Offset in state buffer to read the current color, in 32-bit elements.
 			int effectState;
 			// t# register for the buffer with the positions in clip space
@@ -28,6 +30,8 @@ public:
 		};
 		struct GsData
 		{
+			static const ShaderTemplate& shaderTemplate();
+
 			// Half size of a single spite, in clip space units
 			Vector2 size;
 

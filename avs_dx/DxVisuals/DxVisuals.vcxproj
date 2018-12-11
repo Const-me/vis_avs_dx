@@ -96,7 +96,7 @@
     <ClInclude Include="EffectBase\EffectList.h" />
     <ClInclude Include="Effects\EffectImpl.hpp" />
     <ClInclude Include="EffectBase\RootEffect.h" />
-    <ClInclude Include="Hlsl\Shader.hpp" />
+    <ClInclude Include="Render\Shader.hpp" />
     <ClInclude Include="iEffect.h" />
     <ClInclude Include="Render\EffectRenderer.hpp" />
     <ClInclude Include="Resources\RenderTargets.hpp" />
@@ -189,6 +189,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Effects/shadersCode.h</Outputs>
     </CustomBuild>
     <None Include="packages.config" />
+    <None Include="Render\EffectRenderer.inl" />
     <None Include="Utils\DirectXErrors\data\d2d.inl" />
     <None Include="Utils\DirectXErrors\data\d3d10-11.inl" />
     <None Include="Utils\DirectXErrors\data\d3d9.inl" />

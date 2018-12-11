@@ -1,7 +1,7 @@
 #pragma once
 #include "../EffectBase/EffectBase.h"
 #include "../Render/EffectStateBuilder.h"
-#include "../Hlsl/Shader.hpp"
+#include "../Render/Shader.hpp"
 #include "../Resources/staticResources.h"
 
 // Interop with the AVS code

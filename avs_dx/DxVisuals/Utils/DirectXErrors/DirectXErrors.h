@@ -1,8 +1,5 @@
 #pragma once
 
-// Get error string from HRESULT code, e.g. "DXGI_ERROR_MORE_DATA". Returns nullptr for unknown codes. The data includes a subset of Win32 errors.
-const char* getDxErrorStringA( HRESULT hr );
-
 // Get error description from HRESULT code, e.g. "The caller did not supply a sufficiently large buffer." Returns nullptr for unknown codes. The data doesn't include Win32 errors, FormatMessage API already knows them.
 const char* getDxErrorDescriptionA( HRESULT hr );
 

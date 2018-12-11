@@ -29,31 +29,6 @@
 
 #include "codes.h"
 
-namespace
-{
-	// The built-in HRESULT_FROM_WIN32 is an inline function without constexpr in Win8.1 SDK. Need to workaround.
-	constexpr HRESULT hresultFromWin32( unsigned long x )
-	{
-		return (HRESULT)( x ) <= 0 ? (HRESULT)( x ) : (HRESULT)( ( ( x ) & 0x0000FFFF ) | ( FACILITY_WIN32 << 16 ) | 0x80000000 );
-	}
-}
-
-const char* getDxErrorStringA( HRESULT hr )
-{
-#define CHK_ERR( code, description )      case code: return #code;
-#define CHK_ERRA( code )                  case code: return #code;
-#define CHK_ERR_WIN32A( code )            case hresultFromWin32( code ) : return #code;
-	switch( hr )
-	{
-#include "data/win32.inl"
-#include "includeData.inl"
-	}
-#undef CHK_ERR_WIN32A
-#undef CHK_ERRA
-#undef CHK_ERR
-	return nullptr;
-}
-
 const char* getDxErrorDescriptionA( HRESULT hr )
 {
 #define CHK_ERR( code, description )      case code: return description;

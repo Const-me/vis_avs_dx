@@ -98,6 +98,7 @@
     <ClInclude Include="EffectBase\RootEffect.h" />
     <ClInclude Include="Hlsl\Shader.hpp" />
     <ClInclude Include="iEffect.h" />
+    <ClInclude Include="Render\EffectRenderer.hpp" />
     <ClInclude Include="Resources\RenderTargets.hpp" />
     <ClInclude Include="Utils\preciseTickCount.h" />
     <ClInclude Include="Resources\EffectsState.h" />

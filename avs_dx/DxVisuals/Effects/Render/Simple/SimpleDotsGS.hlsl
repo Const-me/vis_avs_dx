@@ -1,7 +1,6 @@
 #ifndef AVS_SHADER
 #define SIZE_X    0.01
 #define SIZE_Y    SIZE_X * 16 / 9
-#define TEX_SIZE  1.5
 #endif
 
 struct sIn

@@ -2,6 +2,7 @@
 #include "../EffectBase/EffectBase.h"
 #include "../Render/EffectStateBuilder.h"
 #include "../Hlsl/Shader.hpp"
+#include "../Resources/staticResources.h"
 
 // Interop with the AVS code
 inline int min( int a, int b )

@@ -8,10 +8,10 @@ namespace
 {
 	const std::array<const char*, 4> s_targetStrings =
 	{
-		"vs_5_0",
-		"ps_5_0",
-		"gs_5_0",
 		"cs_5_0",
+		"vs_5_0",
+		"gs_5_0",
+		"ps_5_0",
 	};
 	inline const char* targetString( eStage t )
 	{

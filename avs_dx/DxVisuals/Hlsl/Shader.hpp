@@ -5,15 +5,12 @@
 #include "../Resources/createShaders.hpp"
 
 // A shader that's instantiated from a template. Source data is arbitrary type, needs to be copyable and need to have operator==.
-template<eStage stage, class TSourceData, class fnMakeDefines>
+template<eStage stage, class TSourceData>
 class Shader
 {
 public:
-	using pfnMakeDefines = HRESULT( *)( const TSourceData& src, Hlsl::Defines& result );
-
-	Shader( const char& n, const CStringA& src, pfnMakeDefines pfn ) :
+	Shader( const char& n, const CStringA& src ) :
 		name( n ),
-		defines( pfn ),
 		codeTemplate( src )
 	{ }
 
@@ -26,14 +23,14 @@ public:
 		return false;
 	}
 
-	HRESULT compile( const TSourceData& src )
+	HRESULT compile( const TSourceData& sourceData )
 	{
 		// Drop the old shader
 		result = nullptr;
 
 		// Generate preprocessor macro values
 		Hlsl::Defines def;
-		CHECK( defines( src, def ) );
+		CHECK( sourceData.defines( def ) );
 
 		// Compile HLSL into DXBC
 		std::vector<uint8_t> dxbc;
@@ -55,7 +52,7 @@ public:
 		CHECK( createShader( dxbc, result ) );
 
 		// Save the new state
-		m_source = src;
+		m_source = sourceData;
 		return S_OK;
 	}
 
@@ -66,7 +63,6 @@ public:
 
 private:
 	const char* const name;
-	const pfnMakeDefines defines;
 	const CStringA& codeTemplate;
 	TSourceData m_source;
 	ShaderPtr<stage> result;

@@ -2,10 +2,10 @@
 
 enum struct eStage : uint8_t
 {
-	Vertex = 0,
-	Pixel = 1,
+	Compute = 0,
+	Vertex = 1,
 	Geometry = 2,
-	Compute = 3,
+	Pixel = 3,
 };
 
 namespace
@@ -18,6 +18,10 @@ namespace
 	{
 		using IShader = ID3D11VertexShader;
 		static constexpr const char * shaderName = "vertex";
+		static inline void bind( IShader* ptr )
+		{
+			context->VSSetShader( ptr, nullptr, 0 );
+		}
 	};
 
 	template<>
@@ -25,6 +29,10 @@ namespace
 	{
 		using IShader = ID3D11PixelShader;
 		static constexpr const char * shaderName = "pixel";
+		static inline void bind( IShader* ptr )
+		{
+			context->PSSetShader( ptr, nullptr, 0 );
+		}
 	};
 
 	template<>
@@ -32,6 +40,10 @@ namespace
 	{
 		using IShader = ID3D11GeometryShader;
 		static constexpr const char * shaderName = "geometry";
+		static inline void bind( IShader* ptr )
+		{
+			context->GSSetShader( ptr, nullptr, 0 );
+		}
 	};
 
 	template<>
@@ -39,6 +51,10 @@ namespace
 	{
 		using IShader = ID3D11ComputeShader;
 		static constexpr const char * shaderName = "compute";
+		static inline void bind( IShader* ptr )
+		{
+			context->CSSetShader( ptr, nullptr, 0 );
+		}
 	};
 }
 
@@ -52,4 +68,10 @@ template<eStage stage>
 constexpr const char* shaderName()
 {
 	return ShaderTraits<stage>::shaderName;
+}
+
+template<eStage stage>
+inline void bindShader( IShader<stage>* ptr )
+{
+	ShaderTraits<stage>::bind( ptr );
 }

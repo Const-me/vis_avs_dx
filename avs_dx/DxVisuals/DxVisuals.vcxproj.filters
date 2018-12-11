@@ -39,6 +39,7 @@
     <ClInclude Include="Hlsl\Shader.hpp" />
     <ClInclude Include="Hlsl\Defines.h" />
     <ClInclude Include="Effects\Render\Simple\Simple.h" />
+    <ClInclude Include="Render\EffectRenderer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

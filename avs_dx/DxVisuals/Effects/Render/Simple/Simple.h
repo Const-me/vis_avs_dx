@@ -66,13 +66,16 @@ public:
 
 class Simple: public SimpleBase, public EffectBase
 {
+	SimpleBase::AvsState* const avs;
+
 public:
+	using SimpleBase::AvsState;
+
+	Simple( AvsState* p ) : avs( p ) { }
+
+	const Metadata& metadata() override;
+
 	HRESULT stateDeclarations( EffectStateBuilder &builder ) override;
 
-	using SimpleBase::AvsState;
-	DECLARE_EFFECT( Simple );
-
 	HRESULT render( RenderTargets& rt ) override { return E_NOTIMPL; }
-
-	// EffectRenderer<DotsRendering> dots;
 };

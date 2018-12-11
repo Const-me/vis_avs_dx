@@ -34,9 +34,6 @@ public:
 };
 
 #define DECLARE_EFFECT( DX )                   \
-struct AvsState;                               \
-AvsState* const avs;                           \
-DX( AvsState* pState ) : avs( pState ) { }     \
 const Metadata& metadata() override;
 
 #define IMPLEMENT_EFFECT( DX, NATIVE )                                                     \
@@ -51,6 +48,16 @@ const EffectBase::Metadata& DX::metadata(){ return s_metadada; }
 template<class TStruct>
 class EffectBase1 : public TStruct, public EffectBase
 {
+public:
+	using tBase = EffectBase1<TStruct>;
+	using AvsState = typename TStruct::AvsState;
+
+protected:
+
+	typename TStruct::AvsState* const avs;
+	EffectBase1( typename TStruct::AvsState* ass ) : avs( ass ) { }
+
 private:
+
 	EffectRenderer<TStruct> m_render;
 };

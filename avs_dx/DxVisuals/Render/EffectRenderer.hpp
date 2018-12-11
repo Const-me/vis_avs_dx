@@ -23,6 +23,7 @@ template<eStage stage>
 struct NoShader
 {
 	NoShader( bool unused ) { }
+
 	void bind() const
 	{
 		bindShader<stage>( nullptr );

@@ -43,14 +43,14 @@ struct ColorModifierStructs
 class ColorModifier : public EffectBase1<ColorModifierStructs>
 {
 public:
-	using AvsState = ColorModifierStructs::AvsState;
+	inline ColorModifier( AvsState *pState ) : tBase( pState ) { }
+
+	const Metadata& metadata() override;
 
 	HRESULT stateDeclarations( EffectStateBuilder &builder ) override
 	{
 		return E_NOTIMPL;
 	}
-
-	DECLARE_EFFECT( ColorModifier );
 
 	HRESULT render( RenderTargets& rt ) override { return E_NOTIMPL; }
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include "../EffectBase/EffectBase.h"
 #include "../Render/EffectStateBuilder.h"
+#include "../Hlsl/Shader.hpp"
 
 // Interop with the AVS code
 inline int min( int a, int b )

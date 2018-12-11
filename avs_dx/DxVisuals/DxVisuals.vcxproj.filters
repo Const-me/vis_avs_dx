@@ -6,7 +6,6 @@
     <ClInclude Include="Hlsl\Variable.h" />
     <ClInclude Include="Primitives\ColorsTexture.h" />
     <ClInclude Include="Hlsl\Compiler.h" />
-    <ClInclude Include="Hlsl\Defines.hpp" />
     <ClInclude Include="Render\FrameGraphBuilder.h" />
     <ClInclude Include="Hlsl\FunctionBuilder.h" />
     <ClInclude Include="Hlsl\ShaderBuilder.h" />
@@ -38,6 +37,8 @@
     <ClInclude Include="Resources\EffectsState.h" />
     <ClInclude Include="Resources\RenderTargets.hpp" />
     <ClInclude Include="Render\Stage.h" />
+    <ClInclude Include="Hlsl\Shader.hpp" />
+    <ClInclude Include="Hlsl\Defines.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -69,6 +70,7 @@
     <ClCompile Include="EffectBase\EffectListBase.fact.cpp" />
     <ClCompile Include="Utils\SimpleMath.cpp" />
     <ClCompile Include="Resources\EffectsState.cpp" />
+    <ClCompile Include="Hlsl\Defines.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

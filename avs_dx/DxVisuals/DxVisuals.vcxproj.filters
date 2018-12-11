@@ -15,7 +15,6 @@
     <ClInclude Include="Utils\DirectXErrors\DirectXErrors.h" />
     <ClInclude Include="Utils\DirectXErrors\formatMessage.hpp" />
     <ClInclude Include="Effects\Render\Starfield.h" />
-    <ClInclude Include="Effects\Trans\ColorModifier.h" />
     <ClInclude Include="Effects\Trans\DynamicMovement.h" />
     <ClInclude Include="Effects\shadersCode.h" />
     <ClInclude Include="Render\EffectStateBuilder.h" />
@@ -40,6 +39,7 @@
     <ClInclude Include="Effects\Render\Simple\Simple.h" />
     <ClInclude Include="Render\EffectRenderer.hpp" />
     <ClInclude Include="Render\Shader.hpp" />
+    <ClInclude Include="Effects\Trans\ColorModifier\ColorModifier.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -53,7 +53,6 @@
     <ClCompile Include="Utils\DirectXErrors\DirectXErrors.cpp" />
     <ClCompile Include="Utils\DirectXErrors\formatCString.cpp" />
     <ClCompile Include="Effects\Render\Starfield.cpp" />
-    <ClCompile Include="Effects\Trans\ColorModifier.cpp" />
     <ClCompile Include="Effects\Trans\DynamicMovement.cpp" />
     <ClCompile Include="Effects\shadersCode.cpp" />
     <ClCompile Include="Render\EffectStateBuilder.cpp" />
@@ -72,6 +71,7 @@
     <ClCompile Include="Resources\EffectsState.cpp" />
     <ClCompile Include="Hlsl\Defines.cpp" />
     <ClCompile Include="Effects\Render\Simple\Simple.cpp" />
+    <ClCompile Include="Effects\Trans\ColorModifier\ColorModifier.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -92,12 +92,12 @@
     <None Include="Render\EffectRenderer.inl" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Effects\Trans\ColorModifierPS.hlsl" />
     <FxCompile Include="Effects\UpdateStateCS.hlsl" />
     <FxCompile Include="Effects\Render\Simple\SimpleDotsGS.hlsl" />
     <FxCompile Include="Effects\Render\Simple\SimpleDotsVS.hlsl" />
     <FxCompile Include="Effects\Render\Simple\SimpleSolidPS.hlsl" />
     <FxCompile Include="Effects\Render\Simple\SimpleSolidVS.hlsl" />
+    <FxCompile Include="Effects\Trans\ColorModifier\ColorModifierPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

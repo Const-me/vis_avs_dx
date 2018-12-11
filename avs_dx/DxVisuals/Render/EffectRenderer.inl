@@ -2,7 +2,7 @@
 
 namespace
 {
-	// Horrible metaprogramming + macros below. I wish I had compile-time reflection instead.
+	// Horrible metaprogramming + macros below. I wish I had compile-time reflection instead. VC++ proprietary __if_exists helps but only slightly so.
 	enum eShaderKind : uint8_t
 	{
 		None,

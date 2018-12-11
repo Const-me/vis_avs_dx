@@ -1,8 +1,9 @@
 #pragma once
 #include "../EffectBase/EffectBase.h"
 #include "../Render/EffectStateBuilder.h"
-#include "../Render/Shader.hpp"
+#include "../Render/EffectRenderer.hpp"
 #include "../Resources/staticResources.h"
+#include "shadersCode.h"
 
 // Interop with the AVS code
 inline int min( int a, int b )
@@ -46,3 +47,10 @@ template<> HRESULT createDxEffect<NATIVE>( void* pState, std::unique_ptr<iEffect
 };                                                                                         \
 static const EffectBase::Metadata s_metadada{ #DX, false };                                \
 const EffectBase::Metadata& DX::metadata(){ return s_metadada; }
+
+template<class TStruct>
+class EffectBase1 : public TStruct, public EffectBase
+{
+private:
+	EffectRenderer<TStruct> m_render;
+};

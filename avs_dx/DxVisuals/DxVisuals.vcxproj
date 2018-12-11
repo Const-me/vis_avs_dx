@@ -107,7 +107,7 @@
     <ClInclude Include="Effects\Render\Simple\Simple.h" />
     <ClInclude Include="Effects\Render\Starfield.h" />
     <ClInclude Include="Effects\shadersCode.h" />
-    <ClInclude Include="Effects\Trans\ColorModifier.h" />
+    <ClInclude Include="Effects\Trans\ColorModifier\ColorModifier.h" />
     <ClInclude Include="Effects\Trans\DynamicMovement.h" />
     <ClInclude Include="Hlsl\FunctionBuilder.h" />
     <ClInclude Include="Render\Stage.h" />
@@ -145,7 +145,7 @@
     <ClCompile Include="Effects\Render\Simple\Simple.cpp" />
     <ClCompile Include="Effects\Render\Starfield.cpp" />
     <ClCompile Include="Effects\shadersCode.cpp" />
-    <ClCompile Include="Effects\Trans\ColorModifier.cpp" />
+    <ClCompile Include="Effects\Trans\ColorModifier\ColorModifier.cpp" />
     <ClCompile Include="Effects\Trans\DynamicMovement.cpp" />
     <ClCompile Include="Hlsl\FunctionBuilder.cpp" />
     <ClCompile Include="Render\PassBuilder.cpp" />
@@ -219,7 +219,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
     </FxCompile>
-    <FxCompile Include="Effects\Trans\ColorModifierPS.hlsl">
+    <FxCompile Include="Effects\Trans\ColorModifier\ColorModifierPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>

@@ -1,9 +1,8 @@
 #ifndef AVS_SHADER
 #define SHADER_CODE
-#define BIND_TEX_FRAME t1
 #endif
 
-Texture2D<float4> texPrevFrame : register(BIND_TEX_FRAME);
+Texture2D<float4> texPrevFrame : register(t1);
 
 float4 main( float4 screenSpace : SV_Position ) : SV_Target
 {

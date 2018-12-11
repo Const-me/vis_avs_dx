@@ -60,9 +60,11 @@ public:
 		return S_OK;
 	}
 
-	operator IShader<stage>* ( ) const
+	void bind() const
 	{
-		return result;
+		if( nullptr == result )
+			logWarning( "%s shader %s: binding shader that wasn't compiled", shaderName<stage>(), shaderTemplate.name );
+		bindShader<stage>( result );
 	}
 
 private:

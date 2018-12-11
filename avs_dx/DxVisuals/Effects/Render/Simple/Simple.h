@@ -74,5 +74,5 @@ public:
 
 	HRESULT render( RenderTargets& rt ) override { return E_NOTIMPL; }
 
-	EffectRenderer<DotsRendering> dots;
+	// EffectRenderer<DotsRendering> dots;
 };

@@ -17,7 +17,6 @@ namespace
 	struct ShaderTraits<eStage::Vertex>
 	{
 		using IShader = ID3D11VertexShader;
-		static constexpr const char * shaderName = "vertex";
 		static inline void bind( IShader* ptr )
 		{
 			context->VSSetShader( ptr, nullptr, 0 );
@@ -28,7 +27,6 @@ namespace
 	struct ShaderTraits<eStage::Pixel>
 	{
 		using IShader = ID3D11PixelShader;
-		static constexpr const char * shaderName = "pixel";
 		static inline void bind( IShader* ptr )
 		{
 			context->PSSetShader( ptr, nullptr, 0 );
@@ -39,7 +37,6 @@ namespace
 	struct ShaderTraits<eStage::Geometry>
 	{
 		using IShader = ID3D11GeometryShader;
-		static constexpr const char * shaderName = "geometry";
 		static inline void bind( IShader* ptr )
 		{
 			context->GSSetShader( ptr, nullptr, 0 );
@@ -50,7 +47,6 @@ namespace
 	struct ShaderTraits<eStage::Compute>
 	{
 		using IShader = ID3D11ComputeShader;
-		static constexpr const char * shaderName = "compute";
 		static inline void bind( IShader* ptr )
 		{
 			context->CSSetShader( ptr, nullptr, 0 );
@@ -63,12 +59,6 @@ using IShader = typename ShaderTraits<stage>::IShader;
 
 template<eStage stage>
 using ShaderPtr = CComPtr<typename ShaderTraits<stage>::IShader>;
-
-template<eStage stage>
-constexpr const char* shaderName()
-{
-	return ShaderTraits<stage>::shaderName;
-}
 
 template<eStage stage>
 inline void bindShader( IShader<stage>* ptr )

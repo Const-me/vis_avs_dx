@@ -3,7 +3,7 @@
 #include "../Resources/staticResources.h"
 #include "../../InteropLib/interop.h"
 #include "../Render/Binder.h"
-#include "../Hlsl/Compiler.h"
+#include "../Render/StateShaders.h"
 
 // The critical section that guards renderers, linked from deep inside AVS.
 extern CRITICAL_SECTION g_render_cs;

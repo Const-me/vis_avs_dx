@@ -48,3 +48,5 @@ public:
 		LeaveCriticalSection( &m_cs );
 	}
 };
+
+void setMacro( std::vector<std::pair<CStringA, CStringA>> &macros, const CStringA& key, const CStringA& value );

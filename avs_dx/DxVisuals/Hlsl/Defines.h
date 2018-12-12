@@ -2,6 +2,7 @@
 
 namespace Hlsl
 {
+	// A set of HLSL macros with their values.
 	class Defines
 	{
 		std::vector<std::pair<CStringA, CStringA>> m_map;
@@ -12,6 +13,8 @@ namespace Hlsl
 
 		void set( const CStringA& name, const CStringA& value );
 
-		static void getData( const Defines* pDefines, std::vector<D3D_SHADER_MACRO>& macros );
+		void clear() { m_map.clear(); }
+
+		std::vector<D3D_SHADER_MACRO> data() const;
 	};
 }

@@ -17,15 +17,17 @@ void Defines::set( const CStringA& key, const CStringA& value )
 	m_map.emplace_back( std::make_pair( key, value ) );
 }
 
-void Defines::getData( const Defines* pDefines, std::vector<D3D_SHADER_MACRO>& macros )
+std::vector<D3D_SHADER_MACRO> Defines::data() const
 {
-	macros.clear();
+	std::vector<D3D_SHADER_MACRO> macros;
+	macros.reserve( m_map.size() + 2 );
+
 	macros.emplace_back( D3D_SHADER_MACRO{ "AVS_SHADER", "" } );
 
-	if( nullptr != pDefines )
-	{
-		for( auto& p : pDefines->m_map )
-			macros.emplace_back( D3D_SHADER_MACRO{ p.first, p.second } );
-	}
+	for( auto& p : m_map )
+		macros.emplace_back( D3D_SHADER_MACRO{ p.first, p.second } );
+
 	macros.emplace_back( D3D_SHADER_MACRO{ nullptr, nullptr } );
+
+	return std::move( macros );
 }

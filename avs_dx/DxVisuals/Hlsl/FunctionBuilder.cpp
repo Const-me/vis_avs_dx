@@ -20,7 +20,7 @@ HRESULT FunctionBuilder::uintConstants( const char* constantName, const int* arr
 	for( int i = 0; i < count; i++ )
 	{
 		print( "0x%08X", arr[ i ] );
-		if(i+1<count)
+		if( i + 1 < count )
 			hlsl += ", ";
 		else
 			hlsl += " };\r\n";

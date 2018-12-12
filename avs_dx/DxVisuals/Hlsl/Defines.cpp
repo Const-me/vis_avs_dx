@@ -31,3 +31,43 @@ std::vector<D3D_SHADER_MACRO> Defines::data() const
 
 	return std::move( macros );
 }
+
+void Defines::set( const CStringA &key, uint32_t value )
+{
+	CStringA str;
+	str.Format( "0x%X", value );
+	set( key, str );
+}
+
+void Defines::set( const CStringA &key, int value )
+{
+	CStringA str;
+	str.Format( "%i", value );
+	set( key, str );
+}
+
+void Defines::set( const CStringA &key, float value )
+{
+	CStringA str;
+	str.Format( "%g", value );
+	set( key, str );
+}
+
+void Defines::set( const CStringA &key, const std::vector<int>& vec )
+{
+	CStringA str;
+	for( int i : vec )
+	{
+		if( str.GetLength() > 0)
+			str += ", ";
+		str.AppendFormat( "0x%X", i );
+	}
+	set( key, str );
+}
+
+CStringA Defines::expand( CStringA hlsl ) const
+{
+	for( const auto& m : m_map )
+		hlsl.Replace( m.first, m.second );
+	return hlsl;
+}

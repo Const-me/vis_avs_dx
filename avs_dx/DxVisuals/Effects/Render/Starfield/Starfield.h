@@ -33,16 +33,10 @@ struct StarfieldStructs
 		int nc;
 	};
 
-	struct StateData
+	struct StateData: public StarfieldStateStruct
 	{
-		const StateShaderTemplate& shaderTemplate() { return StarfieldState(); }
-
 		UINT stateSize() { return 3; }
 
-		StateData()
-		{
-
-		}
 		StateData( const AvsState& s )
 		{
 			onbeat = s.onbeat ? true : false;
@@ -50,20 +44,6 @@ struct StarfieldStructs
 			WarpSpeed = s.WarpSpeed;
 			durFrames = s.durFrames;
 		}
-
-		HRESULT defines( StateMacroValues& vals ) const
-		{
-			vals.add( "onbeat", onbeat );
-			vals.add( "spdBeat", spdBeat );
-			vals.add( "WarpSpeed", WarpSpeed );
-			vals.add( "durFrames", durFrames );
-			return S_OK;
-		}
-
-		bool onbeat;
-		float spdBeat;
-		float WarpSpeed;
-		uint32_t durFrames;
 	};
 };
 

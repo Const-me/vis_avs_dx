@@ -1,6 +1,6 @@
 #pragma once
 #include "../../EffectImpl.hpp"
-#include "../../../Render/EffectRenderer.hpp"
+using namespace Hlsl::Render::Simple;
 
 class SimpleBase
 {
@@ -13,19 +13,11 @@ public:
 		int color_pos;
 	};
 
-	class StateData
+	struct StateData: public SimpleStateStruct
 	{
-		std::vector<int> colors;
-
-	public:
-
-		static const StateShaderTemplate& shaderTemplate();
-
 		HRESULT update( const AvsState& ass );
 
 		static inline UINT stateSize() { return 4; }
-
-		HRESULT defines( StateMacroValues& vals ) const;
 	};
 
 	struct DotsRendering

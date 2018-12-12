@@ -98,7 +98,6 @@
     <ClInclude Include="EffectBase\EffectList.h" />
     <ClInclude Include="Effects\EffectImpl.hpp" />
     <ClInclude Include="EffectBase\RootEffect.h" />
-    <ClInclude Include="Hlsl\StateMacroValues.h" />
     <ClInclude Include="Render\EffectStateShader.hpp" />
     <ClInclude Include="Render\Shader.hpp" />
     <ClInclude Include="iEffect.h" />
@@ -145,7 +144,6 @@
     <ClCompile Include="EffectBase\EffectListBase.fact.cpp" />
     <ClCompile Include="EffectBase\RootEffect.cpp" />
     <ClCompile Include="Hlsl\Defines.cpp" />
-    <ClCompile Include="Hlsl\StateMacroValues.cpp" />
     <ClCompile Include="Resources\StructureBuffer.cpp" />
     <ClCompile Include="Render\StateShaders.cpp" />
     <ClCompile Include="Utils\MiscUtils.cpp" />

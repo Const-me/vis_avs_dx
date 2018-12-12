@@ -126,6 +126,21 @@
 			sb.AppendFormat( fmt, argv );
 			sb.AppendLine();
 		}
+		int tt = 0;
+		public void setTabs( int t )
+		{
+			tt = t;
+		}
+		public void incTabs(){ tt++; }
+		public void decTabs(){ tt--; }
+		public void tl( string l )
+		{
+			tabs( tt ); line( l );
+		}
+		public void tl( string l, params object[] argv )
+		{
+			tabs( tt ); line( l, argv );
+		}
 	}
 
 	static bool isStateTemplate( string p )

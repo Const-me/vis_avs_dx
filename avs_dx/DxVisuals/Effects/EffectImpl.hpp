@@ -3,8 +3,9 @@
 #include "../Render/EffectRenderer.hpp"
 #include "../Resources/staticResources.h"
 #include "shadersCode.h"
-#include "../Hlsl/StateMacroValues.h"
-using Hlsl::StateMacroValues;
+#include "../Hlsl/Defines.h"
+#include "../Render/EffectRenderer.hpp"
+using Hlsl::Defines;
 
 // Interop with the AVS code
 inline int min( int a, int b )
@@ -61,7 +62,7 @@ public:
 protected:
 
 	typename TStruct::AvsState* const avs;
-	EffectBase1( typename TStruct::AvsState* ass ) : avs( ass ) { }
+	EffectBase1( typename TStruct::AvsState* ass ) : avs( ass ), m_stateData( *ass ){ }
 
 private:
 

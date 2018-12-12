@@ -39,7 +39,6 @@
     <ClInclude Include="Resources\StructureBuffer.h" />
     <ClInclude Include="Render\StateShaders.h" />
     <ClInclude Include="Hlsl\compile.h" />
-    <ClInclude Include="Hlsl\StateMacroValues.h" />
     <ClInclude Include="Hlsl\StateShaderTemplate.h" />
     <ClInclude Include="Hlsl\ShaderTemplate.h" />
     <ClInclude Include="Resources\createShader.hpp" />
@@ -77,7 +76,6 @@
     <ClCompile Include="Resources\StructureBuffer.cpp" />
     <ClCompile Include="Render\StateShaders.cpp" />
     <ClCompile Include="Hlsl\compile.cpp" />
-    <ClCompile Include="Hlsl\StateMacroValues.cpp" />
     <ClCompile Include="Utils\MiscUtils.cpp" />
   </ItemGroup>
   <ItemGroup>

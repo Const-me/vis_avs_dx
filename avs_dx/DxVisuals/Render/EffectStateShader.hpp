@@ -1,10 +1,10 @@
 #pragma once
 #include "../Hlsl/StateShaderTemplate.h"
-#include "../Hlsl/StateMacroValues.h"
+#include "../Hlsl/Defines.h"
 
 struct EffectStateShader
 {
 	const StateShaderTemplate* shaderTemplate = nullptr;
 	UINT stateSize = 0;
-	Hlsl::StateMacroValues values;
+	Hlsl::Defines values;
 };

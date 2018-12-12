@@ -11,6 +11,7 @@ inline float3 unpackBgr( uint bgr )
 #define num_colors 3
 #define COLOR_VALUES 0xFF0000, 0xFF00, 0xFF
 #define INIT_STATE 0
+// <macro-vector type="int" name="colors" size="num_colors" values="COLOR_VALUES" />
 
 RWByteAddressBuffer effectStates : register(u0);
 

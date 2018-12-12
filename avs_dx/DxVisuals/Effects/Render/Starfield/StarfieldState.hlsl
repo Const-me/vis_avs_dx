@@ -2,6 +2,7 @@
 #define IS_BEAT 1
 #define INIT_STATE  0
 
+// These variables will become macros
 static const bool onbeat = true;
 static const float spdBeat = 4;
 static const float WarpSpeed = 6;

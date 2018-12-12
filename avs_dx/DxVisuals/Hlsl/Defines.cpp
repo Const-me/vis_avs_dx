@@ -53,6 +53,12 @@ void Defines::set( const CStringA &key, float value )
 	set( key, str );
 }
 
+void Defines::set( const CStringA &key, bool value )
+{
+	const CStringA s = ( value ) ? "true" : "false";
+	set( key, s );
+}
+
 void Defines::set( const CStringA &key, const std::vector<int>& vec )
 {
 	CStringA str;

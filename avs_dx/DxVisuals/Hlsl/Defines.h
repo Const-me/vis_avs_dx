@@ -18,14 +18,15 @@ namespace Hlsl
 		void set( const CStringA &key, uint32_t value );
 		void set( const CStringA &key, int value );
 		void set( const CStringA &key, float value );
+		void set( const CStringA &key, bool value );
 
 		// Add macro with values like "0x11, 0x22, 0x33"
 		void set( const CStringA &key, const std::vector<int>& vec );
 
-		// For HLSL-running macros
+		// For HLSL-running macros, used by normal per-effect shaders.
 		std::vector<D3D_SHADER_MACRO> data() const;
 
-		// For manually running macros
+		// For manually expanded macros, used by state shaders.
 		CStringA expand( CStringA hlsl ) const;
 	};
 }

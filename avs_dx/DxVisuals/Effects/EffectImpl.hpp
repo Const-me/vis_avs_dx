@@ -85,8 +85,18 @@ private:
 
 	HRESULT buildState( EffectStateShader& ess ) override
 	{
-		ess.shaderTemplate = &m_stateData.shaderTemplate();
+		ess.shaderTemplate = m_stateData.shaderTemplate();
 		ess.stateSize = m_stateData.stateSize();
 		return m_stateData.defines( ess.values );
 	}
+};
+
+struct EmptyStateData
+{
+	template<class A>
+	EmptyStateData( const A& ) { }
+	const StateShaderTemplate* shaderTemplate() { return nullptr; }
+	UINT stateSize() { return 0; }
+	HRESULT defines( Defines& def ) const { return S_FALSE; }
+	bool operator==( const EmptyStateData& ) { return true; }
 };

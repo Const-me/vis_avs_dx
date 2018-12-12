@@ -30,7 +30,7 @@ struct ColorModifierStructs
 
 		bool update( const AvsState& ass, int stateOffset );
 
-		HRESULT defines( Hlsl::Defines& def ) const;
+		HRESULT defines( Defines& def ) const;
 
 	private:
 		// NSEEL expression for the pixel code
@@ -38,6 +38,8 @@ struct ColorModifierStructs
 		// The above expression compiled into the HLSL fragment
 		CStringA hlsl;
 	};
+
+	using StateData = EmptyStateData;
 };
 
 class ColorModifier : public EffectBase1<ColorModifierStructs>

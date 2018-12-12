@@ -116,7 +116,7 @@
     <ClInclude Include="Effects\Render\Starfield\Starfield.h" />
     <ClInclude Include="Effects\shadersCode.h" />
     <ClInclude Include="Effects\Trans\ColorModifier\ColorModifier.h" />
-    <ClInclude Include="Effects\Trans\DynamicMovement.h" />
+    <ClInclude Include="Effects\Trans\DMove\DynamicMovement.h" />
     <ClInclude Include="Hlsl\FunctionBuilder.h" />
     <ClInclude Include="Render\Stage.h" />
     <ClInclude Include="Resources\RenderTarget.h" />
@@ -155,7 +155,7 @@
     <ClCompile Include="Effects\Render\Starfield\Starfield.cpp" />
     <ClCompile Include="Effects\shadersCode.cpp" />
     <ClCompile Include="Effects\Trans\ColorModifier\ColorModifier.cpp" />
-    <ClCompile Include="Effects\Trans\DynamicMovement.cpp" />
+    <ClCompile Include="Effects\Trans\DMove\DynamicMovement.cpp" />
     <ClCompile Include="Hlsl\FunctionBuilder.cpp" />
     <ClCompile Include="Render\PassBuilder.cpp" />
     <ClCompile Include="Render\FrameGraphBuilder.cpp" />

@@ -1,5 +1,5 @@
 #pragma once
-#include "../EffectImpl.hpp"
+#include "../../EffectImpl.hpp"
 
 struct DynamicMovementStructs
 {
@@ -27,6 +27,8 @@ struct DynamicMovementStructs
 		int XRES;
 		int YRES;
 	};
+
+	using StateData = EmptyStateData;
 };
 
 class DynamicMovement : public EffectBase1<DynamicMovementStructs>

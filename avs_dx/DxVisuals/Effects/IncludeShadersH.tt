@@ -127,7 +127,7 @@ static void generateStateData( CppBuilder sb, string sourcePath, int lvl )
 	sb.tl( "struct {0}Struct", name );
 	sb.tl( "{" );
 	sb.incTabs();
-	sb.tl( "static inline const StateShaderTemplate& shaderTemplate() {{ return {0}(); }}", name );
+	sb.tl( "static inline const StateShaderTemplate* shaderTemplate() {{ return &{0}(); }}", name );
 
 	sb.line();
 	foreach( var d in decls )
@@ -146,6 +146,7 @@ static void generateStateData( CppBuilder sb, string sourcePath, int lvl )
 	sb.incTabs();
 	foreach( var d in decls )
 		d.defines( sb );
+	sb.tl( "return S_OK;" );
 	sb.decTabs();
 	sb.tl( "}" );
 

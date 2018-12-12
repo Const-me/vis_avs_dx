@@ -82,7 +82,5 @@ public:
 
 	const Metadata& metadata() override;
 
-	HRESULT buildState( EffectStateShader& ess ) override;
-
 	HRESULT render( RenderTargets& rt ) override { return E_NOTIMPL; }
 };

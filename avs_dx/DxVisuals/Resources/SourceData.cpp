@@ -17,7 +17,7 @@ HRESULT SourceData::create()
 	CD3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{ D3D11_SRV_DIMENSION_TEXTURE2D, texFormat };
 	CHECK( device->CreateShaderResourceView( m_texture, &srvDesc, &m_srv ) );
 
-	CD3D11_BUFFER_DESC bufferDesc{ sizeof( sConstantBuffer ), D3D11_BIND_SHADER_RESOURCE, D3D11_USAGE_DYNAMIC, D3D11_CPU_ACCESS_WRITE };
+	CD3D11_BUFFER_DESC bufferDesc{ sizeof( sConstantBuffer ), D3D11_BIND_CONSTANT_BUFFER, D3D11_USAGE_DYNAMIC, D3D11_CPU_ACCESS_WRITE };
 	CHECK( device->CreateBuffer( &bufferDesc, nullptr, &m_cbuffer ) );
 
 	return S_OK;

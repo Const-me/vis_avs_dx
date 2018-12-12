@@ -34,5 +34,9 @@ public:
 	HRESULT update( char visdata[ 2 ][ 2 ][ bands ], int isBeat );
 
 	template<eStage stage>
-	void bind( UINT t, UINT cb );
+	void bind( UINT t, UINT cb )
+	{
+		bindResource<stage>( t, m_srv );
+		bindConstantBuffer<stage>( cb, m_cbuffer );
+	}
 };

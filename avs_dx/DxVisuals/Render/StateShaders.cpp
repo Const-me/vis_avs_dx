@@ -12,6 +12,9 @@ namespace
 		CAtlMap<CStringA, bool> globals;
 		for( const auto &e : effects )
 		{
+			if( nullptr == e.shaderTemplate )
+				continue;
+
 			anyBeat = anyBeat || e.shaderTemplate->hasBeat;
 			for( const auto &s : e.shaderTemplate->globals )
 				globals[ s ] = true;
@@ -39,12 +42,15 @@ void main()
 		CStringA offsetString;
 		for( const auto& e : effects )
 		{
-			CStringA main = e.values.expand( e.shaderTemplate->hlslMain );
-			offsetString.Format( "%i", stateOffset * 4 );
-			main.Replace( "STATE_OFFSET", offsetString );
+			if( e.shaderTemplate )
+			{
+				CStringA main = e.values.expand( e.shaderTemplate->hlslMain );
+				offsetString.Format( "%i", stateOffset * 4 );
+				main.Replace( "STATE_OFFSET", offsetString );
 
-			hlsl += main;
-			hlsl += "\r\n";
+				hlsl += main;
+				hlsl += "\r\n";
+			}
 			stateOffset += e.stateSize;
 		}
 
@@ -62,13 +68,16 @@ HRESULT StateShaders::compile( const std::vector<EffectStateShader> &effects, UI
 
 	std::vector<uint8_t> dxbc;
 	Hlsl::Defines def;
+	if( anyBeat ) def.set( "IS_BEAT", "false" );
+
 	CHECK( Hlsl::compile( eStage::Compute, hlsl, "UpdateState", Hlsl::includes(), def, dxbc ) );
 
 	CHECK( createShader( dxbc, update ) );
 
 	if( anyBeat )
 	{
-		def.set( "IS_BEAT", "1" );
+		def.clear();
+		def.set( "IS_BEAT", "true" );
 
 		CHECK( Hlsl::compile( eStage::Compute, hlsl, "UpdateStateOnBeat", Hlsl::includes(), def, dxbc ) );
 
@@ -78,7 +87,8 @@ HRESULT StateShaders::compile( const std::vector<EffectStateShader> &effects, UI
 		updateOnBeat = update;
 
 	def.clear();
-	def.set( "INIT_STATE", "1" );
+	def.set( "INIT_STATE", "true" );
+	if( anyBeat ) def.set( "IS_BEAT", "false" );
 
 	CHECK( Hlsl::compile( eStage::Compute, hlsl, "InitState", Hlsl::includes(), def, dxbc ) );
 

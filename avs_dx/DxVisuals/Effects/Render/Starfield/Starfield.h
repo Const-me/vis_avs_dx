@@ -1,5 +1,6 @@
 #pragma once
 #include "../../EffectImpl.hpp"
+using namespace Hlsl::Render::Starfield;
 
 struct StarfieldStructs
 {
@@ -34,8 +35,35 @@ struct StarfieldStructs
 
 	struct StateData
 	{
+		const StateShaderTemplate& shaderTemplate() { return StarfieldState(); }
+
+		UINT stateSize() { return 3; }
+
+		StateData()
+		{
+
+		}
+		StateData( const AvsState& s )
+		{
+			onbeat = s.onbeat ? true : false;
+			spdBeat = s.spdBeat;
+			WarpSpeed = s.WarpSpeed;
+			durFrames = s.durFrames;
+		}
+
+		HRESULT defines( StateMacroValues& vals ) const
+		{
+			vals.add( "onbeat", onbeat );
+			vals.add( "spdBeat", spdBeat );
+			vals.add( "WarpSpeed", WarpSpeed );
+			vals.add( "durFrames", durFrames );
+			return S_OK;
+		}
+
 		bool onbeat;
 		float spdBeat;
+		float WarpSpeed;
+		uint32_t durFrames;
 	};
 };
 

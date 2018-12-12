@@ -23,7 +23,7 @@ public:
 
 		HRESULT update( const AvsState& ass );
 
-		UINT stateSize() const { return 4; }
+		static inline UINT stateSize() { return 4; }
 
 		HRESULT defines( StateMacroValues& vals ) const;
 	};

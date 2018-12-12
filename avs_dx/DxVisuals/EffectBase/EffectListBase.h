@@ -81,7 +81,7 @@ protected:
 	// Collect renderers into the local vector. Return false if the list is unchanged, true if they were added, removed or reordered.
 	bool updateList();
 
-	bool shouldRebuildState() override;
+	HRESULT shouldRebuildState() override;
 
 	// Call the function for any non-list effect in the hierarchy, walking the nested lists in depth first order.
 	template<class tFunc>

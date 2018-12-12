@@ -53,6 +53,11 @@ public:
 	using tBase = EffectBase1<TStruct>;
 	using AvsState = typename TStruct::AvsState;
 
+	EffectBase1()
+	{
+
+	}
+
 protected:
 
 	typename TStruct::AvsState* const avs;
@@ -61,4 +66,26 @@ protected:
 private:
 
 	EffectRenderer<TStruct> m_render;
+	typename TStruct::StateData m_stateData;
+
+	HRESULT shouldRebuildState() override
+	{
+		__if_exists( TStruct::StateData::update )
+		{
+			return m_stateData.update( *avs );
+		}
+		__if_not_exists( TStruct::StateData::update )
+		{
+			const TStruct::StateData newState{ *avs };
+			return m_stateData == newState ? S_FALSE : S_OK;
+		}
+		return E_FAIL;
+	}
+
+	HRESULT buildState( EffectStateShader& ess ) override
+	{
+		ess.shaderTemplate = &m_stateData.shaderTemplate();
+		ess.stateSize = m_stateData.stateSize();
+		return m_stateData.defines( ess.values );
+	}
 };

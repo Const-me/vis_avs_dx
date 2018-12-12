@@ -110,6 +110,7 @@
     <FxCompile Include="Effects\Render\Starfield\StarCS.hlsl" />
     <FxCompile Include="Effects\Render\Starfield\StarVS.hlsl" />
     <FxCompile Include="Effects\Render\Simple\SimpleState.hlsl" />
+    <FxCompile Include="Effects\Render\Starfield\StarfieldState.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

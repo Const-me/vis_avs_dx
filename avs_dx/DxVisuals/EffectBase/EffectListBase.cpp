@@ -52,15 +52,17 @@ bool EffectListBase::updateList()
 	return result;
 }
 
-bool EffectListBase::shouldRebuildState()
+HRESULT EffectListBase::shouldRebuildState()
 {
-	bool result = false;
+	HRESULT hr = S_FALSE;
 	for( auto p : m_effects )
 	{
-		const bool r = p->shouldRebuildState();
-		result = result || r;
+		const HRESULT r = p->shouldRebuildState();
+		CHECK( r );
+		if( S_OK == r )
+			hr = S_OK;
 	}
-	return result;
+	return hr;
 }
 
 HRESULT EffectListBase::updateParameters( Binder& binder )

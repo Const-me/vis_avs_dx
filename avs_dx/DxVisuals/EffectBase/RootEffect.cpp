@@ -52,7 +52,7 @@ HRESULT RootEffect::renderEffects( bool isBeat )
 
 	// Run a state update shader
 	context->CSSetShader( isBeat ? m_stateShaders.updateOnBeat : m_stateShaders.update, nullptr, 0 );
-	csSetUav( m_state.uav(), 0 );
+	bindUav( 0, m_state.uav() );
 	context->Dispatch( 1, 1, 1 );
 
 	CHECK( m_targets.writeToLast( clearfb() ) );
@@ -83,7 +83,7 @@ HRESULT RootEffect::buildState()
 
 	// Run init shader
 	bindShader<eStage::Compute>( m_stateShaders.init );
-	csSetUav( m_state.uav(), 0 );
+	bindUav( 0, m_state.uav() );
 	StaticResources::sourceData.bind<eStage::Compute>( 0, 0 );
 	context->Dispatch( 1, 1, 1 );
 

@@ -8,15 +8,6 @@ inline HRESULT getLastHr() { return HRESULT_FROM_WIN32( GetLastError() ); }
 #define CHECK( hr ) { const HRESULT __hr = ( hr ); if( FAILED( __hr ) ) { __debugbreak(); logError( __hr, #hr ); return __hr; } }
 #endif
 
-inline void csSetUav( ID3D11UnorderedAccessView* uav, UINT slot )
-{
-	context->CSSetUnorderedAccessViews( slot, 1, &uav, nullptr );
-}
-inline void csSetCBuffer( ID3D11Buffer* cb, UINT slot )
-{
-	context->CSSetConstantBuffers( slot, 1, &cb );
-}
-
 inline void omSetTarget( ID3D11RenderTargetView* rtv )
 {
 	context->OMSetRenderTargets( 1, &rtv, nullptr );

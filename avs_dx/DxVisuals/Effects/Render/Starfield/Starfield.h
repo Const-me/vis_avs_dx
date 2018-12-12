@@ -36,7 +36,7 @@ struct StarfieldStructs
 	{
 		bool onbeat;
 		float spdBeat;
-	}
+	};
 };
 
 class Starfield : public EffectBase1<StarfieldStructs>

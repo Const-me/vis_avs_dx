@@ -24,20 +24,24 @@ HRESULT SimpleBase::StateData::defines( StateMacroValues& values ) const
 	return S_OK;
 }
 
-HRESULT Simple::buildState( int stateBufferOffset, int& thisSize, CStringA& hlsl, bool& useBeat, CAtlMap<CStringA, int>& globals )
+HRESULT Simple::buildState( EffectStateShader& ess )
 {
+	/* ess.shaderTemplate = SimpleState();
+	ess.stateSize = 4;
+	.
 	setStateOffset( stateBufferOffset );
 	thisSize = 4;
 
 	StateMacroValues values{ stateBufferOffset };
 	const int numColors = this->avs->num_colors;
-	values.add( "num_colors", numColors );
-	values.add( "COLOR_VALUES", uintConstants( this->avs->colors, numColors ) );
+	ess.values.add( "num_colors", numColors );
+	ess.values.uintConstants( "COLOR_VALUES", uintConstants( this->avs->colors, numColors ) );
 
 	CStringA src = replaceMacros( SimpleStateCS().hlsl, values );
 
 	CStringA main;
 	CHECK( splitStateGs( src, main, globals ) );
 	hlsl = main;
-	return S_OK;
+	return S_OK; */
+	return E_NOTIMPL;
 }

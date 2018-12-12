@@ -105,6 +105,7 @@
     <ClInclude Include="Render\EffectRenderer.hpp" />
     <ClInclude Include="Hlsl\ShaderTemplate.h" />
     <ClInclude Include="Hlsl\StateShaderTemplate.h" />
+    <ClInclude Include="Resources\bindResource.h" />
     <ClInclude Include="Resources\RenderTargets.hpp" />
     <ClInclude Include="Resources\StructureBuffer.h" />
     <ClInclude Include="Render\StateShaders.h" />

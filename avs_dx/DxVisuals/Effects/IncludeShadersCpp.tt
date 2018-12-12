@@ -194,7 +194,11 @@ static void writeIncludes( CppBuilder sb, NamespaceData ns, int lvl )
 	if( null == parent )
 		sb.line( "static const IncludesMap<{0}> result{{ names, tuples }};", ns.headers.Length );
 	else
+	{
+		sb.line( "// Including headers from a parent scope." );
+		sb.tabs( lvl + 1 );
 		sb.line( "static const IncludesMap<{0}> result{{ ::{1}::includes(), names, tuples }};", ns.headers.Length, parent.fullName );
+	}
 	sb.tabs( lvl + 1 );
 	sb.line( "return result.map;" );
 

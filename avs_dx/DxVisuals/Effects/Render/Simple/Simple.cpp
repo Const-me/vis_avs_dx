@@ -4,6 +4,27 @@ using namespace Hlsl::Render::Simple;
 
 IMPLEMENT_EFFECT( Simple, C_SimpleClass )
 
+const StateShaderTemplate& SimpleBase::StateData::shaderTemplate()
+{
+	return SimpleState();
+}
+
+HRESULT SimpleBase::StateData::update( const AvsState& ass )
+{
+	if( std::equal( colors.begin(), colors.end(), ass.colors, ass.colors + ass.num_colors ) )
+		return S_FALSE;
+	colors.assign( ass.colors, ass.colors + ass.num_colors );
+	return S_OK;
+}
+
+HRESULT SimpleBase::StateData::defines( MacroValues& vals ) const
+{
+	const int num_colors = (int)colors.size();
+	values.add( "num_colors", num_colors );
+	values.add( "COLOR_VALUES", uintConstants( colors.data(), num_colors ) );
+	return S_OK;
+}
+
 HRESULT Simple::buildState( int stateBufferOffset, int& thisSize, CStringA& hlsl, bool& useBeat, CAtlMap<CStringA, int>& globals )
 {
 	setStateOffset( stateBufferOffset );

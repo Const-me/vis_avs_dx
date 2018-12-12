@@ -1,9 +1,3 @@
-#define STATE_OFFSET 0
-#define num_colors 3
-#define COLOR_VALUES 0xFF0000, 0xFF00, 0xFF
-
-RWByteAddressBuffer effectStates : register(u0);
-
 // <global>
 inline float3 unpackBgr( uint bgr )
 {
@@ -13,17 +7,27 @@ inline float3 unpackBgr( uint bgr )
 }
 // </global>
 
+#define STATE_OFFSET 7
+#define num_colors 3
+#define COLOR_VALUES 0xFF0000, 0xFF00, 0xFF
+#define INIT_STATE 0
+
+RWByteAddressBuffer effectStates : register(u0);
+
 [numthreads( 1, 1, 1 )]
 void main()
 {
+    const uint colors[ num_colors ] = { COLOR_VALUES };
+#if INIT_STATE
+	effectStates.Store( STATE_OFFSET, 0 );
+	effectStates.Store3( STATE_OFFSET + 4, asuint( unpackBgr( colors[ 0 ] ) ) );
+#else
     uint color_pos = effectStates.Load( STATE_OFFSET );
     color_pos++;
     if( color_pos >= num_colors * 64 )
         color_pos = 0;
     effectStates.Store( STATE_OFFSET, color_pos );
 	
-    const uint colors[ num_colors ] = { COLOR_VALUES };
-
     uint p = color_pos / 64;
     uint r = color_pos & 63;
     uint c1, c2;
@@ -36,4 +40,5 @@ void main()
 
     const float3 res = lerp( unpackBgr( c1 ), unpackBgr( c2 ), (float) r * ( 1.0 / 64.0 ) );
     effectStates.Store3( STATE_OFFSET + 4, asuint( res ) );
+#endif
 }

@@ -13,6 +13,19 @@ public:
 		int color_pos;
 	};
 
+	struct StateData
+	{
+		std::vector<int> colors;
+
+		static const StateShaderTemplate& shaderTemplate();
+
+		HRESULT update( const AvsState& ass );
+
+		UINT stateSize() const { return 4; }
+
+		HRESULT defines( MacroValues& vals ) const;
+	};
+
 	struct DotsRendering
 	{
 		struct VsData

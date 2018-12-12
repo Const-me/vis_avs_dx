@@ -31,6 +31,12 @@ struct StarfieldStructs
 		float CurrentSpeed;
 		int nc;
 	};
+
+	struct StateData
+	{
+		bool onbeat;
+		float spdBeat;
+	}
 };
 
 class Starfield : public EffectBase1<StarfieldStructs>

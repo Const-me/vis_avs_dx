@@ -14,7 +14,6 @@
     <ClInclude Include="Utils\DirectXErrors\codes.h" />
     <ClInclude Include="Utils\DirectXErrors\DirectXErrors.h" />
     <ClInclude Include="Utils\DirectXErrors\formatMessage.hpp" />
-    <ClInclude Include="Effects\Render\Starfield.h" />
     <ClInclude Include="Effects\Trans\DynamicMovement.h" />
     <ClInclude Include="Effects\shadersCode.h" />
     <ClInclude Include="Render\EffectStateBuilder.h" />
@@ -42,6 +41,9 @@
     <ClInclude Include="Effects\Trans\ColorModifier\ColorModifier.h" />
     <ClInclude Include="Render\ShaderTemplate.h" />
     <ClInclude Include="Hlsl\stateShaderUtils.h" />
+    <ClInclude Include="Effects\Render\Starfield\Starfield.h" />
+    <ClInclude Include="Resources\StructureBuffer.h" />
+    <ClInclude Include="Render\StateShaderTemplate.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -54,7 +56,6 @@
     <ClCompile Include="Render\PassBuilder.cpp" />
     <ClCompile Include="Utils\DirectXErrors\DirectXErrors.cpp" />
     <ClCompile Include="Utils\DirectXErrors\formatCString.cpp" />
-    <ClCompile Include="Effects\Render\Starfield.cpp" />
     <ClCompile Include="Effects\Trans\DynamicMovement.cpp" />
     <ClCompile Include="Effects\shadersCode.cpp" />
     <ClCompile Include="Render\EffectStateBuilder.cpp" />
@@ -75,6 +76,8 @@
     <ClCompile Include="Effects\Render\Simple\Simple.cpp" />
     <ClCompile Include="Effects\Trans\ColorModifier\ColorModifier.cpp" />
     <ClCompile Include="Hlsl\stateShaderUtils.cpp" />
+    <ClCompile Include="Effects\Render\Starfield\Starfield.cpp" />
+    <ClCompile Include="Resources\StructureBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -94,6 +97,7 @@
     <None Include="packages.config" />
     <None Include="Render\EffectRenderer.inl" />
     <None Include="Effects\VisCommon.fx" />
+    <None Include="Effects\Render\Starfield\Star.fx" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Effects\UpdateStateCS.hlsl" />
@@ -102,7 +106,9 @@
     <FxCompile Include="Effects\Render\Simple\SimpleSolidPS.hlsl" />
     <FxCompile Include="Effects\Render\Simple\SimpleSolidVS.hlsl" />
     <FxCompile Include="Effects\Trans\ColorModifier\ColorModifierPS.hlsl" />
-    <FxCompile Include="Effects\Render\Simple\SimpleStateCS.hlsl" />
+    <FxCompile Include="Effects\Render\Starfield\StarCS.hlsl" />
+    <FxCompile Include="Effects\Render\Starfield\StarVS.hlsl" />
+    <FxCompile Include="Effects\Render\Simple\SimpleState.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

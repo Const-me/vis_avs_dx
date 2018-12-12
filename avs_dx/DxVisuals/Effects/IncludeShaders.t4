@@ -20,17 +20,21 @@
 		public readonly string[] headers;
 		public readonly string[] sources;
 		public readonly NamespaceData[] children;
+		public readonly NamespaceData parent;
+		public readonly string fullName;
 
-		public NamespaceData( string dir, string name = null )
+		public NamespaceData( string dir, string name = null, NamespaceData parent = null )
 		{
 			this.name = name;
+			this.parent = parent;
+			fullName = ( null == parent ) ? "Hlsl" : parent.fullName + "::" + name;
 			findFiles( dir, "*.fx", false, ref headers );
 			findFiles( dir, "*.hlsl", false, ref sources );
 			List<NamespaceData> subs = new List<NamespaceData>();
 			foreach( var sd in Directory.GetDirectories( dir ) )
 			{
-				var s = new NamespaceData( sd, Path.GetFileNameWithoutExtension( sd ) );
-				if( s.headers.Length > 0 || s.sources.Length > 0 || s.children.Length > 0 )
+				var s = new NamespaceData( sd, Path.GetFileNameWithoutExtension( sd ), this );
+				if( s.anyInclude || s.anySource || s.anyChild )
 					subs.Add( s );
 			}
 			children = subs.ToArray();
@@ -39,6 +43,12 @@
 		public bool anyInclude => headers.Length > 0;
 		public bool anySource => sources.Length > 0;
 		public bool anyChild => children.Length > 0;
+
+		public IEnumerable<NamespaceData> parents()
+		{
+			for( NamespaceData p = parent; null != p; p = p.parent )
+				yield return p;
+		}
 	}
 
 	NamespaceData s_root = null;
@@ -116,5 +126,15 @@
 			sb.AppendFormat( fmt, argv );
 			sb.AppendLine();
 		}
+	}
+
+	static bool isStateTemplate( string p )
+	{
+		return p.ToLowerInvariant().EndsWith( "state.hlsl" );
+	}
+
+	static string templateResultType( string p )
+	{
+		return isStateTemplate( p ) ? "StateShaderTemplate" : "ShaderTemplate";
 	}
 #>

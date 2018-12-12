@@ -75,6 +75,18 @@ namespace
 			decompress( names, compressedValues );
 			map.Rehash();
 		}
+
+		IncludesMap( const CAtlMap<CStringA, CStringA>& parent, std::array<const char*, size> names, std::array<std::tuple<const uint8_t*, int, int>, size> compressedValues )
+		{
+			decompress( names, compressedValues );
+			for( POSITION pos = parent.GetStartPosition(); nullptr != pos; )
+			{
+				auto p = parent.GetNext( pos );
+				if( nullptr == map.Lookup( p->m_key ) )
+					map.SetAt( p->m_key, p->m_value );
+			}
+			map.Rehash();
+		}
 	};
 }
 
@@ -82,7 +94,7 @@ namespace Hlsl
 {<#= writeNamespaces( generateNamespaces ) #>
 	namespace StaticShaders
 	{
-		<#= makeStaticShaders() #>
+<#= makeStaticShaders() #>
 	}
 }<#@ include file="IncludeShaders.t4"#><#+
 const int valsPerLine = 32;
@@ -113,6 +125,7 @@ void makeShader( CppBuilder sb, string path )
 {
 	byte[] orig = File.ReadAllBytes( path );
 	byte[] compressed = compressBuffer( orig );
+	sb.tabs( 2 );
 	sb.line( "std::vector<uint8_t> {0}()", Path.GetFileNameWithoutExtension( path ) );
 	sb.line( "		{" );
 	sb.line( "			const uint8_t src[] =", compressed.Length );
@@ -134,82 +147,175 @@ string makeStaticShaders()
 	return sb.ToString().Trim();
 }
 
+static void writeIncludes( CppBuilder sb, NamespaceData ns, int lvl )
+{
+	sb.line( lvl );
+	sb.print( "const CAtlMap<CStringA, CStringA>& includes()" );
+	sb.line( lvl );
+	sb.line( "{" );
+	int[] origSize = new int[ ns.headers.Length ];
+	int[] cmpSize = new int[ ns.headers.Length ];
+	for( int i = 0; i < ns.headers.Length; i++ )
+	{
+		string hlsl = ns.headers[ i ];
+		byte[] orig = File.ReadAllBytes( hlsl );
+		byte[] compressed = compressBuffer( orig );
+
+		sb.tabs( lvl + 1 );
+		sb.line( "const uint8_t {0}[] =", Path.GetFileNameWithoutExtension( hlsl ) );
+		printBytes( sb, compressed );
+		origSize[ i ] = orig.Length;
+		cmpSize[ i ] = compressed.Length;
+	}
+
+	sb.line( lvl + 1 );
+	sb.print( "const std::array<std::tuple<const uint8_t*, int, int>, {0}> tuples = ", ns.headers.Length );
+	sb.line( lvl + 2 );
+	sb.print( "{ " );
+	for( int i = 0; i < ns.headers.Length; i++ )
+	{
+		sb.print( "std::make_tuple( &{0}[0], {1}, {2} )", Path.GetFileNameWithoutExtension( ns.headers[ i ] ), cmpSize[ i ], origSize[ i ] );
+		if( i + 1 < ns.headers.Length )
+			sb.print( ", " );
+	}
+	sb.line( " };" );
+
+	sb.tabs( lvl + 1 );
+	sb.print( "const std::array<const char*, {0}> names = ", ns.headers.Length );
+	sb.line( lvl + 2 );
+	sb.print( "{ " );
+	sb.print( string.Join( ", ", ns.headers.Select( p => String.Format( @"R""({0})""", Path.GetFileName( p ).ToLowerInvariant() ) ) ) );
+	sb.line( " };" );
+
+	sb.tabs( lvl + 1 );
+
+	// Include parent scope includes, if any
+	NamespaceData parent = ns.parents().FirstOrDefault( n => n.anyInclude );
+	if( null == parent )
+		sb.line( "static const IncludesMap<{0}> result{{ names, tuples }};", ns.headers.Length );
+	else
+		sb.line( "static const IncludesMap<{0}> result{{ ::{1}::includes(), names, tuples }};", ns.headers.Length, parent.fullName );
+	sb.tabs( lvl + 1 );
+	sb.line( "return result.map;" );
+
+	sb.tabs( lvl );
+	sb.line( "};" );
+}
+
+static void writeTemplate( CppBuilder sb, int lvl, string sourcePath )
+{
+	byte[] orig = File.ReadAllBytes( sourcePath );
+	byte[] compressed = compressBuffer( orig );
+
+	sb.line( lvl );
+	sb.print( "const ShaderTemplate& {0}()", Path.GetFileNameWithoutExtension( sourcePath ) );
+	sb.line( lvl );
+	sb.print( "{" );
+	sb.line( lvl + 1 );
+	sb.line( "const uint8_t src[] =" );
+	printBytes( sb, compressed );
+
+	sb.tabs( lvl + 1 );
+	sb.line( "static const ShaderTemplate result{{ R\"({0})\", decompressString( src, {1}, {2} ) }};", Path.GetFileName( sourcePath ), compressed.Length, orig.Length );
+	sb.tabs( lvl + 1 );
+	sb.line( "return result;" );
+
+	sb.tabs( lvl );
+	sb.print( "};" );
+}
+
+const string globalBegin = "<global>";
+const string globalEnd = "</global>";
+const string entryPoint = "void main()";
+const string isBeatMacro = "IS_BEAT";
+
+static void writeStateTemplate( CppBuilder sb, int lvl, string sourcePath )
+{
+	string content = File.ReadAllText( sourcePath, Encoding.ASCII );
+
+	// Find global blocks
+	HashSet<string> globals = new HashSet<string>();
+	int iStart = 0;
+	while( true )
+	{
+		iStart = content.IndexOf( globalBegin, iStart );
+		if( iStart < 0 ) break;
+		iStart += globalBegin.Length;
+
+		int iEnd = content.IndexOf( globalEnd, iStart );
+		if( iEnd < 0 )
+			throw new ArgumentException( "<globals> tag wasn't closed in " + sourcePath );
+		int iNewStart = iEnd + globalEnd.Length;
+		for( iEnd--; content[ iEnd ] != '\n'; iEnd-- );
+
+		string g = content.Substring( iStart, iEnd - iStart ).Trim();
+		globals.Add( g );
+	}
+
+	// Find main
+	iStart = content.IndexOf( entryPoint );
+	if( iStart < 0 )
+		throw new ArgumentException( "\"void main()\" wasn't found in" + sourcePath );
+	iStart += entryPoint.Length;
+	content = content.Substring( iStart ).Trim();
+
+	// Compress and write the data
+
+	sb.line( lvl );
+	sb.print( "const StateShaderTemplate& {0}()", Path.GetFileNameWithoutExtension( sourcePath ) );
+	sb.line( lvl );
+	sb.line( "{" );
+
+	string[] arr = globals.ToArray();
+	List<byte[]> compressed = arr.Select( compressString ).ToList();
+	for( int i = 0; i < arr.Length; i++ )
+	{
+		sb.tabs( lvl + 1 );
+		sb.line( "const uint8_t globalData{0}[] = ", i );
+		printBytes( sb, compressed[ i ] );
+	}
+
+	sb.tabs( lvl + 1 );
+	sb.print( "static const std::vector<CStringA> globals{ " );
+	for( int i = 0; i < arr.Length; i++ )
+	{
+		sb.print( "decompressString( globalData{0}, {1}, {2} )", i, compressed[ i ].Length, arr[ i ].Length );
+		if( i + 1 != arr.Length )
+			sb.print( ", " );
+	}
+	sb.line( " };" );
+
+	byte[] hlslData = compressString( content );
+	sb.tabs( lvl + 1 );
+	sb.line( "const uint8_t hlslData[] = " );
+	printBytes( sb, hlslData );
+
+	bool hasBeat = content.Contains( isBeatMacro ) || arr.Any( s => s.Contains( isBeatMacro ) );
+	sb.tabs( lvl + 1 );
+	sb.line( "static const StateShaderTemplate result{{ R\"({0})\", decompressString( hlslData, {1}, {2} ), {3}, globals }};",
+		Path.GetFileName( sourcePath ),
+		hlslData.Length, content.Length, 
+		hasBeat ? "true" : "false" );
+	sb.tabs( lvl + 1 );
+	sb.line( "return result;" );
+
+	sb.tabs( lvl );
+	sb.line( "};" );
+}
+
 static void generateNamespaces( CppBuilder sb, NamespaceData ns, int lvl )
 {
-	// TODO [low]: when needed, implement compile-time merging of these includes with ones in the parent namespace
-	if( ns.headers.Length > 0 )
-	{
-		sb.line( lvl );
-		sb.print( "const CAtlMap<CStringA, CStringA>& includes()" );
-		sb.line( lvl );
-		sb.line( "{" );
-		int[] origSize = new int[ ns.headers.Length ];
-		int[] cmpSize = new int[ ns.headers.Length ];
-		for( int i = 0; i < ns.headers.Length; i++ )
-		{
-			string hlsl = ns.headers[ i ];
-			byte[] orig = File.ReadAllBytes( hlsl );
-			byte[] compressed = compressBuffer( orig );
-
-			sb.tabs( lvl + 1 );
-			sb.line( "const uint8_t {0}[] =", Path.GetFileNameWithoutExtension( hlsl ) );
-			printBytes( sb, compressed );
-			origSize[ i ] = orig.Length;
-			cmpSize[ i ] = compressed.Length;
-		}
-
-		sb.line( lvl + 1 );
-		sb.print( "const std::array<std::tuple<const uint8_t*, int, int>, {0}> tuples = ", ns.headers.Length );
-		sb.line( lvl + 2 );
-		sb.print( "{ " );
-		for( int i = 0; i < ns.headers.Length; i++ )
-		{
-			sb.print( "std::make_tuple( &{0}[0], {1}, {2} )", Path.GetFileNameWithoutExtension( ns.headers[ i ] ), cmpSize[ i ], origSize[ i ] );
-			if( i + 1 < ns.headers.Length )
-				sb.print( ", " );
-		}
-		sb.line( " };" );
-
-		sb.tabs( lvl + 1 );
-		sb.print( "const std::array<const char*, {0}> names = ", ns.headers.Length );
-		sb.line( lvl + 2 );
-		sb.print( "{ " );
-		sb.print( string.Join( ", ", ns.headers.Select( p => String.Format( @"R""({0})""", Path.GetFileName( p ).ToLowerInvariant() ) ) ) );
-		sb.line( " };" );
-
-		sb.tabs( lvl + 1 );
-		sb.line( "static const IncludesMap<{0}> result{{ names, tuples }};", ns.headers.Length );
-		sb.tabs( lvl + 1 );
-		sb.line( "return result.map;" );
-
-		sb.tabs( lvl );
-		sb.line( "};" );
-	}
+	if( ns.anyInclude )
+		writeIncludes( sb, ns, lvl );
 
 	if( ns.sources.Length > 0 )
 	{
 		foreach( string s in ns.sources )
 		{
-			byte[] orig = File.ReadAllBytes( s );
-			byte[] compressed = compressBuffer( orig );
-
-			sb.line( lvl );
-			string name = Path.GetFileNameWithoutExtension( s );
-			string content = File.ReadAllText( s, Encoding.ASCII );
-			sb.print( "const ShaderTemplate& {0}()", name );
-			sb.line( lvl );
-			sb.print( "{" );
-			sb.line( lvl + 1 );
-			sb.line( "const uint8_t src[] =" );
-			printBytes( sb, compressed );
-
-			sb.tabs( lvl + 1 );
-			sb.line( "static const ShaderTemplate result{{ R\"({0})\", decompressString( src, {1}, {2} ) }};", Path.GetFileName( s ), compressed.Length, orig.Length );
-			sb.tabs( lvl + 1 );
-			sb.line( "return result;" );
-
-			sb.tabs( lvl );
-			sb.print( "};" );
+			if( isStateTemplate( s ) )
+				writeStateTemplate( sb, lvl, s );
+			else
+				writeTemplate( sb, lvl, s );
 		}
 	}
 }
@@ -244,5 +350,10 @@ static byte[] compressBuffer( byte[] src )
 		throw new Win32Exception();
 	Array.Resize( ref dest, (int)destSize );
 	return dest;
+}
+
+static byte[] compressString( string src )
+{
+	return compressBuffer( Encoding.ASCII.GetBytes( src ) );
 }
 #>

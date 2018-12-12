@@ -68,6 +68,7 @@
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
+      <AdditionalIncludeDirectories>$(ProjectDir)Effects</AdditionalIncludeDirectories>
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -90,6 +91,7 @@
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
+      <AdditionalIncludeDirectories>$(ProjectDir)Effects</AdditionalIncludeDirectories>
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -100,14 +102,16 @@
     <ClInclude Include="iEffect.h" />
     <ClInclude Include="Render\EffectRenderer.hpp" />
     <ClInclude Include="Render\ShaderTemplate.h" />
+    <ClInclude Include="Render\StateShaderTemplate.h" />
     <ClInclude Include="Resources\RenderTargets.hpp" />
     <ClInclude Include="Hlsl\stateShaderUtils.h" />
+    <ClInclude Include="Resources\StructureBuffer.h" />
     <ClInclude Include="Utils\preciseTickCount.h" />
     <ClInclude Include="Resources\EffectsState.h" />
     <ClInclude Include="Render\Binder.h" />
     <ClInclude Include="Render\EffectsResources.h" />
     <ClInclude Include="Effects\Render\Simple\Simple.h" />
-    <ClInclude Include="Effects\Render\Starfield.h" />
+    <ClInclude Include="Effects\Render\Starfield\Starfield.h" />
     <ClInclude Include="Effects\shadersCode.h" />
     <ClInclude Include="Effects\Trans\ColorModifier\ColorModifier.h" />
     <ClInclude Include="Effects\Trans\DynamicMovement.h" />
@@ -141,12 +145,13 @@
     <ClCompile Include="EffectBase\RootEffect.cpp" />
     <ClCompile Include="Hlsl\Defines.cpp" />
     <ClCompile Include="Hlsl\stateShaderUtils.cpp" />
+    <ClCompile Include="Resources\StructureBuffer.cpp" />
     <ClCompile Include="Utils\preciseTickCount.cpp" />
     <ClCompile Include="Resources\EffectsState.cpp" />
     <ClCompile Include="Render\Binder.cpp" />
     <ClCompile Include="Render\EffectsResources.cpp" />
     <ClCompile Include="Effects\Render\Simple\Simple.cpp" />
-    <ClCompile Include="Effects\Render\Starfield.cpp" />
+    <ClCompile Include="Effects\Render\Starfield\Starfield.cpp" />
     <ClCompile Include="Effects\shadersCode.cpp" />
     <ClCompile Include="Effects\Trans\ColorModifier\ColorModifier.cpp" />
     <ClCompile Include="Effects\Trans\DynamicMovement.cpp" />
@@ -221,9 +226,20 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
     </FxCompile>
-    <FxCompile Include="Effects\Render\Simple\SimpleStateCS.hlsl">
+    <FxCompile Include="Effects\Render\Simple\SimpleState.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+    </FxCompile>
+    <None Include="Effects\Render\Starfield\Star.fx">
+      <FileType>Document</FileType>
+    </None>
+    <FxCompile Include="Effects\Render\Starfield\StarCS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Render\Starfield\StarVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Effects\UpdateStateCS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
@@ -236,8 +252,6 @@
     <FxCompile Include="Effects\Render\Simple\SimpleSolidPS.hlsl">
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Effects</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Effects</AdditionalIncludeDirectories>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>

@@ -43,6 +43,7 @@
     <ClInclude Include="Hlsl\StateShaderTemplate.h" />
     <ClInclude Include="Hlsl\ShaderTemplate.h" />
     <ClInclude Include="Resources\createShader.hpp" />
+    <ClInclude Include="Render\EffectStateShader.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

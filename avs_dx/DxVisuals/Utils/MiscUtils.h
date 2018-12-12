@@ -12,6 +12,10 @@ inline void csSetUav( ID3D11UnorderedAccessView* uav, UINT slot )
 {
 	context->CSSetUnorderedAccessViews( slot, 1, &uav, nullptr );
 }
+inline void csSetCBuffer( ID3D11Buffer* cb, UINT slot )
+{
+	context->CSSetConstantBuffers( slot, 1, &cb );
+}
 
 inline void omSetTarget( ID3D11RenderTargetView* rtv )
 {

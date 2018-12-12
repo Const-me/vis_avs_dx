@@ -13,9 +13,11 @@ public:
 		int color_pos;
 	};
 
-	struct StateData
+	class StateData
 	{
 		std::vector<int> colors;
+
+	public:
 
 		static const StateShaderTemplate& shaderTemplate();
 
@@ -23,7 +25,7 @@ public:
 
 		UINT stateSize() const { return 4; }
 
-		HRESULT defines( MacroValues& vals ) const;
+		HRESULT defines( StateMacroValues& vals ) const;
 	};
 
 	struct DotsRendering

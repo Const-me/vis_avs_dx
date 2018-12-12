@@ -6,7 +6,7 @@
 
 namespace
 {
-	CStringA assembleEffects( const std::vector<StateBuilder::Effect> &effects, bool &anyBeat )
+	CStringA assembleEffects( const std::vector<EffectStateShader> &effects, bool &anyBeat, UINT& totalStateSize )
 	{
 		anyBeat = false;
 		CAtlMap<CStringA, bool> globals;
@@ -35,22 +35,30 @@ void main()
 {
 )fffuuu";
 
+		UINT stateOffset = 0;
+		CStringA offsetString;
 		for( const auto& e : effects )
 		{
-			hlsl += e.values.expand( e.shaderTemplate->hlslMain );
+			CStringA main = e.values.expand( e.shaderTemplate->hlslMain );
+			offsetString.Format( "%i", stateOffset * 4 );
+			main.Replace( "STATE_OFFSET", offsetString );
+
+			hlsl += main;
 			hlsl += "\r\n";
+			stateOffset += e.stateSize;
 		}
 
 		hlsl += "}";
+		totalStateSize = stateOffset;
 		return hlsl;
 	}
 }
 
-HRESULT StateBuilder::compile( const std::vector<Effect> &effects )
+HRESULT StateShaders::compile( const std::vector<EffectStateShader> &effects, UINT& totalStateSize )
 {
 	init = update = updateOnBeat = nullptr;
 	bool anyBeat;
-	const CStringA hlsl = assembleEffects( effects, anyBeat );
+	const CStringA hlsl = assembleEffects( effects, anyBeat, totalStateSize );
 
 	std::vector<uint8_t> dxbc;
 	Hlsl::Defines def;

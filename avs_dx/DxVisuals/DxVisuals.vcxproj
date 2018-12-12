@@ -99,6 +99,7 @@
     <ClInclude Include="Effects\EffectImpl.hpp" />
     <ClInclude Include="EffectBase\RootEffect.h" />
     <ClInclude Include="Hlsl\StateMacroValues.h" />
+    <ClInclude Include="Render\EffectStateShader.hpp" />
     <ClInclude Include="Render\Shader.hpp" />
     <ClInclude Include="iEffect.h" />
     <ClInclude Include="Render\EffectRenderer.hpp" />

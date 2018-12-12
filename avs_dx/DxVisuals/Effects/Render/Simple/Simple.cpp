@@ -17,11 +17,10 @@ HRESULT SimpleBase::StateData::update( const AvsState& ass )
 	return S_OK;
 }
 
-HRESULT SimpleBase::StateData::defines( MacroValues& vals ) const
+HRESULT SimpleBase::StateData::defines( StateMacroValues& values ) const
 {
-	const int num_colors = (int)colors.size();
-	values.add( "num_colors", num_colors );
-	values.add( "COLOR_VALUES", uintConstants( colors.data(), num_colors ) );
+	values.add( "num_colors", (int)colors.size() );
+	values.uintConstants( "COLOR_VALUES", colors );
 	return S_OK;
 }
 
@@ -30,7 +29,7 @@ HRESULT Simple::buildState( int stateBufferOffset, int& thisSize, CStringA& hlsl
 	setStateOffset( stateBufferOffset );
 	thisSize = 4;
 
-	MacroValues values{ stateBufferOffset };
+	StateMacroValues values{ stateBufferOffset };
 	const int numColors = this->avs->num_colors;
 	values.add( "num_colors", numColors );
 	values.add( "COLOR_VALUES", uintConstants( this->avs->colors, numColors ) );

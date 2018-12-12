@@ -1,6 +1,6 @@
 #pragma once
 #include "../iEffect.h"
-class EffectStateBuilder;
+#include "../Render/EffectStateShader.hpp"
 class Binder;
 class RenderTargets;
 
@@ -20,7 +20,7 @@ public:
 	// Effects will return true if user has changed their settings in a way that deprecates GPU state buffer data and/or state shaders
 	virtual bool shouldRebuildState() { return false; }
 
-	virtual HRESULT buildState( int stateBufferOffset, int& thisSize, CStringA& hlsl, bool& useBeat, CAtlMap<CStringA, int>& globals ){ return S_FALSE; }
+	virtual HRESULT buildState( EffectStateShader& ess ){ return S_FALSE; }
 
 	// If user has changed something with the GUI controls, this method will recompile shaders / update GPU resources accordingly.
 	virtual HRESULT updateParameters( Binder& binder ) { return S_FALSE; }

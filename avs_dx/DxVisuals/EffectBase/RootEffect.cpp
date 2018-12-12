@@ -51,7 +51,7 @@ HRESULT RootEffect::renderEffects( bool isBeat )
 	}
 
 	// Run a state update shader
-	context->CSSetShader( isBeat ? m_updateStateBeat : m_updateState, nullptr, 0 );
+	context->CSSetShader( isBeat ? m_stateShaders.updateOnBeat : m_stateShaders.update, nullptr, 0 );
 	csSetUav( m_state.uav(), 0 );
 	context->Dispatch( 1, 1, 1 );
 
@@ -64,72 +64,28 @@ HRESULT RootEffect::renderEffects( bool isBeat )
 
 HRESULT RootEffect::buildState()
 {
-	CAtlMap<CStringA, int> globals;
-	std::vector<CStringA> mainPieces;
-	bool useBeat = false;
-	int stateBufferOffset = 0;
-
+	// Collect effects state shaders
+	std::vector<EffectStateShader> shaders;
 	HRESULT hr = applyRecursively( [ & ]( EffectBase& e )
 	{
-		CStringA hlsl;
-		bool beat = false;
-		int thisSize = 0;
-		CHECK( e.buildState( stateBufferOffset, thisSize, hlsl, beat, globals ) );
-
-		stateBufferOffset += thisSize * 4;
-
-		if( hlsl.GetLength() > 0 )
-			mainPieces.push_back( hlsl );
-
-		useBeat = useBeat || beat;
-		return S_OK;
+		shaders.emplace_back( EffectStateShader{} );
+		return e.buildState( *shaders.rbegin() );
 	} );
 	CHECK( hr );
 
-	CStringA hlsl = R"fffuuu(
-#include "FrameGlobalData.fx"
+	// Compile together
+	UINT totalStateSize;
+	CHECK( m_stateShaders.compile( shaders, totalStateSize ) );
 
-RWByteAddressBuffer effectStates : register(u0);
-)fffuuu";
+	// Create state buffer
+	if( totalStateSize != m_state.getSize() )
+		CHECK( m_state.create( totalStateSize ) );
 
-	for( POSITION pos = globals.GetStartPosition(); nullptr != pos; )
-	{
-		CStringA s = globals.GetNextKey( pos );
-		hlsl += s;
-		hlsl += "\r\n";
-	}
-
-	hlsl += R"fffuuu(
-[numthreads( 1, 1, 1 )]
-void main()
-{
-)fffuuu";
-
-	for( auto& s : mainPieces )
-	{
-		hlsl += s;
-		hlsl += "\r\n";
-	}
-	hlsl += "}";
-
-	std::vector<uint8_t> dxbc;
-	CStringA errors;
-	hr = Hlsl::compile( eStage::Compute, hlsl, dxbc, errors );
-	if( FAILED( hr ) )
-	{
-		logError( hr, "Error compiling state shader." );
-		return hr;
-	}
-
-	CHECK( createShader( dxbc, m_updateState ) );
-
-	// TODO: if useBeat == true, change defines and compile again.
-	m_updateStateBeat = m_updateState;
-
-
-	const UINT newStateSize = (UINT)stateBufferOffset / 4;
-	if( newStateSize != m_state.getSize() )
-		CHECK( m_state.create( newStateSize ) );
+	// Run init shader
+	bindShader<eStage::Compute>( m_stateShaders.init );
+	csSetUav( m_state.uav(), 0 );
+	StaticResources::sourceData.bind<eStage::Compute>( 0, 0 );
+	context->Dispatch( 1, 1, 1 );
 
 	return S_OK;
 }

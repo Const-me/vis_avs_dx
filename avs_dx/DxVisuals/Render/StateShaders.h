@@ -1,17 +1,9 @@
 #pragma once
-#include "../Hlsl/StateShaderTemplate.h"
-#include "../Hlsl/StateMacroValues.h"
+#include "EffectStateShader.hpp"
 
-struct StateBuilder
+struct StateShaders
 {
 	CComPtr<ID3D11ComputeShader> init, update, updateOnBeat;
 
-	struct Effect
-	{
-		const StateShaderTemplate* shaderTemplate;
-		UINT stateSize;
-		Hlsl::StateMacroValues values;
-	};
-
-	HRESULT compile( const std::vector<Effect> &effects );
+	HRESULT compile( const std::vector<EffectStateShader> &effects, UINT& totalStateSize );
 };

@@ -32,4 +32,7 @@ public:
 	void destroy();
 
 	HRESULT update( char visdata[ 2 ][ 2 ][ bands ], int isBeat );
+
+	template<eStage stage>
+	void bind( UINT t, UINT cb );
 };

@@ -28,7 +28,7 @@ public:
 
 	struct DotsRendering : public PointSpritesRender
 	{
-
+		using CsData = SimpleCS;
 		using VsData = SimpleDotsVS;
 	};
 

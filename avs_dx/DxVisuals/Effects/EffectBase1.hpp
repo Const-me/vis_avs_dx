@@ -54,7 +54,14 @@ private:
 		const bool changedSomething = changedBindings || changedData;
 		if( !changedSomething )
 			return S_FALSE;
-		CHECK( m_render.compileShaders() );
+
+		const CAtlMap<CStringA, CStringA>* pIncludes = &Hlsl::includes();
+		__if_exists( TStruct::effectIncludes )
+		{
+			pIncludes = &TStruct::effectIncludes();
+		}
+
+		CHECK( m_render.compileShaders( *pIncludes ) );
 		return S_OK;
 	}
 };

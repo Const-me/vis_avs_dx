@@ -50,6 +50,8 @@ struct StarfieldStructs: public PointSpritesRender
 	using CsData = Hlsl::Render::Starfield::StarCS;
 
 	using VsData = Hlsl::Render::Starfield::StarVS;
+
+	static const CAtlMap<CStringA, CStringA>& effectIncludes() { return includes(); }
 };
 
 class Starfield : public EffectBase1<StarfieldStructs>

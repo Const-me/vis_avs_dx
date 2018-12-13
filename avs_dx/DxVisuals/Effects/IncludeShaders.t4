@@ -152,4 +152,16 @@
 	{
 		return isStateTemplate( p ) ? "StateShaderTemplate" : "ShaderTemplate";
 	}
+
+	static string pluralString( int count, string single )
+	{
+		return ( 1 == count ) ? $"{count} {single}": $"{count} {single}s";
+	}
+
+	static string relativePath( string pathBase, string pathAbs )
+	{
+		Uri uBase = new Uri( pathBase );
+		Uri uAbs = new Uri( pathAbs );
+		return uBase.MakeRelativeUri( uAbs ).ToString();
+	}
 #>

@@ -1,4 +1,5 @@
 #pragma once
+#include "../Expressions/variableTypes.h"
 
 namespace Hlsl
 {
@@ -22,6 +23,10 @@ namespace Hlsl
 
 		// Add macro with values like "0x11, 0x22, 0x33"
 		void set( const CStringA &key, const std::vector<int>& vec );
+
+		void set( const CStringA &key, const float2& value );
+		void set( const CStringA &key, const float3& value );
+		void set( const CStringA &key, const float4& value );
 
 		// For HLSL-running macros, used by normal per-effect shaders.
 		std::vector<D3D_SHADER_MACRO> data() const;

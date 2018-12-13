@@ -2,7 +2,6 @@
 #define BIND_STARS_POSITIONS t4
 #define EFFECT_STATE 0
 #endif
-
 ByteAddressBuffer effectStates : register(t1);
 
 StructuredBuffer<float2> positiions : register(BIND_STARS_POSITIONS);

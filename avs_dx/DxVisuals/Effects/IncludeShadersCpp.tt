@@ -133,7 +133,7 @@ void makeShader( CppBuilder sb, string path )
 	sb.line( "			std::vector<uint8_t> result = decompressBytes( src, {0}, {1} );", compressed.Length, orig.Length );
 	sb.line( "			return std::move( result );" );
 	sb.line( "		};" );
-	Console.WriteLine( "Included a static shader from {0}", path );
+	Console.WriteLine( "Included a static shader from {0}", Path.GetFileName( path ) );
 }
 
 string makeStaticShaders()
@@ -204,28 +204,59 @@ static void writeIncludes( CppBuilder sb, NamespaceData ns, int lvl )
 
 	sb.tabs( lvl );
 	sb.line( "};" );
+
+	Console.WriteLine( "Generated {0} in {1}", pluralString( ns.headers.Length, "include" ), ns.fullName );
 }
 
-static void writeTemplate( CppBuilder sb, int lvl, string sourcePath )
+static int firstIndex( string[] lines, Func<string,bool> test, int start = 0 )
 {
-	byte[] orig = File.ReadAllBytes( sourcePath );
+	for( int i = start; i < lines.Length; i++ )
+		if( test( lines[ i ] ) )
+			return i;
+	return -1;
+}
+
+void writeTemplate( CppBuilder sb, int lvl, string sourcePath )
+{
+	// Cleanup unused "#ifndef AVS_SHADER" portion of the HLSL, to save a bit of space.
+	string[] lines = File.ReadAllLines( sourcePath );
+	int indAvxShaderIfdef = firstIndex( lines, s => s == "#ifndef AVS_SHADER" );
+
+	if( indAvxShaderIfdef >= 0 )
+	{
+		int indEndif = firstIndex( lines, s => s.StartsWith( "#endif" ), indAvxShaderIfdef );
+		if( indEndif < 0 ) throw new ArgumentException( "Unmatched `#ifndef AVS_SHADER` in " + sourcePath );
+
+		List<string> newLines = new List<string>();
+		newLines.AddRange( lines.Take( indAvxShaderIfdef ) );
+		newLines.AddRange( lines.Skip( indEndif + 1 ) );
+		lines = newLines.ToArray();
+		// Console.WriteLine( string.Join( "\r\n", lines ) );
+	}
+
+	byte[] orig = Encoding.ASCII.GetBytes( string.Join( "\r\n", lines ) );
 	byte[] compressed = compressBuffer( orig );
 
-	sb.line( lvl );
-	sb.print( "const ShaderTemplate& {0}()", Path.GetFileNameWithoutExtension( sourcePath ) );
-	sb.line( lvl );
-	sb.print( "{" );
-	sb.line( lvl + 1 );
-	sb.line( "const uint8_t src[] =" );
-	printBytes( sb, compressed );
+	sb.setTabs( lvl );
+	sb.tl( "const ShaderTemplate* {0}::shaderTemplate()", Path.GetFileNameWithoutExtension( sourcePath ) );
+	sb.tl( "{" );
+	sb.incTabs();
+	if( compressed.Length < ( orig.Length + lines.Length - 1 ) )
+	{
+		sb.tl( "const uint8_t src[] =" );
+		printBytes( sb, compressed );
+		sb.tl( "static const ShaderTemplate result{{ R\"({0})\", decompressString( src, {1}, {2} ) }};", Path.GetFileName( sourcePath ), compressed.Length, orig.Length );
+	}
+	else
+	{
+		sb.tl( @"const char src[] = R""fffuuu({0})fffuuu"";", string.Join( "\r\n", lines ) );
+		sb.tl( "static const ShaderTemplate result{{ R\"({0})\", src }};", Path.GetFileName( sourcePath ) );
+	}
+	sb.tl( "return &result;" );
+	sb.decTabs();
+	sb.tl( "};" );
 
-	sb.tabs( lvl + 1 );
-	sb.line( "static const ShaderTemplate result{{ R\"({0})\", decompressString( src, {1}, {2} ) }};", Path.GetFileName( sourcePath ), compressed.Length, orig.Length );
-	sb.tabs( lvl + 1 );
-	sb.line( "return result;" );
-
-	sb.tabs( lvl );
-	sb.print( "};" );
+	Console.WriteLine( "Included a shader template from " + relativePath( sourceDir, sourcePath ) );
 }
 
 const string globalBegin = "<global>";
@@ -307,7 +338,7 @@ static void writeStateTemplate( CppBuilder sb, int lvl, string sourcePath )
 	sb.line( "};" );
 }
 
-static void generateNamespaces( CppBuilder sb, NamespaceData ns, int lvl )
+void generateNamespaces( CppBuilder sb, NamespaceData ns, int lvl )
 {
 	if( ns.anyInclude )
 		writeIncludes( sb, ns, lvl );

@@ -14,6 +14,7 @@
 #include "../Hlsl/ShaderTemplate.h"
 #include "../Hlsl/StateShaderTemplate.h"
 #include "../Hlsl/Defines.h"
+#include "../Expressions/variableTypes.h"
 
 namespace Hlsl
 {
@@ -47,40 +48,7 @@ static void generateNamespace( CppBuilder sb, NamespaceData ns, int lvl )
 
 static readonly Regex s_reConst = new Regex( @"^static const\s+(\S+)\s+(\S+)\s+=\s+(.+);$" );
 
-static readonly Dictionary<string, string> s_valueClasses = new Dictionary<string, string>()
-{
-	{ "uint2", "CSize" },
-	{ "int2", "CPoint" },
-	{ "float2", "Vector2" },
-	{ "float3", "Vector3" },
-	{ "float4", "Vector4" },
-};
-
-static string convertType( string t )
-{
-	switch( t )
-	{
-		case "uint": return "uint32_t";
-	}
-	string vc;
-	if( s_valueClasses.TryGetValue( t, out vc ) )
-		return vc;
-	return t;
-}
-
 static readonly Regex s_reVal = new Regex( @"^\s*(\S+)\s*\((.*)\)" );
-
-static string convertValue( string v )
-{
-	var m = s_reVal.Match( v );
-	if( m.Success )
-	{
-		string vc;
-		if( s_valueClasses.TryGetValue( m.Groups[ 1 ].Value, out vc ) )
-			return string.Format( "{0}({1})", vc, m.Groups[ 2 ].Value );
-	}
-	return v;
-}
 
 interface iConstDecl
 {
@@ -96,9 +64,9 @@ class ConstDecl: iConstDecl
 	public ConstDecl( string str )
 	{
 		var m = s_reConst.Match( str );
-		tp = convertType( m.Groups[ 1 ].Value );
+		tp = m.Groups[ 1 ].Value;
 		name = m.Groups[ 2 ].Value;
-		val = convertValue( m.Groups[ 3 ].Value );
+		val = m.Groups[ 3 ].Value;
 	}
 	public string member() { return $"{tp} {name} = {val};"; }
 	public void defines( CppBuilder sb )
@@ -114,7 +82,7 @@ class VectorDecl: iConstDecl
 	public VectorDecl( string str )
 	{
 		var node = XDocument.Parse( str.Substring( str.IndexOf( "<macro-vector" ) ) ).Root;
-		tp = convertType( node.Attribute( "type" ).Value );
+		tp = node.Attribute( "type" ).Value;
 		name = node.Attribute( "name" ).Value;
 		size = node.Attribute( "size" ).Value;
 		vals = node.Attribute( "values" ).Value;

@@ -44,6 +44,7 @@
     <ClInclude Include="Render\EffectStateShader.hpp" />
     <ClInclude Include="Resources\bindResource.h" />
     <ClInclude Include="Effects\Trans\DMove\DynamicMovement.h" />
+    <ClInclude Include="Expressions\variableTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

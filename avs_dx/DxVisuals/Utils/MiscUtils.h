@@ -25,10 +25,7 @@ inline void setShaders( ID3D11VertexShader* vs, ID3D11GeometryShader* gs, ID3D11
 	context->PSSetShader( ps, nullptr, 0 );
 }
 
-inline void iaClearBuffers()
-{
-	context->IASetVertexBuffers( 0, D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT, nullptr, nullptr, nullptr );
-}
+void iaClearBuffers();
 
 class LockExternCs
 {

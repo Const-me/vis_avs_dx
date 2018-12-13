@@ -112,9 +112,41 @@ class CodeDecl: iConstDecl
 	}
 }
 
+class BindingDecl: iConstDecl
+{
+	public string name { get; private set; }
+	readonly string macro;
+	readonly char typeChar = 't';
+	public BindingDecl( string str )
+	{
+		var node = XDocument.Parse( str.Substring( str.IndexOf( "<macro-resource" ) ) ).Root;
+		name = node.Attribute( "name" ).Value;
+		macro = node.Attribute( "macro" ).Value;
+		var typeAttr = node.Attribute( "type" );
+		if( null != typeAttr )
+			typeChar = parseType( typeAttr.Value );
+	}
+	public string member() { return $"UINT {name};"; }
+	public void defines( CppBuilder sb )
+	{
+		sb.tl( @"def.setBinding( ""{0}"", '{1}', {2} );", macro, typeChar, name );
+	}
+	static char parseType( string t )
+	{
+		switch( t.ToLowerInvariant() )
+		{
+			case "srv": return 't';
+			case "uav": return 'u';
+			case "cbuffer": return 'b';
+		}
+		throw new ArgumentException( "Unsupported type attribute {0} in <macro-resource> element", t );
+	}
+}
+
 static iConstDecl[] parseConstants( string[] lines )
 {
 	List<iConstDecl> res = new List<iConstDecl>();
+	res.AddRange( lines.Where( l => l.Contains( "<macro-resource" ) ).Select( s => new BindingDecl( s ) ) );
 	res.AddRange( lines.Where( l => l.StartsWith( "static const" ) ).Select( s => new ConstDecl( s ) ) );
 	res.AddRange( lines.Where( l => l.Contains( "<macro-vector" ) ).Select( s => new VectorDecl( s ) ) );
 	res.AddRange( lines.Where( l => l.Contains( "<macro-code" ) ).Select( s => new CodeDecl( s ) ) );

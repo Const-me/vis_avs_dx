@@ -17,21 +17,6 @@ void Defines::set( const CStringA& key, const CStringA& value )
 	m_map.emplace_back( std::make_pair( key, value ) );
 }
 
-std::vector<D3D_SHADER_MACRO> Defines::data() const
-{
-	std::vector<D3D_SHADER_MACRO> macros;
-	macros.reserve( m_map.size() + 2 );
-
-	macros.emplace_back( D3D_SHADER_MACRO{ "AVS_SHADER", "" } );
-
-	for( auto& p : m_map )
-		macros.emplace_back( D3D_SHADER_MACRO{ p.first, p.second } );
-
-	macros.emplace_back( D3D_SHADER_MACRO{ nullptr, nullptr } );
-
-	return std::move( macros );
-}
-
 void Defines::set( const CStringA &key, uint32_t value )
 {
 	CStringA str;
@@ -71,9 +56,52 @@ void Defines::set( const CStringA &key, const std::vector<int>& vec )
 	set( key, str );
 }
 
+void Defines::set( const CStringA &key, const float2& value )
+{
+	CStringA str;
+	str.Format( "float2( %g, %g )", value.x, value.y );
+	set( key, str );
+}
+
+void Defines::set( const CStringA &key, const float3& value )
+{
+	CStringA str;
+	str.Format( "float3( %g, %g, %g )", value.x, value.y, value.z );
+	set( key, str );
+}
+
+void Defines::set( const CStringA &key, const float4& value )
+{
+	CStringA str;
+	str.Format( "float4( %g, %g, %g, %g )", value.x, value.y, value.z, value.w );
+	set( key, str );
+}
+
+void Defines::setBinding( const CStringA &key, char type, UINT slot )
+{
+	CStringA value;
+	value.Format( "%c%i", type, slot );
+	set( key, value );
+}
+
 CStringA Defines::expand( CStringA hlsl ) const
 {
 	for( const auto& m : m_map )
 		hlsl.Replace( m.first, m.second );
 	return hlsl;
+}
+
+std::vector<D3D_SHADER_MACRO> Defines::data() const
+{
+	std::vector<D3D_SHADER_MACRO> macros;
+	macros.reserve( m_map.size() + 2 );
+
+	macros.emplace_back( D3D_SHADER_MACRO{ "AVS_SHADER", "1" } );
+
+	for( auto& p : m_map )
+		macros.emplace_back( D3D_SHADER_MACRO{ p.first, p.second } );
+
+	macros.emplace_back( D3D_SHADER_MACRO{ nullptr, nullptr } );
+
+	return std::move( macros );
 }

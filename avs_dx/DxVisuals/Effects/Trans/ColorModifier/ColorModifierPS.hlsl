@@ -1,9 +1,13 @@
 #ifndef AVS_SHADER
+
 #define SHADER_CODE
 // <macro-code name="shaderCode" macro="SHADER_CODE" />
-#endif
 
-Texture2D<float4> texPrevFrame : register(t1);
+#define BIND_PREV_FRAME t1
+// <macro-resource name="bindPrevFrame" macro="BIND_PREV_FRAME" />
+
+#endif
+Texture2D<float4> texPrevFrame : register( BIND_PREV_FRAME );
 
 float4 main( float4 screenSpace : SV_Position ) : SV_Target
 {

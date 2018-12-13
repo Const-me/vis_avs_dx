@@ -1,5 +1,6 @@
 #ifndef AVS_SHADER
 #define BIND_STARS_POSITIONS t4
+// <macro-resource name="bindStarsPosition" macro="BIND_STARS_POSITIONS" />
 #define EFFECT_STATE 0
 #endif
 ByteAddressBuffer effectStates : register(t1);

@@ -66,10 +66,16 @@ HRESULT RootEffect::buildState()
 {
 	// Collect effects state shaders
 	std::vector<EffectStateShader> shaders;
+	UINT stateOffset = 0;
 	HRESULT hr = applyRecursively( [ & ]( EffectBase& e )
 	{
 		shaders.emplace_back( EffectStateShader{} );
-		return e.buildState( *shaders.rbegin() );
+		EffectStateShader &ess = *shaders.rbegin();
+		
+		const HRESULT hr = e.buildState( ess );
+		e.setStateOffset( stateOffset * 4 );
+		stateOffset += ess.stateSize;
+		return hr;
 	} );
 	CHECK( hr );
 

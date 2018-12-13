@@ -28,11 +28,11 @@ public:
 
 	virtual HRESULT render( RenderTargets& rt ) = 0;
 
+	void setStateOffset( UINT off ) { m_stateOffset = off; }
+
 protected:
 
-	int m_stateOffset;
+	UINT m_stateOffset;
 
-	int stateOffset() const { return m_stateOffset; }
-
-	void setStateOffset( int off ) { m_stateOffset = off; }
+	UINT stateOffset() const { return m_stateOffset; }
 };

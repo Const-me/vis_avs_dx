@@ -20,3 +20,8 @@ HRESULT PsData::defines( Hlsl::Defines& def ) const
 	def.set( "SHADER_CODE", hlsl );
 	return S_OK;
 }
+
+HRESULT ColorModifier::render( RenderTargets& rt )
+{
+	return E_NOTIMPL;
+}

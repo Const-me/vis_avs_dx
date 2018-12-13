@@ -1,8 +1,9 @@
 #pragma once
 #include "../../EffectImpl.hpp"
+#include "../PointSpritesRender.hpp"
 using namespace Hlsl::Render::Starfield;
 
-struct StarfieldStructs
+struct StarfieldStructs: public PointSpritesRender
 {
 	struct StarFormat
 	{
@@ -49,22 +50,15 @@ struct StarfieldStructs
 	using CsData = Hlsl::Render::Starfield::StarCS;
 
 	using VsData = Hlsl::Render::Starfield::StarVS;
-
-	using GsData = Hlsl::Render::PointSpriteGS;
-
-	static ID3D11PixelShader* pixelShader()
-	{
-		return StaticResources::pointSprite;
-	}
 };
 
 class Starfield : public EffectBase1<StarfieldStructs>
 {
 public:
 
-	inline Starfield( AvsState *pState ) : tBase( pState ) { }
+	Starfield( AvsState *pState ) : tBase( pState ) { }
 
 	const Metadata& metadata() override;
 
-	HRESULT render( RenderTargets& rt ) override { return E_NOTIMPL; }
+	HRESULT render( RenderTargets& rt ) override;
 };

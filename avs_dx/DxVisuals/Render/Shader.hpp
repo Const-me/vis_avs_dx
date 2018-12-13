@@ -18,34 +18,47 @@ public:
 		return m_source.updateBindings( binder );
 	}
 
-	bool needsCompiling( const TSourceData& src ) const
+	template<class tAvxState>
+	HRESULT updateValues( const tAvxState& ass, UINT stateOffset )
+	{
+		__if_not_exists( TSourceData::update )
+		{
+			return S_FALSE;
+		}
+
+		__if_exists( TSourceData::update )
+		{
+			return m_source.update( ass, stateOffset );
+		}
+
+		return E_FAIL;
+	}
+
+	/* bool needsCompiling( const TSourceData& src ) const
 	{
 		if( !result )
 			return true;
 		if( !( src == m_source ) )
 			return true;
 		return false;
-	}
+	} */
 
-	HRESULT compile( const TSourceData& sourceData )
+	HRESULT compile( const CAtlMap<CStringA, CStringA>& inc )
 	{
 		// Drop the old shader
 		result = nullptr;
 
-		// Generate preprocessor macro values
+		// Generate preprocessor macro values, from the current copy of the state
 		Hlsl::Defines def;
-		CHECK( sourceData.defines( def ) );
+		CHECK( m_source.defines( def ) );
 
 		// Compile HLSL into DXBC
 		std::vector<uint8_t> dxbc;
-		CStringA errors;
-		const HRESULT hr = Hlsl::compile( stage, shaderTemplate.hlsl, dxbc, errors, &def );
+		CHECK( Hlsl::compile( stage, shaderTemplate.hlsl, shaderTemplate.name, inc, def, dxbc ) );
 
 		// Upload DXBC to GPU
 		CHECK( createShader( dxbc, result ) );
 
-		// Save the new state
-		m_source = sourceData;
 		return S_OK;
 	}
 

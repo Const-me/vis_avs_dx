@@ -1,5 +1,6 @@
 #pragma once
 #include "../../EffectImpl.hpp"
+#include "../PointSpritesRender.hpp"
 using namespace Hlsl::Render::Simple;
 
 class SimpleBase
@@ -25,36 +26,10 @@ public:
 		static inline UINT stateSize() { return 4; }
 	};
 
-	struct DotsRendering
+	struct DotsRendering : public PointSpritesRender
 	{
-		struct VsData: public SimpleDotsVS
-		{
-			static const ShaderTemplate& shaderTemplate();
 
-			// Offset in state buffer to read the current color, in 32-bit elements.
-			int effectState;
-			// t# register for the buffer with the positions in clip space
-			int bindDotsPositions;
-
-			void update( const AvsState& ass, int stateOffset );
-
-			HRESULT defines( Hlsl::Defines& def ) const;
-		};
-		struct GsData
-		{
-			static const ShaderTemplate& shaderTemplate();
-
-			// Half size of a single spite, in clip space units
-			Vector2 size;
-
-			void update( const AvsState& ass, int stateOffset );
-
-			HRESULT defines( Hlsl::Defines& def ) const;
-		};
-		static ID3D11PixelShader* pixelShader()
-		{
-			return StaticResources::pointSprite;
-		}
+		using VsData = SimpleDotsVS;
 	};
 
 	struct SolidRendering
@@ -76,7 +51,7 @@ public:
 	};
 };
 
-class Simple: public SimpleBase, public EffectBase
+/* class Simple: public SimpleBase, public EffectBase
 {
 	SimpleBase::AvsState* const avs;
 	StateData stateData;
@@ -101,4 +76,17 @@ public:
 	}
 
 	HRESULT render( RenderTargets& rt ) override { return E_NOTIMPL; }
+}; */
+
+// For the first version, hardcode the "Dots" method
+class Simple : public EffectBase1<SimpleBase>
+{
+	StructureBuffer dotsBuffer;
+
+public:
+	Simple( AvsState *pState ) : tBase( pState ) { }
+
+	const Metadata& metadata() override;
+
+	HRESULT render( RenderTargets& rt ) override;
 };

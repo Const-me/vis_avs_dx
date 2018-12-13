@@ -57,25 +57,34 @@ public:
 	HRESULT updateValues( const tAvxState& ass, UINT stateOffset )
 	{
 		HRESULT res = S_FALSE;
-		forEachDynStage( [ =, &res ]( auto p )
+		forEachDynStage( [ & ]( auto p )
 		{
-			using tData = decltype( p );
-			__if_not_exists( tData::update )
+			const HRESULT hr = p.updateValues( ass, stateOffset );
+			if( FAILED( hr ) )
 			{
-				return S_FALSE;
+				logError( hr, "Update failed" );
+				return;
 			}
+			if( S_FALSE != hr )
+				res = S_OK;
+		} );
+		return res;
+	}
 
-			__if_exists( tData::update )
+	HRESULT compileShaders( const CAtlMap<CStringA, CStringA>& inc )
+	{
+		HRESULT res = S_FALSE;
+		forEachDynStage( [ & ]( auto p )
+		{
+			const HRESULT hr = p.compile( inc );
+			if( FAILED( hr ) )
 			{
-				const HRESULT hr = p.update( ass, stateOffset );
-				if( FAILED( hr ) )
-				{
-					logError( hr, "Update failed" );
-					return;
-				}
-				if( S_FALSE != hr )
-					res = S_OK;
+				logError( hr, "Update failed" );
+				res = hr;
+				return;
 			}
+			if( S_FALSE != hr )
+				res = S_OK;
 		} );
 		return res;
 	}

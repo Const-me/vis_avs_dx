@@ -10,3 +10,16 @@ HRESULT SimpleBase::StateData::update( const AvsState& ass )
 	colors.assign( ass.colors, ass.colors + ass.num_colors );
 	return S_OK;
 }
+
+HRESULT Simple::render( RenderTargets& rt )
+{
+	// TODO: change based on the size
+	constexpr UINT dotsCount = 768;
+	if( !dotsBuffer )
+		CHECK( dotsBuffer.create( sizeof( Vector2 ), dotsCount ) );
+
+	bindShaders();
+
+
+	return E_NOTIMPL;
+}

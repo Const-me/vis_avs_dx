@@ -16,4 +16,9 @@ public:
 
 	// Read/write view of the buffer
 	ID3D11UnorderedAccessView* uav() const { return m_uav; }
+
+	operator bool() const
+	{
+		return nullptr != m_srv && nullptr != m_uav;
+	}
 };

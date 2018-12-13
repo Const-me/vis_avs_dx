@@ -44,6 +44,7 @@ HRESULT Starfield::render( RenderTargets& rt )
 	const UINT uavSlot = data<eStage::Compute>().bindStarsPosition;
 	bindUav( uavSlot, starsBuffer.uav() );
 	context->Dispatch( nThreadGroups, 1, 1 );
+	bindUav( uavSlot );
 
 	// Render the sprites
 	const UINT srvSlot = data<eStage::Vertex>().bindStarsPosition;
@@ -51,6 +52,7 @@ HRESULT Starfield::render( RenderTargets& rt )
 	iaClearBuffers();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_POINTLIST );
 	context->DrawIndexed( nStars, 0, 0 );
+	bindResource<eStage::Vertex>( srvSlot );
 
 	return S_OK;
 }

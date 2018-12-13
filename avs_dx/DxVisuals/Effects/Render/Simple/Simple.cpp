@@ -63,6 +63,7 @@ HRESULT Simple::render( RenderTargets& rt )
 	const UINT uavSlot = data<eStage::Compute>().bindDotsPosition;
 	bindUav( uavSlot, dotsBuffer.uav() );
 	context->Dispatch( 3, 1, 1 );
+	bindUav( uavSlot );
 
 	// Render the sprites
 	const UINT srvSlot = data<eStage::Vertex>().bindDots;
@@ -70,6 +71,7 @@ HRESULT Simple::render( RenderTargets& rt )
 	iaClearBuffers();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_POINTLIST );
 	context->DrawIndexed( 768, 0, 0 );
+	bindResource<eStage::Vertex>( srvSlot );
 
 	return S_OK;
 }

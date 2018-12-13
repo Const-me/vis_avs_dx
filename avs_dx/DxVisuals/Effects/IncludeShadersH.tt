@@ -175,7 +175,7 @@ static void generateShaderStruct( CppBuilder sb, string sourcePath, int lvl )
 		sb.line();
 		sb.tl( "bool operator==( const {0}& that ) const", name );
 		sb.tl( "{" );
-		sb.tl( "	return {0};", string.Join( " && ", decls.Select( d=> string.Format( "{0} == that.{0}", d.name ) ) ) );
+		sb.tl( "	return {0};", string.Join( " && ", decls.Select( d => string.Format( "{0} == that.{0}", d.name ) ) ) );
 		sb.tl( "}" );
 
 		sb.line();

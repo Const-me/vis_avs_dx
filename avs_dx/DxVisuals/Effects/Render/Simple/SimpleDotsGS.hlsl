@@ -1,6 +1,5 @@
 #ifndef AVS_SHADER
-#define SIZE_X    0.01
-#define SIZE_Y    SIZE_X * 16 / 9
+static const float2 sizeInClipSpace = float2( 0.01, 0.01 * 16 / 9 );
 #endif
 
 struct sIn
@@ -29,7 +28,7 @@ void main( point sIn input[1], inout TriangleStream<sOut> output )
         const float y = ( i & 2 ) - 1;
         sOut r;
         r.pos = pos;
-        r.pos.xy += float2( x * SIZE_X, y * SIZE_Y );
+        r.pos.xy += float2( x, y ) * sizeInClipSpace;
         r.tc = float2( x, y );
         r.color = color;
         output.Append( r );

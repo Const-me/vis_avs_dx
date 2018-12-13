@@ -6,7 +6,7 @@ static const float2 y1y2 = float2( -0.5, 0.5 );
 static const float sampleV = 0.75f;
 static const uint pointsCount = 768;
 #endif
-RWBuffer<float2> dots : register(BIND_DOTS_POSITIONS);
+RWStructuredBuffer<float2> dots : register(BIND_DOTS_POSITIONS);
 
 [numthreads( 256, 1, 1 )]
 void main( in uint3 threadId : SV_DispatchThreadID )

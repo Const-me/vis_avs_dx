@@ -6,7 +6,7 @@
 static const float3 starsColor = float3( 1, 1, 1 );
 #endif
 
-Buffer<StarFormat> stars : register(BIND_STARS_POSITIONS);
+StructuredBuffer<StarFormat> stars : register(BIND_STARS_POSITIONS);
 
 struct SimpleVertex
 {

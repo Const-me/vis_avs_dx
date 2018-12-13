@@ -4,7 +4,7 @@
 #define BIND_STARS_POSITIONS u4
 // <macro-resource name="bindStarsPosition" macro="BIND_STARS_POSITIONS" type="uav" />
 #endif
-RWBuffer<StarFormat> stars : register( BIND_STARS_POSITIONS );
+RWStructuredBuffer<StarFormat> stars : register(BIND_STARS_POSITIONS);
 
 [numthreads( 256, 1, 1 )]
 void main( in uint3 threadId : SV_DispatchThreadID )

@@ -43,25 +43,39 @@ public:
 		m_shaders{ tHelper<eStage::Compute>::ctorArg(), tHelper<eStage::Vertex>::ctorArg(), tHelper<eStage::Geometry>::ctorArg(), tHelper<eStage::Pixel>::ctorArg() }
 	{ }
 
-	bool updateDynamics( const tAvxState& ass, int stateOffset )
+	bool updateBindings( Binder& binder )
 	{
 		bool res = false;
-		forEachDynStage( [ =, &res ]( auto p )
+		forEachDynStage( [ & ]( auto p )
 		{
-			const bool r = p.update( ass, stateOffset );
-			res = res || r;
+			const bool changedBindings = p.updateBindings( binder );
+			res = res || changedBindings;
 		} );
 		return res;
 	}
 
-	bool updateBindings( Binder& binder )
+	HRESULT updateValues( const tAvxState& ass, UINT stateOffset )
 	{
-		// Resource bindings
-		bool res = false;
+		HRESULT res = S_FALSE;
 		forEachDynStage( [ =, &res ]( auto p )
 		{
-			const bool changedBindings = p.updateBindings( binder );
-			res = res || changedBindings;
+			using tData = decltype( p );
+			__if_not_exists( tData::update )
+			{
+				return S_FALSE;
+			}
+
+			__if_exists( tData::update )
+			{
+				const HRESULT hr = p.update( ass, stateOffset );
+				if( FAILED( hr ) )
+				{
+					logError( hr, "Update failed" );
+					return;
+				}
+				if( S_FALSE != hr )
+					res = S_OK;
+			}
 		} );
 		return res;
 	}

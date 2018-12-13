@@ -89,6 +89,15 @@ private:
 		ess.stateSize = m_stateData.stateSize();
 		return m_stateData.defines( ess.values );
 	}
+
+	HRESULT updateParameters( Binder& binder ) override
+	{
+		const bool changedBindings = m_render.updateBindings( binder );
+		const HRESULT hr = m_render.updateValues( *avs, stateOffset() );;
+		CHECK( hr );
+		const bool changedData = ( hr != S_FALSE );
+		return ( changedBindings || changedData ) ? S_OK : S_FALSE;
+	}
 };
 
 struct EmptyStateData

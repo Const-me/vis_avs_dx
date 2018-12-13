@@ -13,6 +13,11 @@ class Shader
 public:
 	Shader( const ShaderTemplate* st ) : shaderTemplate( *st ) { }
 
+	bool updateBindings( Binder& binder )
+	{
+		return m_source.updateBindings( binder );
+	}
+
 	bool needsCompiling( const TSourceData& src ) const
 	{
 		if( !result )

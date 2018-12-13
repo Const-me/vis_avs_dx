@@ -19,6 +19,15 @@
 
 namespace Hlsl
 {
+	template<eStage stage>
+	struct ShaderBaseStruct
+	{
+		bool updateBindings( Binder& binder ){ return false; }
+
+		template<class TAvx>
+		HRESULT update( const TAvx& a, UINT stateOffset ) { return S_FALSE; }
+	};
+
 <#= writeNamespaces( generateNamespace ) #>
 	namespace StaticShaders
 	{
@@ -173,7 +182,12 @@ static void generateShaderStruct( CppBuilder sb, string sourcePath, int lvl )
 	sb.line();
 
 	string name = Path.GetFileNameWithoutExtension( sourcePath );
-	sb.tl( "struct {0}", name );
+	string stage = stageString( sourcePath );
+
+	string baseClass = "";
+	if( null !=stage )
+		baseClass = $": public ShaderBaseStruct<eStage::{stage}>";
+	sb.tl( "struct {0}{1}", name, baseClass );
 	sb.tl( "{" );
 	sb.incTabs();
 	sb.tl( "static const {0}* shaderTemplate();", isStateTemplate( sourcePath ) ? "StateShaderTemplate" : "ShaderTemplate", name );
@@ -190,7 +204,6 @@ static void generateShaderStruct( CppBuilder sb, string sourcePath, int lvl )
 		sb.tl( "}" );
 
 		BindingDecl[] bindings = decls.OfType<BindingDecl>().ToArray();
-		string stage = stageString( sourcePath );
 		if( bindings.Length > 0 && null != stage )
 		{
 			sb.line();

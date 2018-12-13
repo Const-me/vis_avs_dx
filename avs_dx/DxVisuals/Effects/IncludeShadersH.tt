@@ -42,12 +42,14 @@ static void generateNamespace( CppBuilder sb, NamespaceData ns, int lvl )
 	{
 		foreach( string s in ns.sources )
 		{
+			if( isStateTemplate( s ) )
+			{
+				generateStateData( sb, s, lvl );
+				continue;
+			}
 			sb.tabs( lvl );
 			string name = Path.GetFileNameWithoutExtension( s );
 			sb.line( "const {0}& {1}();", templateResultType( s ), name );
-
-			if( isStateTemplate( s ) )
-				generateStateData( sb, s, lvl );
 		}
 	}
 }

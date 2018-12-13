@@ -1,5 +1,4 @@
 #pragma once
-#include "EffectsResources.h"
 #include "Stage.h"
 
 class Binder

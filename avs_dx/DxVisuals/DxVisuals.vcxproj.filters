@@ -4,16 +4,12 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Hlsl\Variable.h" />
-    <ClInclude Include="Primitives\ColorsTexture.h" />
-    <ClInclude Include="Render\FrameGraphBuilder.h" />
     <ClInclude Include="Hlsl\FunctionBuilder.h" />
-    <ClInclude Include="Render\PassBuilder.h" />
     <ClInclude Include="Utils\logger.h" />
     <ClInclude Include="Utils\DirectXErrors\codes.h" />
     <ClInclude Include="Utils\DirectXErrors\DirectXErrors.h" />
     <ClInclude Include="Utils\DirectXErrors\formatMessage.hpp" />
     <ClInclude Include="Effects\shadersCode.h" />
-    <ClInclude Include="Render\EffectsResources.h" />
     <ClInclude Include="Render\Binder.h" />
     <ClInclude Include="Utils\MiscUtils.h" />
     <ClInclude Include="Resources\RenderTarget.h" />
@@ -51,24 +47,17 @@
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Hlsl\Variable.cpp" />
-    <ClCompile Include="Primitives\ColorsTexture.cpp" />
-    <ClCompile Include="Render\FrameGraphBuilder.cpp" />
     <ClCompile Include="Hlsl\FunctionBuilder.cpp" />
-    <ClCompile Include="Render\PassBuilder.cpp" />
     <ClCompile Include="Utils\DirectXErrors\DirectXErrors.cpp" />
     <ClCompile Include="Utils\DirectXErrors\formatCString.cpp" />
     <ClCompile Include="Effects\shadersCode.cpp" />
-    <ClCompile Include="Render\EffectsResources.cpp" />
     <ClCompile Include="Render\Binder.cpp" />
     <ClCompile Include="Resources\RenderTarget.cpp" />
     <ClCompile Include="Resources\staticResources.cpp" />
     <ClCompile Include="Resources\SourceData.cpp" />
     <ClCompile Include="Utils\preciseTickCount.cpp" />
-    <ClCompile Include="EffectBase\EffectBase.cpp" />
     <ClCompile Include="EffectBase\EffectListBase.cpp" />
-    <ClCompile Include="EffectBase\EffectList.cpp" />
     <ClCompile Include="EffectBase\RootEffect.cpp" />
-    <ClCompile Include="EffectBase\EffectListBase.fact.cpp" />
     <ClCompile Include="Utils\SimpleMath.cpp" />
     <ClCompile Include="Resources\EffectsState.cpp" />
     <ClCompile Include="Hlsl\Defines.cpp" />
@@ -80,6 +69,7 @@
     <ClCompile Include="Hlsl\compile.cpp" />
     <ClCompile Include="Utils\MiscUtils.cpp" />
     <ClCompile Include="Effects\Trans\DMove\DynamicMovement.cpp" />
+    <ClCompile Include="EffectBase\EffectListBase.factory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

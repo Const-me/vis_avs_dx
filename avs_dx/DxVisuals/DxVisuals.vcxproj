@@ -114,7 +114,6 @@
     <ClInclude Include="Utils\preciseTickCount.h" />
     <ClInclude Include="Resources\EffectsState.h" />
     <ClInclude Include="Render\Binder.h" />
-    <ClInclude Include="Render\EffectsResources.h" />
     <ClInclude Include="Effects\Render\Simple\Simple.h" />
     <ClInclude Include="Effects\Render\Starfield\Starfield.h" />
     <ClInclude Include="Effects\shadersCode.h" />
@@ -130,12 +129,9 @@
     <ClInclude Include="Utils\DirectXErrors\DirectXErrors.h" />
     <ClInclude Include="Utils\DirectXErrors\formatMessage.hpp" />
     <ClInclude Include="Utils\logger.h" />
-    <ClInclude Include="Render\PassBuilder.h" />
-    <ClInclude Include="Render\FrameGraphBuilder.h" />
     <ClInclude Include="Hlsl\compile.h" />
     <ClInclude Include="EffectBase\EffectBase.h" />
     <ClInclude Include="Hlsl\Defines.h" />
-    <ClInclude Include="Primitives\ColorsTexture.h" />
     <ClInclude Include="EffectBase\EffectListBase.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -143,8 +139,7 @@
     <ClInclude Include="Utils\MiscUtils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EffectBase\EffectList.cpp" />
-    <ClCompile Include="EffectBase\EffectListBase.fact.cpp" />
+    <ClCompile Include="EffectBase\EffectListBase.factory.cpp" />
     <ClCompile Include="EffectBase\RootEffect.cpp" />
     <ClCompile Include="Hlsl\Defines.cpp" />
     <ClCompile Include="Resources\StructureBuffer.cpp" />
@@ -153,18 +148,13 @@
     <ClCompile Include="Utils\preciseTickCount.cpp" />
     <ClCompile Include="Resources\EffectsState.cpp" />
     <ClCompile Include="Render\Binder.cpp" />
-    <ClCompile Include="Render\EffectsResources.cpp" />
     <ClCompile Include="Effects\Render\Simple\Simple.cpp" />
     <ClCompile Include="Effects\Render\Starfield\Starfield.cpp" />
     <ClCompile Include="Effects\shadersCode.cpp" />
     <ClCompile Include="Effects\Trans\ColorModifier\ColorModifier.cpp" />
     <ClCompile Include="Effects\Trans\DMove\DynamicMovement.cpp" />
     <ClCompile Include="Hlsl\FunctionBuilder.cpp" />
-    <ClCompile Include="Render\PassBuilder.cpp" />
-    <ClCompile Include="Render\FrameGraphBuilder.cpp" />
     <ClCompile Include="Hlsl\compile.cpp" />
-    <ClCompile Include="EffectBase\EffectBase.cpp" />
-    <ClCompile Include="Primitives\ColorsTexture.cpp" />
     <ClCompile Include="EffectBase\EffectListBase.cpp" />
     <ClCompile Include="Resources\RenderTarget.cpp" />
     <ClCompile Include="Resources\SourceData.cpp" />

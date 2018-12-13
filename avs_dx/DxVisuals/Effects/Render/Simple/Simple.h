@@ -13,7 +13,7 @@ public:
 		int color_pos;
 	};
 
-	struct StateData: public SimpleStateStruct
+	struct StateData: public SimpleState
 	{
 		StateData( const AvsState& s )
 		{

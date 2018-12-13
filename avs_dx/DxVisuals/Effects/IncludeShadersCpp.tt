@@ -266,7 +266,7 @@ static void writeStateTemplate( CppBuilder sb, int lvl, string sourcePath )
 	// Compress and write the data
 
 	sb.line( lvl );
-	sb.print( "const StateShaderTemplate& {0}()", Path.GetFileNameWithoutExtension( sourcePath ) );
+	sb.print( "const StateShaderTemplate* {0}::shaderTemplate()", Path.GetFileNameWithoutExtension( sourcePath ) );
 	sb.line( lvl );
 	sb.line( "{" );
 
@@ -301,7 +301,7 @@ static void writeStateTemplate( CppBuilder sb, int lvl, string sourcePath )
 		hlslData.Length, content.Length, 
 		hasBeat ? "true" : "false" );
 	sb.tabs( lvl + 1 );
-	sb.line( "return result;" );
+	sb.line( "return &result;" );
 
 	sb.tabs( lvl );
 	sb.line( "};" );

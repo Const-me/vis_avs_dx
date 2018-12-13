@@ -124,17 +124,17 @@ static void generateStateData( CppBuilder sb, string sourcePath, int lvl )
 	sb.line();
 
 	string name = Path.GetFileNameWithoutExtension( sourcePath );
-	sb.tl( "struct {0}Struct", name );
+	sb.tl( "struct {0}", name );
 	sb.tl( "{" );
 	sb.incTabs();
-	sb.tl( "static inline const StateShaderTemplate* shaderTemplate() {{ return &{0}(); }}", name );
+	sb.tl( "static const StateShaderTemplate* shaderTemplate();", name );
 
 	sb.line();
 	foreach( var d in decls )
 		sb.tl( d.member() );
 
 	sb.line();
-	sb.tl( "bool operator==( const {0}Struct& that ) const", name );
+	sb.tl( "bool operator==( const {0}& that ) const", name );
 	sb.tl( "{" );
 	sb.tl( "	return {0};", string.Join( " && ", decls.Select( d=> string.Format( "{0} == that.{0}", d.name ) ) ) );
 	sb.tl( "}" );

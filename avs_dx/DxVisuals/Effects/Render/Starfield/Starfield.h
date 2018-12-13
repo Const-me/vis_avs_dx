@@ -33,7 +33,7 @@ struct StarfieldStructs
 		int nc;
 	};
 
-	struct StateData: public StarfieldStateStruct
+	struct StateData: public StarfieldState
 	{
 		UINT stateSize() { return 3; }
 

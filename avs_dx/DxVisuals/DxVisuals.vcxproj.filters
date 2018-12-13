@@ -112,6 +112,7 @@
     <FxCompile Include="Effects\Render\Starfield\StarfieldState.hlsl" />
     <FxCompile Include="Effects\Render\PointSpriteGS.hlsl" />
     <FxCompile Include="Effects\Render\Simple\SimpleCS.hlsl" />
+    <FxCompile Include="Effects\Render\Starfield\StarInitCS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

@@ -1,3 +1,4 @@
+#include "Star.fx"
 #ifndef AVS_SHADER
 #define BIND_STARS_POSITIONS t4
 // <macro-resource name="bindStarsPosition" macro="BIND_STARS_POSITIONS" />
@@ -5,7 +6,7 @@
 #endif
 ByteAddressBuffer effectStates : register(t1);
 
-StructuredBuffer<float2> positiions : register(BIND_STARS_POSITIONS);
+Buffer<StarFormat> stars : register(BIND_STARS_POSITIONS);
 
 struct SimpleVertex
 {
@@ -16,7 +17,7 @@ struct SimpleVertex
 SimpleVertex main( uint id : SV_VertexID )
 {
     SimpleVertex r;
-    r.pos = float4( positiions[ id ], 0, 1 );
+    r.pos = float4( stars[ id ].position.xy, 0, 1 );
     r.color = asfloat( effectStates.Load4( EFFECT_STATE ) );
     return r;
 }

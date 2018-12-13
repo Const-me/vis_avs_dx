@@ -1,4 +1,5 @@
 #include "VisCommon.fx"
+
 #ifndef AVS_SHADER
 // Centered position
 static const float SIMPLE_Y1 = 0.25;
@@ -12,8 +13,6 @@ struct SimpleVertex
     float4 color : color0;
 };
 
-ByteAddressBuffer effectStates : register(t1);
-
 SimpleVertex main( uint id : SV_VertexID )
 {
     const float2 xy = float2(id & 1, id >> 1);
@@ -22,6 +21,6 @@ SimpleVertex main( uint id : SV_VertexID )
     res.pos.zw = float2(0, 1);
     res.tc.x = xy.x;
     res.tc.y = lerp(-1, +1, xy.y);
-    res.color = asfloat( effectStates.Load4( EFFECT_STATE ) );
+    res.color = stateFloat4( 0 );
     return res;
 }

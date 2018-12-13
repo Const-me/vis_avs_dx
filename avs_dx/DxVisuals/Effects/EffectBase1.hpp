@@ -55,7 +55,7 @@ private:
 		if( !changedSomething )
 			return S_FALSE;
 
-		const CAtlMap<CStringA, CStringA>* pIncludes = &Hlsl::includes();
+		const CAtlMap<CStringA, CStringA>* pIncludes = &::Hlsl::includes();
 		__if_exists( TStruct::effectIncludes )
 		{
 			pIncludes = &TStruct::effectIncludes();

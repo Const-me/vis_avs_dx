@@ -40,3 +40,21 @@ public:
 		bindConstantBuffer<stage>( cb, m_cbuffer );
 	}
 };
+
+enum struct eSource : uint8_t
+{
+	Spectrum = 0,
+	Wave = 1
+};
+enum struct eChannel : uint8_t
+{
+	Left = 0,
+	Center = 1,
+	Right = 2
+};
+inline float sourceSampleV( eSource s, eChannel ch )
+{
+	constexpr float sources[ 2 ] = { 0.25, 0.75 };
+	constexpr float channels[ 3 ] = { -0.125f, 0, +0.125 };
+	return sources[ (uint8_t)s ] + channels[ (uint8_t)ch ];
+}

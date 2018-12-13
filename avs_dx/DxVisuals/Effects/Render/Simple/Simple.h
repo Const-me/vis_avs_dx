@@ -12,6 +12,8 @@ public:
 		int num_colors;
 		int colors[ 16 ];
 		int color_pos;
+
+		float sampleV() const;
 	};
 
 	struct StateData: public SimpleState
@@ -25,61 +27,24 @@ public:
 
 		static inline UINT stateSize() { return 4; }
 	};
-
-	struct DotsRendering : public PointSpritesRender
-	{
-		using CsData = SimpleCS;
-		using VsData = SimpleDotsVS;
-	};
-
-	struct SolidRendering
-	{
-		struct VsData
-		{
-			// Offset in state buffer to read the current color, in 32-bit elements.
-			int effectState;
-			// start/end Y coordinate, in clip space units
-			float y1, y2;
-			HRESULT defines( Hlsl::Defines& def ) const;
-		};
-		struct PsData
-		{
-			float readV;
-			bool analizer;
-			HRESULT defines( Hlsl::Defines& def ) const;
-		};
-	};
 };
 
-/* class Simple: public SimpleBase, public EffectBase
+struct DotsRendering : public SimpleBase, public PointSpritesRender
 {
-	SimpleBase::AvsState* const avs;
-	StateData stateData;
-
-public:
-	using SimpleBase::AvsState;
-
-	Simple( AvsState* p ) : avs( p ), stateData( *p ){ }
-
-	const Metadata& metadata() override;
-
-	HRESULT shouldRebuildState() override
+	class CsData : public SimpleCS
 	{
-		return stateData.update( *avs );
-	}
+		int m_effect = -1;
 
-	HRESULT buildState( EffectStateShader& ess ) override
-	{
-		ess.shaderTemplate = stateData.shaderTemplate();
-		ess.stateSize = stateData.stateSize();
-		return stateData.defines( ess.values );
-	}
+	public:
 
-	HRESULT render( RenderTargets& rt ) override { return E_NOTIMPL; }
-}; */
+		HRESULT updateValues( const AvsState& ass, int stateOffset );
+	};
+
+	using VsData = SimpleDotsVS;
+};
 
 // For the first version, hardcode the "Dots" method
-class Simple : public EffectBase1<SimpleBase>
+class Simple : public EffectBase1<DotsRendering>
 {
 	StructureBuffer dotsBuffer;
 

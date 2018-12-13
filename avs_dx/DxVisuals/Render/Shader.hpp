@@ -68,6 +68,7 @@ public:
 			logWarning( "%s shader %s: binding shader that wasn't compiled", Hlsl::targetName( stage ), shaderTemplate.name );
 		bindShader<stage>( result );
 	}
+	const TSourceData& data() const { return m_source; }
 
 private:
 	const ShaderTemplate& shaderTemplate;

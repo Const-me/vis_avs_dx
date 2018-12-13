@@ -64,6 +64,14 @@ private:
 		CHECK( m_render.compileShaders( *pIncludes ) );
 		return S_OK;
 	}
+
+protected:
+
+	template<eStage stage>
+	decltype( auto ) data() const
+	{
+		return m_render.data<stage>();
+	}
 };
 
 struct EmptyStateData

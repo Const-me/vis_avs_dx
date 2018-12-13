@@ -94,6 +94,13 @@ public:
 		forEachStage( []( auto p ) { p.bind(); } );
 	}
 
+	template<eStage stage>
+	decltype( auto ) data() const
+	{
+		static_assert( shaderKinds[ (uint8_t)stage ] == eShaderKind::Dynamic, "Only dynamic shaders hold state data" );
+		return std::get<(uint8_t)stage>( m_shaders ).data();
+	}
+
 private:
 	template<eStage stage>
 	using tHelper = ShaderTypeHelper<FxDef, stage, shaderKinds[ (uint8_t)stage ]>;

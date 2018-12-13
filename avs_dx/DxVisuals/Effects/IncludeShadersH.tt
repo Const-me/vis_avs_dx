@@ -136,7 +136,7 @@ class BindingDecl: iConstDecl
 		if( null != typeAttr )
 			typeChar = parseType( typeAttr.Value );
 	}
-	public string member() { return $"UINT {name};"; }
+	public string member() { return $"UINT {name} = UINT_MAX;"; }
 	public void defines( CppBuilder sb )
 	{
 		sb.tl( @"def.setBinding( ""{0}"", '{1}', {2} );", macro, typeChar, name );

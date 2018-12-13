@@ -87,7 +87,7 @@ HRESULT RootEffect::buildState()
 	if( totalStateSize != m_state.getSize() )
 		CHECK( m_state.create( totalStateSize ) );
 
-	// Run init shader
+	// Run state init shader
 	bindShader<eStage::Compute>( m_stateShaders.init );
 	bindUav( 0, m_state.uav() );
 	StaticResources::sourceData.bind<eStage::Compute>( 0, 0 );

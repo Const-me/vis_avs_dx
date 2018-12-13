@@ -27,7 +27,7 @@ HRESULT Starfield::initializedState()
 	return S_OK;
 }
 
-HRESULT StarfieldStructs::VsData::update( const AvsState& ass, UINT stateOffset )
+HRESULT StarfieldStructs::VsData::update( const AvsState& ass )
 {
 	if( ass.color == m_color )
 		return S_FALSE;

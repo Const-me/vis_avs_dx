@@ -53,7 +53,7 @@ struct StarfieldStructs: public PointSpritesRender
 	{
 		int m_color = -1;
 	public:
-		HRESULT update( const AvsState& ass, UINT stateOffset );
+		HRESULT update( const AvsState& ass );
 	};
 
 	static const CAtlMap<CStringA, CStringA>& effectIncludes() { return includes(); }

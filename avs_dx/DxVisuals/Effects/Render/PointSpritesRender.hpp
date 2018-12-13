@@ -8,7 +8,7 @@ struct PointSpritesRender
 	struct GsData : public Hlsl::Render::PointSpriteGS
 	{
 		template<class TAvs>
-		HRESULT update( const TAvs& a, UINT stateOffset )
+		HRESULT update( const TAvs& a )
 		{
 			const CSize screenSize = getRenderSize();
 			if( screenSize == m_pixels )

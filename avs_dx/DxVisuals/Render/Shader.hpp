@@ -19,9 +19,9 @@ public:
 	}
 
 	template<class tAvxState>
-	HRESULT updateValues( const tAvxState& ass, UINT stateOffset )
+	HRESULT updateValues( const tAvxState& ass )
 	{
-		return m_source.update( ass, stateOffset );
+		return m_source.update( ass );
 	}
 
 	HRESULT compile( const CAtlMap<CStringA, CStringA>& inc, UINT stateOffset )

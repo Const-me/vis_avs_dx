@@ -48,7 +48,7 @@ private:
 	HRESULT updateParameters( Binder& binder ) override
 	{
 		const bool changedBindings = m_render.updateBindings( binder );
-		const HRESULT hr = m_render.updateValues( *avs, stateOffset() );;
+		const HRESULT hr = m_render.updateValues( *avs );
 		CHECK( hr );
 		const bool changedData = ( hr != S_FALSE );
 		const bool changedSomething = changedBindings || changedData;

@@ -54,12 +54,12 @@ public:
 		return res;
 	}
 
-	HRESULT updateValues( const tAvxState& ass, UINT stateOffset )
+	HRESULT updateValues( const tAvxState& ass )
 	{
 		HRESULT res = S_FALSE;
 		forEachDynStage( [ & ]( auto& p )
 		{
-			const HRESULT hr = p.updateValues( ass, stateOffset );
+			const HRESULT hr = p.updateValues( ass );
 			if( FAILED( hr ) )
 			{
 				logError( hr, "Update failed" );

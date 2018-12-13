@@ -26,7 +26,7 @@ namespace Hlsl
 		ShaderBaseStruct( const ShaderBaseStruct& ) = delete;
 		bool updateBindings( Binder& binder ){ return false; }
 		template<class TAvx>
-		HRESULT update( const TAvx& a, UINT stateOffset ) { return S_FALSE; }
+		HRESULT update( const TAvx& a ) { return S_FALSE; }
 	};
 
 <#= writeNamespaces( generateNamespace ) #>

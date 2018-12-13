@@ -54,6 +54,18 @@ public:
 		return res;
 	}
 
+	bool updateBindings( Binder& binder )
+	{
+		// Resource bindings
+		bool res = false;
+		forEachDynStage( [ =, &res ]( auto p )
+		{
+			const bool changedBindings = p.updateBindings( binder );
+			res = res || changedBindings;
+		} );
+		return res;
+	}
+
 	void bindShaders()
 	{
 		forEachStage( []( auto p ) { p.bind(); } );

@@ -45,6 +45,17 @@ struct StarfieldStructs
 			durFrames = s.durFrames;
 		}
 	};
+
+	using CsData = Hlsl::Render::Starfield::StarCS;
+
+	using VsData = Hlsl::Render::Starfield::StarVS;
+
+	using GsData = Hlsl::Render::PointSpriteGS;
+
+	static ID3D11PixelShader* pixelShader()
+	{
+		return StaticResources::pointSprite;
+	}
 };
 
 class Starfield : public EffectBase1<StarfieldStructs>

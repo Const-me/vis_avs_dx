@@ -14,5 +14,6 @@ public:
 
 	Binder();
 
-	UINT reserveInputSlot( eStage pipelineStage, char resourceType );
+	// Reserve the input slot, returns false if the result was unchanged.
+	bool reserveInputSlot( UINT& result, eStage pipelineStage, char resourceType );
 };

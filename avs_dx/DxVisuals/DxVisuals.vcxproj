@@ -218,7 +218,7 @@
     <None Include="Effects\FrameGlobalData.fx">
       <FileType>Document</FileType>
     </None>
-    <FxCompile Include="Effects\Render\Simple\SimpleDotsGS.hlsl">
+    <FxCompile Include="Effects\Render\PointSpriteGS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
     </FxCompile>

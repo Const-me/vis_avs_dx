@@ -18,33 +18,37 @@ Binder::Binder()
 	}
 
 	// RWByteAddressBuffer effectStates : register(u0);
-	reserveInputSlot( eStage::Compute, 'u' );
+	UINT unused;
+	reserveInputSlot( unused, eStage::Compute, 'u' );
 
 	// Texture2D<float4> prevFrameTexture : register(t2);
-	reserveInputSlot( eStage::Pixel, 't' );
+	reserveInputSlot( unused, eStage::Pixel, 't' );
 }
 
 namespace
 {
-	inline UINT inc( UINT& v, UINT limit )
+	inline bool inc( UINT& v, UINT& result, UINT limit )
 	{
 		v++;
-		return std::min( v, limit - 1 );
+		const UINT newResult = std::min( v, limit - 1 );
+		const bool changed = newResult != result;
+		result = newResult;
+		return changed;
 	}
 }
 
 // Reserve shader slot for the specified resource, return string like "t4" that can be compiled into the shader code to access that resource
-UINT Binder::reserveInputSlot( eStage pipelineStage, char resourceType )
+bool Binder::reserveInputSlot( UINT& result, eStage pipelineStage, char resourceType )
 {
 	Slots& s = m_data[ (uint8_t)pipelineStage ];
 	switch( resourceType )
 	{
 	case 't':
-		return inc( s.srv, D3D11_COMMONSHADER_INPUT_RESOURCE_REGISTER_COUNT );
+		return inc( s.srv, result, D3D11_COMMONSHADER_INPUT_RESOURCE_REGISTER_COUNT );
 	case 'u':
-		return inc( s.uav, D3D11_PS_CS_UAV_REGISTER_COUNT );
+		return inc( s.uav, result, D3D11_PS_CS_UAV_REGISTER_COUNT );
 	case 'b':
-		return inc( s.cbuffer, D3D11_COMMONSHADER_CONSTANT_BUFFER_HW_SLOT_COUNT );
+		return inc( s.cbuffer, result, D3D11_COMMONSHADER_CONSTANT_BUFFER_HW_SLOT_COUNT );
 	}
 	__debugbreak();
 	return 0;

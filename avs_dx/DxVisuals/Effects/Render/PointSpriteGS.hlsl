@@ -1,4 +1,5 @@
 #ifndef AVS_SHADER
+// A geometry shader that expands points into point sprites. The points must be in clip space, they must have position and color attributes.
 static const float2 sizeInClipSpace = float2( 0.01, 0.01 * 16 / 9 );
 #endif
 

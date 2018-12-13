@@ -101,7 +101,6 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Effects\UpdateStateCS.hlsl" />
-    <FxCompile Include="Effects\Render\Simple\SimpleDotsGS.hlsl" />
     <FxCompile Include="Effects\Render\Simple\SimpleDotsVS.hlsl" />
     <FxCompile Include="Effects\Render\Simple\SimpleSolidPS.hlsl" />
     <FxCompile Include="Effects\Render\Simple\SimpleSolidVS.hlsl" />
@@ -110,6 +109,7 @@
     <FxCompile Include="Effects\Render\Starfield\StarVS.hlsl" />
     <FxCompile Include="Effects\Render\Simple\SimpleState.hlsl" />
     <FxCompile Include="Effects\Render\Starfield\StarfieldState.hlsl" />
+    <FxCompile Include="Effects\Render\PointSpriteGS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

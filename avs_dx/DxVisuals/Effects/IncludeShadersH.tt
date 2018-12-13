@@ -14,6 +14,7 @@
 #include "../Hlsl/ShaderTemplate.h"
 #include "../Hlsl/StateShaderTemplate.h"
 #include "../Hlsl/Defines.h"
+#include "../Render/Binder.h"
 #include "../Expressions/variableTypes.h"
 
 namespace Hlsl
@@ -116,7 +117,7 @@ class BindingDecl: iConstDecl
 {
 	public string name { get; private set; }
 	readonly string macro;
-	readonly char typeChar = 't';
+	public readonly char typeChar = 't';
 	public BindingDecl( string str )
 	{
 		var node = XDocument.Parse( str.Substring( str.IndexOf( "<macro-resource" ) ) ).Root;
@@ -153,6 +154,16 @@ static iConstDecl[] parseConstants( string[] lines )
 	return res.ToArray();
 }
 
+static string stageString( string sourcePath )
+{
+	string name = Path.GetFileNameWithoutExtension( sourcePath ).ToLowerInvariant();
+	if( name.EndsWith( "cs" ) ) return "Compute";
+	if( name.EndsWith( "vs" ) ) return "Vertex";
+	if( name.EndsWith( "gs" ) ) return "Geometry";
+	if( name.EndsWith( "ps" ) ) return "Pixel";
+	return null;
+}
+
 static void generateShaderStruct( CppBuilder sb, string sourcePath, int lvl )
 {
 	string[] lines = File.ReadAllLines( sourcePath );
@@ -178,8 +189,22 @@ static void generateShaderStruct( CppBuilder sb, string sourcePath, int lvl )
 		sb.tl( "	return {0};", string.Join( " && ", decls.Select( d => string.Format( "{0} == that.{0}", d.name ) ) ) );
 		sb.tl( "}" );
 
-		sb.line();
+		BindingDecl[] bindings = decls.OfType<BindingDecl>().ToArray();
+		string stage = stageString( sourcePath );
+		if( bindings.Length > 0 && null != stage )
+		{
+			sb.line();
+			sb.tl( "HRESULT initBindings( Binder& binder )" );
+			sb.tl( "{" );
+			sb.incTabs();
+			foreach( var b in bindings )
+				sb.tl( "{0} = binder.reserveInputSlot( eStage::{1}, '{2}' );", b.name, stage, b.typeChar );
+			sb.tl( "return S_OK;" );
+			sb.decTabs();
+			sb.tl( "}" );
+		}
 
+		sb.line();
 		sb.tl( "HRESULT defines( Hlsl::Defines& def ) const" );
 		sb.tl( "{" );
 		sb.incTabs();

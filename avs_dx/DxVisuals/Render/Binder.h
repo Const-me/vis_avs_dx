@@ -4,8 +4,15 @@
 
 class Binder
 {
-	// std::array<>
+	struct Slots
+	{
+		UINT srv, uav, cbuffer;
+	};
+	std::array<Slots, 4> m_data;
+
 public:
-	// Reserve shader slot for the specified resource, return string like "t4" that can be compiled into the shader code to access that resource
-	const CStringA& bind( eStage pipelineStage, ID3D11ShaderResourceView* srv );
+
+	Binder();
+
+	UINT reserveInputSlot( eStage pipelineStage, char resourceType );
 };

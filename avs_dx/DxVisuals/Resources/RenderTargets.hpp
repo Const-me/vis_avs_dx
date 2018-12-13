@@ -2,6 +2,7 @@
 #include "RenderTarget.h"
 #include "../../InteropLib/interop.h"
 
+// A set of 2 render targets textures.
 class RenderTargets
 {
 	std::array<RenderTarget, 2> m_targets;

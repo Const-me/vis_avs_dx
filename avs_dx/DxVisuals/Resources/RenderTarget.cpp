@@ -37,6 +37,5 @@ void RenderTarget::bindTarget()
 
 void RenderTarget::bindView( UINT slot ) const
 {
-	ID3D11ShaderResourceView* v = m_srv;
-	context->PSSetShaderResources( slot, 1, &v );
+	bindResource<eStage::Pixel>( slot, m_srv );
 }

@@ -61,7 +61,7 @@ private:
 			pIncludes = &TStruct::effectIncludes();
 		}
 
-		CHECK( m_render.compileShaders( *pIncludes ) );
+		CHECK( m_render.compileShaders( *pIncludes, stateOffset() ) );
 		return S_OK;
 	}
 

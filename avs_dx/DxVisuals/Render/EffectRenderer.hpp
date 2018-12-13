@@ -71,12 +71,12 @@ public:
 		return res;
 	}
 
-	HRESULT compileShaders( const CAtlMap<CStringA, CStringA>& inc )
+	HRESULT compileShaders( const CAtlMap<CStringA, CStringA>& inc, UINT stateOffset )
 	{
 		HRESULT res = S_FALSE;
 		forEachDynStage( [ & ]( auto p )
 		{
-			const HRESULT hr = p.compile( inc );
+			const HRESULT hr = p.compile( inc, stateOffset );
 			if( FAILED( hr ) )
 			{
 				logError( hr, "Update failed" );

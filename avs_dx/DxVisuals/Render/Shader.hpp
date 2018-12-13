@@ -21,35 +21,17 @@ public:
 	template<class tAvxState>
 	HRESULT updateValues( const tAvxState& ass, UINT stateOffset )
 	{
-		__if_not_exists( TSourceData::update )
-		{
-			return S_FALSE;
-		}
-
-		__if_exists( TSourceData::update )
-		{
-			return m_source.update( ass, stateOffset );
-		}
-
-		return E_FAIL;
+		return m_source.update( ass, stateOffset );
 	}
 
-	/* bool needsCompiling( const TSourceData& src ) const
-	{
-		if( !result )
-			return true;
-		if( !( src == m_source ) )
-			return true;
-		return false;
-	} */
-
-	HRESULT compile( const CAtlMap<CStringA, CStringA>& inc )
+	HRESULT compile( const CAtlMap<CStringA, CStringA>& inc, UINT stateOffset )
 	{
 		// Drop the old shader
 		result = nullptr;
 
 		// Generate preprocessor macro values, from the current copy of the state
 		Hlsl::Defines def;
+		def.set( "STATE_OFFSET", stateOffset );
 		CHECK( m_source.defines( def ) );
 
 		// Compile HLSL into DXBC

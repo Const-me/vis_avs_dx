@@ -21,6 +21,6 @@ SimpleVertex main( uint id : SV_VertexID )
     res.pos.zw = float2(0, 1);
     res.tc.x = xy.x;
     res.tc.y = lerp(-1, +1, xy.y);
-    res.color = stateFloat4( 0 );
+    res.color = float4( stateFloat3( 1 ), 1 );
     return res;
 }

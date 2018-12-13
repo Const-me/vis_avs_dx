@@ -26,6 +26,14 @@ inline float stateFloat( int i )
 {
     return asfloat( effectStates.Load( STATE_OFFSET + i * 4 ) );
 }
+inline float2 stateFloat2( int i )
+{
+    return asfloat( effectStates.Load2( STATE_OFFSET + i * 4 ) );
+}
+inline float3 stateFloat3( int i )
+{
+    return asfloat( effectStates.Load3( STATE_OFFSET + i * 4 ) );
+}
 inline float4 stateFloat4( int i )
 {
     return asfloat( effectStates.Load4( STATE_OFFSET + i * 4 ) );

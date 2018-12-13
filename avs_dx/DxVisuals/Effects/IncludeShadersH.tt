@@ -22,8 +22,9 @@ namespace Hlsl
 	template<eStage stage>
 	struct ShaderBaseStruct
 	{
+		ShaderBaseStruct() = default;
+		ShaderBaseStruct( const ShaderBaseStruct& ) = delete;
 		bool updateBindings( Binder& binder ){ return false; }
-
 		template<class TAvx>
 		HRESULT update( const TAvx& a, UINT stateOffset ) { return S_FALSE; }
 	};
@@ -74,6 +75,8 @@ class ConstDecl: iConstDecl
 	public ConstDecl( string str )
 	{
 		var m = s_reConst.Match( str );
+		if( !m.Success )
+			throw new ArgumentException( "Unable to parse the constant declaration:\r\n" + str );
 		tp = m.Groups[ 1 ].Value;
 		name = m.Groups[ 2 ].Value;
 		val = m.Groups[ 3 ].Value;

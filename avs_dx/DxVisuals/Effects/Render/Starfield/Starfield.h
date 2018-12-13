@@ -47,9 +47,14 @@ struct StarfieldStructs: public PointSpritesRender
 		}
 	};
 
-	using CsData = Hlsl::Render::Starfield::StarCS;
+	using CsData = StarCS;
 
-	using VsData = Hlsl::Render::Starfield::StarVS;
+	class VsData : public StarVS
+	{
+		int m_color = -1;
+	public:
+		HRESULT update( const AvsState& ass, UINT stateOffset );
+	};
 
 	static const CAtlMap<CStringA, CStringA>& effectIncludes() { return includes(); }
 };

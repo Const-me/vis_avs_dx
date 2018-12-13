@@ -46,7 +46,7 @@ public:
 	bool updateBindings( Binder& binder )
 	{
 		bool res = false;
-		forEachDynStage( [ & ]( auto p )
+		forEachDynStage( [ & ]( auto& p )
 		{
 			const bool changedBindings = p.updateBindings( binder );
 			res = res || changedBindings;
@@ -57,7 +57,7 @@ public:
 	HRESULT updateValues( const tAvxState& ass, UINT stateOffset )
 	{
 		HRESULT res = S_FALSE;
-		forEachDynStage( [ & ]( auto p )
+		forEachDynStage( [ & ]( auto& p )
 		{
 			const HRESULT hr = p.updateValues( ass, stateOffset );
 			if( FAILED( hr ) )
@@ -74,7 +74,7 @@ public:
 	HRESULT compileShaders( const CAtlMap<CStringA, CStringA>& inc, UINT stateOffset )
 	{
 		HRESULT res = S_FALSE;
-		forEachDynStage( [ & ]( auto p )
+		forEachDynStage( [ & ]( auto& p )
 		{
 			const HRESULT hr = p.compile( inc, stateOffset );
 			if( FAILED( hr ) )
@@ -91,7 +91,7 @@ public:
 
 	void bindShaders()
 	{
-		forEachStage( []( auto p ) { p.bind(); } );
+		forEachStage( []( auto& p ) { p.bind(); } );
 	}
 
 	template<eStage stage>

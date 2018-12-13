@@ -12,6 +12,14 @@ class float3 : public Vector3
 {
 public:
 	float3( double x, double y, double z ) : Vector3( (float)x, (float)y, (float)z ) { }
+
+	void fromRgb( int rgb )
+	{
+		x = (float)( ( rgb >> 16 ) & 0xFF );
+		y = (float)( ( rgb >> 8 ) & 0xFF );
+		z = (float)( rgb & 0xFF );
+		( *this ) *= ( 1.0f / 255.0f );
+	}
 };
 
 class float4 : public Vector4

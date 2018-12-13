@@ -27,6 +27,15 @@ HRESULT Starfield::initializedState()
 	return S_OK;
 }
 
+HRESULT StarfieldStructs::VsData::update( const AvsState& ass, UINT stateOffset )
+{
+	if( ass.color == m_color )
+		return S_FALSE;
+	starsColor.fromRgb( ass.color );
+	m_color = ass.color;
+	return S_OK;
+}
+
 HRESULT Starfield::render( RenderTargets& rt )
 {
 	CHECK( rt.writeToLast( false ) );

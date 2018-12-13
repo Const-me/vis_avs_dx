@@ -56,7 +56,6 @@ HRESULT Simple::initializedState()
 HRESULT Simple::render( RenderTargets& rt )
 {
 	CHECK( rt.writeToLast( false ) );
-
 	bindShaders();
 
 	// Calculate dots positions, with the CS
@@ -70,7 +69,7 @@ HRESULT Simple::render( RenderTargets& rt )
 	bindResource<eStage::Vertex>( srvSlot, dotsBuffer.srv() );
 	iaClearBuffers();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_POINTLIST );
-	context->DrawIndexed( 768, 0, 0 );
+	context->Draw( 768, 0 );
 	bindResource<eStage::Vertex>( srvSlot );
 
 	return S_OK;

@@ -39,6 +39,7 @@ HRESULT StarfieldStructs::VsData::update( const AvsState& ass, UINT stateOffset 
 HRESULT Starfield::render( RenderTargets& rt )
 {
 	CHECK( rt.writeToLast( false ) );
+	bindShaders();
 
 	// Calculate dots positions, with the CS
 	const UINT uavSlot = data<eStage::Compute>().bindStarsPosition;
@@ -51,7 +52,7 @@ HRESULT Starfield::render( RenderTargets& rt )
 	bindResource<eStage::Vertex>( srvSlot, starsBuffer.srv() );
 	iaClearBuffers();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_POINTLIST );
-	context->DrawIndexed( nStars, 0, 0 );
+	context->Draw( nStars, 0 );
 	bindResource<eStage::Vertex>( srvSlot );
 
 	return S_OK;

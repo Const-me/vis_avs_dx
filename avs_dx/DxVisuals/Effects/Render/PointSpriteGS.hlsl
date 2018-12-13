@@ -11,9 +11,9 @@ struct sIn
 
 struct sOut
 {
-    float4 pos : SV_Position;
     float2 tc : TEXCOORD0;
     float4 color : COLOR0;
+    float4 pos : SV_Position;
 };
 
 [maxvertexcount( 4 )]

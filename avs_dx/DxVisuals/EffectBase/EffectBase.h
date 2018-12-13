@@ -23,6 +23,8 @@ public:
 
 	virtual HRESULT buildState( EffectStateShader& ess ){ return S_FALSE; }
 
+	virtual HRESULT initializedState() { return S_FALSE; }
+
 	// If user has changed something with the GUI controls, this method will recompile shaders / update GPU resources accordingly.
 	virtual HRESULT updateParameters( Binder& binder ) { return S_FALSE; }
 

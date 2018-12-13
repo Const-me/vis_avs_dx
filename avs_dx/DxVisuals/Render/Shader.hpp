@@ -31,7 +31,7 @@ public:
 
 		// Generate preprocessor macro values, from the current copy of the state
 		Hlsl::Defines def;
-		def.set( "STATE_OFFSET", stateOffset );
+		def.set( "STATE_OFFSET", stateOffset * 4 );
 		CHECK( m_source.defines( def ) );
 
 		// Compile HLSL into DXBC

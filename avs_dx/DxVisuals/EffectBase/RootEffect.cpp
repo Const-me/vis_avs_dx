@@ -73,7 +73,7 @@ HRESULT RootEffect::buildState()
 		EffectStateShader &ess = *shaders.rbegin();
 		
 		const HRESULT hr = e.buildState( ess );
-		e.setStateOffset( stateOffset * 4 );
+		e.setStateOffset( stateOffset );
 		stateOffset += ess.stateSize;
 		return hr;
 	} );
@@ -92,6 +92,10 @@ HRESULT RootEffect::buildState()
 	bindUav( 0, m_state.uav() );
 	StaticResources::sourceData.bind<eStage::Compute>( 0, 0 );
 	context->Dispatch( 1, 1, 1 );
+
+	// Invoke initializedState() method for all effects
+	hr = applyRecursively( [ & ]( EffectBase& e ) { return e.initializedState(); } );
+	CHECK( hr );
 
 	return S_OK;
 }

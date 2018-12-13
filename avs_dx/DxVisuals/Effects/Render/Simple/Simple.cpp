@@ -43,12 +43,19 @@ HRESULT DotsRendering::CsData::updateValues( const AvsState& ass, int stateOffse
 	return S_OK;
 }
 
-HRESULT Simple::render( RenderTargets& rt )
+HRESULT Simple::initializedState()
 {
 	// TODO: change based on the size
 	constexpr UINT dotsCount = 768;
 	if( !dotsBuffer )
 		CHECK( dotsBuffer.create( sizeof( Vector2 ), dotsCount ) );
+
+	return S_OK;
+}
+
+HRESULT Simple::render( RenderTargets& rt )
+{
+	CHECK( rt.writeToLast( false ) );
 
 	bindShaders();
 

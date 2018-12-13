@@ -56,11 +56,15 @@ struct StarfieldStructs: public PointSpritesRender
 
 class Starfield : public EffectBase1<StarfieldStructs>
 {
+	StructureBuffer starsBuffer;
+
 public:
 
 	Starfield( AvsState *pState ) : tBase( pState ) { }
 
 	const Metadata& metadata() override;
+
+	HRESULT initializedState() override;
 
 	HRESULT render( RenderTargets& rt ) override;
 };

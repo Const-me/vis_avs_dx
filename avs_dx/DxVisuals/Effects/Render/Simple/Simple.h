@@ -53,5 +53,7 @@ public:
 
 	const Metadata& metadata() override;
 
+	HRESULT initializedState() override;
+
 	HRESULT render( RenderTargets& rt ) override;
 };

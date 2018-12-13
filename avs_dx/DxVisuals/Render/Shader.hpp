@@ -11,7 +11,7 @@ template<eStage stage, class TSourceData>
 class Shader
 {
 public:
-	Shader( const ShaderTemplate& st ) :shaderTemplate( st ) { }
+	Shader( const ShaderTemplate* st ) : shaderTemplate( *st ) { }
 
 	bool needsCompiling( const TSourceData& src ) const
 	{

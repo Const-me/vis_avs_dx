@@ -1,5 +1,6 @@
 #pragma once
 #include "../../EffectImpl.hpp"
+using namespace Hlsl::Trans::ColorModifier;
 
 struct ColorModifierStructs
 {
@@ -24,19 +25,9 @@ struct ColorModifierStructs
 		return StaticResources::fullScreenTriangle;
 	}
 
-	struct PsData
+	struct PsData: public ColorModifierPS
 	{
-		static const ShaderTemplate& shaderTemplate();
-
 		bool update( const AvsState& ass, int stateOffset );
-
-		HRESULT defines( Defines& def ) const;
-
-	private:
-		// NSEEL expression for the pixel code
-		CStringA expression;
-		// The above expression compiled into the HLSL fragment
-		CStringA hlsl;
 	};
 
 	using StateData = EmptyStateData;

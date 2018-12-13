@@ -27,7 +27,7 @@ public:
 
 	struct DotsRendering
 	{
-		struct VsData
+		struct VsData: public SimpleDotsVS
 		{
 			static const ShaderTemplate& shaderTemplate();
 

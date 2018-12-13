@@ -1,8 +1,7 @@
 #include "VisCommon.fx"
-
 #ifndef AVS_SHADER
-#define SIMPLE_READ_V 0.75f // center channel waveform
-#define SIMPLE_ANALYZER true
+static const float SIMPLE_READ_V = 0.75f;
+static const bool SIMPLE_ANALYZER = true;
 #endif
 
 float4 main( float2 tc : TEXCOORD0, float4 color : COLOR0 ) : SV_Target

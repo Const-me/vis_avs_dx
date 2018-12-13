@@ -62,7 +62,7 @@ namespace
 	struct ShaderTypeHelper<T, stage, eShaderKind::Dynamic>                                 \
 	{                                                                                       \
 		using Type = Shader<eStage::Compute, typename T::DataClass>;                        \
-		static const ShaderTemplate& ctorArg() { return T::DataClass::shaderTemplate(); }   \
+		static const ShaderTemplate* ctorArg() { return T::DataClass::shaderTemplate(); }   \
 	}
 
 	DEFINE_DYNAMIC_SHADER( eStage::Compute, CsData );

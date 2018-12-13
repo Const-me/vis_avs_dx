@@ -1,5 +1,6 @@
 #ifndef AVS_SHADER
 #define BIND_DOTS_POSITIONS t4
+// <macro-resource name="bindDots" macro="BIND_DOTS_POSITIONS" />
 #define EFFECT_STATE 0
 #endif
 

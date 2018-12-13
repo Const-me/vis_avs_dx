@@ -1,9 +1,8 @@
 #include "VisCommon.fx"
-
 #ifndef AVS_SHADER
 // Centered position
-#define SIMPLE_Y1 -0.5f
-#define SIMPLE_Y2 +0.5f
+static const float SIMPLE_Y1 = 0.25;
+static const float SIMPLE_Y2 = 0.75;
 #endif
 
 struct SimpleVertex

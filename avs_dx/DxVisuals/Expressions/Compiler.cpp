@@ -3,6 +3,7 @@
 #include "parse.h"
 #include "utils.hpp"
 #include "includeFunctions.h"
+#include "builtinFunctions.h"
 
 using namespace Expressions;
 
@@ -15,7 +16,7 @@ Compiler::Compiler( const char* effectName, const Prototype& effectPrototype ) :
 
 HRESULT Compiler::update( RString effect_exp[ 4 ] )
 {
-	int changedMask = 0;
+	bool somethingChanged = false;
 	CStringA ee;
 	for( int i = 0; i < 4; i++ )
 	{
@@ -23,9 +24,9 @@ HRESULT Compiler::update( RString effect_exp[ 4 ] )
 		if( ee == m_expressions[ i ] )
 			continue;
 		m_expressions[ i ] = ee;
-		changedMask |= ( 1 << i );
+		somethingChanged = true;
 	}
-	if( 0 == changedMask )
+	if( !somethingChanged )
 		return S_FALSE;
 
 	m_vars.clear();
@@ -62,6 +63,9 @@ namespace
 		const ShaderFunc* pfn = lookupShaderFunc( fi );
 		if( nullptr != pfn )
 			pfn->returnType;
+		eVarType vt;
+		if( isBuiltinFunction( fi, vt ) )
+			return vt;
 		return eVarType::f32;
 	}
 }
@@ -113,20 +117,25 @@ HRESULT Compiler::allocVariables( const std::array<Assignments, 4>& parsed )
 				{
 					// it's a variable.
 					p->m_value.readMask |= maskBit;
+					return false;
 				}
-				else
+				
+				const ShaderFunc* pFunc = lookupShaderFunc( id );
+				if( nullptr != pFunc )
 				{
-					// Probably a function, bind it.
-					const ShaderFunc* pFunc = lookupShaderFunc( id );
-					if( nullptr == pFunc )
-					{
-						logError( "Undefined function %s", cstr( id ) );
-						hr = E_INVALIDARG;
-						return true;
-					}
+					// Custom shader function
 					CAtlMap<CStringA, ShaderFunc>& funcMap = ( 0 == i ) ? funcsFragment : funcsState;
+					funcMap[ id ] = *pFunc;
+					return false;
 				}
-				return false;
+				if( isBuiltinFunction( id ) )
+				{
+					// Built-in i.e. HLSL-implemented shader function
+					return false;
+				}
+				logError( "Undefined function %s", cstr( id ) );
+				hr = E_INVALIDARG;
+				return true;
 			} );
 			CHECK( hr );
 		}

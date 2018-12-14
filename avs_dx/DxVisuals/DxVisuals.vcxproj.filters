@@ -51,6 +51,7 @@
     <ClInclude Include="Expressions\parse.h" />
     <ClInclude Include="Utils\decompressor.h" />
     <ClInclude Include="Expressions\includeFunctions.h" />
+    <ClInclude Include="Expressions\builtinFunctions.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -85,6 +86,7 @@
     <ClCompile Include="Expressions\parse.cpp" />
     <ClCompile Include="Utils\decompressor.cpp" />
     <ClCompile Include="Expressions\includeFunctions.cpp" />
+    <ClCompile Include="Expressions\builtinFunctions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

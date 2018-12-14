@@ -95,6 +95,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Expressions\builtinFunctions.h" />
     <ClInclude Include="Expressions\includeFunctions.h" />
     <ClInclude Include="Utils\decompressor.h" />
     <ClInclude Include="Expressions\parse.h" />
@@ -147,6 +148,7 @@
     <ClInclude Include="Utils\MiscUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Expressions\builtinFunctions.cpp" />
     <ClCompile Include="Expressions\includeFunctions.cpp" />
     <ClCompile Include="Utils\decompressor.cpp" />
     <ClCompile Include="Expressions\parse.cpp" />

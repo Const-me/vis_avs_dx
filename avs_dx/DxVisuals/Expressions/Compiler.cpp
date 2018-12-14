@@ -28,7 +28,6 @@ HRESULT Compiler::update( RString effect_exp[ 4 ] )
 	if( 0 == changedMask )
 		return S_FALSE;
 
-	m_globalsCode.RemoveAll();
 	m_vars.clear();
 	m_stateGlobals.clear();
 	m_stateTemplate.hasBeat = false;
@@ -52,8 +51,6 @@ HRESULT Compiler::update( RString effect_exp[ 4 ] )
 
 	CHECK( buildFragmentCode( parsed[ 0 ] ) );
 
-
-
 	return S_OK;
 }
 
@@ -62,8 +59,9 @@ namespace
 	eVarType guessVarType( const CStringA& rhs )
 	{
 		const CStringA fi = getFirstId( rhs );
-		if( fi == "gettime" )
-			return eVarType::u32;
+		const ShaderFunc* pfn = lookupShaderFunc( fi );
+		if( nullptr != pfn )
+			pfn->returnType;
 		return eVarType::f32;
 	}
 }
@@ -78,6 +76,7 @@ HRESULT Compiler::allocVariables( const std::array<Assignments, 4>& parsed )
 		uint8_t readMask = 0;
 	};
 
+	// Include builtin vars, both state, inputs and outputs
 	CAtlMap<CStringA, sVarFlags> vars;
 	proto.enumBuiltins( [ & ]( const CStringA& name, eVarType vt )
 	{
@@ -86,6 +85,7 @@ HRESULT Compiler::allocVariables( const std::array<Assignments, 4>& parsed )
 		vf.vt = vt;
 	} );
 
+	// Create vars defined by "x=value" statements, guess their types.
 	for( uint8_t i = 0; i < 4; i++ )
 	{
 		const uint8_t maskBit = (uint8_t)1 << i;
@@ -98,6 +98,7 @@ HRESULT Compiler::allocVariables( const std::array<Assignments, 4>& parsed )
 		}
 	}
 
+	// Parse right sides into a set of identifiers, resolve the functions. Also populate `readMask` fields.
 	CAtlMap<CStringA, ShaderFunc> funcsState, funcsFragment;
 	for( uint8_t i = 0; i < 4; i++ )
 	{
@@ -131,6 +132,25 @@ HRESULT Compiler::allocVariables( const std::array<Assignments, 4>& parsed )
 		}
 	}
 
+	// Gather state shader global functions
+	m_stateGlobals.clear();
+	for( POSITION pos = funcsState.GetStartPosition(); nullptr != pos; )
+	{
+		const ShaderFunc sf = funcsState.GetNextValue( pos );
+		m_stateGlobals.push_back( CStringA{ sf.hlsl } );
+	}
+
+	// Gather global functions used by the fragment
+	m_fragmentGlobals = "";
+	for( POSITION pos = funcsFragment.GetStartPosition(); nullptr != pos; )
+	{
+		const ShaderFunc sf = funcsFragment.GetNextValue( pos );
+		if( m_fragmentGlobals.GetLength() > 0 )
+			m_fragmentGlobals += "\r\n";
+		m_fragmentGlobals += sf.hlsl;
+	}
+
+	// Finally, gather the variables.
 	m_vars.clear();
 	m_stateSize = proto.fixedStateSize();
 
@@ -237,14 +257,4 @@ HRESULT Compiler::buildFragmentCode( const Assignments& parsed )
 	printAssignments( code, parsed );
 	m_hlslFragment = code;
 	return S_OK;
-}
-
-UINT Compiler::stateSize()
-{
-	return (UINT)m_stateSize;
-}
-
-const StateShaderTemplate* Compiler::shaderTemplate()
-{
-	return &m_stateTemplate;
 }

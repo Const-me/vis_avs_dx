@@ -18,9 +18,13 @@ namespace Expressions
 		// Recompile stuff from the strings
 		HRESULT update( RString effect_exp[ 4 ] );
 
-		const StateShaderTemplate* shaderTemplate();
+		const StateShaderTemplate* shaderTemplate() { return &m_stateTemplate; }
 
-		UINT stateSize();
+		UINT stateSize() const { return (UINT)m_stateSize; }
+
+		const CStringA& fragmentGlobals() const { return m_fragmentGlobals; }
+
+		const CStringA& fragmentCode() const { return m_hlslFragment; }
 
 	protected:
 		template<class T>
@@ -37,9 +41,6 @@ namespace Expressions
 		// Local copy of the effect's expression strings
 		std::array<CStringA, 4> m_expressions;
 
-		// Global functions / resource declarations used by the state shaders.
-		CAtlMap<CStringA, bool> m_globalsCode;
-
 		struct sVariable
 		{
 			// Name of the variable from the user's expressions
@@ -53,6 +54,7 @@ namespace Expressions
 		std::vector<sVariable> m_vars;
 		int m_stateSize;
 
+		CStringA m_fragmentGlobals;
 		CStringA m_hlslFragment;
 		std::vector<CStringA> m_stateGlobals;
 		StateShaderTemplate m_stateTemplate;

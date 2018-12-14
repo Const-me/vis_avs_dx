@@ -2,21 +2,29 @@
 #include "../Effects/includeDefs.h"
 #include "../Render/EffectStateShader.hpp"
 #include "Prototype.h"
+#include "../Hlsl/Defines.h"
 
 namespace Expressions
 {
 	class Compiler
 	{
 		const Prototype& proto;
+		const char* const name;
 
 	public:
-		Compiler( const Prototype& effectPrototype );
+		Compiler( const char* effectName, const Prototype& effectPrototype );
 
 		// Recompile stuff from the strings
 		HRESULT update( RString effect_exp[ 4 ] );
 
 		// Rebuild the state shader
 		HRESULT buildState( EffectStateShader& ess );
+
+		const StateShaderTemplate* shaderTemplate();
+
+		UINT stateSize();
+
+		HRESULT defines( Hlsl::Defines& def ) const;
 
 	private:
 

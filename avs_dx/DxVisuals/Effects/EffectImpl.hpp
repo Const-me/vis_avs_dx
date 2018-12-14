@@ -7,6 +7,7 @@
 #include "shadersCode.h"
 #include "../Hlsl/Defines.h"
 #include "EffectBase1.hpp"
+#include "../Expressions/Compiler.h"
 using Hlsl::Defines;
 
 #include "includeDefs.h"

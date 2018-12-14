@@ -3,7 +3,8 @@
 
 using namespace Expressions;
 
-Compiler::Compiler( const Prototype& effectPrototype ) :
+Compiler::Compiler( const char* effectName, const Prototype& effectPrototype ) :
+	name( effectName ),
 	proto( effectPrototype )
 { }
 
@@ -47,6 +48,23 @@ HRESULT Compiler::parse( uint8_t what, CStringA& hlsl )
 }
 
 HRESULT Compiler::deductTypes()
+{
+	return E_NOTIMPL;
+}
+
+UINT Compiler::stateSize()
+{
+	__debugbreak();
+	return 0;
+}
+
+const StateShaderTemplate* Compiler::shaderTemplate()
+{
+	__debugbreak();
+	return nullptr;
+}
+
+HRESULT Compiler::defines( Hlsl::Defines& def ) const
 {
 	return E_NOTIMPL;
 }

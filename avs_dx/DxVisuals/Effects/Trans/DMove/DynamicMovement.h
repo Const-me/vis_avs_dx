@@ -29,7 +29,15 @@ struct DynamicMovementStructs
 		int YRES;
 	};
 
-	using StateData = EmptyStateData;
+	struct StateData : public Expressions::Compiler
+	{
+		StateData( AvsState& ass );
+
+		HRESULT update( AvsState& ass )
+		{
+			return Compiler::update( ass.effect_exp );
+		}
+	};
 
 	using VsData = DMoveVS;
 
@@ -39,7 +47,7 @@ struct DynamicMovementStructs
 class DynamicMovement : public EffectBase1<DynamicMovementStructs>
 {
 public:
-	inline DynamicMovement( AvsState *pState ) : tBase( pState ) { }
+	DynamicMovement( AvsState *pState );
 
 	const Metadata& metadata() override;
 

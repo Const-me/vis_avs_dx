@@ -3,6 +3,7 @@
 #include "../Render/EffectStateShader.hpp"
 #include "Prototype.h"
 #include "../Hlsl/Defines.h"
+#include "parse.h"
 
 namespace Expressions
 {
@@ -67,7 +68,7 @@ namespace Expressions
 		std::vector<sVariable> m_vars;
 		int m_stateSize;
 
-		HRESULT parse( uint8_t what, CStringA& hlsl );
+		std::array<Assignments, 4> m_parsed;
 
 		HRESULT deductTypes();
 	};

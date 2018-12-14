@@ -2,5 +2,5 @@
 
 namespace Expressions
 {
-	const char* cstr( const CStringA&s ) { return s; }
+	inline const char* cstr( const CStringA&s ) { return s; }
 }

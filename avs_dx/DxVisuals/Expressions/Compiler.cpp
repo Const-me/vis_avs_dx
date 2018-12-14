@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Compiler.h"
-#include "comments.h"
+#include "parse.h"
+#include "utils.hpp"
 
 using namespace Expressions;
 
@@ -36,21 +37,10 @@ HRESULT Compiler::update( RString effect_exp[ 4 ] )
 		return S_OK;
 	}
 
-	CStringA init, frame, beat;
-	CHECK( parse( 0, init ) );
-	CHECK( parse( 1, frame ) );
-	CHECK( parse( 2, frame ) );
-	CHECK( parse( 3, m_hlslFragment ) );
+	for( int i = 0; i < 4; i++ )
+		CHECK( parseAssignments( m_expressions[ i ], m_parsed[ i ] ) );
 
 	CHECK( deductTypes() );
-
-	return E_NOTIMPL;
-}
-
-HRESULT Compiler::parse( uint8_t what, CStringA& hlsl )
-{
-	CStringA code = m_expressions[ what ];
-	CHECK( removeComments( code ) );
 
 	return E_NOTIMPL;
 }

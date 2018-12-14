@@ -3,27 +3,9 @@
 
 using namespace Expressions;
 
-HRESULT Compiler::addState( const CStringA& name, uint32_t def )
-{
-
-}
-
-HRESULT Compiler::addState( const CStringA& name, float def )
-[
-
-]
-
-// Declare input constant usable by all expressions. Will become a macro.
-HRESULT Compiler::addInput( const CStringA& name, eVarType vt )
-{
-
-}
-// Declare output variable produced by the fragment expression.
-HRESULT Compiler::addOutput( const CStringA& name, eVarType vt = eVarType::f32 )
-{
-
-}
-
+Compiler::Compiler( const Prototype& effectPrototype ) :
+	proto( effectPrototype )
+{ }
 
 HRESULT Compiler::update( RString effect_exp[ 4 ] )
 {
@@ -49,7 +31,7 @@ HRESULT Compiler::update( RString effect_exp[ 4 ] )
 	CHECK( parse( 2, frame ) );
 	CHECK( parse( 3, m_hlslFragment ) );
 
-	CHECK( deduceTypes() );
+	CHECK( deductTypes() );
 
 	return E_NOTIMPL;
 }
@@ -61,5 +43,10 @@ HRESULT Compiler::buildState( EffectStateShader& ess )
 
 HRESULT Compiler::parse( uint8_t what, CStringA& hlsl )
 {
+	return E_NOTIMPL;
+}
 
+HRESULT Compiler::deductTypes()
+{
+	return E_NOTIMPL;
 }

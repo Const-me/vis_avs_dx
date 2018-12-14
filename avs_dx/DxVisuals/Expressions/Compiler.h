@@ -7,17 +7,10 @@ namespace Expressions
 {
 	class Compiler
 	{
+		const Prototype& proto;
+
 	public:
-
-
-		// Reserve a fixed state variable
-		HRESULT addState( const CStringA& name, uint32_t def );
-		HRESULT addState( const CStringA& name, float def );
-
-		// Declare input constant usable by all expressions. Will become a macro.
-		HRESULT addInput( const CStringA& name, eVarType vt );
-		// Declare output variable produced by the fragment expression.
-		HRESULT addOutput( const CStringA& name, eVarType vt = eVarType::f32 );
+		Compiler( const Prototype& effectPrototype );
 
 		// Recompile stuff from the strings
 		HRESULT update( RString effect_exp[ 4 ] );
@@ -26,15 +19,6 @@ namespace Expressions
 		HRESULT buildState( EffectStateShader& ess );
 
 	private:
-
-		struct sFixedStateVar
-		{
-			CStringA name;
-			CStringA initVal;
-			eVarType vt;
-			int offset = -1;
-		};
-		std::vector<sFixedStateVar> m_fixedState;
 
 		enum eExpressionBits : uint8_t
 		{
@@ -69,7 +53,7 @@ namespace Expressions
 
 		std::vector<sVariable> m_vars;
 
-		HRESULT parse( const CStringA& exp, uint8_t what, CStringA& hlsl );
+		HRESULT parse( uint8_t what, CStringA& hlsl );
 
 		HRESULT deductTypes();
 	};

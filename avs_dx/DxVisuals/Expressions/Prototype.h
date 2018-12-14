@@ -3,8 +3,10 @@
 
 namespace Expressions
 {
+	// A prototype for the expression-based effect, contains input/output variables/constants.
 	class Prototype
 	{
+		// Count if uint variables in the state block
 		int m_size = 0;
 
 		HRESULT addState( const CStringA& name, eVarType vt, const CStringA& initVal );
@@ -46,10 +48,13 @@ namespace Expressions
 
 		int fixedStateSize() const { return m_size; }
 
+		// HLSL piece for state initialization
 		CStringA initState() const;
 
+		// HLSL piece for loading state variables from the untyped buffer
 		CStringA stateLoad() const;
 
+		// HLSL piece for storing state variables
 		CStringA stateStore() const;
 
 		std::vector<sInputOutput> inputs, outputs;

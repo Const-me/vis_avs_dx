@@ -57,5 +57,12 @@ namespace Expressions
 		CStringA m_hlslFragment;
 
 		HRESULT allocVariables( const std::array<Assignments, 4>& parsed );
+
+		static void printAssignments( CStringA& code, const Assignments& ass );
+		void printLoadState( CStringA& code ) const;
+		void printStoreState( CStringA& code ) const;
+
+		HRESULT buildStateCode( const std::array<Assignments, 4>& parsed );
+		HRESULT buildFragmentCode( const Assignments& parsed );
 	};
 }

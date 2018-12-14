@@ -43,7 +43,11 @@ HRESULT Compiler::update( RString effect_exp[ 4 ] )
 
 	CHECK( allocVariables( parsed ) );
 
-	return E_NOTIMPL;
+	CHECK( buildStateCode( parsed ) );
+
+	CHECK( buildFragmentCode( parsed[ 3 ] ) );
+
+	return S_OK;
 }
 
 namespace
@@ -130,6 +134,75 @@ HRESULT Compiler::allocVariables( const std::array<Assignments, 4>& parsed )
 			var.offset = -1;
 	}
 
+	return S_OK;
+}
+
+void Compiler::printAssignments( CStringA& code, const Assignments& ass )
+{
+	for( const auto &a : ass )
+		code.AppendFormat( "		%s = %s;\r\n", cstr( a.first ), cstr( a.second ) );
+}
+
+void Compiler::printLoadState( CStringA& code ) const
+{
+	for( const auto &v : m_vars )
+		if( v.offset >= 0 )
+			code.AppendFormat( "\t\t%s = %s;\r\n", cstr( v.name ), cstr( stateLoad( v.vt, v.offset ) ) );
+}
+
+void Compiler::printStoreState( CStringA& code ) const
+{
+	for( const auto &v : m_vars )
+		if( v.offset >= 0 )
+			code.AppendFormat( "\t\t%s;\r\n", cstr( stateStore( v.vt, v.offset, v.name ) ) );
+}
+
+HRESULT Compiler::buildStateCode( const std::array<Assignments, 4>& parsed )
+{
+	CStringA code = "	{\r\n";
+	for( const auto &v : m_vars )
+		if( v.usedInState )
+			code.AppendFormat( "		%s %s;\r\n", hlslName( v.vt ), cstr( v.name ) );
+
+	code += "#if INIT_STATE\r\n";
+	code += proto.initState();
+	printAssignments( code, parsed[ 0 ] );
+
+	code += "#else\r\n";
+	code += proto.stateLoad();
+	printLoadState( code );
+
+	printAssignments( code, parsed[ 1 ] );
+	code += "#if IS_BEAT\r\n";
+	printAssignments( code, parsed[ 2 ] );
+	code += "#endif\r\n";
+	code += "#endif\r\n";
+	code += proto.stateStore();
+	printStoreState( code );
+
+	code += "	}\r\n";
+
+	m_hlslState = code;
+	return S_OK;
+}
+
+HRESULT Compiler::buildFragmentCode( const Assignments& parsed )
+{
+	CStringA code = proto.stateLoad();
+	for( const auto &v : m_vars )
+	{
+		if( !v.usedInFragment )
+			continue;
+		if( v.offset >= 0 )
+		{
+			const CStringA load = Expressions::stateLoad( v.vt, v.offset );
+			code.AppendFormat( "		%s %s = %s;\r\n", hlslName( v.vt ), cstr( v.name ), cstr( load ) );
+		}
+		else
+			code.AppendFormat( "		%s %s;\r\n", hlslName( v.vt ), cstr( v.name ) );
+	}
+	printAssignments( code, parsed );
+	m_hlslFragment = code;
 	return S_OK;
 }
 

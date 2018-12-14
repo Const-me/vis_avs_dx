@@ -43,6 +43,11 @@
     <ClInclude Include="Expressions\variableTypes.h" />
     <ClInclude Include="Effects\Render\PointSpritesRender.hpp" />
     <ClInclude Include="Effects\EffectBase1.hpp" />
+    <ClInclude Include="Expressions\Compiler.h" />
+    <ClInclude Include="Effects\includeDefs.h" />
+    <ClInclude Include="Expressions\Prototype.h" />
+    <ClInclude Include="Expressions\eVarType.h" />
+    <ClInclude Include="Expressions\utils.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -70,6 +75,9 @@
     <ClCompile Include="Utils\MiscUtils.cpp" />
     <ClCompile Include="Effects\Trans\DMove\DynamicMovement.cpp" />
     <ClCompile Include="EffectBase\EffectListBase.factory.cpp" />
+    <ClCompile Include="Expressions\Compiler.cpp" />
+    <ClCompile Include="Expressions\Prototype.cpp" />
+    <ClCompile Include="Expressions\eVarType.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

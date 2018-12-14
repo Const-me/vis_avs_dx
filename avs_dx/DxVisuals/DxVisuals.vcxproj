@@ -95,6 +95,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Expressions\comments.h" />
     <ClInclude Include="Effects\includeDefs.h" />
     <ClInclude Include="Expressions\Compiler.h" />
     <ClInclude Include="EffectBase\EffectList.h" />
@@ -144,6 +145,7 @@
     <ClInclude Include="Utils\MiscUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Expressions\comments.cpp" />
     <ClCompile Include="Expressions\Compiler.cpp" />
     <ClCompile Include="EffectBase\EffectListBase.factory.cpp" />
     <ClCompile Include="EffectBase\RootEffect.cpp" />

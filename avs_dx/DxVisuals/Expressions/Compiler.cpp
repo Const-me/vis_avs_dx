@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Compiler.h"
+#include "comments.h"
 
 using namespace Expressions;
 
@@ -48,6 +49,9 @@ HRESULT Compiler::update( RString effect_exp[ 4 ] )
 
 HRESULT Compiler::parse( uint8_t what, CStringA& hlsl )
 {
+	CStringA code = m_expressions[ what ];
+	CHECK( removeComments( code ) );
+
 	return E_NOTIMPL;
 }
 

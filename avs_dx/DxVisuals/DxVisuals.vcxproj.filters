@@ -48,6 +48,7 @@
     <ClInclude Include="Expressions\eVarType.h" />
     <ClInclude Include="Expressions\utils.hpp" />
     <ClInclude Include="Resources\RenderTargets.h" />
+    <ClInclude Include="Expressions\comments.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -79,6 +80,7 @@
     <ClCompile Include="Expressions\Prototype.cpp" />
     <ClCompile Include="Expressions\eVarType.cpp" />
     <ClCompile Include="Resources\RenderTargets.cpp" />
+    <ClCompile Include="Expressions\comments.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

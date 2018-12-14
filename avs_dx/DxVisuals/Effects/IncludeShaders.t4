@@ -1,3 +1,4 @@
+<#@ include file="../CppBuilder.t4" #>
 <#+
 	static string[] findFiles( string inputDir, string filter, bool recursive, ref string[] found )
 	{
@@ -94,53 +95,6 @@
 		CppBuilder sb = new CppBuilder();
 		writeNamespaces( sb, act, root, 0 );
 		return sb.ToString();
-	}
-
-	class CppBuilder
-	{
-		public readonly StringBuilder sb = new StringBuilder();
-		public override string ToString() { return sb.ToString(); }
-
-		public void line() { sb.AppendLine(); }
-		public void tabs( int countMinusOne )
-		{
-			for( int i = 0; i <= countMinusOne; i++ )
-				sb.Append( '\t' );
-		}
-		public void line( int tabsAfter )
-		{
-			line();
-			tabs( tabsAfter );
-		}
-		public void line( string s ) { sb.AppendLine( s ); }
-		public void print( string s )
-		{
-			sb.Append( s );
-		}
-		public void print( string fmt, params object[] argv )
-		{
-			sb.AppendFormat( fmt, argv );
-		}
-		public void line( string fmt, params object[] argv )
-		{
-			sb.AppendFormat( fmt, argv );
-			sb.AppendLine();
-		}
-		int tt = 0;
-		public void setTabs( int t )
-		{
-			tt = t;
-		}
-		public void incTabs(){ tt++; }
-		public void decTabs(){ tt--; }
-		public void tl( string l )
-		{
-			tabs( tt ); line( l );
-		}
-		public void tl( string l, params object[] argv )
-		{
-			tabs( tt ); line( l, argv );
-		}
 	}
 
 	static bool isStateTemplate( string p )

@@ -1,0 +1,94 @@
+<#@ include file="../compress.t4"#>
+<#@ include file="../CppBuilder.t4"#>
+<#+
+	static string[] findFiles( string inputDir, string filter, bool recursive, ref string[] found )
+	{
+		if( null != found )
+			return found;
+		SearchOption opts = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+		found = Directory.EnumerateFiles( inputDir, filter, opts ).ToArray();
+		return found;
+	}
+
+	static readonly Regex s_reFunc = new Regex( @"^inline\s+(\S+)\s+(\S+)\s*\(" );
+
+	class HlslFunction
+	{
+		public readonly string retType, name, code;
+		public HlslFunction( string code )
+		{
+			this.code = code;
+			var m = s_reFunc.Match( code );
+			if( !m.Success )
+				throw new ArgumentException( "Error parsing function declaration.\n" + code );
+			retType = convertType( m.Groups[ 1 ].Value );
+			name = m.Groups[ 2 ].Value;
+			Console.WriteLine( "{0}) -> {1}", m.Groups[ 0 ].Value, retType );
+		}
+
+		static string convertType( string hlsl )
+		{
+			switch( hlsl )
+			{
+				case "uint": return "u32";
+				case "float": return "f32";
+				case "int": return "i32";
+			}
+			throw new ArgumentException( "Unsupported function type " + hlsl );
+		}
+	}
+
+	IEnumerable<HlslFunction> build()
+	{
+		string dir = Host.ResolveParameterValue( "", "", "SOURCE" );
+		string[] sourceFiles = null;
+		findFiles( dir, "*.hlsl", false, ref sourceFiles );
+		return sourceFiles.SelectMany( parseSource );
+	}
+
+	static IEnumerable<HlslFunction> parseSource( string src )
+	{
+		string content = File.ReadAllText( src, Encoding.ASCII );
+		for( int i = 0; true; )
+		{
+			i = content.IndexOf( "\ninline", i );
+			if( i < 0 )
+				yield break;
+			i++;
+			int iEnd = content.IndexOf( "\n}", i );
+			string code = content.Substring( i, iEnd - i + 2 );
+			yield return new HlslFunction( code );
+			i = iEnd + 2;
+		}
+	}
+
+	class CompressedFunction
+	{
+		public readonly string retType, name;
+		public readonly int offset;
+		public CompressedFunction( HlslFunction f, int off )
+		{
+			retType = f.retType;
+			name = f.name;
+			offset = off;
+		}
+	}
+
+	void compressFunctions( out byte[] compressed, out int origLength, out CompressedFunction[] result )
+	{
+		HlslFunction[] orig = build().ToArray();
+		List<byte> origBuffer = new List<byte>();
+		result = new CompressedFunction[ orig.Length ];
+		for( int i = 0; i < orig.Length; i++ )
+		{
+			int offset = origBuffer.Count;
+			origBuffer.AddRange( Encoding.ASCII.GetBytes( orig[ i ].code ) );
+			origBuffer.Add( 0 );
+			result[ i ] = new CompressedFunction( orig[ i ], offset );
+		}
+
+		byte[] buff = origBuffer.ToArray();
+		origLength = buff.Length;
+		compressed = compressBuffer( buff );
+	}
+#>

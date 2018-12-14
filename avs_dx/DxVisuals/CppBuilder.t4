@@ -1,0 +1,74 @@
+<#+
+// Helper class to write indented C++ code / headers into the StringBuilder
+class CppBuilder
+{
+	readonly StringBuilder sb = new StringBuilder();
+
+	public override string ToString() { return sb.ToString(); }
+
+	public void line() { sb.AppendLine(); }
+	public void tabs( int countMinusOne )
+	{
+		for( int i = 0; i <= countMinusOne; i++ )
+			sb.Append( '\t' );
+	}
+	public void line( int tabsAfter )
+	{
+		line();
+		tabs( tabsAfter );
+	}
+	public void line( string s ) { sb.AppendLine( s ); }
+	public void print( string s )
+	{
+		sb.Append( s );
+	}
+	public void print( string fmt, params object[] argv )
+	{
+		sb.AppendFormat( fmt, argv );
+	}
+	public void line( string fmt, params object[] argv )
+	{
+		sb.AppendFormat( fmt, argv );
+		sb.AppendLine();
+	}
+	int tt = 0;
+	public void setTabs( int t )
+	{
+		tt = t;
+	}
+	public void incTabs(){ tt++; }
+	public void decTabs(){ tt--; }
+	public void tl( string l )
+	{
+		tabs( tt ); line( l );
+	}
+	public void tl( string l, params object[] argv )
+	{
+		tabs( tt ); line( l, argv );
+	}
+}
+
+const int valsPerLine = 32;
+
+static void printBytes( CppBuilder sb, byte[] data )
+{
+	sb.line( "\t\t\t{" );
+	for( int i = 0; true; )
+	{
+		int count = Math.Min( valsPerLine, data.Length - i );
+		sb.print( "\t\t\t\t" );
+		var values = data.Skip( i ).Take( count );
+		var strings = values.Select( b => string.Format( "0x{0:X2}", b ) );
+		sb.print( string.Join( ", ", strings ) );
+		i += count;
+		if( i < data.Length ) 
+		{
+			sb.line( "," );
+			continue;
+		}
+		break;
+	}
+	sb.line();
+	sb.line( "\t\t\t};" );
+}
+#>

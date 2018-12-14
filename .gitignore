@@ -10,3 +10,4 @@ avs_dx/DxVisuals/Effects/shadersCode.cpp
 avs_dx/DxVisuals/Effects/shadersCode.h
 *.tmp
 avs_dx/~$Readme.docx
+avs_dx/DxVisuals/Expressions/includeFunctions.cpp

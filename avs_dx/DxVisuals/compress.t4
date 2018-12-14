@@ -1,0 +1,38 @@
+<#+
+static IntPtr hCompressor = IntPtr.Zero;
+
+enum eCompressionAlgorithm: uint
+{
+	MSZIP = 2,
+	XPRESS = 3,
+	XPRESS_HUFF = 4,
+	LZMS = 5,
+}
+
+const eCompressionAlgorithm algo = eCompressionAlgorithm.MSZIP;
+
+[DllImport( "Cabinet.dll", SetLastError = true )]
+static extern bool CreateCompressor( eCompressionAlgorithm Algorithm, IntPtr AllocationRoutines, out IntPtr CompressorHandle );
+
+[DllImport( "Cabinet.dll", SetLastError = true )]
+static extern bool Compress(IntPtr CompressorHandle, [In] byte[] UncompressedData, IntPtr UncompressedDataSize, [Out] byte[] CompressedBuffer, IntPtr CompressedBufferSize, out IntPtr CompressedDataSize);
+
+static byte[] compressBuffer( byte[] src )
+{
+	if( hCompressor == IntPtr.Zero )
+		if( !CreateCompressor( algo, IntPtr.Zero, out hCompressor ) )
+			throw new Win32Exception();
+	byte[] dest = new byte[ src.Length * 2 ];
+	IntPtr srcSize = new IntPtr( src.Length );
+	IntPtr destSize = new IntPtr( src.Length * 2 );
+	if( !Compress( hCompressor, src, srcSize, dest, destSize, out destSize ) )
+		throw new Win32Exception();
+	Array.Resize( ref dest, (int)destSize );
+	return dest;
+}
+
+static byte[] compressString( string src )
+{
+	return compressBuffer( Encoding.ASCII.GetBytes( src ) );
+}
+#>

@@ -49,6 +49,8 @@
     <ClInclude Include="Expressions\utils.hpp" />
     <ClInclude Include="Resources\RenderTargets.h" />
     <ClInclude Include="Expressions\parse.h" />
+    <ClInclude Include="Utils\decompressor.h" />
+    <ClInclude Include="Expressions\includeFunctions.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -81,6 +83,8 @@
     <ClCompile Include="Expressions\eVarType.cpp" />
     <ClCompile Include="Resources\RenderTargets.cpp" />
     <ClCompile Include="Expressions\parse.cpp" />
+    <ClCompile Include="Utils\decompressor.cpp" />
+    <ClCompile Include="Expressions\includeFunctions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -101,6 +105,10 @@
     <None Include="Render\EffectRenderer.inl" />
     <None Include="Effects\VisCommon.fx" />
     <None Include="Effects\Render\Starfield\Star.fx" />
+    <None Include="compress.t4" />
+    <None Include="Expressions\includeFunctionsCpp.tt" />
+    <None Include="Expressions\includeFunctions.t4" />
+    <None Include="CppBuilder.t4" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Effects\Render\Simple\SimpleDotsVS.hlsl" />
@@ -116,6 +124,7 @@
     <FxCompile Include="Effects\Render\Starfield\StarInitCS.hlsl" />
     <FxCompile Include="Effects\Trans\DMove\DMovePS.hlsl" />
     <FxCompile Include="Effects\Trans\DMove\DMoveVS.hlsl" />
+    <FxCompile Include="Expressions\shaderFunctions.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

@@ -95,6 +95,8 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Expressions\includeFunctions.h" />
+    <ClInclude Include="Utils\decompressor.h" />
     <ClInclude Include="Expressions\parse.h" />
     <ClInclude Include="Effects\includeDefs.h" />
     <ClInclude Include="Expressions\Compiler.h" />
@@ -145,6 +147,8 @@
     <ClInclude Include="Utils\MiscUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Expressions\includeFunctions.cpp" />
+    <ClCompile Include="Utils\decompressor.cpp" />
     <ClCompile Include="Expressions\parse.cpp" />
     <ClCompile Include="Expressions\Compiler.cpp" />
     <ClCompile Include="EffectBase\EffectListBase.factory.cpp" />
@@ -189,6 +193,8 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Effects/shadersCode.cpp</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Effects/shadersCode.cpp</Outputs>
     </CustomBuild>
+    <None Include="compress.t4" />
+    <None Include="CppBuilder.t4" />
     <None Include="Effects\IncludeShaders.t4" />
     <CustomBuild Include="Effects\IncludeShadersH.tt">
       <FileType>Document</FileType>
@@ -199,6 +205,16 @@
 "%(FullPath)" -a !!STATIC!$(OutDir)Shaders -a !!SOURCE!$(ProjectDir)Effects -out $(ProjectDir)Effects/shadersCode.h</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Effects/shadersCode.h</Outputs>
     </CustomBuild>
+    <CustomBuild Include="Expressions\includeFunctions.tt">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"C:\Program Files (x86)\Common Files\microsoft shared\TextTemplating\14.0\TextTransform.exe" ^
+"%(FullPath)" -a !!SOURCE!$(ProjectDir)Expressions -out $(ProjectDir)Expressions/includeFunctions.cpp</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Expressions/includeFunctions.cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"C:\Program Files (x86)\Common Files\microsoft shared\TextTemplating\14.0\TextTransform.exe" ^
+"%(FullPath)" -a !!SOURCE!$(ProjectDir)Expressions -out $(ProjectDir)Expressions/includeFunctions.cpp</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Expressions/includeFunctions.cpp</Outputs>
+    </CustomBuild>
+    <None Include="Expressions\includeFunctions.t4" />
     <None Include="packages.config" />
     <None Include="Render\EffectRenderer.inl" />
     <None Include="Utils\DirectXErrors\data\d2d.inl" />
@@ -222,6 +238,10 @@
     <FxCompile Include="Effects\Trans\DMove\DMoveVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Expressions\shaderFunctions.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
     </FxCompile>
     <None Include="Effects\VisCommon.fx">
       <FileType>Document</FileType>

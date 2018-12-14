@@ -15,7 +15,7 @@ const eCompressionAlgorithm algo = eCompressionAlgorithm.MSZIP;
 static extern bool CreateCompressor( eCompressionAlgorithm Algorithm, IntPtr AllocationRoutines, out IntPtr CompressorHandle );
 
 [DllImport( "Cabinet.dll", SetLastError = true )]
-static extern bool Compress(IntPtr CompressorHandle, [In] byte[] UncompressedData, IntPtr UncompressedDataSize, [Out] byte[] CompressedBuffer, IntPtr CompressedBufferSize, out IntPtr CompressedDataSize);
+static extern bool Compress( IntPtr CompressorHandle, [In] byte[] UncompressedData, IntPtr UncompressedDataSize, [Out] byte[] CompressedBuffer, IntPtr CompressedBufferSize, out IntPtr CompressedDataSize );
 
 static byte[] compressBuffer( byte[] src )
 {

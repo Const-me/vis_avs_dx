@@ -19,6 +19,7 @@ namespace
 		return res;
 	}
 
+	// BTW, the only reason for this code is Win7 support: on Win8+ there's GetSystemTimePreciseAsFileTime API for that.
 	class PreciseTickCount
 	{
 		const uint32_t msStart;

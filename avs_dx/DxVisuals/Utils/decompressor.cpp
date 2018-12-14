@@ -32,7 +32,6 @@ namespace
 	static const Decompressor s_decompressor;
 }
 
-
 std::vector<uint8_t> decompressBytes( const uint8_t* src, int compressedLength, int origLength )
 {
 	std::vector<uint8_t> result;

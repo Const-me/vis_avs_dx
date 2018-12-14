@@ -10,10 +10,13 @@ Binder::Binder()
 		// cbuffer FrameGlobalData : register(b0)
 		s.cbuffer++;
 
-		// Texture2D<float> texVisData : register(t0);
+		// Texture2D<float> texVisDataU8 : register(t0);
 		s.srv++;
 
-		// ByteAddressBuffer effectStates : register(t1);
+		// Texture2D<float> texVisDataS8 : register(t1);
+		s.srv++;
+
+		// ByteAddressBuffer effectStates : register(t2);
 		s.srv++;
 	}
 

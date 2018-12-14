@@ -8,7 +8,7 @@ class SourceData
 	// First two lines are spectrum, left/right channel, second two lines are wave.
 	// Y texture coordinates: 0.125 left channel spectrum, 0.25 center channel spectrum, 0.375 right channel spectrum, 0.625 left channel waveform, 0.75 center channel waveform, 0.875 right channel waveform
 	CComPtr<ID3D11Texture2D> m_texture;
-	CComPtr<ID3D11ShaderResourceView> m_srv;
+	CComPtr<ID3D11ShaderResourceView> m_srvSigned, m_srvUnsigned;
 
 	struct sConstantBuffer
 	{
@@ -34,10 +34,11 @@ public:
 	HRESULT update( char visdata[ 2 ][ 2 ][ bands ], int isBeat );
 
 	template<eStage stage>
-	void bind( UINT t, UINT cb )
+	void bind()
 	{
-		bindResource<stage>( t, m_srv );
-		bindConstantBuffer<stage>( cb, m_cbuffer );
+		bindResource<stage>( 0, m_srvUnsigned );
+		bindResource<stage>( 1, m_srvSigned );
+		bindConstantBuffer<stage>( 0, m_cbuffer );
 	}
 };
 

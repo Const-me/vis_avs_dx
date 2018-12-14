@@ -6,7 +6,7 @@ static const bool SIMPLE_ANALYZER = true;
 
 float4 main( float2 tc : TEXCOORD0, float4 color : COLOR0 ) : SV_Target
 {
-    float val = sampleVisData( float2( tc.x, SIMPLE_READ_V ) );
+    float val = sampleVisData( float2( tc.x, SIMPLE_READ_V ), SIMPLE_READ_V > 0.5 );
     float colorMul = 0;
     if( SIMPLE_ANALYZER )
     {

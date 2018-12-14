@@ -90,7 +90,7 @@ HRESULT RootEffect::buildState()
 	// Run state init shader
 	bindShader<eStage::Compute>( m_stateShaders.init );
 	bindUav( 0, m_state.uav() );
-	StaticResources::sourceData.bind<eStage::Compute>( 0, 0 );
+	StaticResources::sourceData.bind<eStage::Compute>();
 	context->Dispatch( 1, 1, 1 );
 
 	// Invoke initializedState() method for all effects

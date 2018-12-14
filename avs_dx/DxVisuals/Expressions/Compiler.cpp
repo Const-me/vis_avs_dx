@@ -25,6 +25,15 @@ HRESULT Compiler::update( RString effect_exp[ 4 ] )
 
 	m_globalsCode.RemoveAll();
 	m_vars.clear();
+	m_hlslState = "";
+	m_hlslFragment = "";
+	m_vars.clear();
+	m_stateSize = proto.fixedStateSize();
+	if( m_expressions[ 0 ].GetLength() <= 0 && m_expressions[ 1 ].GetLength() <= 0 && m_expressions[ 2 ].GetLength() <= 0 && m_expressions[ 3 ].GetLength() <= 0 )
+	{
+		// All expressions are empty
+		return S_OK;
+	}
 
 	CStringA init, frame, beat;
 	CHECK( parse( 0, init ) );
@@ -34,11 +43,6 @@ HRESULT Compiler::update( RString effect_exp[ 4 ] )
 
 	CHECK( deductTypes() );
 
-	return E_NOTIMPL;
-}
-
-HRESULT Compiler::buildState( EffectStateShader& ess )
-{
 	return E_NOTIMPL;
 }
 
@@ -54,17 +58,11 @@ HRESULT Compiler::deductTypes()
 
 UINT Compiler::stateSize()
 {
-	__debugbreak();
-	return 0;
+	return (UINT)m_stateSize;
 }
 
 const StateShaderTemplate* Compiler::shaderTemplate()
 {
 	__debugbreak();
 	return nullptr;
-}
-
-HRESULT Compiler::defines( Hlsl::Defines& def ) const
-{
-	return E_NOTIMPL;
 }

@@ -17,14 +17,9 @@ namespace Expressions
 		// Recompile stuff from the strings
 		HRESULT update( RString effect_exp[ 4 ] );
 
-		// Rebuild the state shader
-		HRESULT buildState( EffectStateShader& ess );
-
 		const StateShaderTemplate* shaderTemplate();
 
 		UINT stateSize();
-
-		HRESULT defines( Hlsl::Defines& def ) const;
 
 	protected:
 		template<class T>
@@ -70,6 +65,7 @@ namespace Expressions
 		CStringA m_hlslFragment;
 
 		std::vector<sVariable> m_vars;
+		int m_stateSize;
 
 		HRESULT parse( uint8_t what, CStringA& hlsl );
 

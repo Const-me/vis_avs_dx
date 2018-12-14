@@ -38,12 +38,24 @@ namespace StaticResources
 		}
 
 		// Input layout
-		{
+		/* {
 			static const D3D11_INPUT_ELEMENT_DESC iaDesc[ 2 ] =
 			{
 				{ "SV_Position", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 				{ "TEXCOORD",    0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			};
+		} */
+
+		// Black texture
+		{
+			CD3D11_TEXTURE2D_DESC texDesc{ DXGI_FORMAT_B8G8R8A8_UNORM, 1, 1, 1, 1, D3D11_BIND_SHADER_RESOURCE, D3D11_USAGE_IMMUTABLE };
+			const uint32_t data = 0;	// premultiplied alpha
+			D3D11_SUBRESOURCE_DATA srd{ &data, 4, 0 };
+			CComPtr<ID3D11Texture2D> tex;
+			CHECK( device->CreateTexture2D( &texDesc, &srd, &tex ) );
+
+			CD3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{ D3D11_SRV_DIMENSION_TEXTURE2D, DXGI_FORMAT_B8G8R8A8_UNORM };
+			CHECK( device->CreateShaderResourceView( tex, &srvDesc, &blackTexture ) );
 		}
 
 		CHECK( sourceData.create() );
@@ -59,7 +71,8 @@ namespace StaticResources
 
 		sampleBilinear = nullptr;
 		blendPremultipliedAlpha = nullptr;
-		layoutPos2Tc2 = nullptr;
+		// layoutPos2Tc2 = nullptr;
+		blackTexture = nullptr;
 		sourceData.destroy();
 	}
 
@@ -69,6 +82,7 @@ namespace StaticResources
 
 	CComPtr<ID3D11SamplerState> sampleBilinear;
 	CComPtr<ID3D11BlendState> blendPremultipliedAlpha;
-	CComPtr<ID3D11InputLayout> layoutPos2Tc2;
+	CComPtr<ID3D11ShaderResourceView> blackTexture;
+	// CComPtr<ID3D11InputLayout> layoutPos2Tc2;
 	SourceData sourceData;
 };

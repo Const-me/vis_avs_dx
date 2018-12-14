@@ -8,6 +8,37 @@ inline uint gettime( float x )
     return getTickCount;
 }
 
+inline float sqr( float x )
+{
+    return x * x;
+}
+
+inline float invsqrt( float x )
+{
+    return rsqrt( x );
+}
+
+inline float above( float a, float b )
+{
+    return a > b ? 1 : 0;
+}
+
+inline float below( float a, float b )
+{
+    return a < b ? 1 : 0;
+}
+
+inline float sigmoid( float x, float constraint )
+{
+    const float t = 1.0 + exp( -x * constraint );
+    if( 0.0 == t )
+        return 0;
+    return 1.0 / t;
+}
+
+// The getspec / getosc functions below deliberately sample data between pixels to reduce count of texture lookups by 50%
+// http://www.asawicki.info/news_1516_half-pixel_offset_in_directx_11.html
+
 // returns spectrum data centered at 'band', (0..1), sampled 'width' (0..1) wide.
 // 'channel' can be: 0=center, 1=left, 2=right. return value is (-1..1)
 inline float getspec( float band, float width, uint channel )
@@ -46,34 +77,6 @@ inline float getosc( float band, float width, uint channel )
     }
     const uint count = ( rangeInt.y - rangeInt.x ) << 1;
     return res / (float) count;
-}
-
-inline float sqr( float x )
-{
-    return x * x;
-}
-
-inline float invsqrt( float x )
-{
-    return rsqrt( x );
-}
-
-inline float above( float a, float b )
-{
-    return a > b ? 1 : 0;
-}
-
-inline float below( float a, float b )
-{
-    return a < b ? 1 : 0;
-}
-
-inline float sigmoid( float x, float constraint )
-{
-    const float t = 1.0 + exp( -x * constraint );
-    if( 0.0 == t )
-        return 0;
-    return 1.0 / t;
 }
 
 [numthreads( 1, 1, 1 )]

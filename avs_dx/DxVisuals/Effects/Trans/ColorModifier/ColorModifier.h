@@ -27,10 +27,30 @@ struct ColorModifierStructs
 
 	struct PsData: public ColorModifierPS
 	{
-		HRESULT update( const AvsState& ass );
+		PsData();
+
+		const ShaderTemplate* shaderTemplate() { return &m_template; }
+
+	private:
+		CStringA m_hlsl;
+		ShaderTemplate m_template;
 	};
 
-	using StateData = EmptyStateData;
+	struct StateData : public Expressions::Compiler
+	{
+		StateData( AvsState& ass );
+
+		HRESULT update( AvsState& ass )
+		{
+			return hr_or( Compiler::update( ass.effect_exp ), updateInputs( ass ) );
+		}
+
+		HRESULT defines( Hlsl::Defines& def ) const;
+
+	private:
+		CSize screenSize;
+		HRESULT updateInputs( const AvsState& ass );
+	};
 };
 
 class ColorModifier : public EffectBase1<ColorModifierStructs>
@@ -39,6 +59,8 @@ public:
 	inline ColorModifier( AvsState *pState ) : tBase( pState ) { }
 
 	const Metadata& metadata() override;
+
+	HRESULT updateParameters( Binder& binder ) override;
 
 	HRESULT render( RenderTargets& rt ) override;
 };

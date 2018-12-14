@@ -1,8 +1,9 @@
 #include "VisCommon.fx"
 #ifndef AVS_SHADER
+#define SHADER_GLOBALS
 #define SHADER_CODE
-// <macro-code name="shaderCode" macro="SHADER_CODE" />
 #endif
+SHADER_GLOBALS
 
 struct sInput
 {

@@ -11,7 +11,8 @@ template<eStage stage, class TSourceData>
 class Shader
 {
 public:
-	Shader( const ShaderTemplate* st ) : shaderTemplate( *st ) { }
+	Shader() = default;
+	Shader( bool unused ) { }
 
 	bool updateBindings( Binder& binder )
 	{
@@ -21,7 +22,9 @@ public:
 	template<class tAvxState>
 	HRESULT updateValues( const tAvxState& ass )
 	{
-		return m_source.update( ass );
+		const HRESULT h1 = m_source.update( ass );
+		// return S_OK when update returnned S_OK, or when the shader is nullptr.
+		return hr_or( h1, result ? S_FALSE : S_OK );
 	}
 
 	HRESULT compile( const CAtlMap<CStringA, CStringA>& inc, UINT stateOffset )
@@ -34,9 +37,11 @@ public:
 		def.set( "STATE_OFFSET", stateOffset * 4 );
 		CHECK( m_source.defines( def ) );
 
+		const ShaderTemplate& tmpl = *m_source.shaderTemplate();
+
 		// Compile HLSL into DXBC
 		std::vector<uint8_t> dxbc;
-		CHECK( Hlsl::compile( stage, shaderTemplate.hlsl, shaderTemplate.name, inc, def, dxbc ) );
+		CHECK( Hlsl::compile( stage, tmpl.hlsl, tmpl.name, inc, def, dxbc ) );
 
 		// Upload DXBC to GPU
 		CHECK( createShader( dxbc, result ) );
@@ -47,13 +52,17 @@ public:
 	void bind() const
 	{
 		if( nullptr == result )
-			logWarning( "%s shader %s: binding shader that wasn't compiled", Hlsl::targetName( stage ), shaderTemplate.name );
+			logWarning( "%s shader %s: binding shader that wasn't compiled", Hlsl::targetName( stage ), m_source.shaderTemplate()->name );
 		bindShader<stage>( result );
 	}
 	const TSourceData& data() const { return m_source; }
 
+	void dropShader()
+	{
+		result = nullptr;
+	}
+
 private:
-	const ShaderTemplate& shaderTemplate;
 	TSourceData m_source;
 	ShaderPtr<stage> result;
 };

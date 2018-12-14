@@ -43,7 +43,6 @@ struct DynamicMovementStructs
 	private:
 		CSize screenSize;
 		HRESULT updateInputs( const AvsState& ass );
-		
 	};
 
 	using VsData = DMoveVS;

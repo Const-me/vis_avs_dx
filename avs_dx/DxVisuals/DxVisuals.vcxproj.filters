@@ -52,6 +52,7 @@
     <ClInclude Include="Utils\decompressor.h" />
     <ClInclude Include="Expressions\includeFunctions.h" />
     <ClInclude Include="Expressions\builtinFunctions.h" />
+    <ClInclude Include="Hlsl\ShaderBaseStruct.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

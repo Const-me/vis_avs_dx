@@ -56,16 +56,16 @@ HRESULT Simple::initializedState()
 HRESULT Simple::render( RenderTargets& rt )
 {
 	CHECK( rt.writeToLast( false ) );
-	bindShaders();
+	renderer.bindShaders();
 
 	// Calculate dots positions, with the CS
-	const UINT uavSlot = data<eStage::Compute>().bindDotsPosition;
+	const UINT uavSlot = renderer.data<eStage::Compute>().bindDotsPosition;
 	bindUav( uavSlot, dotsBuffer.uav() );
 	context->Dispatch( 3, 1, 1 );
 	bindUav( uavSlot );
 
 	// Render the sprites
-	const UINT srvSlot = data<eStage::Vertex>().bindDots;
+	const UINT srvSlot = renderer.data<eStage::Vertex>().bindDots;
 	bindResource<eStage::Vertex>( srvSlot, dotsBuffer.srv() );
 	iaClearBuffers();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_POINTLIST );

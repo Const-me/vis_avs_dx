@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "DynamicMovement.h"
-using namespace Expressions;
 
 IMPLEMENT_EFFECT( DynamicMovement, C_DMoveClass )
+using namespace Expressions;
 
 namespace
 {
@@ -23,7 +23,7 @@ namespace
 			addOutput( "y" );
 		}
 	};
-	static const Expressions::Prototype& prototype()
+	static const Prototype& prototype()
 	{
 		static const Proto p;
 		return p;
@@ -55,7 +55,7 @@ DynamicMovement::DynamicMovement( AvsState *pState ) :
 
 HRESULT DynamicMovement::render( RenderTargets& rt )
 {
-	const UINT psReadSlot = data<eStage::Pixel>().bindPrevFrame;
+	const UINT psReadSlot = renderer.data<eStage::Pixel>().bindPrevFrame;
 	CHECK( rt.blendToNext( psReadSlot ) );
 
 	return E_NOTIMPL; 

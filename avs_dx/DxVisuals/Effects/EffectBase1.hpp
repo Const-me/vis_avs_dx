@@ -14,14 +14,9 @@ protected:
 	typename TStruct::AvsState* const avs;
 	EffectBase1( typename TStruct::AvsState* ass ) : avs( ass ), m_stateData( *ass ) { }
 
-	void bindShaders()
-	{
-		m_render.bindShaders();
-	}
+	EffectRenderer<TStruct> renderer;
 
 private:
-
-	EffectRenderer<TStruct> m_render;
 	typename TStruct::StateData m_stateData;
 
 	HRESULT shouldRebuildState() override
@@ -45,10 +40,12 @@ private:
 		return m_stateData.defines( ess.values );
 	}
 
+protected:
+
 	HRESULT updateParameters( Binder& binder ) override
 	{
-		const bool changedBindings = m_render.updateBindings( binder );
-		const HRESULT hr = m_render.updateValues( *avs );
+		const bool changedBindings = renderer.updateBindings( binder );
+		const HRESULT hr = renderer.updateValues( *avs );
 		CHECK( hr );
 		const bool changedData = ( hr != S_FALSE );
 		const bool changedSomething = changedBindings || changedData;
@@ -61,16 +58,8 @@ private:
 			pIncludes = &TStruct::effectIncludes();
 		}
 
-		CHECK( m_render.compileShaders( *pIncludes, stateOffset() ) );
+		CHECK( renderer.compileShaders( *pIncludes, stateOffset() ) );
 		return S_OK;
-	}
-
-protected:
-
-	template<eStage stage>
-	decltype( auto ) data() const
-	{
-		return m_render.data<stage>();
 	}
 };
 

@@ -66,8 +66,7 @@ private:
 		{
 			const HRESULT hr = fn( *p );
 			CHECK( hr );
-			if( S_FALSE != hr )
-				res = hr;
+			res = hr_or( res, hr );
 		}
 		return res;
 	}

@@ -59,14 +59,7 @@ public:
 		HRESULT res = S_FALSE;
 		forEachDynStage( [ & ]( auto& p )
 		{
-			const HRESULT hr = p.updateValues( ass );
-			if( FAILED( hr ) )
-			{
-				logError( hr, "Update failed" );
-				return;
-			}
-			if( S_FALSE != hr )
-				res = S_OK;
+			res = hr_or( res, p.updateValues( ass ) );
 		} );
 		return res;
 	}
@@ -99,6 +92,13 @@ public:
 	{
 		static_assert( shaderKinds[ (uint8_t)stage ] == eShaderKind::Dynamic, "Only dynamic shaders hold state data" );
 		return std::get<(uint8_t)stage>( m_shaders ).data();
+	}
+
+	template<eStage stage>
+	void dropShader()
+	{
+		static_assert( shaderKinds[ (uint8_t)stage ] == eShaderKind::Dynamic, "Only dynamic shaders can be dropped" );
+		std::get<(uint8_t)stage>( m_shaders ).dropShader();
 	}
 
 private:

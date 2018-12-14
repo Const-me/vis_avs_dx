@@ -14,21 +14,12 @@
 #include "../Hlsl/ShaderTemplate.h"
 #include "../Hlsl/StateShaderTemplate.h"
 #include "../Hlsl/Defines.h"
+#include "../Hlsl/ShaderBaseStruct.h"
 #include "../Render/Binder.h"
 #include "../Expressions/variableTypes.h"
 
 namespace Hlsl
 {
-	template<eStage stage>
-	struct ShaderBaseStruct
-	{
-		ShaderBaseStruct() = default;
-		ShaderBaseStruct( const ShaderBaseStruct& ) = delete;
-		bool updateBindings( Binder& binder ){ return false; }
-		template<class TAvx>
-		HRESULT update( const TAvx& a ) { return S_FALSE; }
-	};
-
 <#= writeNamespaces( generateNamespace ) #>
 	namespace StaticShaders
 	{

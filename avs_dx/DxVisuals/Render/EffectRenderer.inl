@@ -57,12 +57,12 @@ namespace
 
 #undef DEFINE_STATIC_SHADER
 
-#define DEFINE_DYNAMIC_SHADER( stage, DataClass )                                           \
-	template<class T>                                                                       \
-	struct ShaderTypeHelper<T, stage, eShaderKind::Dynamic>                                 \
-	{                                                                                       \
-		using Type = Shader<stage, typename T::DataClass>;                                  \
-		static const ShaderTemplate* ctorArg() { return T::DataClass::shaderTemplate(); }   \
+#define DEFINE_DYNAMIC_SHADER( stage, DataClass )                   \
+	template<class T>                                               \
+	struct ShaderTypeHelper<T, stage, eShaderKind::Dynamic>         \
+	{                                                               \
+		using Type = Shader<stage, typename T::DataClass>;          \
+		static constexpr bool ctorArg() { return false; }           \
 	}
 
 	DEFINE_DYNAMIC_SHADER( eStage::Compute, CsData );

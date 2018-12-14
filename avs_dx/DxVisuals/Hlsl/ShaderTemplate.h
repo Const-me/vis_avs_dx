@@ -7,7 +7,8 @@ struct ShaderTemplate
 	const char* const name;
 
 	// HLSL source code of the template
-	const CStringA hlsl;
+	CStringA hlsl;
 
 	constexpr ShaderTemplate( const char *n, const CStringA& src ) : name( n ), hlsl( src ) { }
+	ShaderTemplate( const ShaderTemplate& that ) : name( that.name ), hlsl( that.hlsl ) { }
 };

@@ -16,7 +16,7 @@ namespace
 				continue;
 
 			anyBeat = anyBeat || e.shaderTemplate->hasBeat;
-			for( const auto &s : e.shaderTemplate->globals )
+			for( const auto &s : *e.shaderTemplate->globals )
 				globals[ s ] = true;
 		}
 

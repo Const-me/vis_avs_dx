@@ -6,9 +6,11 @@
 using namespace Expressions;
 
 Compiler::Compiler( const char* effectName, const Prototype& effectPrototype ) :
-	name( effectName ),
+	m_stateTemplate( effectName ),
 	proto( effectPrototype )
-{ }
+{
+	m_stateTemplate.globals = &m_stateGlobals;
+}
 
 HRESULT Compiler::update( RString effect_exp[ 4 ] )
 {
@@ -27,7 +29,9 @@ HRESULT Compiler::update( RString effect_exp[ 4 ] )
 
 	m_globalsCode.RemoveAll();
 	m_vars.clear();
-	m_hlslState = "";
+	m_stateGlobals.clear();
+	m_stateTemplate.hasBeat = false;
+	m_stateTemplate.hlslMain = "";
 	m_hlslFragment = "";
 	m_vars.clear();
 	m_stateSize = proto.fixedStateSize();
@@ -46,6 +50,8 @@ HRESULT Compiler::update( RString effect_exp[ 4 ] )
 	CHECK( buildStateCode( parsed ) );
 
 	CHECK( buildFragmentCode( parsed[ 0 ] ) );
+
+
 
 	return S_OK;
 }
@@ -177,16 +183,20 @@ HRESULT Compiler::buildStateCode( const std::array<Assignments, 4>& parsed )
 	printLoadState( code );
 
 	printAssignments( code, parsed[ 1 ] );
-	code += "#if IS_BEAT\r\n";
-	printAssignments( code, parsed[ 2 ] );
-	code += "#endif\r\n";
+
+	m_stateTemplate.hasBeat = !parsed[ 2 ].empty();
+	if( m_stateTemplate.hasBeat )
+	{
+		code += "#if IS_BEAT\r\n";
+		printAssignments( code, parsed[ 2 ] );
+		code += "#endif\r\n";
+	}
 	code += "#endif\r\n";
 	code += proto.stateStore();
 	printStoreState( code );
-
 	code += "	}\r\n";
-
-	m_hlslState = code;
+	
+	m_stateTemplate.hlslMain = code;
 	return S_OK;
 }
 
@@ -217,6 +227,5 @@ UINT Compiler::stateSize()
 
 const StateShaderTemplate* Compiler::shaderTemplate()
 {
-	__debugbreak();
-	return nullptr;
+	return &m_stateTemplate;
 }

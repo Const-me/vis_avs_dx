@@ -7,19 +7,21 @@ struct StateShaderTemplate
 	const char* const name;
 
 	// HLSL source code of the main() function, excluding the signature but including the { }
-	const CStringA hlslMain;
+	CStringA hlslMain;
 
 	// HLSL source code of the global sections
-	const std::vector<CStringA>& globals;
+	const std::vector<CStringA> *globals = nullptr;
 
 	// Some part of the shader uses IS_BEAT macro. The runtime will compile two different versions of the shader.
 	// This way it's slightly faster than runtime branching on `beat` from FrameGlobalData cbuffer
-	const bool hasBeat;
+	bool hasBeat = false;
+
+	StateShaderTemplate( const char *n ) : name( n ) { }
 
 	StateShaderTemplate( const char *n, const CStringA& src, bool beat, const std::vector<CStringA> &glob ) :
 		name( n ),
 		hlslMain( src ),
 		hasBeat( beat ),
-		globals( glob )
+		globals( &glob )
 	{ }
 };

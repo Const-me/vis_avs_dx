@@ -10,10 +10,10 @@ namespace Expressions
 	class Compiler
 	{
 		const Prototype& proto;
-		const char* const name;
 
 	public:
 		Compiler( const char* effectName, const Prototype& effectPrototype );
+		Compiler( const Compiler & ) = delete;
 
 		// Recompile stuff from the strings
 		HRESULT update( RString effect_exp[ 4 ] );
@@ -53,8 +53,9 @@ namespace Expressions
 		std::vector<sVariable> m_vars;
 		int m_stateSize;
 
-		CStringA m_hlslState;
 		CStringA m_hlslFragment;
+		std::vector<CStringA> m_stateGlobals;
+		StateShaderTemplate m_stateTemplate;
 
 		HRESULT allocVariables( const std::array<Assignments, 4>& parsed );
 

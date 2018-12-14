@@ -45,7 +45,7 @@ HRESULT Compiler::update( RString effect_exp[ 4 ] )
 
 	CHECK( buildStateCode( parsed ) );
 
-	CHECK( buildFragmentCode( parsed[ 3 ] ) );
+	CHECK( buildFragmentCode( parsed[ 0 ] ) );
 
 	return S_OK;
 }
@@ -122,16 +122,20 @@ HRESULT Compiler::allocVariables( const std::array<Assignments, 4>& parsed )
 		var.vt = vf.vt;
 
 		const uint8_t usageMask = vf.readMask | vf.writeMask;
-		var.usedInState = 0 != ( usageMask & 7 );
-		var.usedInFragment = 0 != ( usageMask & 8 );
+		var.usedInState = 0 != ( usageMask & 0xE );
+		var.usedInFragment = 0 != ( usageMask & 1 );
 
 		if( var.usedInState && var.usedInFragment )
 		{
+			// Used in both state shader and fragment code: need to place in the state buffer
 			var.offset = m_stateSize;
 			m_stateSize++;
 		}
 		else
+		{
+			// Just a local variable, no need to persist.
 			var.offset = -1;
+		}
 	}
 
 	return S_OK;
@@ -166,7 +170,7 @@ HRESULT Compiler::buildStateCode( const std::array<Assignments, 4>& parsed )
 
 	code += "#if INIT_STATE\r\n";
 	code += proto.initState();
-	printAssignments( code, parsed[ 0 ] );
+	printAssignments( code, parsed[ 3 ] );
 
 	code += "#else\r\n";
 	code += proto.stateLoad();

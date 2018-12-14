@@ -113,7 +113,7 @@
     <ClInclude Include="Hlsl\ShaderTemplate.h" />
     <ClInclude Include="Hlsl\StateShaderTemplate.h" />
     <ClInclude Include="Resources\bindResource.h" />
-    <ClInclude Include="Resources\RenderTargets.hpp" />
+    <ClInclude Include="Resources\RenderTargets.h" />
     <ClInclude Include="Resources\StructureBuffer.h" />
     <ClInclude Include="Render\StateShaders.h" />
     <ClInclude Include="Utils\preciseTickCount.h" />
@@ -150,6 +150,7 @@
     <ClCompile Include="Expressions\eVarType.cpp" />
     <ClCompile Include="Hlsl\Defines.cpp" />
     <ClCompile Include="Expressions\Prototype.cpp" />
+    <ClCompile Include="Resources\RenderTargets.cpp" />
     <ClCompile Include="Resources\StructureBuffer.cpp" />
     <ClCompile Include="Render\StateShaders.cpp" />
     <ClCompile Include="Utils\MiscUtils.cpp" />

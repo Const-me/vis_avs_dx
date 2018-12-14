@@ -26,6 +26,16 @@ namespace Expressions
 
 		HRESULT defines( Hlsl::Defines& def ) const;
 
+	protected:
+		template<class T>
+		inline void updateInput( T& oldVal, const T& newVal, HRESULT& hr )
+		{
+			if( oldVal == newVal )
+				return;
+			oldVal = newVal;
+			hr = S_OK;
+		}
+
 	private:
 
 		enum eExpressionBits : uint8_t

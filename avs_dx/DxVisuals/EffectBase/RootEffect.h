@@ -1,6 +1,6 @@
 #pragma once
 #include "EffectListBase.h"
-#include "../Resources/RenderTargets.hpp"
+#include "../Resources/RenderTargets.h"
 #include "../Resources/EffectsState.h"
 #include "../Render/StateShaders.h"
 

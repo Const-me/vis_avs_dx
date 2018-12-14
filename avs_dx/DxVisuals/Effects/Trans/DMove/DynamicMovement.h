@@ -35,8 +35,15 @@ struct DynamicMovementStructs
 
 		HRESULT update( AvsState& ass )
 		{
-			return Compiler::update( ass.effect_exp );
+			return hr_or( Compiler::update( ass.effect_exp ), updateInputs( ass ) );
 		}
+
+		HRESULT defines( Hlsl::Defines& def ) const;
+
+	private:
+		CSize screenSize;
+		HRESULT updateInputs( const AvsState& ass );
+		
 	};
 
 	using VsData = DMoveVS;

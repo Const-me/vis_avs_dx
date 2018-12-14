@@ -23,7 +23,6 @@
     <ClInclude Include="EffectBase\EffectList.h" />
     <ClInclude Include="iEffect.h" />
     <ClInclude Include="Resources\EffectsState.h" />
-    <ClInclude Include="Resources\RenderTargets.hpp" />
     <ClInclude Include="Render\Stage.h" />
     <ClInclude Include="Hlsl\Defines.h" />
     <ClInclude Include="Effects\Render\Simple\Simple.h" />
@@ -48,6 +47,7 @@
     <ClInclude Include="Expressions\Prototype.h" />
     <ClInclude Include="Expressions\eVarType.h" />
     <ClInclude Include="Expressions\utils.hpp" />
+    <ClInclude Include="Resources\RenderTargets.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -78,6 +78,7 @@
     <ClCompile Include="Expressions\Compiler.cpp" />
     <ClCompile Include="Expressions\Prototype.cpp" />
     <ClCompile Include="Expressions\eVarType.cpp" />
+    <ClCompile Include="Resources\RenderTargets.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

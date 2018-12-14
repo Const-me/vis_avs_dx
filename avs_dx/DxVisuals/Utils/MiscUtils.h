@@ -42,3 +42,6 @@ public:
 };
 
 void setMacro( std::vector<std::pair<CStringA, CStringA>> &macros, const CStringA& key, const CStringA& value );
+
+// If any of them fail, return error code; otherwise interpret them as booleans, compute logocal OR, and return S_OK / S_FALSE.
+HRESULT hr_or( HRESULT h1, HRESULT h2 );

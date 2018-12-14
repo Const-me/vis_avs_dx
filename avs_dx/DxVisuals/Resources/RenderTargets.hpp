@@ -14,7 +14,7 @@ public:
 		for( auto& t : m_targets )
 			t.destroy();
 	}
-	HRESULT writeToLast( bool clear )
+	HRESULT writeToLast( bool clear = false )
 	{
 		RenderTarget& t = m_targets[ m_lastTarget ];
 		if( !t )
@@ -25,7 +25,7 @@ public:
 		return S_OK;
 
 	}
-	HRESULT writeToNext( UINT readPsSlot, bool clear )
+	HRESULT writeToNext( UINT readPsSlot, bool clearNext )
 	{
 		RenderTarget& tRead = m_targets[ m_lastTarget ];
 		tRead.bindView( readPsSlot );
@@ -34,7 +34,7 @@ public:
 		RenderTarget& tWrite = m_targets[ m_lastTarget ];
 		if( !tWrite )
 			CHECK( tWrite.create( getRenderSize() ) );
-		if( clear )
+		if( clearNext )
 			tWrite.clear();
 		tWrite.bindTarget();
 		return S_OK;

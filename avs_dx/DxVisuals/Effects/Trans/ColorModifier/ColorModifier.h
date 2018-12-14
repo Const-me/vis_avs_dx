@@ -27,6 +27,7 @@ struct ColorModifierStructs
 
 	struct PsData: public ColorModifierPS
 	{
+		HRESULT update( const AvsState& ass );
 	};
 
 	using StateData = EmptyStateData;

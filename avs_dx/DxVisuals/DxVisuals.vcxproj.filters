@@ -103,6 +103,8 @@
     <FxCompile Include="Effects\Render\PointSpriteGS.hlsl" />
     <FxCompile Include="Effects\Render\Simple\SimpleCS.hlsl" />
     <FxCompile Include="Effects\Render\Starfield\StarInitCS.hlsl" />
+    <FxCompile Include="Effects\Trans\DMove\DMovePS.hlsl" />
+    <FxCompile Include="Effects\Trans\DMove\DMoveVS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

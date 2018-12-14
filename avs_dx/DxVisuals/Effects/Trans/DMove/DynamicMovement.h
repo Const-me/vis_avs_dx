@@ -1,5 +1,6 @@
 #pragma once
 #include "../../EffectImpl.hpp"
+using namespace Hlsl::Trans::DMove;
 
 struct DynamicMovementStructs
 {
@@ -29,6 +30,10 @@ struct DynamicMovementStructs
 	};
 
 	using StateData = EmptyStateData;
+
+	using VsData = DMoveVS;
+
+	using PsData = DMovePS;
 };
 
 class DynamicMovement : public EffectBase1<DynamicMovementStructs>
@@ -38,5 +43,5 @@ public:
 
 	const Metadata& metadata() override;
 
-	HRESULT render( RenderTargets& rt ) override { return E_NOTIMPL; }
+	HRESULT render( RenderTargets& rt ) override;
 };

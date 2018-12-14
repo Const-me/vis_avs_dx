@@ -37,6 +37,15 @@ namespace StaticResources
 			CHECK( device->CreateBlendState( &blendDesc, &blendPremultipliedAlpha ) );
 		}
 
+		// Input layout
+		{
+			static const D3D11_INPUT_ELEMENT_DESC iaDesc[ 2 ] =
+			{
+				{ "SV_Position", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				{ "TEXCOORD",    0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			};
+		}
+
 		CHECK( sourceData.create() );
 
 		return S_OK;
@@ -50,6 +59,7 @@ namespace StaticResources
 
 		sampleBilinear = nullptr;
 		blendPremultipliedAlpha = nullptr;
+		layoutPos2Tc2 = nullptr;
 		sourceData.destroy();
 	}
 
@@ -59,5 +69,6 @@ namespace StaticResources
 
 	CComPtr<ID3D11SamplerState> sampleBilinear;
 	CComPtr<ID3D11BlendState> blendPremultipliedAlpha;
+	CComPtr<ID3D11InputLayout> layoutPos2Tc2;
 	SourceData sourceData;
 };

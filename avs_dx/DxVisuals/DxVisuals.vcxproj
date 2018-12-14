@@ -204,6 +204,14 @@
     <None Include="Utils\DirectXErrors\includeData.inl" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Effects\Trans\DMove\DMovePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Trans\DMove\DMoveVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+    </FxCompile>
     <None Include="Effects\VisCommon.fx">
       <FileType>Document</FileType>
     </None>

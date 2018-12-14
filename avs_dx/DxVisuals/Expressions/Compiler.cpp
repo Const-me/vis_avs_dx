@@ -2,6 +2,7 @@
 #include "Compiler.h"
 #include "parse.h"
 #include "utils.hpp"
+#include "includeFunctions.h"
 
 using namespace Expressions;
 
@@ -97,18 +98,36 @@ HRESULT Compiler::allocVariables( const std::array<Assignments, 4>& parsed )
 		}
 	}
 
+	CAtlMap<CStringA, ShaderFunc> funcsState, funcsFragment;
 	for( uint8_t i = 0; i < 4; i++ )
 	{
 		const uint8_t maskBit = (uint8_t)1 << i;
 		for( const auto &a : parsed[ i ] )
 		{
+			HRESULT hr = S_OK;
 			enumIdentifiers( a.second, [ & ]( const CStringA& id )
 			{
 				auto p = vars.Lookup( id );
 				if( nullptr != p )
+				{
+					// it's a variable.
 					p->m_value.readMask |= maskBit;
+				}
+				else
+				{
+					// Probably a function, bind it.
+					const ShaderFunc* pFunc = lookupShaderFunc( id );
+					if( nullptr == pFunc )
+					{
+						logError( "Undefined function %s", cstr( id ) );
+						hr = E_INVALIDARG;
+						return true;
+					}
+					CAtlMap<CStringA, ShaderFunc>& funcMap = ( 0 == i ) ? funcsFragment : funcsState;
+				}
 				return false;
 			} );
+			CHECK( hr );
 		}
 	}
 

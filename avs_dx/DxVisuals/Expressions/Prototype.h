@@ -58,5 +58,16 @@ namespace Expressions
 		CStringA stateStore() const;
 
 		std::vector<sInputOutput> inputs, outputs;
+
+		template<class TFunc>
+		void enumBuiltins( TFunc fn ) const
+		{
+			for( const auto& fs : m_fixedState )
+				fn( fs.name, fs.vt );
+			for( const auto& i : inputs )
+				fn( i.name, i.vt );
+			for( const auto& o : outputs )
+				fn( o.name, o.vt );
+		}
 	};
 }

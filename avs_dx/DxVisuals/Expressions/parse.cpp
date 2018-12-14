@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "parse.h"
 #include "utils.hpp"
-#include <ctype.h>
 
 namespace Expressions
 {

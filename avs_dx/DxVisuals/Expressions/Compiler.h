@@ -34,15 +34,6 @@ namespace Expressions
 
 	private:
 
-		enum eExpressionBits : uint8_t
-		{
-			None = 0,
-			Init = 1,
-			Frame = 2,
-			Beat = 4,
-			Fragment = 8,
-		};
-
 		// Local copy of the effect's expression strings
 		std::array<CStringA, 4> m_expressions;
 
@@ -55,21 +46,16 @@ namespace Expressions
 			CStringA name;
 			// Offset inside effectStates, from the start of this effect's state block, in 32-bit elements. -1 indicates local variables which that don't need to hit the state buffer.
 			int offset = -1;
-
 			eVarType vt = eVarType::unknown;
-
-			// Combination of bits that says where it's used.
-			eExpressionBits usageMask = eExpressionBits::None;
+			bool usedInState;
+			bool usedInFragment;
 		};
+		std::vector<sVariable> m_vars;
+		int m_stateSize;
 
 		CStringA m_hlslState;
 		CStringA m_hlslFragment;
 
-		std::vector<sVariable> m_vars;
-		int m_stateSize;
-
-		std::array<Assignments, 4> m_parsed;
-
-		HRESULT deductTypes();
+		HRESULT allocVariables( const std::array<Assignments, 4>& parsed );
 	};
 }

@@ -97,7 +97,7 @@
   <ItemGroup>
     <ClInclude Include="Expressions\builtinFunctions.h" />
     <ClInclude Include="Expressions\includeFunctions.h" />
-    <ClInclude Include="Expressions\CompiledShader.hpp" />
+    <ClInclude Include="Expressions\CompiledShader.h" />
     <ClInclude Include="Hlsl\ShaderBaseStruct.h" />
     <ClInclude Include="Utils\decompressor.h" />
     <ClInclude Include="Expressions\parse.h" />
@@ -152,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Expressions\builtinFunctions.cpp" />
+    <ClCompile Include="Expressions\CompiledShader.cpp" />
     <ClCompile Include="Expressions\includeFunctions.cpp" />
     <ClCompile Include="Utils\decompressor.cpp" />
     <ClCompile Include="Expressions\parse.cpp" />

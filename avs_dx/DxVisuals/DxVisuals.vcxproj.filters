@@ -54,7 +54,7 @@
     <ClInclude Include="Expressions\builtinFunctions.h" />
     <ClInclude Include="Hlsl\ShaderBaseStruct.h" />
     <ClInclude Include="Utils\BoolHr.hpp" />
-    <ClInclude Include="Expressions\CompiledShader.hpp" />
+    <ClInclude Include="Expressions\CompiledShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -90,6 +90,7 @@
     <ClCompile Include="Utils\decompressor.cpp" />
     <ClCompile Include="Expressions\includeFunctions.cpp" />
     <ClCompile Include="Expressions\builtinFunctions.cpp" />
+    <ClCompile Include="Expressions\CompiledShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

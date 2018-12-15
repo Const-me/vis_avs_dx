@@ -113,7 +113,7 @@ LRESULT RenderWindow::wmRender( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& h
 	context->OMSetBlendState( nullptr, nullptr, 0xffffffff );
 	pSource->bindView( 127 );
 
-	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP );
+	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	iaClearBuffers();
 	context->Draw( 3, 0 );
 

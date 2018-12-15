@@ -47,6 +47,11 @@ HRESULT DynamicMovementStructs::StateData::updateInputs( const AvsState& ass )
 	return updateInput( screenSize, getRenderSize() );
 }
 
+HRESULT DynamicMovementStructs::VsData::compiledShader( const std::vector<uint8_t>& dxbc )
+{
+	return StaticResources::createLayout( dxbc );
+}
+
 DynamicMovement::DynamicMovement( AvsState *pState ) :
 	tBase( pState )
 { }

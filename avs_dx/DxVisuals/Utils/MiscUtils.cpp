@@ -1,6 +1,13 @@
 #include "stdafx.h"
 #include "MiscUtils.h"
 
+void iaSetBuffer( ID3D11Buffer* vb, UINT vbStride, ID3D11Buffer* ib, DXGI_FORMAT ibFormat )
+{
+	UINT off = 0;
+	context->IASetVertexBuffers( 0, 1, &ib, &vbStride, &off );
+	context->IASetIndexBuffer( ib, ibFormat, 0 );
+}
+
 void iaClearBuffers()
 {
 	ID3D11Buffer* const buffers[ D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ] = {};

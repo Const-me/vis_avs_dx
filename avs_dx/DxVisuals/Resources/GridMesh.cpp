@@ -175,10 +175,32 @@ HRESULT GridMesh::create( const CSize& size )
 	}
 
 	{
+		static_assert( sizeof( Ind3 ) == 6 );
 		CD3D11_BUFFER_DESC desc{ sizeofVector( ib ), D3D11_BIND_INDEX_BUFFER, D3D11_USAGE_IMMUTABLE };
 		D3D11_SUBRESOURCE_DATA initData{ ib.data(), 2, 0 };
 		CHECK( device->CreateBuffer( &desc, &initData, &m_ib ) );
 	}
 
+	m_indexCount = ib.size() * 3;
 	return S_OK;
 }
+
+HRESULT GridMesh::draw() const
+{
+	if( nullptr == m_vb || nullptr == m_ib )
+		return E_POINTER;
+
+	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+	iaSetBuffer( m_vb, sizeof( sInput ), m_ib, DXGI_FORMAT_R16_UINT );
+	context->DrawIndexed( m_indexCount, 0, 0 );
+	return S_OK;
+}
+
+/* std::vector<D3D11_INPUT_ELEMENT_DESC> GridMesh::inputLayoutDesc()
+{
+	return std::vector<D3D11_INPUT_ELEMENT_DESC>
+	{
+		{ "SV_Position", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD",    0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+} */

@@ -2,6 +2,7 @@
 
 class GridMesh
 {
+	UINT m_indexCount;
 	CComPtr<ID3D11Buffer> m_vb, m_ib;
 
 public:
@@ -14,4 +15,6 @@ public:
 	{
 		m_vb = m_ib = nullptr;
 	}
+
+	HRESULT draw() const;
 };

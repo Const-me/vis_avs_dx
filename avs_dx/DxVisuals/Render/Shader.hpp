@@ -59,6 +59,12 @@ public:
 		// Upload DXBC to GPU
 		CHECK( createShader( dxbc, result ) );
 
+		// Invoke optional compiledShader method. Some shaders need that to create input layouts.
+		__if_exists( TSourceData::compiledShader )
+		{
+			CHECK( m_sourceData.compiledShader( dxbc ) );
+		}
+
 		return S_OK;
 	}
 

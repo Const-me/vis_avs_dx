@@ -6,6 +6,8 @@ namespace StaticResources
 	HRESULT create();
 	void destroy();
 
+	HRESULT createLayout( const std::vector<uint8_t>& dxbc );
+
 	extern CComPtr<ID3D11VertexShader> fullScreenTriangle;
 	extern CComPtr<ID3D11PixelShader> copyTexture;
 	extern CComPtr<ID3D11PixelShader> pointSprite;
@@ -15,7 +17,7 @@ namespace StaticResources
 
 	extern CComPtr<ID3D11ShaderResourceView> blackTexture;
 
-	// extern CComPtr<ID3D11InputLayout> layoutPos2Tc2;
+	extern CComPtr<ID3D11InputLayout> layoutPos2Tc2;
 
 	extern SourceData sourceData;
 };

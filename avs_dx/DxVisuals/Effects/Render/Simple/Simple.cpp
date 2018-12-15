@@ -32,7 +32,7 @@ HRESULT SimpleBase::StateData::update( const AvsState& ass )
 	return S_OK;
 }
 
-HRESULT DotsRendering::CsData::updateValues( const AvsState& ass, int stateOffset )
+HRESULT DotsRendering::CsData::updateAvs( const AvsState& ass )
 {
 	if( ass.effect == m_effect )
 		return S_FALSE;
@@ -59,13 +59,13 @@ HRESULT Simple::render( RenderTargets& rt )
 	renderer.bindShaders();
 
 	// Calculate dots positions, with the CS
-	const UINT uavSlot = renderer.data<eStage::Compute>().bindDotsPosition;
+	const UINT uavSlot = renderer.compute().bindDotsPosition;
 	bindUav( uavSlot, dotsBuffer.uav() );
 	context->Dispatch( 3, 1, 1 );
 	bindUav( uavSlot );
 
 	// Render the sprites
-	const UINT srvSlot = renderer.data<eStage::Vertex>().bindDots;
+	const UINT srvSlot = renderer.vertex().bindDots;
 	bindResource<eStage::Vertex>( srvSlot, dotsBuffer.srv() );
 	iaClearBuffers();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_POINTLIST );

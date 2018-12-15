@@ -3,15 +3,11 @@
 
 namespace Hlsl
 {
+	// A base structure for effect's stage data.
 	template<eStage stage>
 	struct ShaderBaseStruct
 	{
 		ShaderBaseStruct() = default;
 		ShaderBaseStruct( const ShaderBaseStruct& ) = delete;
-		bool updateBindings( Binder& binder ) { return false; }
-		template<class TAvx>
-		HRESULT update( const TAvx& a ) { return S_FALSE; }
-		template<class TAvx>
-		HRESULT defines( const TAvx& a ) { return S_FALSE; }
 	};
 }

@@ -36,6 +36,7 @@ extern CComPtr<ID3D11DeviceContext> context;
 #include "Utils/logger.h"
 
 #include "Utils/MiscUtils.h"
+#include "Utils/BoolHr.hpp"
 #include "Resources/bindResource.h"
 
 using CSLock = CComCritSecLock<CComAutoCriticalSection>;

@@ -40,16 +40,12 @@ private:
 		return m_stateData.defines( ess.values );
 	}
 
-protected:
-
 	HRESULT updateParameters( Binder& binder ) override
 	{
-		const bool changedBindings = renderer.updateBindings( binder );
-		const HRESULT hr = renderer.updateValues( *avs );
-		CHECK( hr );
-		const bool changedData = ( hr != S_FALSE );
-		const bool changedSomething = changedBindings || changedData;
-		if( !changedSomething )
+		BoolHr hr = renderer.update( binder, *avs, m_stateData );
+		if( hr.failed() )
+			return hr;
+		if( !hr.value() )
 			return S_FALSE;
 
 		const CAtlMap<CStringA, CStringA>* pIncludes = &::Hlsl::includes();

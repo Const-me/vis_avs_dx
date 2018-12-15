@@ -61,14 +61,10 @@ private:
 
 	HRESULT apply( tFunc fn )
 	{
-		HRESULT res = S_FALSE;
+		BoolHr hr;
 		for( auto p : m_effects )
-		{
-			const HRESULT hr = fn( *p );
-			CHECK( hr );
-			res = hr_or( res, hr );
-		}
-		return res;
+			hr.combine( fn( *p ) );
+		return hr;
 	}
 
 protected:

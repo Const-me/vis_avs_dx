@@ -16,7 +16,7 @@ HRESULT Starfield::initializedState()
 	// Compile & run stars initial update shader
 	Shader<eStage::Compute, StarInitCS> initShader;
 	Binder b;
-	initShader.updateBindings( b );
+	CHECK( initShader.update( b, nullptr, nullptr ) );
 	CHECK( initShader.compile( effectIncludes(), stateOffset() ) );
 
 	initShader.bind();
@@ -42,13 +42,13 @@ HRESULT Starfield::render( RenderTargets& rt )
 	renderer.bindShaders();
 
 	// Calculate dots positions, with the CS
-	const UINT uavSlot = renderer.data<eStage::Compute>().bindStarsPosition;
+	const UINT uavSlot = renderer.compute().bindStarsPosition;
 	bindUav( uavSlot, starsBuffer.uav() );
 	context->Dispatch( nThreadGroups, 1, 1 );
 	bindUav( uavSlot );
 
 	// Render the sprites
-	const UINT srvSlot = renderer.data<eStage::Vertex>().bindStarsPosition;
+	const UINT srvSlot = renderer.vertex().bindStarsPosition;
 	bindResource<eStage::Vertex>( srvSlot, starsBuffer.srv() );
 	iaClearBuffers();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_POINTLIST );

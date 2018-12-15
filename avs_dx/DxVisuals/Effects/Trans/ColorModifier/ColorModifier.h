@@ -40,16 +40,18 @@ struct ColorModifierStructs
 	{
 		StateData( AvsState& ass );
 
-		HRESULT update( AvsState& ass )
+		HRESULT update( AvsState& avs )
 		{
-			return hr_or( Compiler::update( ass.effect_exp ), updateInputs( ass ) );
+			BoolHr hr = Compiler::update( avs.effect_exp );
+			hr.combine( updateInputs( avs ) );
+			return hr;
 		}
 
 		HRESULT defines( Hlsl::Defines& def ) const;
 
 	private:
 		CSize screenSize;
-		HRESULT updateInputs( const AvsState& ass );
+		HRESULT updateInputs( const AvsState& avs );
 	};
 };
 

@@ -121,6 +121,7 @@
     <ClInclude Include="Resources\RenderTargets.h" />
     <ClInclude Include="Resources\StructureBuffer.h" />
     <ClInclude Include="Render\StateShaders.h" />
+    <ClInclude Include="Utils\BoolHr.hpp" />
     <ClInclude Include="Utils\preciseTickCount.h" />
     <ClInclude Include="Resources\EffectsState.h" />
     <ClInclude Include="Render\Binder.h" />

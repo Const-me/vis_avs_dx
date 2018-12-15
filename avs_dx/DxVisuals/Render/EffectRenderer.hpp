@@ -13,6 +13,12 @@ public:
 			logError( "Static shader constructed without the shader" );
 	}
 
+	const bool data()
+	{
+		static_assert( false, "That shader is static, it has no data" );
+		return false;
+	};
+
 	void bind() const
 	{
 		bindShader<stage>( m_shader );
@@ -23,6 +29,12 @@ template<eStage stage>
 struct NoShader
 {
 	NoShader( bool unused ) { }
+
+	const bool data()
+	{
+		static_assert( false, "The effect has no shader for that pipeline stage" );
+		return false;
+	};
 
 	void bind() const
 	{
@@ -37,68 +49,56 @@ class EffectRenderer
 {
 public:
 	static constexpr std::array<eShaderKind, 4> shaderKinds = { computeShaderKind<FxDef>(), vertexShaderKind<FxDef>(), geometryShaderKind<FxDef>(), pixelShaderKind<FxDef>() };
+	// AVS native state
 	using tAvxState = typename FxDef::AvsState;
+	// DX effect's state
+	using tDxState = typename FxDef::StateData;
 
 	EffectRenderer() :
 		m_shaders{ tHelper<eStage::Compute>::ctorArg(), tHelper<eStage::Vertex>::ctorArg(), tHelper<eStage::Geometry>::ctorArg(), tHelper<eStage::Pixel>::ctorArg() }
 	{ }
 
-	bool updateBindings( Binder& binder )
+	// If this effect has no dynamic shader stages, just return S_FALSE. Otherwise, call updateBindings(), updateAvs() and updateDx() methods on the state object, and combine the results.
+	HRESULT update( Binder& binder, const tAvxState& avs, const tDxState& dx )
 	{
-		bool res = false;
-		forEachDynStage( [ & ]( auto& p )
+		return forEachDynStage( [ & ]( auto& p )
 		{
-			const bool changedBindings = p.updateBindings( binder );
-			res = res || changedBindings;
+			return p.update( binder, avs, dx );
 		} );
-		return res;
-	}
-
-	HRESULT updateValues( const tAvxState& ass )
-	{
-		HRESULT res = S_FALSE;
-		forEachDynStage( [ & ]( auto& p )
-		{
-			res = hr_or( res, p.updateValues( ass ) );
-		} );
-		return res;
 	}
 
 	HRESULT compileShaders( const CAtlMap<CStringA, CStringA>& inc, UINT stateOffset )
 	{
-		HRESULT res = S_FALSE;
-		forEachDynStage( [ & ]( auto& p )
+		return forEachDynStage( [ & ]( auto& p )
 		{
-			const HRESULT hr = p.compile( inc, stateOffset );
-			if( FAILED( hr ) )
-			{
-				logError( hr, "Update failed" );
-				res = hr;
-				return;
-			}
-			if( S_FALSE != hr )
-				res = S_OK;
+			return p.compile( inc, stateOffset );
 		} );
-		return res;
+	}
+
+	// Compute shader source data
+	decltype( auto ) compute()
+	{
+		return std::get<0>( m_shaders ).data();
+	}
+	// Vertex shader source data
+	decltype( auto ) vertex()
+	{
+		return std::get<1>( m_shaders ).data();
+	}
+	// Geometry shader source data
+	decltype( auto ) geometry()
+	{
+		return std::get<2>( m_shaders ).data();
+	}
+	// Pixel shader source data
+	decltype( auto ) pixel()
+	{
+		return std::get<3>( m_shaders ).data();
 	}
 
 	void bindShaders()
 	{
 		forEachStage( []( auto& p ) { p.bind(); } );
-	}
-
-	template<eStage stage>
-	decltype( auto ) data() const
-	{
-		static_assert( shaderKinds[ (uint8_t)stage ] == eShaderKind::Dynamic, "Only dynamic shaders hold state data" );
-		return std::get<(uint8_t)stage>( m_shaders ).data();
-	}
-
-	template<eStage stage>
-	void dropShader()
-	{
-		static_assert( shaderKinds[ (uint8_t)stage ] == eShaderKind::Dynamic, "Only dynamic shaders can be dropped" );
-		std::get<(uint8_t)stage>( m_shaders ).dropShader();
 	}
 
 private:
@@ -119,15 +119,21 @@ private:
 	}
 
 	template<class Fn>
-	inline void forEachDynStage( Fn fn )
+	inline HRESULT forEachDynStage( Fn fn )
 	{
+		BoolHr hr;
 		if constexpr( shaderKinds[ 0 ] == eShaderKind::Dynamic )
-			fn( std::get<0>( m_shaders ) );
+			if( hr.combine( fn( std::get<0>( m_shaders ) ) ) )
+				return hr;
 		if constexpr( shaderKinds[ 1 ] == eShaderKind::Dynamic )
-			fn( std::get<1>( m_shaders ) );
+			if( hr.combine( fn( std::get<1>( m_shaders ) ) ) )
+				return hr;
 		if constexpr( shaderKinds[ 2 ] == eShaderKind::Dynamic )
-			fn( std::get<2>( m_shaders ) );
+			if( hr.combine( fn( std::get<2>( m_shaders ) ) ) )
+				return hr;
 		if constexpr( shaderKinds[ 3 ] == eShaderKind::Dynamic )
-			fn( std::get<3>( m_shaders ) );
+			if( hr.combine( fn( std::get<3>( m_shaders ) ) ) )
+				return hr;
+		return hr;
 	}
 };

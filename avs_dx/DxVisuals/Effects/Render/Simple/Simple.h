@@ -37,7 +37,7 @@ struct DotsRendering : public SimpleBase, public PointSpritesRender
 
 	public:
 
-		HRESULT updateValues( const AvsState& ass, int stateOffset );
+		HRESULT updateAvs( const AvsState& avs );
 	};
 
 	using VsData = SimpleDotsVS;

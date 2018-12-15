@@ -34,27 +34,15 @@ ColorModifierStructs::StateData::StateData( AvsState& ass ) :
 	Compiler( "ColorModifier", prototype() )
 { }
 
-
 ColorModifierStructs::PsData::PsData() :
 	m_template{ *ColorModifierPS::shaderTemplate() }
 {
 	m_hlsl = m_template.hlsl;
 }
 
-HRESULT ColorModifier::updateParameters( Binder& binder )
-{
-	const HRESULT hr = tBase::updateParameters( binder );
-	if( S_OK == hr )
-	{
-		// TODO: set new shader code for PS
-		// renderer.data<eStage::Pixel>().
-	}
-	return hr;
-}
-
 HRESULT ColorModifier::render( RenderTargets& rt )
 {
-	const UINT psReadSlot = renderer.data<eStage::Pixel>().bindPrevFrame;
+	const UINT psReadSlot = renderer.pixel().bindPrevFrame;
 	CHECK( rt.writeToNext( psReadSlot, false ) );
 
 	return E_NOTIMPL;

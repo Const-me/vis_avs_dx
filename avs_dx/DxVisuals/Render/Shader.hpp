@@ -11,20 +11,30 @@ template<eStage stage, class TSourceData>
 class Shader
 {
 public:
+	using tStageData = TSourceData;
 	Shader() = default;
 	Shader( bool unused ) { }
 
-	bool updateBindings( Binder& binder )
+	template<class TAvsState, class TDxEffectState>
+	HRESULT update( Binder& binder, const TAvsState& avs, const TDxEffectState& dx )
 	{
-		return m_source.updateBindings( binder );
-	}
-
-	template<class tAvxState>
-	HRESULT updateValues( const tAvxState& ass )
-	{
-		const HRESULT h1 = m_source.update( ass );
-		// return S_OK when update returnned S_OK, or when the shader is nullptr.
-		return hr_or( h1, result ? S_FALSE : S_OK );
+		BoolHr hr;
+		__if_exists( TSourceData::updateBindings )
+		{
+			if( hr.combine( m_sourceData.updateBindings( binder ) ) )
+				return hr;
+		}
+		__if_exists( TSourceData::updateAvs )
+		{
+			if( hr.combine( m_sourceData.updateAvs( avs ) ) )
+				return hr;
+		}
+		__if_exists( TSourceData::updateDx )
+		{
+			if( hr.combine( m_sourceData.updateDx( dx ) ) )
+				return hr;
+		}
+		return hr;
 	}
 
 	HRESULT compile( const CAtlMap<CStringA, CStringA>& inc, UINT stateOffset )
@@ -35,9 +45,12 @@ public:
 		// Generate preprocessor macro values, from the current copy of the state
 		Hlsl::Defines def;
 		def.set( "STATE_OFFSET", stateOffset * 4 );
-		CHECK( m_source.defines( def ) );
+		__if_exists( TSourceData::defines )
+		{
+			CHECK( m_sourceData.defines( def ) );
+		}
 
-		const ShaderTemplate& tmpl = *m_source.shaderTemplate();
+		const ShaderTemplate& tmpl = *m_sourceData.shaderTemplate();
 
 		// Compile HLSL into DXBC
 		std::vector<uint8_t> dxbc;
@@ -49,20 +62,29 @@ public:
 		return S_OK;
 	}
 
+	TSourceData& data() { return m_sourceData; }
+	const TSourceData& data() const { return m_sourceData; }
+
 	void bind() const
 	{
 		if( nullptr == result )
-			logWarning( "%s shader %s: binding shader that wasn't compiled", Hlsl::targetName( stage ), m_source.shaderTemplate()->name );
+			logWarning( "%s shader %s: binding shader that wasn't compiled", Hlsl::targetName( stage ), m_sourceData.shaderTemplate()->name );
 		bindShader<stage>( result );
 	}
-	const TSourceData& data() const { return m_source; }
 
+	// Check if this shader was compiled successfully.
+	bool hasShader() const
+	{
+		return nullptr != result;
+	}
+
+	// Drop the compiled shader
 	void dropShader()
 	{
 		result = nullptr;
 	}
 
 private:
-	TSourceData m_source;
+	TSourceData m_sourceData;
 	ShaderPtr<stage> result;
 };

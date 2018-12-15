@@ -1,3 +1,4 @@
+#include "VisCommon.fx"
 #ifndef AVS_SHADER
 #define SHADER_GLOBALS
 #define SHADER_CODE

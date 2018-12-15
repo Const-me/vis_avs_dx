@@ -1,6 +1,6 @@
 #pragma once
 #include "../../EffectImpl.hpp"
-#include "../../../Expressions/CompiledShader.hpp"
+#include "../../../Expressions/CompiledShader.h"
 
 using namespace Hlsl::Trans::ColorModifier;
 
@@ -35,16 +35,10 @@ struct ColorModifierStructs
 
 		HRESULT update( AvsState& avs )
 		{
-			BoolHr hr = Compiler::update( avs.effect_exp );
-			hr.combine( updateInputs( avs ) );
-			return hr;
+			return Compiler::update( avs.effect_exp );
 		}
 
 		HRESULT defines( Hlsl::Defines& def ) const;
-
-	private:
-		CSize screenSize;
-		HRESULT updateInputs( const AvsState& avs );
 	};
 };
 

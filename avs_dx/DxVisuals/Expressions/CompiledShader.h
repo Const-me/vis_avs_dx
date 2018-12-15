@@ -17,7 +17,12 @@ namespace Expressions
 
 		HRESULT updateDx( const Expressions::Compiler& compiler );
 
-		const ShaderTemplate* shaderTemplate();
+	protected:
+
+		const ShaderTemplate* compiledTemplate() const
+		{
+			return &m_template;
+		}
 	};
 
 	// A shader template with SHADER_GLOBALS & SHADER_CODE placeholder to be filled by the expression compiler.
@@ -26,5 +31,10 @@ namespace Expressions
 	{
 	public:
 		CompiledShader() : CompiledShaderBase( T::shaderTemplate() ) { }
+
+		const ShaderTemplate* shaderTemplate() const
+		{
+			return compiledTemplate();
+		}
 	};
 }

@@ -44,9 +44,7 @@ DynamicMovementStructs::StateData::StateData( AvsState& ass ):
 
 HRESULT DynamicMovementStructs::StateData::updateInputs( const AvsState& ass )
 {
-	HRESULT hr = S_FALSE;
-	updateInput( screenSize, getRenderSize(), hr );
-	return hr;
+	return updateInput( screenSize, getRenderSize() );
 }
 
 DynamicMovement::DynamicMovement( AvsState *pState ) :

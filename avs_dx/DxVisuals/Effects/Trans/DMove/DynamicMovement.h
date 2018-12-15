@@ -48,7 +48,7 @@ struct DynamicMovementStructs
 		HRESULT updateInputs( const AvsState& ass );
 	};
 
-	using VsData = DMoveVS;
+	using VsData = Expressions::CompiledShader<DMoveVS>;
 
 	using PsData = DMovePS;
 };

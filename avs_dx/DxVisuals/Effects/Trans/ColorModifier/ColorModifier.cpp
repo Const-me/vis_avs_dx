@@ -39,5 +39,10 @@ HRESULT ColorModifier::render( RenderTargets& rt )
 	const UINT psReadSlot = renderer.pixel().bindPrevFrame;
 	CHECK( rt.writeToNext( psReadSlot, false ) );
 
-	return E_NOTIMPL;
+	renderer.bindShaders();
+
+	iaClearBuffers();
+	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+	context->Draw( 3, 0 );
+	return S_OK;
 }

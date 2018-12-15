@@ -28,12 +28,12 @@ namespace Expressions
 
 	protected:
 		template<class T>
-		inline void updateInput( T& oldVal, const T& newVal, HRESULT& hr )
+		inline HRESULT updateInput( T& oldVal, const T& newVal )
 		{
 			if( oldVal == newVal )
-				return;
+				return S_FALSE;
 			oldVal = newVal;
-			hr = S_OK;
+			return S_OK;
 		}
 
 	private:

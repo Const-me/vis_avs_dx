@@ -17,7 +17,7 @@ namespace
 		}
 
 		const int sge = sg + macroGlobals.GetLength();
-		const int mce = sg + macroCode.GetLength();
+		const int mce = mc + macroCode.GetLength();
 
 		std::array<CStringA, 3> res;
 		res[ 0 ] = hlsl.Left( sg );
@@ -47,9 +47,4 @@ HRESULT CompiledShaderBase::updateDx( const Expressions::Compiler& compiler )
 	m_template.hlsl += fragmentCode;
 	m_template.hlsl = templatePieces[ 2 ];
 	return S_OK;
-}
-
-const ShaderTemplate* CompiledShaderBase::shaderTemplate()
-{
-	return &m_template;
 }

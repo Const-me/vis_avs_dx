@@ -55,6 +55,7 @@
     <ClInclude Include="Hlsl\ShaderBaseStruct.h" />
     <ClInclude Include="Utils\BoolHr.hpp" />
     <ClInclude Include="Expressions\CompiledShader.h" />
+    <ClInclude Include="Resources\GridMesh.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -91,6 +92,7 @@
     <ClCompile Include="Expressions\includeFunctions.cpp" />
     <ClCompile Include="Expressions\builtinFunctions.cpp" />
     <ClCompile Include="Expressions\CompiledShader.cpp" />
+    <ClCompile Include="Resources\GridMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

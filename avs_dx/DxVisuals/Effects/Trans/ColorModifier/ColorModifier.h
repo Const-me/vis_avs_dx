@@ -49,7 +49,5 @@ public:
 
 	const Metadata& metadata() override;
 
-	HRESULT updateParameters( Binder& binder ) override;
-
 	HRESULT render( RenderTargets& rt ) override;
 };

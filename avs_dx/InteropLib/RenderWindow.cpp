@@ -105,7 +105,7 @@ LRESULT RenderWindow::wmRender( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& h
 	// No need to lock because the reason why this code run is the rendering thread called SendMessage() API. That thread is now waiting for the result doing nothing.
 	logDebug( "WM_RENDER" );
 
-	const RenderTarget* pSource = (const RenderTarget*)( lParam );
+	const RenderTarget* pSource = (const RenderTarget*)( wParam );
 	HRESULT* pResult = (HRESULT*)lParam;
 
 	setShaders( StaticResources::fullScreenTriangle, nullptr, StaticResources::copyTexture );
@@ -116,6 +116,8 @@ LRESULT RenderWindow::wmRender( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& h
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	iaClearBuffers();
 	context->Draw( 3, 0 );
+
+	bindResource<eStage::Pixel>( 127 );
 
 	*pResult = m_swapChain->Present( 0, 0 );
 	return 0;

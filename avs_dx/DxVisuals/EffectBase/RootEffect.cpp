@@ -16,6 +16,8 @@ HRESULT RootEffect::renderRoot( char visdata[ 2 ][ 2 ][ 576 ], int isBeat )
 		// Upload visualization data to GPU
 		CHECK( StaticResources::sourceData.update( visdata, isBeat ) );
 
+		context->OMSetBlendState( StaticResources::blendPremultipliedAlpha, nullptr, 0xffffffff );
+
 		CHECK( renderEffects( 0 != isBeat ) );
 	}
 

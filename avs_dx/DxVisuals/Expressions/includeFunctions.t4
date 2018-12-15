@@ -23,7 +23,7 @@
 				throw new ArgumentException( "Error parsing function declaration.\n" + code );
 			retType = convertType( m.Groups[ 1 ].Value );
 			name = m.Groups[ 2 ].Value;
-			Console.WriteLine( "{0}) -> {1}", m.Groups[ 0 ].Value, retType );
+			Console.WriteLine( "{0} -> {1}", name, retType );
 		}
 
 		static string convertType( string hlsl )

@@ -79,6 +79,20 @@ inline float getosc( float band, float width, uint channel )
     return res / (float) count;
 }
 
+// Following functions are expanded from the corresponding $PI / $E / $PHI macros.
+inline float constantPi()
+{
+    return 3.141592653589793238;
+}
+inline float constantE()
+{
+    return 2.718281828459045235;
+}
+inline float constantGoldenRatio()
+{
+    return 1.618033988749894848;
+}
+
 [numthreads( 1, 1, 1 )]
 void main( uint3 DTid : SV_DispatchThreadID )
 {

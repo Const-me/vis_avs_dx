@@ -9,6 +9,8 @@ namespace Expressions
 
 	// If the expression is x=y, return the index of the '=' character, otherwise S_FALSE
 	HRESULT isAssign( const CStringA& expr, int& indEqual );
+
+	const char* expandDollarMacro( const CStringA& m );
 }
 
 HRESULT Expressions::removeComments( CStringA& code )
@@ -43,7 +45,35 @@ HRESULT Expressions::removeComments( CStringA& code )
 		code = code.Left( i ) + code.Mid( j + 1 );
 	}
 
+	// Couple of macros
+	for( int i = 0; true; )
+	{
+		i = code.Find( '$', i );
+		if( i < 0 )
+			break;
+		const int dollar = i;
+		for( i++; isalnum( code[ i ] ); i++ ) {}
+
+		const CStringA m = code.Mid( dollar + 1, i - dollar - 1 );
+		const char* v = expandDollarMacro( m );
+		if( nullptr == v )
+		{
+			logError( "Syntax error, unknown macro $%s", cstr( m ) );
+			return E_INVALIDARG;
+		}
+		code = code.Left( dollar ) + v + code.Mid( i );
+		i = dollar;
+	}
+
 	return S_OK;
+}
+
+const char* Expressions::expandDollarMacro( const CStringA& m )
+{
+	if( m == "PI" ) return "constantPi()";
+	if( m == "E" ) return "constantE()";
+	if( m == "PHI" ) return "constantGoldenRatio()";
+	return nullptr;
 }
 
 HRESULT Expressions::isAssign( const CStringA& expr, int& idx )

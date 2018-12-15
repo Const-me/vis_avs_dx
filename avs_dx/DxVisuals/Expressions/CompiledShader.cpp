@@ -41,10 +41,11 @@ HRESULT CompiledShaderBase::updateDx( const Expressions::Compiler& compiler )
 
 	fragmentCode = compiler.fragmentCode();
 	fragmentGlobals = compiler.fragmentGlobals();
+
 	m_template.hlsl = templatePieces[ 0 ];
 	m_template.hlsl += fragmentGlobals;
-	m_template.hlsl = templatePieces[ 1 ];
+	m_template.hlsl += templatePieces[ 1 ];
 	m_template.hlsl += fragmentCode;
-	m_template.hlsl = templatePieces[ 2 ];
+	m_template.hlsl += templatePieces[ 2 ];
 	return S_OK;
 }

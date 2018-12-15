@@ -31,8 +31,7 @@ HRESULT StarfieldStructs::VsData::update( const AvsState& ass )
 {
 	if( ass.color == m_color )
 		return S_FALSE;
-	starsColor.fromRgb( ass.color );
-	m_color = ass.color;
+	starsColor = float3FromColor( m_color = ass.color );
 	return S_OK;
 }
 

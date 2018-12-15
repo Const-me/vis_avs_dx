@@ -38,7 +38,7 @@ HRESULT DynamicMovementStructs::StateData::defines( Hlsl::Defines& def ) const
 	return S_OK;
 }
 
-DynamicMovementStructs::StateData::StateData( AvsState& ass ):
+DynamicMovementStructs::StateData::StateData( AvsState& ass ) :
 	Compiler( "DynamicMovement", prototype() )
 { }
 
@@ -50,6 +50,17 @@ HRESULT DynamicMovementStructs::StateData::updateInputs( const AvsState& ass )
 HRESULT DynamicMovementStructs::VsData::compiledShader( const std::vector<uint8_t>& dxbc )
 {
 	return StaticResources::createLayout( dxbc );
+}
+
+HRESULT DynamicMovementStructs::VsData::updateAvs( const AvsState & )
+{
+	const CSize rs = getRenderSize();
+	Vector2 diag{ (float)rs.cx, (float)rs.cy };
+	diag.Normalize();
+	if( scaleToUniform == diag )
+		return S_FALSE;
+	scaleToUniform = diag;
+	return S_OK;
 }
 
 DynamicMovement::DynamicMovement( AvsState *pState ) :

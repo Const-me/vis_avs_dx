@@ -75,7 +75,7 @@ inline float getosc( float band, float width, uint channel )
         float u = (float) x * ( 1.0 / 576.0 );
         res += texVisDataS8.Sample( sampleBilinear, float2( u, v ) );
     }
-    const uint count = ( rangeInt.y - rangeInt.x ) << 1;
+    const uint count = ( rangeInt.y - rangeInt.x ) * 2;
     return res / (float) count;
 }
 

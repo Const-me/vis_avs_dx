@@ -3,7 +3,11 @@
 #define SHADER_GLOBALS
 #define SHADER_CODE
 // Such scale so 
-static const float2 scaleToUniform = float2( 1, 1 );
+static const float2 scaleToUniform = float2( 1.0f, 1.0f );
+inline float constantPi()
+{
+    return 3.141592653589793238;
+}
 #endif
 SHADER_GLOBALS
 
@@ -25,7 +29,7 @@ sOutput main( sInput inputVertex )
     float y = inputVertex.pos.y;
     const float2 centered = scaleToUniform * inputVertex.pos;
     float d = length( centered );
-    float r = atan2( centered.y, centered.x ) + ( M_PI / 2 );
+    float r = atan2( centered.y, centered.x ) + ( constantPi() / 2 );
 
 	{
 SHADER_CODE

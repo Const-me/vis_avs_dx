@@ -52,6 +52,8 @@ struct DynamicMovementStructs
 	struct VsData : public Expressions::CompiledShader<DMoveVS>
 	{
 		static HRESULT compiledShader( const std::vector<uint8_t>& dxbc );
+
+		HRESULT updateAvs( const AvsState & );
 	};
 
 	using PsData = DMovePS;

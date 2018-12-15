@@ -2,7 +2,7 @@
 #ifndef AVS_SHADER
 #define BIND_DOTS_POSITIONS u4
 // <macro-resource name="bindDotsPosition" macro="BIND_DOTS_POSITIONS" type="uav" />
-static const float2 y1y2 = float2( -0.5, 0.5 );
+static const float2 y1y2 = float2( -0.5f, 0.5f );
 static const float sampleV = 0.75f;
 static const uint pointsCount = 768;
 #endif

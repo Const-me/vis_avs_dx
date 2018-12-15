@@ -179,9 +179,10 @@ HRESULT Compiler::allocVariables( const std::array<Assignments, 4>& parsed )
 		var.usedInState = 0 != ( usageMask & 0xE );
 		var.usedInFragment = 0 != ( usageMask & 1 );
 
-		if( var.usedInState && var.usedInFragment )
+		if( var.usedInState )
 		{
-			// Used in both state shader and fragment code: need to place in the state buffer
+			// Used in state shader, need to place that variable in the state buffer.
+			// TODO [low]: it's possible to slightly reduce the count of loads/stores by doing deeper analysis. Not doing that for now.
 			var.offset = m_stateSize;
 			m_stateSize++;
 		}

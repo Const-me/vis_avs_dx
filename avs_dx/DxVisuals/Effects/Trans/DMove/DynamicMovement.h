@@ -1,5 +1,6 @@
 #pragma once
 #include "../../EffectImpl.hpp"
+#include "../../../Expressions/CompiledShader.hpp"
 using namespace Hlsl::Trans::DMove;
 
 struct DynamicMovementStructs

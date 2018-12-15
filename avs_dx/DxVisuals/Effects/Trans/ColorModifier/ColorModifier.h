@@ -1,5 +1,7 @@
 #pragma once
 #include "../../EffectImpl.hpp"
+#include "../../../Expressions/CompiledShader.hpp"
+
 using namespace Hlsl::Trans::ColorModifier;
 
 struct ColorModifierStructs
@@ -25,16 +27,7 @@ struct ColorModifierStructs
 		return StaticResources::fullScreenTriangle;
 	}
 
-	struct PsData: public ColorModifierPS
-	{
-		PsData();
-
-		const ShaderTemplate* shaderTemplate() { return &m_template; }
-
-	private:
-		CStringA m_hlsl;
-		ShaderTemplate m_template;
-	};
+	using PsData = Expressions::CompiledShader<ColorModifierPS>;
 
 	struct StateData : public Expressions::Compiler
 	{

@@ -63,7 +63,10 @@ public:
 	{
 		return forEachDynStage( [ & ]( auto& p )
 		{
-			return p.update( binder, avs, dx );
+			const HRESULT hr = p.update( binder, avs, dx );
+			if( hr != S_FALSE )
+				p.dropShader();
+			return hr;
 		} );
 	}
 

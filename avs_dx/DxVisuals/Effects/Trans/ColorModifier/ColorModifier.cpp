@@ -34,12 +34,6 @@ ColorModifierStructs::StateData::StateData( AvsState& ass ) :
 	Compiler( "ColorModifier", prototype() )
 { }
 
-ColorModifierStructs::PsData::PsData() :
-	m_template{ *ColorModifierPS::shaderTemplate() }
-{
-	m_hlsl = m_template.hlsl;
-}
-
 HRESULT ColorModifier::render( RenderTargets& rt )
 {
 	const UINT psReadSlot = renderer.pixel().bindPrevFrame;

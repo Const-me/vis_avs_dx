@@ -54,6 +54,7 @@
     <ClInclude Include="Expressions\builtinFunctions.h" />
     <ClInclude Include="Hlsl\ShaderBaseStruct.h" />
     <ClInclude Include="Utils\BoolHr.hpp" />
+    <ClInclude Include="Expressions\CompiledShader.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

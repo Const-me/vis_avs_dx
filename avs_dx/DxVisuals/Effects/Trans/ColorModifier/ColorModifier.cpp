@@ -44,5 +44,7 @@ HRESULT ColorModifier::render( RenderTargets& rt )
 	iaClearBuffers();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	context->Draw( 3, 0 );
+
+	bindResource<eStage::Pixel>( psReadSlot );
 	return S_OK;
 }

@@ -83,5 +83,7 @@ HRESULT DynamicMovement::render( RenderTargets& rt )
 
 	renderer.bindShaders();
 	CHECK( m_mesh.draw() );
+
+	bindResource<eStage::Pixel>( psReadSlot );
 	return S_OK;
 }

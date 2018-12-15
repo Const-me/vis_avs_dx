@@ -17,8 +17,8 @@ struct sInput
 
 struct sOutput
 {
-    float4 pos : SV_Position;
     float2 tc : TEXCOORD0;
+    float4 pos : SV_Position;
 };
 
 sOutput main( sInput inputVertex )

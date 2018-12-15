@@ -51,8 +51,24 @@ inline void bindResource<eStage::Pixel>( UINT slot, ID3D11ShaderResourceView* sr
 	context->PSSetShaderResources( slot, 1, &srv );
 }
 
+inline void bindGlobalResource( UINT slot, ID3D11ShaderResourceView* srv = nullptr )
+{
+	bindResource<eStage::Compute>( slot, srv );
+	bindResource<eStage::Vertex>( slot, srv );
+	bindResource<eStage::Geometry>( slot, srv );
+	bindResource<eStage::Pixel>( slot, srv );
+}
+
 // UAVs are only supported by compute shaders
 inline void bindUav( UINT slot, ID3D11UnorderedAccessView* uav = nullptr )
 {
 	context->CSSetUnorderedAccessViews( slot, 1, &uav, nullptr );
+}
+
+inline void bindSampler( UINT slot, ID3D11SamplerState* s = nullptr )
+{
+	context->CSSetSamplers( slot, 1, &s );
+	context->VSSetSamplers( slot, 1, &s );
+	context->GSSetSamplers( slot, 1, &s );
+	context->PSSetSamplers( slot, 1, &s );
 }

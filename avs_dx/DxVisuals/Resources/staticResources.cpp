@@ -51,6 +51,14 @@ namespace StaticResources
 
 		CHECK( sourceData.create() );
 
+		// Bind them
+		sourceData.bind<eStage::Compute>();
+		sourceData.bind<eStage::Vertex>();
+		sourceData.bind<eStage::Geometry>();
+		sourceData.bind<eStage::Pixel>();
+
+		bindSampler( 0, sampleBilinear );
+
 		return S_OK;
 	}
 

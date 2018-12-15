@@ -4,7 +4,7 @@
 void iaSetBuffer( ID3D11Buffer* vb, UINT vbStride, ID3D11Buffer* ib, DXGI_FORMAT ibFormat )
 {
 	UINT off = 0;
-	context->IASetVertexBuffers( 0, 1, &ib, &vbStride, &off );
+	context->IASetVertexBuffers( 0, 1, &vb, &vbStride, &off );
 	context->IASetIndexBuffer( ib, ibFormat, 0 );
 }
 

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "GridMesh.h"
+#include "staticResources.h"
 
 //  x---x---x---x
 //  |\ / \ / \ /|
@@ -187,10 +188,11 @@ HRESULT GridMesh::create( const CSize& size )
 
 HRESULT GridMesh::draw() const
 {
-	if( nullptr == m_vb || nullptr == m_ib )
+	if( nullptr == m_vb || nullptr == m_ib || nullptr == StaticResources::layoutPos2Tc2 )
 		return E_POINTER;
 
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+	context->IASetInputLayout( StaticResources::layoutPos2Tc2 );
 	iaSetBuffer( m_vb, sizeof( sInput ), m_ib, DXGI_FORMAT_R16_UINT );
 	context->DrawIndexed( m_indexCount, 0, 0 );
 	return S_OK;

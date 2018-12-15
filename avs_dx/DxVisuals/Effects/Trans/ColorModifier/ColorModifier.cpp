@@ -24,7 +24,7 @@ namespace
 	}
 }
 
-HRESULT ColorModifierStructs::StateData::defines( Hlsl::Defines& def ) const
+HRESULT ColorModifierStructs::StateData::defines( Hlsl::Defines& def )
 {
 	def.set( "beat", "IS_BEAT" );
 	return S_OK;

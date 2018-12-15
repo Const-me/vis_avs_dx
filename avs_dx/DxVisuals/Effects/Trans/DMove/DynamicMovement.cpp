@@ -58,8 +58,19 @@ DynamicMovement::DynamicMovement( AvsState *pState ) :
 
 HRESULT DynamicMovement::render( RenderTargets& rt )
 {
+	if( !m_mesh )
+	{
+		const CSize rtSize = getRenderSize();
+		// TODO: use config values
+		const CSize gridSize = GridMesh::pickSize( rtSize, 32 );
+		CHECK( m_mesh.create( gridSize ) );
+	}
+	// TODO: drop mesh if resized
+
 	const UINT psReadSlot = renderer.pixel().bindPrevFrame;
 	CHECK( rt.blendToNext( psReadSlot ) );
 
-	return E_NOTIMPL; 
+	renderer.bindShaders();
+	CHECK( m_mesh.draw() );
+	return S_OK;
 }

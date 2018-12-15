@@ -78,3 +78,5 @@ inline float2 randomPos( inout uint rng_state )
     float2 res = float2( randf( rng_state ), randf( rng_state ) );
     return res * 2 - float2( 1, 1 );
 }
+
+#define M_PI 3.1415926535897932384626433832795

@@ -1,6 +1,7 @@
 #pragma once
 #include "../../EffectImpl.hpp"
 #include "../../../Expressions/CompiledShader.h"
+#include "../../../Resources/GridMesh.h"
 using namespace Hlsl::Trans::DMove;
 
 struct DynamicMovementStructs
@@ -50,7 +51,7 @@ struct DynamicMovementStructs
 
 	struct VsData : public Expressions::CompiledShader<DMoveVS>
 	{
-		HRESULT compiledShader( const std::vector<uint8_t>& dxbc );
+		static HRESULT compiledShader( const std::vector<uint8_t>& dxbc );
 	};
 
 	using PsData = DMovePS;
@@ -58,6 +59,8 @@ struct DynamicMovementStructs
 
 class DynamicMovement : public EffectBase1<DynamicMovementStructs>
 {
+	GridMesh m_mesh;
+
 public:
 	DynamicMovement( AvsState *pState );
 

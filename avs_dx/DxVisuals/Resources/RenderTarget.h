@@ -32,4 +32,6 @@ public:
 	void bindView( UINT slot = 0 ) const;
 
 	void copyTo( const RenderTarget& that ) const;
+
+	void swap( RenderTarget& rt );
 };

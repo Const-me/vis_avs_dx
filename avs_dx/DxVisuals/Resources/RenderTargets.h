@@ -28,4 +28,6 @@ public:
 	{
 		return m_targets[ m_lastTarget ];
 	}
+
+	void swapLast( RenderTarget& dest );
 };

@@ -56,3 +56,9 @@ HRESULT RenderTargets::blendToNext( UINT readPsSlot )
 	tRead.bindView( readPsSlot );
 	return S_OK;
 }
+
+void RenderTargets::swapLast( RenderTarget& dest )
+{
+	RenderTarget& t = m_targets[ m_lastTarget ];
+	t.swap( dest );
+}

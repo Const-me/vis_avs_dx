@@ -103,7 +103,7 @@ HRESULT RenderWindow::wmSize( UINT nType, CSize size )
 LRESULT RenderWindow::wmRender( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& handled )
 {
 	// No need to lock because the reason why this code run is the rendering thread called SendMessage() API. That thread is now waiting for the result doing nothing.
-	logDebug( "WM_RENDER" );
+	// logDebug( "WM_RENDER" );
 
 	const RenderTarget* pSource = (const RenderTarget*)( wParam );
 	HRESULT* pResult = (HRESULT*)lParam;

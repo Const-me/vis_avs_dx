@@ -490,7 +490,7 @@ static unsigned int WINAPI RenderThread( LPVOID a )
 		{
 			if( IsWindow( g_hwnd ) && !g_in_destroy ) DDraw_Enter( &w, &h, &fb, &fb2 );
 			else break;
-			if( fb && fb2 )
+			// if( fb && fb2 )
 			{
 				extern int g_dlg_w, g_dlg_h, g_dlg_fps;
 #ifdef LASER

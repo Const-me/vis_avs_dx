@@ -19,9 +19,7 @@ struct sOut
 [maxvertexcount( 4 )]
 void main( point sIn input[1], inout TriangleStream<sOut> output )
 {
-    // const float4 color = input[ 0 ].color;
-	// Debug code below: use white color
-    const float4 color = float4( 1, 1, 1, 1 );
+    const float4 color = input[ 0 ].color;
     const float4 pos = input[ 0 ].pos;
 
     [unroll]

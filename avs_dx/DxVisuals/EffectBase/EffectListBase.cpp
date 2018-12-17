@@ -5,7 +5,7 @@ EffectBase* EffectListBase::T_RenderListType::dxEffect() const
 {
 	if( !render->dxEffect )
 		return nullptr;
-	iEffect* p = render->dxEffect.get();
+	iRootEffect* p = render->dxEffect.get();
 	return static_cast<EffectBase*>( p );
 }
 

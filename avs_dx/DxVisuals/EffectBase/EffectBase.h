@@ -1,10 +1,10 @@
 #pragma once
-#include "../iEffect.h"
+#include "../iRootEffect.h"
 #include "../Render/EffectStateShader.hpp"
 class Binder;
 class RenderTargets;
 
-class EffectBase: public iEffect
+class EffectBase: public iRootEffect
 {
 public:
 	struct Metadata

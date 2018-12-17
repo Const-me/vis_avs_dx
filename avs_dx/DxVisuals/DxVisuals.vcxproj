@@ -115,7 +115,7 @@
     <ClInclude Include="Expressions\Prototype.h" />
     <ClInclude Include="Render\EffectStateShader.hpp" />
     <ClInclude Include="Render\Shader.hpp" />
-    <ClInclude Include="iEffect.h" />
+    <ClInclude Include="iRootEffect.h" />
     <ClInclude Include="Render\EffectRenderer.hpp" />
     <ClInclude Include="Hlsl\ShaderTemplate.h" />
     <ClInclude Include="Hlsl\StateShaderTemplate.h" />

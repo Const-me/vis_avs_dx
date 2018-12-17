@@ -21,7 +21,6 @@
     <ClInclude Include="EffectBase\EffectListBase.h" />
     <ClInclude Include="EffectBase\RootEffect.h" />
     <ClInclude Include="EffectBase\EffectList.h" />
-    <ClInclude Include="iEffect.h" />
     <ClInclude Include="Resources\EffectsState.h" />
     <ClInclude Include="Render\Stage.h" />
     <ClInclude Include="Hlsl\Defines.h" />
@@ -56,6 +55,7 @@
     <ClInclude Include="Utils\BoolHr.hpp" />
     <ClInclude Include="Expressions\CompiledShader.h" />
     <ClInclude Include="Resources\GridMesh.h" />
+    <ClInclude Include="iRootEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

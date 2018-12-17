@@ -20,7 +20,7 @@ public:
 
 	~EffectImpl() override = default;
 
-	static inline HRESULT create( void* pState, std::unique_ptr<iEffect>& res )
+	static inline HRESULT create( void* pState, std::unique_ptr<iRootEffect>& res )
 	{
 		using tImpl = EffectImpl<TEffect>;
 		res = std::make_unique<tImpl>( pState );
@@ -31,11 +31,11 @@ public:
 #define DECLARE_EFFECT( DX )                   \
 const Metadata& metadata() override;
 
-#define IMPLEMENT_EFFECT( DX, NATIVE )                                                     \
-class NATIVE;                                                                              \
-template<> HRESULT createDxEffect<NATIVE>( void* pState, std::unique_ptr<iEffect>& dest )  \
-{                                                                                          \
-	return EffectImpl<DX>::create( pState, dest );                                         \
-};                                                                                         \
-static const EffectBase::Metadata s_metadada{ #DX, false };                                \
+#define IMPLEMENT_EFFECT( DX, NATIVE )                                                         \
+class NATIVE;                                                                                  \
+template<> HRESULT createDxEffect<NATIVE>( void* pState, std::unique_ptr<iRootEffect>& dest )  \
+{                                                                                              \
+	return EffectImpl<DX>::create( pState, dest );                                             \
+};                                                                                             \
+static const EffectBase::Metadata s_metadada{ #DX, false };                                    \
 const EffectBase::Metadata& DX::metadata(){ return s_metadada; }

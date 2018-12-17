@@ -28,7 +28,7 @@ void main( in uint3 threadId : SV_DispatchThreadID )
     StarFormat s = stars[ id ];
 
     const float CurrentSpeed = stateFloat( 1 );
-    s.position.z -= s.speed * CurrentSpeed;
+    s.position.z -= s.speed * CurrentSpeed * ( 1.0 / 255 );
     if( isStarOk( s.position ) )
     {
         stars[ id ] = s;

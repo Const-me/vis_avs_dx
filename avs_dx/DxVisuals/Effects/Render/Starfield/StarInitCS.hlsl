@@ -15,6 +15,6 @@ void main( in uint3 threadId : SV_DispatchThreadID )
     StarFormat s;
     s.position.xy = randomPos( rng_state );
     s.position.z = randf( rng_state );
-    s.speed = ( randf( rng_state ) * 9 + 1 ) * 0.1;
+    s.speed = ( randf( rng_state ) * 8 + 2 ) * 0.1f;
     stars[ id ] = s;
 }

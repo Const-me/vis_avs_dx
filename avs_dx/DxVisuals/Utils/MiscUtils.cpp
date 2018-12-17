@@ -13,6 +13,7 @@ void iaClearBuffers()
 	ID3D11Buffer* const buffers[ D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ] = {};
 	UINT zeros[ D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ] = {};
 	context->IASetVertexBuffers( 0, D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT, buffers, zeros, zeros );
+	context->IASetInputLayout( nullptr );
 }
 
 void setMacro( std::vector<std::pair<CStringA, CStringA>> &macros, const CStringA& key, const CStringA& value )

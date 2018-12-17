@@ -26,8 +26,14 @@ HRESULT RootEffect::renderRoot( bool isBeat, RenderTargets& rt )
 
 	// Run a state update shader
 	context->CSSetShader( isBeat ? m_stateShaders.updateOnBeat : m_stateShaders.update, nullptr, 0 );
+
+	bindGlobalResource( 2 );
 	bindUav( 0, m_state.uav() );
+
 	context->Dispatch( 1, 1, 1 );
+
+	bindUav( 0 );
+	bindGlobalResource( 2, m_state.srv() );
 
 	CHECK( rt.writeToLast( clearfb() ) );
 
@@ -69,9 +75,12 @@ HRESULT RootEffect::buildState()
 
 	// Run state init shader
 	bindShader<eStage::Compute>( m_stateShaders.init );
+	bindGlobalResource( 2 );
 	bindUav( 0, m_state.uav() );
-	StaticResources::sourceData.bind<eStage::Compute>();
 	context->Dispatch( 1, 1, 1 );
+
+	bindUav( 0 );
+	bindGlobalResource( 2, m_state.srv() );
 
 	// Invoke initializedState() method for all effects
 	hr = applyRecursively( [ & ]( EffectBase& e ) { return e.initializedState(); } );

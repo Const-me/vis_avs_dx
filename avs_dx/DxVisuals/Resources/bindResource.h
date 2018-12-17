@@ -51,6 +51,7 @@ inline void bindResource<eStage::Pixel>( UINT slot, ID3D11ShaderResourceView* sr
 	context->PSSetShaderResources( slot, 1, &srv );
 }
 
+// Bind the resource to the same slot to all 4 stages
 inline void bindGlobalResource( UINT slot, ID3D11ShaderResourceView* srv = nullptr )
 {
 	bindResource<eStage::Compute>( slot, srv );

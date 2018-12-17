@@ -17,7 +17,10 @@ void main( in uint3 threadId : SV_DispatchThreadID )
     const float f = (float)id;
     const float countInv = ( 1.0 / pointsCount );
     const float2 samplePos = float2( ( f + 0.5f ) * countInv, sampleV );
-    float val = sampleVisData( samplePos, ( sampleV > 0.5 ) );
+    const bool isWaveform = ( sampleV > 0.5 );
+    float val = sampleVisData( samplePos, isWaveform );
+    if( isWaveform )
+        val = ( val + 1 ) * 0.5;
 
     float2 pos;
     pos.x = lerp( -1, 1, f * countInv );

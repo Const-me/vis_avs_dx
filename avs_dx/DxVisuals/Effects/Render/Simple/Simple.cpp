@@ -7,7 +7,7 @@ namespace
 {
 	eSource source( int effect )
 	{
-		return ( effect & 3 ) > 1 ? eSource::Spectrum : eSource::Wave;
+		return ( effect & 2 ) ? eSource::Wave : eSource::Spectrum;
 	}
 
 	eChannel channel( int effect )

@@ -70,7 +70,8 @@ inline uint rand_xorshift( inout uint rng_state )
 
 inline float randf( inout uint rng_state )
 {
-    return float( rand_xorshift( rng_state ) ) * ( 1.0 / 4294967296.0 );
+    const uint r = rand_xorshift( rng_state );
+    return float( r ) * ( 1.0 / 4294967296.0 );
 }
 
 // Random 2D position in clip space i.e. within [ -1 .. +1 ] interval

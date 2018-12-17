@@ -6,6 +6,14 @@
 #endif
 RWStructuredBuffer<StarFormat> stars : register(BIND_STARS_POSITIONS);
 
+inline bool isStarOk(float3 pos)
+{
+	if( pos.z <= 0 )
+        return false;
+    const float2 p2 = abs( pos.xy / pos.z );
+    return p2.x < 1 && p2.y < 1;
+}
+
 inline void createStar( uint id, inout StarFormat s )
 {
     uint rng_state = srand( id );
@@ -21,13 +29,12 @@ void main( in uint3 threadId : SV_DispatchThreadID )
 
     const float CurrentSpeed = stateFloat( 1 );
     s.position.z -= s.speed * CurrentSpeed;
-    if( s.position.z <= 0 )
-        createStar( id, s );
-    else
+    if( isStarOk( s.position ) )
     {
-        const float2 pos = s.position.xy / s.position.z;
-        if( pos.x < -1 || pos.y < -1 || pos.x > 1 || pos.y > 1 )
-            createStar( id, s );
+        stars[ id ] = s;
+        return;
     }
+
+    createStar( id, s );
     stars[ id ] = s;
 }

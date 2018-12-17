@@ -10,7 +10,7 @@ RWStructuredBuffer<StarFormat> stars : register(BIND_STARS_POSITIONS);
 void main( in uint3 threadId : SV_DispatchThreadID )
 {
     const uint id = threadId.x;
-    uint rng_state = srand( id );
+    uint rng_state = srand( ~id );
 
     StarFormat s;
     s.position.xy = randomPos( rng_state );

@@ -34,9 +34,9 @@ HRESULT Transition::renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, iRo
 	{
 		CSLock __lock( renderLock );
 		CHECK( prepare( visdata, isBeat ) );
-	}
 
-	CHECK( e.renderRoot( 0 != isBeat, m_targets1 ) );
+		CHECK( e.renderRoot( 0 != isBeat, m_targets1 ) );
+	}
 
 	CHECK( present( m_targets1.lastWritten() ) );
 
@@ -48,12 +48,12 @@ HRESULT Transition::renderTransition( char visdata[ 2 ][ 2 ][ 576 ], int isBeat,
 	{
 		CSLock __lock( renderLock );
 		CHECK( prepare( visdata, isBeat ) );
+
+		const bool beat = 0 != isBeat;
+
+		CHECK( e1.renderRoot( beat, m_targets1 ) );
+		CHECK( e2.renderRoot( beat, m_targets2 ) );
 	}
-
-	const bool beat = 0 != isBeat;
-
-	CHECK( e1.renderRoot( beat, m_targets1 ) );
-	CHECK( e2.renderRoot( beat, m_targets2 ) );
 
 	// TODO: implement the transition
 	return E_NOTIMPL;

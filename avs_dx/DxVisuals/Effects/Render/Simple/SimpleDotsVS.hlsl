@@ -16,7 +16,7 @@ struct SimpleVertex
 SimpleVertex main( uint id : SV_VertexID )
 {
     SimpleVertex r;
-    r.pos = float4( positiions[ id ], 0, 1 );
+    r.pos = float4( positiions[ id ], 0.5, 1 );
     r.color = float4( stateFloat3( 1 ), 1 );
     return r;
 }

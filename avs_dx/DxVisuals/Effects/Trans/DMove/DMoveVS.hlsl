@@ -35,7 +35,7 @@ SHADER_CODE
 
     sOutput res;
     if( rectangularCoords )
-        res.pos = float4( x, y, 0, 1 );
+        res.pos = float4( x, y, 0.5, 1 );
     else
     {
         r -= ( M_PI / 2 );
@@ -43,7 +43,7 @@ SHADER_CODE
         sincos( r, resultVec.y, resultVec.x );
         resultVec *= d;
         resultVec *= ( float2( 1, 1 ) / scaleToUniform );
-        res.pos = float4( resultVec, 0, 1 );
+        res.pos = float4( resultVec, 0.5, 1 );
     }
     res.tc = inputVertex.tc;
     return res;

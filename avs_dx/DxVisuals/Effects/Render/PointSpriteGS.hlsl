@@ -19,14 +19,16 @@ struct sOut
 [maxvertexcount( 4 )]
 void main( point sIn input[1], inout TriangleStream<sOut> output )
 {
-    const float4 color = input[ 0 ].color;
+    // const float4 color = input[ 0 ].color;
+	// Debug code below: use white color
+    const float4 color = float4( 1, 1, 1, 1 );
     const float4 pos = input[ 0 ].pos;
 
     [unroll]
 	for( int i = 0; i < 4; i++ )
     {
-        const float x = ( i & 1 ) * 2 - 1;
-        const float y = ( i & 2 ) - 1;
+        const float x = ( i & 1 ) * 2.0 - 1.0;
+        const float y = 1.0 - ( i & 2 );
         sOut r;
         r.pos = pos;
         r.pos.xy += float2( x, y ) * sizeInClipSpace;

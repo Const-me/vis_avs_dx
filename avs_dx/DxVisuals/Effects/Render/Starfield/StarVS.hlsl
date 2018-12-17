@@ -18,7 +18,7 @@ SimpleVertex main( uint id : SV_VertexID )
 {
     StarFormat s = stars[ id ];
     SimpleVertex r;
-    r.pos = float4( s.position.xy, 0, 1 );
+    r.pos = float4( s.position.xy, 0.5, 1 );
     const float c = ( 1.0 - s.position.z ) * s.speed;
     r.color = float4( starsColor * c, 1 );
     return r;

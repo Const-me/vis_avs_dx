@@ -67,7 +67,7 @@ namespace
 			r.pos.x = (float)( x * mulx * 2.0 - 1.0 );
 			r.pos.y = (float)( y * muly * 2.0 - 1.0 );
 			r.tc.x = (float)( x * mulx );
-			r.tc.y = (float)( y * muly );
+			r.tc.y = (float)( 1.0 - y * muly );
 			return r;
 		}
 
@@ -85,7 +85,7 @@ namespace
 			r.pos.x = (float)( xx * 2.0 - 1.0 );
 			r.pos.y = (float)( y * muly * 2.0 - 1.0 );
 			r.tc.x = (float)( x * mulx );
-			r.tc.y = (float)( y * muly );
+			r.tc.y = (float)( 1.0 - y * muly );
 			return r;
 		}
 	};

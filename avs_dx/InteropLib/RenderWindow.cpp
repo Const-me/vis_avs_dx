@@ -108,6 +108,15 @@ LRESULT RenderWindow::wmRender( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& h
 	const RenderTarget* pSource = (const RenderTarget*)( wParam );
 	HRESULT* pResult = (HRESULT*)lParam;
 
+	if( false )
+	{
+		// Debug code: just clear the RT
+		const float rgba[4] = { 0,1,0,1 };
+		context->ClearRenderTargetView( m_rtv, rgba );
+		*pResult = m_swapChain->Present( 0, 0 );
+		return 0;
+	}
+
 	setShaders( StaticResources::fullScreenTriangle, nullptr, StaticResources::copyTexture );
 	omSetTarget( m_rtv );
 	context->OMSetBlendState( nullptr, nullptr, 0xffffffff );

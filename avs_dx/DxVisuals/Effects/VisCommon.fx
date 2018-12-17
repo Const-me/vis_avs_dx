@@ -3,6 +3,7 @@
 // Texture of size 576 * 4, signed bytes i.e. DXGI_FORMAT_R8_SNORM
 // First two lines are spectrum, left/right channel, second two lines are wave.
 // Y texture coordinates: 0.125 left channel spectrum, 0.25 center channel spectrum, 0.375 right channel spectrum, 0.625 left channel waveform, 0.75 center channel waveform, 0.875 right channel waveform
+// Both views below reference the same texture.
 Texture2D<float> texVisDataU8 : register(t0);
 Texture2D<float> texVisDataS8 : register(t1);
 

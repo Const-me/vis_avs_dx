@@ -1,3 +1,4 @@
+// State shaders use special path in compile-time preprocessor, only the content of the main() is included in the DLL.
 #define STATE_OFFSET 7
 #define IS_BEAT 1
 #define INIT_STATE  0

@@ -17,9 +17,9 @@ SamplerState sampleBilinear : register(s0);
 inline float sampleVisData( float2 samplePos, bool waveform )
 {
     if( waveform )
-        return texVisDataS8.Sample( sampleBilinear, samplePos );
+        return texVisDataS8.SampleLevel( sampleBilinear, samplePos, 0 );
     else
-        return texVisDataU8.Sample( sampleBilinear, samplePos );
+        return texVisDataU8.SampleLevel( sampleBilinear, samplePos, 0 );
 }
 
 inline uint stateUint( int i )

@@ -21,6 +21,6 @@ void main( in uint3 threadId : SV_DispatchThreadID )
 
     float2 pos;
     pos.x = lerp( -1, 1, f * countInv );
-    pos.y = lerp( y1y2.x, y1y2.y, f * countInv );
+    pos.y = lerp( y1y2.x, y1y2.y, val );
     dots[ id ] = pos;
 }

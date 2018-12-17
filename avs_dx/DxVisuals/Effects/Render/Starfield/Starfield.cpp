@@ -40,7 +40,7 @@ HRESULT Starfield::render( RenderTargets& rt )
 	CHECK( rt.writeToLast( false ) );
 	renderer.bindShaders();
 
-	// Calculate dots positions, with the CS
+	// Calculate dots positions with the CS
 	const UINT uavSlot = renderer.compute().bindStarsPosition;
 	bindUav( uavSlot, starsBuffer.uav() );
 	context->Dispatch( nThreadGroups, 1, 1 );

@@ -71,12 +71,16 @@
     <ClInclude Include="windowProc.h" />
     <ClInclude Include="effectsFactory.h" />
     <ClInclude Include="interop.h" />
+    <ClInclude Include="drawDx.h" />
+    <ClInclude Include="avsUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="ConsoleLogger.cpp" />
     <ClCompile Include="WindowImpl.cpp" />
+    <ClCompile Include="draw.cpp" />
+    <ClCompile Include="avsUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

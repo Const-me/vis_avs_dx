@@ -274,7 +274,6 @@
     </ClCompile>
     <ClCompile Include="bpm.cpp" />
     <ClCompile Include="cfgwin.cpp" />
-    <ClCompile Include="draw.cpp" />
     <ClCompile Include="laser\laser.cpp" />
     <ClCompile Include="laser\laserline.cpp" />
     <ClCompile Include="laser\ld32.c" />

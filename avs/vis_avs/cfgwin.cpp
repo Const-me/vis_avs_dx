@@ -41,6 +41,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "bpm.h"
 #include "avs_eelif.h"
 #include "undo.h"
+#include "../../avs_dx/InteropLib/drawDx.h"
 
 #ifdef LASER
 extern "C" {
@@ -81,6 +82,7 @@ cfg_fs_flip = 6,
 cfg_fs_flip = 0,
 #endif
 cfg_fs_height = 80, cfg_speed = 5, cfg_fs_rnd_time = 10, cfg_fs_use_overlay = 0;
+CStringA cfg_fs_monitor;
 int cfg_trans = 0, cfg_trans_amount = 128;
 int cfg_dont_min_avs = 0;
 int cfg_transitions = 4;
@@ -598,16 +600,16 @@ static BOOL CALLBACK DlgProc_FS( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 	{
 		int l;
 		DDraw_EnumDispModes( GetDlgItem( hwndDlg, IDC_COMBO1 ) );
-		l = SendDlgItemMessage( hwndDlg, IDC_COMBO1, CB_GETCOUNT, 0, 0 );
+		l = SendDlgItemMessageA( hwndDlg, IDC_COMBO1, CB_GETCOUNT, 0, 0 );
 		if( l < 1 || l == CB_ERR )
 		{
-			SendDlgItemMessage( hwndDlg, IDC_COMBO1, CB_ADDSTRING, 0, ( long )"no suitable modes found" );
-			SendDlgItemMessage( hwndDlg, IDC_COMBO1, CB_SETCURSEL, 0, 0 );
+			SendDlgItemMessageA( hwndDlg, IDC_COMBO1, CB_ADDSTRING, 0, ( LPARAM )"no monitors found" );
+			SendDlgItemMessageA( hwndDlg, IDC_COMBO1, CB_SETCURSEL, 0, 0 );
 		}
 		else
 		{
 			int x;
-			for( x = 0; x < l; x++ )
+			/* for( x = 0; x < l; x++ )
 			{
 				char b[ 256 ], *p = b;
 				SendDlgItemMessage( hwndDlg, IDC_COMBO1, CB_GETLBTEXT, x, (long)b );
@@ -620,6 +622,12 @@ static BOOL CALLBACK DlgProc_FS( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 				if( !*p ) continue;
 				bpp = atoi( ++p );
 				if( w == cfg_fs_w && h == cfg_fs_h && bpp == cfg_fs_bpp )
+					break;
+			} */
+			for( x = 0; x < l; x++ )
+			{
+				auto p = getDisplayInfo( x );
+				if( p && p->displayId == cfg_fs_monitor )
 					break;
 			}
 			if( x != l )
@@ -715,7 +723,8 @@ static BOOL CALLBACK DlgProc_FS( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 				char b[ 256 ], *p = b;
 				int l = SendDlgItemMessage( hwndDlg, IDC_COMBO1, CB_GETCURSEL, 0, 0 );
 				if( l == CB_ERR ) return 0;
-				SendDlgItemMessage( hwndDlg, IDC_COMBO1, CB_GETLBTEXT, l, (long)b );
+
+				/* SendDlgItemMessage( hwndDlg, IDC_COMBO1, CB_GETLBTEXT, l, (long)b );
 				int w, h;
 				while( *p >= '0' && *p <= '9' ) p++;
 				if( !*p ) return 0;
@@ -730,7 +739,15 @@ static BOOL CALLBACK DlgProc_FS( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 				if( w < 1 || h < 1 || bps < 1 ) return 0;
 				cfg_fs_h = h;
 				cfg_fs_w = w;
-				cfg_fs_bpp = bps;
+				cfg_fs_bpp = bps; */
+
+				auto pInfo = getDisplayInfo( l );
+				if( nullptr == pInfo )
+					return 0;
+				cfg_fs_w = pInfo->resolution.cx;
+				cfg_fs_h = pInfo->resolution.cy;
+				cfg_fs_bpp = pInfo->bitsPerPixel;
+				cfg_fs_monitor = pInfo->displayId;
 			}
 			return 0;
 		case IDC_USE_OVERLAY:

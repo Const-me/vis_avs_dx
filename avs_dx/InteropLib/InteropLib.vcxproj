@@ -83,6 +83,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="avsUtils.h" />
+    <ClInclude Include="drawDx.h" />
     <ClInclude Include="effectsFactory.h" />
     <ClInclude Include="interop.h" />
     <ClInclude Include="RenderWindow.h" />
@@ -110,7 +112,9 @@
     <ClInclude Include="windowProc.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="avsUtils.cpp" />
     <ClCompile Include="ConsoleLogger.cpp" />
+    <ClCompile Include="draw.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

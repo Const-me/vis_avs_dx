@@ -266,7 +266,7 @@ int C_RenderTransitionClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, 
 		memcpy( fbs[ ep[ 1 ] ], framebuffer, sizeof( int )*l_w*l_h );
 	}
 
-
+	/*
 	// maybe there's a faster way than using 3 more buffers without screwing
 	// any effect... justin ?
 	if( curtrans & 0x8000 )
@@ -276,14 +276,19 @@ int C_RenderTransitionClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, 
 	int *p = fbs[ ep[ 1 ] ];
 	int *d = fbs[ ep[ 0 ] ];
 	int *o = framebuffer;
-	int x = w * h;
+	int x = w * h; */
 
 	int ttime = 250 * cfg_transitions_speed;
 	if( ttime < 100 ) ttime = 100;
 
 	int n;
-	if( !start_time ) { n = 0; start_time = GetTickCount(); }
-	else n = MulDiv( GetTickCount() - start_time, 256, ttime );
+	if( !start_time )
+	{
+		n = 0;
+		start_time = GetTickCount();
+	}
+	else
+		n = MulDiv( GetTickCount() - start_time, 256, ttime );
 
 	if( n >= 255 ) n = 255;
 

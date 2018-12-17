@@ -41,6 +41,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <multimon.h>
 
 #include "avs_eelif.h"
+#include "../../avs_dx/InteropLib/avsUtils.h"
 
 #ifdef WA3_COMPONENT
 #include "wasabicfg.h"
@@ -291,7 +292,8 @@ void Wnd_GoWindowed( HWND hwnd )
 		SendMessage( g_mod->hwndParent, WM_WA_IPC, 0, IPC_SET_VIS_FS_FLAG );
 #endif
 #ifdef WA3_COMPONENT
-		DDraw_SetFullScreen( 0, cfg_w, cfg_h, cfg_fs_d & 2, 0 );
+		// DDraw_SetFullScreen( 0, cfg_w, cfg_h, cfg_fs_d & 2, 0 );
+		DDraw_SetFullScreenDx( 0, cfg_fs_monitor, cfg_fs_d & 2 );
 		if( last_parent )
 		{
 			ShowWindow( last_parent, SW_SHOWNA );
@@ -300,11 +302,13 @@ void Wnd_GoWindowed( HWND hwnd )
 		}
 		last_parent = 0;
 #elif !defined(WA2_EMBED)
-		DDraw_SetFullScreen( 0, cfg_w - 7 - 6, cfg_h - 15 - 5, cfg_fs_d & 2, 0 );
+		// DDraw_SetFullScreen( 0, cfg_w - 7 - 6, cfg_h - 15 - 5, cfg_fs_d & 2, 0 );
+		DDraw_SetFullScreenDx( 0, cfg_fs_monitor, cfg_fs_d & 2 );
 #else
 		SetParent( hwnd, myWindowState.me );
 		SetWindowLong( hwnd, GWL_STYLE, WS_VISIBLE | WS_CHILDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_OVERLAPPED );
-		DDraw_SetFullScreen( 0, last_windowed_w, last_windowed_h, cfg_fs_d & 2, 0 );
+		// DDraw_SetFullScreen( 0, last_windowed_w, last_windowed_h, cfg_fs_d & 2, 0 );
+		DDraw_SetFullScreenDx( 0, cfg_fs_monitor, cfg_fs_d & 2 );
 		HWND w = myWindowState.me;
 		while( GetWindowLong( w, GWL_STYLE ) & WS_CHILD ) w = GetParent( w );
 		ShowWindow( w, SW_SHOWNA );
@@ -349,12 +353,14 @@ void Wnd_GoFullScreen( HWND hwnd )
 		last_windowed_h = r.bottom;
 #endif
 
-		if( !DDraw_IsMode( cfg_fs_w, cfg_fs_h, cfg_fs_bpp ) )
+		/* if( !DDraw_IsMode( cfg_fs_w, cfg_fs_h, cfg_fs_bpp ) )
 		{
 			int DDraw_PickMode( int *w, int *h, int *bpp );
 			if( !DDraw_PickMode( &cfg_fs_w, &cfg_fs_h, &cfg_fs_bpp ) )
 				return;
-		}
+		} */
+		if( !DDraw_PickModeDx( cfg_fs_monitor, &cfg_fs_w, &cfg_fs_h, &cfg_fs_bpp ) )
+			return;
 
 		{
 #ifdef WA2_EMBED
@@ -386,7 +392,8 @@ void Wnd_GoFullScreen( HWND hwnd )
 				while( GetWindowLong( w, GWL_STYLE ) & WS_CHILD ) w = GetParent( w );
 				ShowWindow( w, SW_HIDE );
 #endif
-				DDraw_SetFullScreen( 1, cfg_fs_w, cfg_fs_h, cfg_fs_d & 1, cfg_fs_bpp );
+				// DDraw_SetFullScreen( 1, cfg_fs_w, cfg_fs_h, cfg_fs_d & 1, cfg_fs_bpp );
+				DDraw_SetFullScreenDx( 1, cfg_fs_monitor, cfg_fs_d & 1 );
 				RECT r;
 				my_getViewport( &r, &tr );
 				SetWindowPos( hwnd, HWND_TOPMOST, r.left, r.top, cfg_fs_w, cfg_fs_h, 0 );
@@ -401,7 +408,8 @@ void Wnd_GoFullScreen( HWND hwnd )
 				while( GetWindowLong( w, GWL_STYLE ) & WS_CHILD ) w = GetParent( w );
 				ShowWindow( w, SW_HIDE );
 #endif
-				DDraw_SetFullScreen( 1, cfg_fs_w, cfg_fs_h, cfg_fs_d & 1, 0 );
+				// DDraw_SetFullScreen( 1, cfg_fs_w, cfg_fs_h, cfg_fs_d & 1, 0 );
+				DDraw_SetFullScreenDx( 1, cfg_fs_monitor, cfg_fs_d & 1 );
 			}
 		}
 #if 0
@@ -477,6 +485,7 @@ int Wnd_Init( struct winampVisModule *this_mod )
 		cfg_fs_w = GetPrivateProfileInt( AVS_SECTION, "cfg_fs_w", cfg_fs_w, INI_FILE );
 		cfg_fs_h = GetPrivateProfileInt( AVS_SECTION, "cfg_fs_h", cfg_fs_h, INI_FILE );
 		cfg_fs_bpp = GetPrivateProfileInt( AVS_SECTION, "cfg_fs_bpp", cfg_fs_bpp, INI_FILE );
+		cfg_fs_monitor = getPrivateProfileString( AVS_SECTION, "cfg_fs_monitor", INI_FILE );
 		cfg_fs_d = GetPrivateProfileInt( AVS_SECTION, "cfg_fs_d", cfg_fs_d, INI_FILE );
 		cfg_fs_fps = GetPrivateProfileInt( AVS_SECTION, "cfg_fs_fps", 6, INI_FILE );
 		cfg_fs_rnd = GetPrivateProfileInt( AVS_SECTION, "cfg_fs_rnd", cfg_fs_rnd, INI_FILE );
@@ -653,6 +662,7 @@ void Wnd_Quit( void )
 		WriteInt( "cfg_fs_h", cfg_fs_h );
 		WriteInt( "cfg_fs_d", cfg_fs_d );
 		WriteInt( "cfg_fs_bpp", cfg_fs_bpp );
+		WritePrivateProfileString( AVS_SECTION, "cfg_fs_monitor", cfg_fs_monitor, INI_FILE );
 		WriteInt( "cfg_fs_fps", cfg_fs_fps );
 		WriteInt( "cfg_fs_rnd", cfg_fs_rnd );
 		WriteInt( "cfg_fs_rnd_time", cfg_fs_rnd_time );

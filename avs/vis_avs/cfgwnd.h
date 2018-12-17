@@ -27,6 +27,8 @@ IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISI
 OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+#include <atlstr.h>
+
 void CfgWnd_Create( struct winampVisModule *this_mod );
 void CfgWnd_Destroy( void );
 
@@ -35,6 +37,7 @@ void CfgWnd_Unpopulate( int force = 0 );
 void CfgWnd_RePopIfNeeded( void );
 
 extern int cfg_fs_w, cfg_fs_h, cfg_fs_d, cfg_fs_bpp, cfg_fs_fps, cfg_fs_rnd, cfg_fs_flip, cfg_fs_height, cfg_speed, cfg_fs_rnd_time;
+extern CStringA cfg_fs_monitor;
 extern int cfg_cfgwnd_x, cfg_cfgwnd_y, cfg_cfgwnd_open;
 extern int cfg_trans, cfg_trans_amount;
 extern int cfg_dont_min_avs;

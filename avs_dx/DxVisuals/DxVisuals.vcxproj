@@ -109,7 +109,7 @@
     <ClInclude Include="EffectBase\EffectList.h" />
     <ClInclude Include="Effects\EffectBase1.hpp" />
     <ClInclude Include="Effects\EffectImpl.hpp" />
-    <ClInclude Include="EffectBase\RootEffect.h" />
+    <ClInclude Include="RootEffect.h" />
     <ClInclude Include="Effects\Render\PointSpritesRender.hpp" />
     <ClInclude Include="Expressions\eVarType.h" />
     <ClInclude Include="Expressions\utils.hpp" />
@@ -163,7 +163,7 @@
     <ClCompile Include="Expressions\parse.cpp" />
     <ClCompile Include="Expressions\Compiler.cpp" />
     <ClCompile Include="EffectBase\EffectListBase.factory.cpp" />
-    <ClCompile Include="EffectBase\RootEffect.cpp" />
+    <ClCompile Include="RootEffect.cpp" />
     <ClCompile Include="Expressions\eVarType.cpp" />
     <ClCompile Include="Hlsl\Defines.cpp" />
     <ClCompile Include="Expressions\Prototype.cpp" />

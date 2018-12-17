@@ -1,8 +1,8 @@
 #pragma once
-#include "EffectListBase.h"
-#include "../Resources/RenderTargets.h"
-#include "../Resources/EffectsState.h"
-#include "../Render/StateShaders.h"
+#include "EffectBase/EffectListBase.h"
+#include "Resources/RenderTargets.h"
+#include "Resources/EffectsState.h"
+#include "Render/StateShaders.h"
 
 class RootEffect : public EffectListBase
 {

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "RootEffect.h"
+#include "../RootEffect.h"
 #include "EffectList.h"
 
 class C_RenderListClass;

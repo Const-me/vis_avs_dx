@@ -19,7 +19,6 @@
     <ClInclude Include="EffectBase\EffectBase.h" />
     <ClInclude Include="Effects\EffectImpl.hpp" />
     <ClInclude Include="EffectBase\EffectListBase.h" />
-    <ClInclude Include="EffectBase\RootEffect.h" />
     <ClInclude Include="EffectBase\EffectList.h" />
     <ClInclude Include="Resources\EffectsState.h" />
     <ClInclude Include="Render\Stage.h" />
@@ -58,6 +57,7 @@
     <ClInclude Include="iRootEffect.h" />
     <ClInclude Include="Transition.h" />
     <ClInclude Include="iTransition.h" />
+    <ClInclude Include="RootEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -72,7 +72,6 @@
     <ClCompile Include="Resources\SourceData.cpp" />
     <ClCompile Include="Utils\preciseTickCount.cpp" />
     <ClCompile Include="EffectBase\EffectListBase.cpp" />
-    <ClCompile Include="EffectBase\RootEffect.cpp" />
     <ClCompile Include="Utils\SimpleMath.cpp" />
     <ClCompile Include="Resources\EffectsState.cpp" />
     <ClCompile Include="Hlsl\Defines.cpp" />
@@ -96,6 +95,7 @@
     <ClCompile Include="Expressions\CompiledShader.cpp" />
     <ClCompile Include="Resources\GridMesh.cpp" />
     <ClCompile Include="Transition.cpp" />
+    <ClCompile Include="RootEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

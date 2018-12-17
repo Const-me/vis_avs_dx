@@ -6,20 +6,17 @@
 
 class RootEffect : public EffectListBase
 {
-	CSize m_renderSize;
-	RenderTargets m_targets;
-
 public:
-	RootEffect( AvsState* pState ) : EffectListBase( pState ), m_renderSize{ 0, 0 }{ }
+	RootEffect( AvsState* pState ) : EffectListBase( pState ){ }
 	const Metadata& metadata() override;
 
-	HRESULT renderRoot( char visdata[ 2 ][ 2 ][ 576 ], int isBeat ) override;
+	HRESULT renderRoot( bool isBeat, RenderTargets& rt ) override;
+
+	HRESULT clearRenders() override;
 
 private:
 	EffectsState m_state;
 	StateShaders m_stateShaders;
 
 	HRESULT buildState();
-
-	HRESULT renderEffects( bool isBeat );
 };

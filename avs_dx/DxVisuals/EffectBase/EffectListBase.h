@@ -96,4 +96,9 @@ protected:
 		}
 		return S_OK;
 	}
+
+	void clearEffects()
+	{
+		m_effects.clear();
+	}
 };

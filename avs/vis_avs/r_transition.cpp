@@ -70,6 +70,7 @@ C_RenderTransitionClass::C_RenderTransitionClass()
 	start_time = 0;
 	_dotransitionflag = 0;
 	initThread = 0;
+	createTransition( dxTransition );
 }
 
 C_RenderTransitionClass::~C_RenderTransitionClass()
@@ -241,7 +242,9 @@ int C_RenderTransitionClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, 
 			g_render_effects2->clearRenders();
 			g_render_effects2->freeBuffers();
 		}
-		return g_render_effects->render( visdata, isBeat, framebuffer, fbout, w, h );
+		// return g_render_effects->render( visdata, isBeat, framebuffer, fbout, w, h );
+		dxTransition->renderSingle( visdata, isBeat, *g_render_effects->dxEffect );
+		return 0;
 	}
 
 	// handle resize
@@ -285,9 +288,14 @@ int C_RenderTransitionClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, 
 	if( n >= 255 ) n = 255;
 
 	float sintrans = (float)( sin( ( (float)n / 255 )*PI - PI / 2 ) / 2 + 0.5 ); // used for smoothing transitions
-																															 // now sintrans does a smooth curve
-																															 // from 0 to 1
-	switch( curtrans & 0x7fff )
+	// now sintrans does a smooth curve from 0 to 1
+
+	if( curtrans & 0x8000 )
+		dxTransition->renderTransition( visdata, isBeat, *g_render_effects->dxEffect, *g_render_effects2->dxEffect, curtrans & 0x7fff, sintrans );
+	else
+		dxTransition->renderSingle( visdata, isBeat, *g_render_effects->dxEffect );
+
+	/* switch( curtrans & 0x7fff )
 	{
 	case 1: // Crossfade
 		mmx_adjblend_block( o, d, p, x, n );
@@ -518,7 +526,7 @@ int C_RenderTransitionClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, 
 	break;
 	default:
 		break;
-	}
+	} */
 
 	if( n == 255 )
 	{

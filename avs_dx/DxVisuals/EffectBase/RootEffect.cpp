@@ -8,36 +8,8 @@
 // The critical section that guards renderers, linked from deep inside AVS.
 extern CRITICAL_SECTION g_render_cs;
 
-HRESULT RootEffect::renderRoot( char visdata[ 2 ][ 2 ][ 576 ], int isBeat )
+HRESULT RootEffect::renderRoot( bool isBeat, RenderTargets& rt )
 {
-	{
-		CSLock __lock( renderLock );
-
-		// Upload visualization data to GPU
-		CHECK( StaticResources::sourceData.update( visdata, isBeat ) );
-
-		context->OMSetBlendState( StaticResources::blendPremultipliedAlpha, nullptr, 0xffffffff );
-
-		CHECK( renderEffects( 0 != isBeat ) );
-	}
-
-	CHECK( present( m_targets.lastWritten() ) );
-
-	return S_OK;
-}
-
-HRESULT RootEffect::renderEffects( bool isBeat )
-{
-	// Handle resize
-	{
-		const CSize currentSize = getRenderSize();
-		if( m_renderSize != currentSize )
-		{
-			m_targets.destroy();
-			m_renderSize = currentSize;
-		}
-	}
-
 	// Collect the effects in the local list
 	{
 		LockExternCs __lock{ g_render_cs };
@@ -57,10 +29,16 @@ HRESULT RootEffect::renderEffects( bool isBeat )
 	bindUav( 0, m_state.uav() );
 	context->Dispatch( 1, 1, 1 );
 
-	CHECK( m_targets.writeToLast( clearfb() ) );
+	CHECK( rt.writeToLast( clearfb() ) );
 
-	CHECK( render( m_targets ) );
+	CHECK( render( rt ) );
 
+	return S_OK;
+}
+
+HRESULT RootEffect::clearRenders()
+{
+	clearEffects();
 	return S_OK;
 }
 

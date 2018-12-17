@@ -353,13 +353,8 @@ static int __inline depthof( int c, int i )
 	return i ? 255 - r : r;
 }
 
-
-
 int C_RenderListClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
 {
-	if( isroot )
-		dxEffect->renderRoot( visdata, isBeat );
-
 	int is_preinit = ( isBeat & 0x80000000 );
 
 	if( isBeat && beat_render )
@@ -939,6 +934,7 @@ int C_RenderListClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *f
 		renders = NULL;
 		if( thisfb ) GlobalFree( (HGLOBAL)thisfb );
 		thisfb = 0;
+		dxEffect->clearRenders();
 	}
 
 	int C_RenderListClass::insertRenderBefore( T_RenderListType *r, T_RenderListType *before )

@@ -31,6 +31,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define _R_TRANSITION_H_
 
 #include "undo.h"
+#include "../../avs_dx/DxVisuals/iTransition.h"
 
 class C_RenderTransitionClass {
 protected:
@@ -46,6 +47,7 @@ protected:
 	char last_file[ MAX_PATH ];
 	int last_which;
 	int _dotransitionflag;
+	std::unique_ptr<iTransition> dxTransition;
 
 public:
 

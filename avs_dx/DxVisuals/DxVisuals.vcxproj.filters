@@ -56,6 +56,8 @@
     <ClInclude Include="Expressions\CompiledShader.h" />
     <ClInclude Include="Resources\GridMesh.h" />
     <ClInclude Include="iRootEffect.h" />
+    <ClInclude Include="Transition.h" />
+    <ClInclude Include="iTransition.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -93,6 +95,7 @@
     <ClCompile Include="Expressions\builtinFunctions.cpp" />
     <ClCompile Include="Expressions\CompiledShader.cpp" />
     <ClCompile Include="Resources\GridMesh.cpp" />
+    <ClCompile Include="Transition.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

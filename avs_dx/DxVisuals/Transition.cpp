@@ -38,7 +38,7 @@ HRESULT Transition::renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, iRo
 		CHECK( e.renderRoot( 0 != isBeat, m_targets1 ) );
 	}
 
-	CHECK( present( m_targets1.lastWritten() ) );
+	CHECK( presentSingle( m_targets1.lastWritten() ) );
 
 	return S_OK;
 }
@@ -55,6 +55,7 @@ HRESULT Transition::renderTransition( char visdata[ 2 ][ 2 ][ 576 ], int isBeat,
 		CHECK( e2.renderRoot( beat, m_targets2 ) );
 	}
 
-	// TODO: implement the transition
-	return E_NOTIMPL;
+	CHECK( presentTransition( m_targets1.lastWritten(), m_targets2.lastWritten(), trans, sintrans ) );
+	
+	return S_OK;
 }

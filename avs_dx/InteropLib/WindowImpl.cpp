@@ -11,7 +11,12 @@ void dxWndProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
 	wnd.ProcessWindowMessage( hwnd, message, wParam, lParam, res );
 }
 
-HRESULT present( const RenderTarget& src )
+HRESULT presentSingle( const RenderTarget& src )
 {
-	return wnd.present( src );
+	return wnd.presentSingle( src );
+}
+
+HRESULT presentTransition( const RenderTarget& t1, const RenderTarget& t2, int trans, float sintrans )
+{
+	return wnd.presentTransition( t1, t2, trans, sintrans );
 }

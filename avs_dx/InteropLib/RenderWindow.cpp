@@ -9,6 +9,8 @@ CComPtr<ID3D11Device> device;
 CComPtr<ID3D11DeviceContext> context;
 CComAutoCriticalSection renderLock;
 
+constexpr UINT msPresentTimeout = 250;
+
 int RenderWindow::wmCreate( LPCREATESTRUCT lpCreateStruct )
 {
 	destroyDevice();
@@ -100,11 +102,11 @@ HRESULT RenderWindow::wmSize( UINT nType, CSize size )
 	return S_OK;
 }
 
-LRESULT RenderWindow::wmRender( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& handled )
+LRESULT RenderWindow::wmPresent( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& handled )
 {
-	// No need to lock because the reason why this code run is the rendering thread called SendMessage() API. That thread is now waiting for the result doing nothing.
-	// logDebug( "WM_RENDER" );
+	// No need to lock because the reason why this code runs is the rendering thread called SendMessage() API. That thread is now waiting for the result doing nothing.
 
+	// logDebug( "WM_RENDER" );
 	const RenderTarget* pSource = (const RenderTarget*)( wParam );
 	HRESULT* pResult = (HRESULT*)lParam;
 
@@ -129,18 +131,67 @@ LRESULT RenderWindow::wmRender( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& h
 	bindResource<eStage::Pixel>( 127 );
 
 	*pResult = m_swapChain->Present( 0, 0 );
-	return 0;
+	return TRUE;
 }
 
-HRESULT RenderWindow::present( const RenderTarget& src )
+HRESULT RenderWindow::sendMessageTimeout( UINT wm, const void* wParam )
+{
+	HRESULT hr = E_FAIL;
+	DWORD_PTR dwResult = 0;
+	const LRESULT res = ::SendMessageTimeout( m_hWnd, wm, (WPARAM)wParam, (LPARAM)&hr, SMTO_BLOCK | SMTO_ERRORONEXIT, msPresentTimeout, &dwResult );
+	if( res != 0 )
+	{
+		if( SUCCEEDED( hr ) )
+			return S_OK;
+		return hr;
+	}
+	return getLastHr();
+}
+
+HRESULT RenderWindow::presentSingle( const RenderTarget& src )
 {
 	if( !src )
 	{
-		logWarning( "RenderWindow::present: the source is empty" );
+		logError( "RenderWindow::presentSingle: the source is empty" );
 		return E_INVALIDARG;
 	}
+	return sendMessageTimeout( WM_PRESENT, &src );
+}
 
-	HRESULT hr = E_FAIL;
-	::SendMessage( m_hWnd, WM_RENDER, (WPARAM)&src, (LPARAM)&hr );
-	return hr;
+HRESULT RenderWindow::presentTransition( const RenderTarget& t1, const RenderTarget& t2, int trans, float sintrans )
+{
+	int flag = 0;
+	if( t1 ) flag |= 1;
+	if( t2 ) flag |= 2;
+	switch( flag )
+	{
+	case 0:
+		logError( "RenderWindow::presentTransition: both sources are empty" );
+		return E_INVALIDARG;
+	case 1:
+		logWarning( "RenderWindow::presentTransition: the second source is empty" );
+		return presentSingle( t1 );
+	case 2:
+		logWarning( "RenderWindow::presentTransition: the first source is empty" );
+		return presentSingle( t2 );
+	}
+
+	sPresentTransition spt;
+	spt.rt1 = &t1;
+	spt.rt2 = &t2;
+	spt.trans = trans;
+	spt.sintrans = sintrans;
+
+	return sendMessageTimeout( WM_TRANSITION, &spt );
+}
+
+LRESULT RenderWindow::wmTransition( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& handled )
+{
+	const sPresentTransition spt = *(sPresentTransition*)( wParam );
+	HRESULT* pResult = (HRESULT*)lParam;
+
+	// TODO: implement transitions
+
+	*pResult = E_NOTIMPL;
+	return TRUE;
 }

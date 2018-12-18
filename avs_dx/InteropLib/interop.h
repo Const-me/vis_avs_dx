@@ -9,4 +9,5 @@ CSize getRenderSize();
 extern CComAutoCriticalSection renderLock;
 
 // Present the specified target on the GUI thread.
-HRESULT present( const RenderTarget& src );
+HRESULT presentSingle( const RenderTarget& src );
+HRESULT presentTransition( const RenderTarget& t1, const RenderTarget& t2, int trans, float sintrans );

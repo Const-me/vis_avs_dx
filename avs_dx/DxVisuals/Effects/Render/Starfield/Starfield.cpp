@@ -27,7 +27,15 @@ HRESULT Starfield::initializedState()
 	return S_OK;
 }
 
-HRESULT StarfieldStructs::VsData::update( const AvsState& ass )
+StarfieldStructs::StateData::StateData( const AvsState& s )
+{
+	onbeat = s.onbeat ? true : false;
+	spdBeat = s.spdBeat;
+	WarpSpeed = s.WarpSpeed;
+	durFrames = s.durFrames;
+}
+
+HRESULT StarfieldStructs::VsData::updateAvs( const AvsState& ass )
 {
 	if( ass.color == m_color )
 		return S_FALSE;

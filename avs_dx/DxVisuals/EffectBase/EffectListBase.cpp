@@ -54,13 +54,11 @@ bool EffectListBase::updateList()
 
 HRESULT EffectListBase::shouldRebuildState()
 {
-	HRESULT hr = S_FALSE;
+	BoolHr hr;
 	for( auto p : m_effects )
 	{
-		const HRESULT r = p->shouldRebuildState();
-		CHECK( r );
-		if( S_OK == r )
-			hr = S_OK;
+		if( hr.combine( p->shouldRebuildState() ) )
+			break;
 	}
 	return hr;
 }

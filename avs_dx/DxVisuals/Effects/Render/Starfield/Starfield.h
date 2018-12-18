@@ -38,13 +38,7 @@ struct StarfieldStructs: public PointSpritesRender
 	{
 		UINT stateSize() { return 3; }
 
-		StateData( const AvsState& s )
-		{
-			onbeat = s.onbeat ? true : false;
-			spdBeat = s.spdBeat;
-			WarpSpeed = s.WarpSpeed;
-			durFrames = s.durFrames;
-		}
+		StateData( const AvsState& s );
 	};
 
 	using CsData = StarCS;
@@ -53,7 +47,7 @@ struct StarfieldStructs: public PointSpritesRender
 	{
 		int m_color = -1;
 	public:
-		HRESULT update( const AvsState& ass );
+		HRESULT updateAvs( const AvsState& ass );
 	};
 
 	static const CAtlMap<CStringA, CStringA>& effectIncludes() { return includes(); }

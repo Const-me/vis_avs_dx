@@ -11,13 +11,21 @@ namespace
 	{
 		DECOMPRESSOR_HANDLE handle = nullptr;
 
-	public:
 		Decompressor()
 		{
 			if( CreateDecompressor( compressionAlgorithm, nullptr, &handle ) )
 				return;
 			logError( getLastHr(), "CreateDecompressor failed" );
 			__debugbreak();
+		}
+
+	public:
+
+		static const Decompressor& instance()
+		{
+			// It's used in static initializers, the order is undefined. Fortunately, modern C++ guarantees thread safety for such code.
+			static const Decompressor s_decompressor;
+			return s_decompressor;
 		}
 
 		void decompress( const uint8_t* src, int compressedLength, void* dest, int origLength ) const
@@ -28,22 +36,20 @@ namespace
 			__debugbreak();
 		}
 	};
-
-	static const Decompressor s_decompressor;
 }
 
 std::vector<uint8_t> decompressBytes( const uint8_t* src, int compressedLength, int origLength )
 {
 	std::vector<uint8_t> result;
 	result.resize( (size_t)origLength );
-	s_decompressor.decompress( src, compressedLength, result.data(), origLength );
+	Decompressor::instance().decompress( src, compressedLength, result.data(), origLength );
 	return std::move( result );
 }
 
 CStringA decompressString( const uint8_t* src, int compressedLength, int origLength )
 {
 	CStringA result;
-	s_decompressor.decompress( src, compressedLength, result.GetBufferSetLength( origLength + 1 ), origLength );
+	Decompressor::instance().decompress( src, compressedLength, result.GetBufferSetLength( origLength + 1 ), origLength );
 	result.ReleaseBuffer( origLength );
 	return std::move( result );
 }

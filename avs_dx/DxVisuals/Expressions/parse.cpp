@@ -97,6 +97,8 @@ HRESULT Expressions::isAssign( const CStringA& expr, int& idx )
 HRESULT Expressions::parseAssignments( CStringA code, Assignments& assignments )
 {
 	assignments.clear();
+	if( code.GetLength() <= 0 )
+		return S_FALSE;
 
 	CHECK( removeComments( code ) );
 
@@ -105,6 +107,9 @@ HRESULT Expressions::parseAssignments( CStringA code, Assignments& assignments )
 	code.Remove( '\t' );
 	code.Remove( '\r' );
 	code.Remove( '\n' );
+
+	if( code.GetLength() <= 0 )
+		return S_FALSE;
 
 	// Parse into expressions
 	CStringA exp;

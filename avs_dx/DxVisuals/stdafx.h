@@ -16,10 +16,10 @@ using DirectX::SimpleMath::Vector3;
 using DirectX::SimpleMath::Vector4;
 
 // ATL
+#define _WINDLL
 #include <atltypes.h>
 #include <atlcoll.h>
 #include <atlstr.h>
-// #include <atlcom.h>
 
 // C++
 #include <stdint.h>

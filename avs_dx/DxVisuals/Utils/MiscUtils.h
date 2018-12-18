@@ -2,10 +2,12 @@
 
 inline HRESULT getLastHr() { return HRESULT_FROM_WIN32( GetLastError() ); }
 
+constexpr bool dbgBreakOnErrors = false;
+
 #ifdef NDEBUG
 #define CHECK( hr ) { const HRESULT __hr = ( hr ); if( FAILED( __hr ) ) { logError( __hr, #hr ); return __hr; } }
 #else
-#define CHECK( hr ) { const HRESULT __hr = ( hr ); if( FAILED( __hr ) ) { __debugbreak(); logError( __hr, #hr ); return __hr; } }
+#define CHECK( hr ) { const HRESULT __hr = ( hr ); if( FAILED( __hr ) ) { if( dbgBreakOnErrors )__debugbreak(); logError( __hr, #hr ); return __hr; } }
 #endif
 
 inline void omSetTarget( ID3D11RenderTargetView* rtv )

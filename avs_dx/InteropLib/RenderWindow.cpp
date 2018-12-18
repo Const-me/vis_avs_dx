@@ -87,11 +87,17 @@ HRESULT RenderWindow::wmSize( UINT nType, CSize size )
 	// https://docs.microsoft.com/en-us/windows/desktop/direct3ddxgi/d3d10-graphics-programming-guide-dxgi#handling-window-resizing
 	if( !m_swapChain )
 		return S_FALSE;
-
 	CSLock __lock( renderLock );
 
 	context->OMSetRenderTargets( 0, nullptr, nullptr );
 	m_rtv = nullptr;
+
+	if( size.cx <= 0 || size.cy <= 0 )
+	{
+		logInfo( "WM_SIZE with an empty size, ignoring." );
+		return S_FALSE;
+	}
+
 	CHECK( m_swapChain->ResizeBuffers( 0, 0, 0, DXGI_FORMAT_UNKNOWN, 0 ) );
 
 	CComPtr<ID3D11Texture2D> pBuffer;
@@ -112,10 +118,16 @@ HRESULT RenderWindow::wmSize( UINT nType, CSize size )
 LRESULT RenderWindow::wmPresent( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& handled )
 {
 	// No need to lock because the reason why this code runs is the rendering thread called SendMessage() API. That thread is now waiting for the result doing nothing.
-
 	// logDebug( "WM_RENDER" );
 	const RenderTarget* pSource = (const RenderTarget*)( wParam );
 	HRESULT* pResult = (HRESULT*)lParam;
+
+	if( !m_rtv )
+	{
+		logWarning( "Present is called while there's no render target" );
+		*pResult = S_FALSE;
+		return 0;
+	}
 
 	if( false )
 	{
@@ -196,6 +208,13 @@ LRESULT RenderWindow::wmTransition( UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 {
 	const sPresentTransition spt = *(sPresentTransition*)( wParam );
 	HRESULT* pResult = (HRESULT*)lParam;
+
+	if( !m_rtv )
+	{
+		logWarning( "Present is called while there's no render target" );
+		*pResult = S_FALSE;
+		return 0;
+	}
 
 	// TODO: implement transitions
 

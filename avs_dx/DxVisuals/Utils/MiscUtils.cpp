@@ -16,6 +16,15 @@ void iaClearBuffers()
 	context->IASetInputLayout( nullptr );
 }
 
+LockExternCs::LockExternCs( CRITICAL_SECTION& cs ) : m_cs( cs )
+{
+	EnterCriticalSection( &m_cs );
+}
+LockExternCs::~LockExternCs()
+{
+	LeaveCriticalSection( &m_cs );
+}
+
 void setMacro( std::vector<std::pair<CStringA, CStringA>> &macros, const CStringA& key, const CStringA& value )
 {
 	for( auto& p : macros )
@@ -28,13 +37,4 @@ void setMacro( std::vector<std::pair<CStringA, CStringA>> &macros, const CString
 		}
 	}
 	macros.emplace_back( std::make_pair( key, value ) );
-}
-
-HRESULT hr_or( HRESULT h1, HRESULT h2 )
-{
-	if( FAILED( h1 ) ) return h1;
-	if( FAILED( h2 ) ) return h2;
-	if( S_FALSE == h1 && S_FALSE == h2 )
-		return S_FALSE;
-	return S_OK;
 }

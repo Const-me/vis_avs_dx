@@ -32,15 +32,13 @@ void iaClearBuffers();
 class LockExternCs
 {
 	CRITICAL_SECTION& m_cs;
+
 public:
-	LockExternCs( CRITICAL_SECTION& cs ) : m_cs( cs )
-	{
-		EnterCriticalSection( &m_cs );
-	}
-	~LockExternCs()
-	{
-		LeaveCriticalSection( &m_cs );
-	}
+	LockExternCs() = delete;
+	LockExternCs( const LockExternCs& that ) = delete;
+
+	LockExternCs( CRITICAL_SECTION& cs );
+	~LockExternCs();
 };
 
 void setMacro( std::vector<std::pair<CStringA, CStringA>> &macros, const CStringA& key, const CStringA& value );

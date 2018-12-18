@@ -3,6 +3,7 @@
 #include "drawDx.h"
 #include "Utils/WTL/atlctrls.h"
 #include "enumDisplays.h"
+#include "interop.h"
 
 extern HINSTANCE g_hInstance;
 extern HWND g_hwnd;
@@ -43,6 +44,9 @@ void DDraw_BeginResize( void )
 void DDraw_Enter( int *w, int *h, int **fb1, int **fb2 )
 {
 	LOCK();
+	const CSize sz = getRenderSize();
+	*w = sz.cx;
+	*h = sz.cy;
 }
 
 void DDraw_Exit( int which )

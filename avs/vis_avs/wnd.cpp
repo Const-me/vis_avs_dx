@@ -169,7 +169,7 @@ void WritePreset( int preset )
 	g_render_effects->__SavePreset( temp );
 }
 
-void my_getViewport( RECT *r, RECT *sr ) {
+/* void my_getViewport( RECT *r, RECT *sr ) {
 	if( sr )
 	{
 		HINSTANCE h = LoadLibrary( "user32.dll" );
@@ -194,8 +194,7 @@ void my_getViewport( RECT *r, RECT *sr ) {
 		}
 	}
 	SystemParametersInfo( SPI_GETWORKAREA, 0, r, 0 );
-}
-
+} */
 
 void SetTransparency( HWND hWnd, int enable, int amount )
 {
@@ -395,12 +394,13 @@ void Wnd_GoFullScreen( HWND hwnd )
 				// DDraw_SetFullScreen( 1, cfg_fs_w, cfg_fs_h, cfg_fs_d & 1, cfg_fs_bpp );
 				DDraw_SetFullScreenDx( 1, cfg_fs_monitor, cfg_fs_d & 1 );
 				RECT r;
-				my_getViewport( &r, &tr );
-				SetWindowPos( hwnd, HWND_TOPMOST, r.left, r.top, cfg_fs_w, cfg_fs_h, 0 );
+				DDraw_GetMonitorRectDx( cfg_fs_monitor, &r );
+				SetWindowPos( hwnd, HWND_TOPMOST, r.left, r.top, r.right - r.left, r.bottom - r.top, 0 );
 				SetForegroundWindow( hwnd );
 			}
 			else
 			{
+				// cfg_fs_use_overlay. Not supported and is probably hard to achieve on modern Windows.
 #if defined(WA2_EMBED)
 				SetWindowLong( hwnd, GWL_STYLE, WS_VISIBLE );
 				SetParent( hwnd, NULL );

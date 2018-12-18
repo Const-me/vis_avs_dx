@@ -627,7 +627,7 @@ static BOOL CALLBACK DlgProc_FS( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 			for( x = 0; x < l; x++ )
 			{
 				auto p = getDisplayInfo( x );
-				if( p && p->displayId == cfg_fs_monitor )
+				if( p && p->deviceName == cfg_fs_monitor )
 					break;
 			}
 			if( x != l )
@@ -666,13 +666,14 @@ static BOOL CALLBACK DlgProc_FS( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 		switch( LOWORD( wParam ) )
 		{
 		case IDC_BUTTON1:
-			if( IsDlgButtonChecked( hwndDlg, IDC_USE_OVERLAY ) || DDraw_IsMode( cfg_fs_w, cfg_fs_h, cfg_fs_bpp ) )
+			// if( IsDlgButtonChecked( hwndDlg, IDC_USE_OVERLAY ) || DDraw_IsMode( cfg_fs_w, cfg_fs_h, cfg_fs_bpp ) )
+			if( DDraw_PickModeDx( cfg_fs_monitor, &cfg_fs_w, &cfg_fs_h, &cfg_fs_bpp ) )
 			{
 				SetForegroundWindow( g_hwnd );
 				PostMessage( g_hwnd, WM_USER + 32, 0, 0 );
 			}
 			else
-				MessageBox( hwndDlg, "Choose a video mode", "Fullscreen", MB_OK );
+				MessageBox( hwndDlg, "Choose a display for fullscreen", "Fullscreen", MB_OK );
 			return 0;
 		case IDC_BPP_CONV:
 			cfg_fs_flip &= ~8;
@@ -746,8 +747,8 @@ static BOOL CALLBACK DlgProc_FS( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 					return 0;
 				cfg_fs_w = pInfo->resolution.cx;
 				cfg_fs_h = pInfo->resolution.cy;
-				cfg_fs_bpp = pInfo->bitsPerPixel;
-				cfg_fs_monitor = pInfo->displayId;
+				cfg_fs_bpp = pInfo->colorDepth;
+				cfg_fs_monitor = pInfo->deviceName;
 			}
 			return 0;
 		case IDC_USE_OVERLAY:

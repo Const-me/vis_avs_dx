@@ -2,7 +2,7 @@
 #include "../../avs/vis_avs/draw.h"
 #include "drawDx.h"
 #include "Utils/WTL/atlctrls.h"
-#pragma comment(lib, "DXGI.lib")
+#include "enumDisplays.h"
 
 extern HINSTANCE g_hInstance;
 extern HWND g_hwnd;
@@ -10,8 +10,6 @@ extern HWND g_hwnd;
 static CComAutoCriticalSection g_cs;
 
 #define LOCK() CSLock __lock( g_cs )
-
-static CComPtr<IDXGIFactory1> factory;
 
 CSize s_size;
 
@@ -31,9 +29,7 @@ int DDraw_Init()
 }
 
 void DDraw_Quit( void )
-{
-	factory = nullptr;
-}
+{ }
 
 void DDraw_Resize( int w, int h, int dsize )
 {
@@ -71,56 +67,40 @@ int DDraw_IsFullScreen( void )
 	return g_fs;
 }
 
-CAtlMap<int, sDisplayInfo> s_displays;
-
-static CStringA displayName( const char* deviceName )
-{
-	const CStringA name = deviceName;
-	const CStringA prefix = R"(\\.\Display)";
-	const int prefixLength = prefix.GetLength();
-	if( 0 == name.Left( prefixLength ).CompareNoCase( prefix ) )
-	{
-		const int num = atoi( name.operator const char*( ) + prefixLength );
-		CStringA res;
-		res.Format( "Display %i", num );
-		return res;
-	}
-	return name;
-}
+CAtlArray<sDisplayInfo> s_displays;
+CAtlMap<int, sDisplayInfo> s_cbItems;
 
 HRESULT enumerateOutputs( WTL::CComboBox& comboBox )
 {
-	s_displays.RemoveAll();
-
 	// Unlike original AVS, we never switch display modes. This function populates the combobox with the list of displays instead.
-	for( DWORD i = 0; true; i++ )
+	enumDisplays( s_displays );
+
+	for( size_t i = 0; i < s_displays.GetCount(); i++ )
 	{
-		DISPLAY_DEVICEA displayDevice = {};
-		displayDevice.cb = sizeof( DISPLAY_DEVICEA );
-		if( !EnumDisplayDevicesA( nullptr, i, &displayDevice, 0 ) )
-			return S_FALSE;
-		DEVMODEA devMode = {};
-		devMode.dmSize = sizeof( DEVMODEA );
-		if( !EnumDisplaySettingsA( displayDevice.DeviceName, ENUM_CURRENT_SETTINGS, &devMode ) )
-			continue;
-
-		const CStringA name = displayName( displayDevice.DeviceName );
-
+		const sDisplayInfo& di = s_displays[ i ];
+		const CStringA name = displayName( di.deviceName );
 		CString val;
 		val.Format( L"%S %dx%d@%dBPP", name.operator const char*( ),
-			devMode.dmPelsWidth, devMode.dmPelsHeight, devMode.dmBitsPerPel );
+			di.resolution.cx, di.resolution.cy, di.colorDepth );
 		const int ind = comboBox.AddString( val );
-		sDisplayInfo di;
-		di.displayId = displayDevice.DeviceName;
-		di.resolution = CSize{ (int)devMode.dmPelsWidth, (int)devMode.dmPelsHeight };
-		di.bitsPerPixel = devMode.dmBitsPerPel;
-		s_displays[ ind ] = di;
+		comboBox.SetItemData( ind, i );
 	}
+
+	// Combobox sorts it's items by default.
+	s_cbItems.RemoveAll();
+	const int count = comboBox.GetCount();
+	for( int item = 0; item < count; item++ )
+	{
+		size_t display = comboBox.GetItemData( item );
+		s_cbItems[ item ] = s_displays[ display ];
+	}
+
+	return S_OK;
 }
 
 const sDisplayInfo* getDisplayInfo( int comboboxIndex )
 {
-	auto p = s_displays.Lookup( comboboxIndex );
+	auto p = s_cbItems.Lookup( comboboxIndex );
 	if( nullptr != p )
 		return &p->m_value;
 	return nullptr;
@@ -175,16 +155,30 @@ int DDraw_PickMode( int *w, int *h, int *bpp )
 	return 0;
 }
 
-bool DDraw_PickModeDx( const CStringA& monitor, int *w, int *h, int *bpp )
+bool DDraw_PickModeDx( CStringA& monitor, int *w, int *h, int *bpp )
 {
-	DEVMODEA devMode = {};
-	devMode.dmSize = sizeof( DEVMODEA );
-	if( EnumDisplaySettingsA( monitor, ENUM_CURRENT_SETTINGS, &devMode ) || EnumDisplaySettingsA( nullptr, ENUM_CURRENT_SETTINGS, &devMode ) )
-	{
-		*w = (int)devMode.dmPelsWidth;
-		*h = (int)devMode.dmPelsHeight;
-		*bpp = (int)devMode.dmBitsPerPel;
-		return true;
-	}
-	return false;
+	
+	enumDisplays( s_displays );
+	auto p = displayOrDefault( s_displays, monitor );
+	if( nullptr == p )
+		return false;
+
+	if( nullptr != w )
+		*w = p->resolution.cx;
+	if( nullptr != h )
+		*h = p->resolution.cy;
+	if( nullptr != bpp )
+		*bpp = p->colorDepth;
+	return true;
+}
+
+bool DDraw_GetMonitorRectDx( CStringA& monitor, RECT* pRect )
+{
+	enumDisplays( s_displays );
+	auto p = displayOrDefault( s_displays, monitor );
+	if( nullptr == p )
+		return false;
+
+	*pRect = p->rectangle;
+	return true;
 }

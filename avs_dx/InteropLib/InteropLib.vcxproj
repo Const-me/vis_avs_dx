@@ -84,6 +84,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="avsUtils.h" />
+    <ClInclude Include="enumDisplays.h" />
     <ClInclude Include="drawDx.h" />
     <ClInclude Include="effectsFactory.h" />
     <ClInclude Include="interop.h" />
@@ -114,6 +115,7 @@
   <ItemGroup>
     <ClCompile Include="avsUtils.cpp" />
     <ClCompile Include="ConsoleLogger.cpp" />
+    <ClCompile Include="enumDisplays.cpp" />
     <ClCompile Include="draw.cpp" />
     <ClCompile Include="module.cpp" />
     <ClCompile Include="RenderWindow.cpp" />

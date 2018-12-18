@@ -73,6 +73,7 @@
     <ClInclude Include="interop.h" />
     <ClInclude Include="drawDx.h" />
     <ClInclude Include="avsUtils.h" />
+    <ClInclude Include="enumDisplays.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -82,6 +83,7 @@
     <ClCompile Include="draw.cpp" />
     <ClCompile Include="avsUtils.cpp" />
     <ClCompile Include="module.cpp" />
+    <ClCompile Include="enumDisplays.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,4 +1,5 @@
 #pragma once
+#define DXERR_ATL_STRING
 #include "DirectXErrors/DirectXErrors.h"
 
 enum struct eLogLevel : uint8_t

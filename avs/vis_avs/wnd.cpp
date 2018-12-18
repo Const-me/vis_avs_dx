@@ -1119,15 +1119,12 @@ static LRESULT CALLBACK WndProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 {
 	dxWndProc( hwnd, message, wParam, lParam );
 
-	if( DDraw_IsFullScreen() &&
-		!cfg_fs_use_overlay &&
-		( ( message == WM_KEYDOWN && wParam == VK_ESCAPE ) ||
-			message == WM_LBUTTONUP ||
-			( message == WM_NCACTIVATE && !wParam ) ||
-			message == WM_KILLFOCUS
-			)
-		)
+	static long s_doubleClickComplete = 0;
+
+	if( DDraw_IsFullScreen() && !cfg_fs_use_overlay &&
+		( ( message == WM_KEYDOWN && wParam == VK_ESCAPE ) || ( message == WM_LBUTTONUP && GetMessageTime() > s_doubleClickComplete ) ) )
 	{
+		// logDebug( "WM_LBUTTONUP %i", GetMessageTime() );
 		Wnd_GoWindowed( hwnd );
 		return 0;
 	}
@@ -1194,6 +1191,8 @@ static LRESULT CALLBACK WndProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 	}
 	if( message == WM_LBUTTONDBLCLK && !DDraw_IsFullScreen() )
 	{
+		s_doubleClickComplete = GetMessageTime() + 1000;	// 1 second should be enough for the user to release a mouse button
+		// logDebug( "WM_LBUTTONDBLCLK %i", s_doubleClickComplete );
 		if( cfg_fs_dblclk )
 		{
 			if( DDraw_IsFullScreen() )

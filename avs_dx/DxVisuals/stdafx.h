@@ -32,7 +32,6 @@ using DirectX::SimpleMath::Vector4;
 extern CComPtr<ID3D11Device> device;
 extern CComPtr<ID3D11DeviceContext> context;
 
-#define DXERR_ATL_STRING
 #include "Utils/logger.h"
 
 #include "Utils/MiscUtils.h"

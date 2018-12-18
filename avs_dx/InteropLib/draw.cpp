@@ -59,7 +59,6 @@ void DDraw_SetFullScreen( int fs, int w, int h, int dbl, int bpp )
 void DDraw_SetFullScreenDx( int fs, const CStringA& monitor, int dbl )
 {
 	g_fs = ( 0 != fs );
-	logError( "DDraw_SetFullScreenDx is not yet implemented" );
 }
 
 int DDraw_IsFullScreen( void )

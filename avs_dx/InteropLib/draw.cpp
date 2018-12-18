@@ -86,7 +86,7 @@ HRESULT enumerateOutputs( WTL::CComboBox& comboBox )
 		comboBox.SetItemData( ind, i );
 	}
 
-	// Combobox sorts it's items by default.
+	// Combobox sorts it's items as soon as new ones are inserted, that's why using set/get item data to keep the index in s_displays array.
 	s_cbItems.RemoveAll();
 	const int count = comboBox.GetCount();
 	for( int item = 0; item < count; item++ )

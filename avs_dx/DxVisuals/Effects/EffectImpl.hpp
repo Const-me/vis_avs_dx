@@ -18,7 +18,8 @@ class EffectImpl : public TEffect
 public:
 	EffectImpl( void* pNative ) : TEffect( ( typename TEffect::AvsState* )( pNative ) ) { }
 
-	~EffectImpl() override = default;
+	~EffectImpl() override
+	{ }
 
 	static inline HRESULT create( void* pState, std::unique_ptr<iRootEffect>& res )
 	{

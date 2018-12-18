@@ -28,7 +28,10 @@ private:
 		__if_not_exists( TStruct::StateData::update )
 		{
 			const TStruct::StateData newState{ *avs };
-			return m_stateData == newState ? S_FALSE : S_OK;
+			if( m_stateData == newState )
+				return S_FALSE;
+			m_stateData = newState;
+			return S_OK;
 		}
 		return E_FAIL;
 	}

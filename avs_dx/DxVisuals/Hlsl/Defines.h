@@ -10,7 +10,6 @@ namespace Hlsl
 
 	public:
 		Defines() = default;
-		Defines( Defines* parentScope ) : m_map( parentScope->m_map ) { }
 
 		void set( const CStringA& name, const CStringA& value );
 

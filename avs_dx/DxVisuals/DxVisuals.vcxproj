@@ -95,6 +95,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Utils\events.h" />
     <ClInclude Include="Expressions\builtinFunctions.h" />
     <ClInclude Include="Expressions\includeFunctions.h" />
     <ClInclude Include="Expressions\CompiledShader.h" />
@@ -154,6 +155,7 @@
     <ClInclude Include="Utils\MiscUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Utils\events.cpp" />
     <ClCompile Include="Expressions\builtinFunctions.cpp" />
     <ClCompile Include="Expressions\CompiledShader.cpp" />
     <ClCompile Include="Expressions\includeFunctions.cpp" />

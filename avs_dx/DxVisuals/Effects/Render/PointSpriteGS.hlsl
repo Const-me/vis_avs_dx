@@ -1,6 +1,7 @@
 #ifndef AVS_SHADER
-// A geometry shader that expands points into point sprites. The points must be in clip space, they must have position and color attributes.
-static const float2 sizeInClipSpace = float2( 0.01f, 0.01f * 16 / 9 );
+// A geometry shader that expands points into point sprites.
+static const float2 sizeInPixels = float2( 8, 8 );
+#define AVS_RENDER_SIZE float2( 1280, 720 )
 #endif
 
 struct sIn
@@ -21,6 +22,7 @@ void main( point sIn input[1], inout TriangleStream<sOut> output )
 {
     const float4 color = input[ 0 ].color;
     const float4 pos = input[ 0 ].pos;
+    const float2 halfSize = sizeInPixels / AVS_RENDER_SIZE;
 
     [unroll]
 	for( int i = 0; i < 4; i++ )
@@ -29,7 +31,7 @@ void main( point sIn input[1], inout TriangleStream<sOut> output )
         const float y = 1.0 - ( i & 2 );
         sOut r;
         r.pos = pos;
-        r.pos.xy += float2( x, y ) * sizeInClipSpace;
+        r.pos.xy += float2( x, y ) * halfSize;
         r.tc = float2( x, y );
         r.color = color;
         output.Append( r );

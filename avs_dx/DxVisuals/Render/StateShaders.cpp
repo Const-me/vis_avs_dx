@@ -90,10 +90,28 @@ HRESULT StateShaders::compile( const std::vector<EffectStateShader> &effects, UI
 	def.set( "INIT_STATE", "true" );
 	if( anyBeat ) def.set( "IS_BEAT", "false" );
 
+	if( hlsl.Find( "AVS_RENDER_SIZE" ) >= 0 )
+	{
+		def.set( "AVS_RENDER_SIZE", getRenderSizeString() );
+		subscribeHandler( this );
+	}
+	else
+		unsubscribeHandler( this );
+
 	CHECK( Hlsl::compile( eStage::Compute, hlsl, "InitState", Hlsl::includes(), def, dxbc ) );
 
 	CHECK( createShader( dxbc, init ) );
 
 	logInfo( "Compiled the state shaders" );
 	return S_OK;
+}
+
+StateShaders::~StateShaders()
+{
+	unsubscribeHandler( this );
+}
+
+void StateShaders::onRenderSizeChanged()
+{
+	init = update = updateOnBeat = nullptr;
 }

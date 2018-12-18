@@ -4,16 +4,21 @@
 #include "../Hlsl/Defines.h"
 #include "../Hlsl/compile.h"
 #include "../Resources/createShader.hpp"
+#include "../Utils/events.h"
 
 // A shader that's instantiated from a template. Source data is what defines the macros.
 // Source needs to be copyable, needs to have operator==, and needs to have HRESULT defines( Hlsl::Defines &def ); method.
 template<eStage stage, class TSourceData>
-class Shader
+class Shader: public iResizeHandler
 {
 public:
 	using tStageData = TSourceData;
 	Shader() = default;
 	Shader( bool unused ) { }
+	~Shader()
+	{
+		unsubscribeHandler( this );
+	}
 
 	template<class TAvsState, class TDxEffectState>
 	HRESULT update( Binder& binder, const TAvsState& avs, const TDxEffectState& dx )
@@ -34,6 +39,8 @@ public:
 			if( hr.combine( m_sourceData.updateDx( dx ) ) )
 				return hr;
 		}
+		if( !result )
+			hr.combine( true );
 		return hr;
 	}
 
@@ -51,6 +58,14 @@ public:
 		}
 
 		const ShaderTemplate& tmpl = *m_sourceData.shaderTemplate();
+
+		if( tmpl.hlsl.Find( "AVS_RENDER_SIZE" ) >= 0 )
+		{
+			def.set( "AVS_RENDER_SIZE", getRenderSizeString() );
+			subscribeHandler( this );
+		}
+		else
+			unsubscribeHandler( this );
 
 		// Compile HLSL into DXBC
 		std::vector<uint8_t> dxbc;
@@ -93,4 +108,10 @@ public:
 private:
 	TSourceData m_sourceData;
 	ShaderPtr<stage> result;
+
+	// iResizeHandler
+	void onRenderSizeChanged() override
+	{
+		result = nullptr;
+	}
 };

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Transition.h"
 #include "Resources/staticResources.h"
+#include "Utils/events.h"
 
 void createTransition( std::unique_ptr<iTransition>& up )
 {
@@ -24,6 +25,7 @@ HRESULT Transition::prepare( char visdata[ 2 ][ 2 ][ 576 ], int isBeat )
 		m_targets1.destroy();
 		m_targets2.destroy();
 		m_renderSize = currentSize;
+		callResizeHandlers();
 	}
 
 	return S_OK;

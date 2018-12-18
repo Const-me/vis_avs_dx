@@ -58,6 +58,7 @@
     <ClInclude Include="Transition.h" />
     <ClInclude Include="iTransition.h" />
     <ClInclude Include="RootEffect.h" />
+    <ClInclude Include="Utils\events.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -96,6 +97,7 @@
     <ClCompile Include="Resources\GridMesh.cpp" />
     <ClCompile Include="Transition.cpp" />
     <ClCompile Include="RootEffect.cpp" />
+    <ClCompile Include="Utils\events.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -117,7 +119,6 @@
     <None Include="Effects\VisCommon.fx" />
     <None Include="Effects\Render\Starfield\Star.fx" />
     <None Include="compress.t4" />
-    <None Include="Expressions\includeFunctionsCpp.tt" />
     <None Include="Expressions\includeFunctions.t4" />
     <None Include="CppBuilder.t4" />
   </ItemGroup>
@@ -140,5 +141,6 @@
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />
     <CustomBuild Include="Effects\IncludeShadersH.tt" />
+    <CustomBuild Include="Expressions\includeFunctions.tt" />
   </ItemGroup>
 </Project>

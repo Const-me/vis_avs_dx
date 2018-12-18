@@ -15,7 +15,7 @@ HRESULT RootEffect::renderRoot( bool isBeat, RenderTargets& rt )
 		LockExternCs __lock{ g_render_cs };
 		const bool listChanged = updateList();
 		const bool stateChanged = shouldRebuildState();
-		if( listChanged || stateChanged )
+		if( listChanged || stateChanged || !m_stateShaders )
 		{
 			CHECK( buildState() );
 		}

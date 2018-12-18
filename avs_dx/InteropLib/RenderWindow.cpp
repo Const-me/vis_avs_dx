@@ -67,11 +67,17 @@ void RenderWindow::destroyDevice()
 namespace
 {
 	CSize g_renderSize;
+	CStringA g_renderSizeString;
 }
 
 CSize getRenderSize()
 {
 	return g_renderSize;
+}
+
+const CStringA& getRenderSizeString()
+{
+	return g_renderSizeString;
 }
 
 HRESULT RenderWindow::wmSize( UINT nType, CSize size )
@@ -98,6 +104,7 @@ HRESULT RenderWindow::wmSize( UINT nType, CSize size )
 	logInfo( "Resized the swap chain to %i x %i", size.cx, size.cy );
 
 	g_renderSize = size;
+	g_renderSizeString.Format( "float2( %i, %i )", size.cx, size.cy );
 
 	return S_OK;
 }

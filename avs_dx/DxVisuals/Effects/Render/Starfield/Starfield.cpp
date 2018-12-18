@@ -1,17 +1,18 @@
 #include "stdafx.h"
 #include "Starfield.h"
 
-IMPLEMENT_EFFECT( Starfield, C_StarField )
+IMPLEMENT_EFFECT( Starfield, C_StarField );
 
-constexpr UINT nStars = 4096;
+// Max.limit of the count, the size of the buffers
+constexpr UINT nStarsCapacity = 4096;
+// Compute shader threads per group
 constexpr UINT csThreads = 256;
-constexpr UINT nThreadGroups = nStars / csThreads;
 
 HRESULT Starfield::initializedState()
 {
 	// Create the stars buffer
 	if( !starsBuffer )
-		CHECK( starsBuffer.create( 16, nStars ) );
+		CHECK( starsBuffer.create( 16, nStarsCapacity ) );
 
 	// Compile & run stars initial update shader
 	Shader<eStage::Compute, StarInitCS> initShader;
@@ -21,9 +22,16 @@ HRESULT Starfield::initializedState()
 
 	initShader.bind();
 	bindUav( initShader.data().bindStarsPosition, starsBuffer.uav() );
-	context->Dispatch( nThreadGroups, 1, 1 );
+	constexpr UINT nThreadGroupsTotal = nStarsCapacity / csThreads;
+	context->Dispatch( nThreadGroupsTotal, 1, 1 );
 
 	bindUav( initShader.data().bindStarsPosition );
+
+	// Refresh stars count on the next render()
+	prevStars = 0;
+	nStars = 0;
+	nComputeGroups = 0;
+
 	return S_OK;
 }
 
@@ -45,13 +53,22 @@ HRESULT StarfieldStructs::VsData::updateAvs( const AvsState& ass )
 
 HRESULT Starfield::render( RenderTargets& rt )
 {
+	if( prevStars != avs->MaxStars_set )
+	{
+		prevStars = avs->MaxStars_set;
+		const CSize sz = getRenderSize();
+		nStars = MulDiv( avs->MaxStars_set, sz.cx * sz.cy, 512 * 384 );
+		nStars = std::min( nStars, nStarsCapacity );
+		nComputeGroups = ( nStars + csThreads - 1 ) / csThreads;
+	}
+
 	CHECK( rt.writeToLast( false ) );
 	renderer.bindShaders();
 
 	// Calculate dots positions with the CS
 	const UINT uavSlot = renderer.compute().bindStarsPosition;
 	bindUav( uavSlot, starsBuffer.uav() );
-	context->Dispatch( nThreadGroups, 1, 1 );
+	context->Dispatch( nComputeGroups, 1, 1 );
 	bindUav( uavSlot );
 
 	// Render the sprites

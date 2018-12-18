@@ -56,6 +56,8 @@ struct StarfieldStructs: public PointSpritesRender
 class Starfield : public EffectBase1<StarfieldStructs>
 {
 	StructureBuffer starsBuffer;
+	int prevStars = 0;
+	UINT nStars, nComputeGroups;
 
 public:
 

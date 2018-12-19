@@ -87,7 +87,7 @@ HRESULT Expressions::isAssign( const CStringA& expr, int& idx )
 		logError( "Syntax error, '=' in expression %s", cstr( expr.Left( idx ) ) );
 		return E_INVALIDARG;
 	}
-	if( !isalpha( expr[ 0 ] ) )
+	if( !isAlpha( expr[ 0 ] ) )
 	{
 		logError( "Syntax error: '=', invalid left operand %s", cstr( expr.Left( idx ) ) );
 		return E_INVALIDARG;
@@ -125,7 +125,7 @@ HRESULT Expressions::parseAssignments( CStringA code, Assignments& assignments )
 		CHECK( hr );
 		if( S_FALSE == hr )
 		{
-			logWarning( "Unknown expression %s - ignoring", cstr( exp ) );
+			logWarning( "Unknown expression \"%s\" - ignoring", cstr( exp ) );
 			continue;
 		}
 		assignments.emplace_back( std::make_pair( exp.Left( indEqual ), exp.Mid( indEqual + 1 ) ) );

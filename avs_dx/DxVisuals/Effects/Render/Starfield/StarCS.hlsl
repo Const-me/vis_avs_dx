@@ -8,10 +8,15 @@ RWStructuredBuffer<StarFormat> stars : register(BIND_STARS_POSITIONS);
 
 inline bool isStarOk(float3 pos)
 {
+    bool result;
 	if( pos.z <= 0 )
-        return false;
-    const float2 p2 = abs( pos.xy / pos.z );
-    return p2.x < 1 && p2.y < 1;
+        result = false;
+	else
+    {
+        const float2 p2 = abs( pos.xy / pos.z );
+        result = p2.x < 1 && p2.y < 1;
+    }
+    return result;
 }
 
 inline void createStar( uint id, inout StarFormat s )

@@ -121,6 +121,7 @@
     <None Include="compress.t4" />
     <None Include="Expressions\includeFunctions.t4" />
     <None Include="CppBuilder.t4" />
+    <None Include="Effects\Polyline.fx" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Effects\Render\Simple\SimpleDotsVS.hlsl" />
@@ -137,6 +138,8 @@
     <FxCompile Include="Effects\Trans\DMove\DMovePS.hlsl" />
     <FxCompile Include="Effects\Trans\DMove\DMoveVS.hlsl" />
     <FxCompile Include="Expressions\shaderFunctions.hlsl" />
+    <FxCompile Include="Effects\Render\PolylineGS.hlsl" />
+    <FxCompile Include="Effects\Render\PolylinePS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

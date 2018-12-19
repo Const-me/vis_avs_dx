@@ -244,6 +244,17 @@
     <None Include="Utils\DirectXErrors\includeData.inl" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Effects\Polyline.fx">
+      <FileType>Document</FileType>
+    </None>
+    <FxCompile Include="Effects\Render\PolylineGS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Render\PolylinePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+    </FxCompile>
     <FxCompile Include="Effects\Trans\DMove\DMovePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>

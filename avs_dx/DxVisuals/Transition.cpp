@@ -3,6 +3,9 @@
 #include "Resources/staticResources.h"
 #include "Utils/events.h"
 
+// The critical section that guards renderers, linked from deep inside AVS.
+extern CRITICAL_SECTION g_render_cs;
+
 void createTransition( std::unique_ptr<iTransition>& up )
 {
 	up = std::make_unique<Transition>();
@@ -40,6 +43,7 @@ HRESULT Transition::renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, iRo
 		CHECK( e.renderRoot( 0 != isBeat, m_targets1 ) );
 	}
 
+	UnlockExternCs _unlock{ g_render_cs };
 	CHECK( presentSingle( m_targets1.lastWritten() ) );
 
 	return S_OK;
@@ -57,6 +61,7 @@ HRESULT Transition::renderTransition( char visdata[ 2 ][ 2 ][ 576 ], int isBeat,
 		CHECK( e2.renderRoot( beat, m_targets2 ) );
 	}
 
+	UnlockExternCs _unlock{ g_render_cs };
 	CHECK( presentTransition( m_targets1.lastWritten(), m_targets2.lastWritten(), trans, sintrans ) );
 	
 	return S_OK;

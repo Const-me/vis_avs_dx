@@ -25,6 +25,15 @@ LockExternCs::~LockExternCs()
 	LeaveCriticalSection( &m_cs );
 }
 
+UnlockExternCs::UnlockExternCs( CRITICAL_SECTION& cs ) : m_cs( cs )
+{
+	LeaveCriticalSection( &m_cs );
+}
+UnlockExternCs::~UnlockExternCs()
+{
+	EnterCriticalSection( &m_cs );
+}
+
 void setMacro( std::vector<std::pair<CStringA, CStringA>> &macros, const CStringA& key, const CStringA& value )
 {
 	for( auto& p : macros )

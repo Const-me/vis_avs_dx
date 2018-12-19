@@ -43,4 +43,16 @@ public:
 	~LockExternCs();
 };
 
+class UnlockExternCs
+{
+	CRITICAL_SECTION& m_cs;
+
+public:
+	UnlockExternCs() = delete;
+	UnlockExternCs( const LockExternCs& that ) = delete;
+
+	UnlockExternCs( CRITICAL_SECTION& cs );
+	~UnlockExternCs();
+};
+
 void setMacro( std::vector<std::pair<CStringA, CStringA>> &macros, const CStringA& key, const CStringA& value );

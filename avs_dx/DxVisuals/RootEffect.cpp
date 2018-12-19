@@ -5,26 +5,20 @@
 #include "Render/Binder.h"
 #include "Render/StateShaders.h"
 
-// The critical section that guards renderers, linked from deep inside AVS.
-extern CRITICAL_SECTION g_render_cs;
-
 HRESULT RootEffect::renderRoot( bool isBeat, RenderTargets& rt )
 {
 	// Collect the effects in the local list
+	const bool listChanged = updateList();
+	const BoolHr stateChanged = shouldRebuildState();
+	if( stateChanged.failed() )
+		return stateChanged;
+	if( listChanged || stateChanged.value() || !m_stateShaders )
 	{
-		LockExternCs __lock{ g_render_cs };
-		const bool listChanged = updateList();
-		const BoolHr stateChanged = shouldRebuildState();
-		if( stateChanged.failed() )
-			return stateChanged;
-		if( listChanged || stateChanged.value() || !m_stateShaders )
-		{
-			CHECK( buildState() );
-		}
-
-		Binder binder;
-		CHECK( updateParameters( binder ) );
+		CHECK( buildState() );
 	}
+
+	Binder binder;
+	CHECK( updateParameters( binder ) );
 
 	// Run a state update shader
 	context->CSSetShader( isBeat ? m_stateShaders.updateOnBeat : m_stateShaders.update, nullptr, 0 );

@@ -3,7 +3,7 @@
 #define SHADER_GLOBALS
 #define SHADER_CODE
 // Such scale so 
-static const float2 scaleToUniform = float2( 1.0f, 1.0f );
+static const float2 scaleToUniform = float2( 0.8f, 0.6f );
 static const bool rectangularCoords = false;
 #endif
 #define M_PI 3.141592653589793238
@@ -42,7 +42,8 @@ SHADER_CODE
         float2 resultVec;
         sincos( r, resultVec.y, resultVec.x );
         resultVec *= d;
-        resultVec *= ( float2( 1, 1 ) / scaleToUniform );
+        const float2 antiScale = ( float2( 1, 1 ) / scaleToUniform );
+        resultVec *= antiScale;
         res.pos = float4( resultVec, 0.5, 1 );
     }
     res.tc = inputVertex.tc;

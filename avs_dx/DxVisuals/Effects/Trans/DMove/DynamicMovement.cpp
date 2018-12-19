@@ -52,15 +52,16 @@ HRESULT DynamicMovementStructs::VsData::compiledShader( const std::vector<uint8_
 	return StaticResources::createLayout( dxbc );
 }
 
-HRESULT DynamicMovementStructs::VsData::updateAvs( const AvsState & )
+HRESULT DynamicMovementStructs::VsData::updateAvs( const AvsState &avs )
 {
 	const CSize rs = getRenderSize();
 	Vector2 diag{ (float)rs.cx, (float)rs.cy };
 	diag.Normalize();
-	if( scaleToUniform == diag )
-		return S_FALSE;
-	scaleToUniform = diag;
-	return S_OK;
+
+	BoolHr res;
+	res.updateValue( scaleToUniform, diag );
+	res.updateValue( rectangularCoords, 0 != avs.rectcoords );
+	return res;
 }
 
 DynamicMovement::DynamicMovement( AvsState *pState ) :

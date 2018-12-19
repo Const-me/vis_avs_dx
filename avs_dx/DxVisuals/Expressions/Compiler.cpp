@@ -36,7 +36,7 @@ HRESULT Compiler::update( RString effect_exp[ 4 ] )
 	m_hlslFragment = "";
 	m_vars.clear();
 	m_stateSize = proto.fixedStateSize();
-	if( m_expressions[ 0 ].GetLength() <= 0 && m_expressions[ 1 ].GetLength() <= 0 && m_expressions[ 2 ].GetLength() <= 0 && m_expressions[ 3 ].GetLength() <= 0 )
+	if( !hasAny( m_expressions, []( const CStringA& s ) { return s.GetLength() > 0; } ) )
 	{
 		// All expressions are empty
 		return S_OK;
@@ -119,7 +119,7 @@ HRESULT Compiler::allocVariables( const std::array<Assignments, 4>& parsed )
 					p->m_value.readMask |= maskBit;
 					return false;
 				}
-				
+
 				const ShaderFunc* pFunc = lookupShaderFunc( id );
 				if( nullptr != pFunc )
 				{
@@ -244,7 +244,7 @@ HRESULT Compiler::buildStateCode( const std::array<Assignments, 4>& parsed )
 	code += proto.stateStore();
 	printStoreState( code );
 	code += "	}\r\n";
-	
+
 	m_stateTemplate.hlslMain = code;
 	return S_OK;
 }

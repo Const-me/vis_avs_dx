@@ -19,6 +19,7 @@ protected:
 private:
 	typename TStruct::StateData m_stateData;
 
+protected:
 	HRESULT shouldRebuildState() override
 	{
 		__if_exists( TStruct::StateData::update )
@@ -36,6 +37,7 @@ private:
 		return E_FAIL;
 	}
 
+private:
 	HRESULT buildState( EffectStateShader& ess ) override
 	{
 		ess.shaderTemplate = m_stateData.shaderTemplate();
@@ -64,6 +66,7 @@ private:
 
 struct EmptyStateData
 {
+	EmptyStateData() = default;
 	template<class A>
 	EmptyStateData( const A& ) { }
 	const StateShaderTemplate* shaderTemplate() { return nullptr; }

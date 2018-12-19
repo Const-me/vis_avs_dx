@@ -61,4 +61,23 @@ public:
 		assert( succeeded() );
 		return m_hr == S_OK;
 	}
+
+	template<class T>
+	inline HRESULT updateValue( T& currentValue, const T& newValue )
+	{
+		if( currentValue == newValue )
+			return m_hr;
+		currentValue = newValue;
+		combine( true );
+		return m_hr;
+	}
 };
+
+template<class T>
+inline HRESULT updateValue( T& currentValue, const T& newValue )
+{
+	if( currentValue == newValue )
+		return S_FALSE;
+	currentValue = newValue;
+	return S_OK;
+}

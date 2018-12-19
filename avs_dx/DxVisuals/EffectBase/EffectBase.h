@@ -30,7 +30,7 @@ public:
 
 	virtual HRESULT render( RenderTargets& rt ) = 0;
 
-	void setStateOffset( UINT off ) { m_stateOffset = off; }
+	virtual void setStateOffset( UINT off ) { m_stateOffset = off; }
 
 protected:
 

@@ -118,6 +118,8 @@ public:
 
 	HRESULT shouldRebuildState() override;
 
+	void setStateOffset( UINT off ) override;
+
 	// Forward the rest of the calls to specific renderers
 	HRESULT updateParameters( Binder& binder ) override { return m_pImpl->updateParameters( binder ); }
 	HRESULT render( RenderTargets& rt ) override { return m_pImpl->render( rt ); }

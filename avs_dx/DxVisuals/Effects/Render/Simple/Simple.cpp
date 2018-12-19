@@ -145,3 +145,9 @@ HRESULT Simple::shouldRebuildState()
 	replaceStyleIfNeeded();
 	return EffectBase1::shouldRebuildState();
 }
+
+void Simple::setStateOffset( UINT off )
+{
+	EffectBase1::setStateOffset( off );
+	m_pImpl->setStateOffset( off );
+}

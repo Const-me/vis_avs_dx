@@ -209,6 +209,9 @@ C_THISCLASS::~C_THISCLASS()
 
 int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
 {
+	__debugbreak();
+	return 0;
+
 	smp_begin( 1, visdata, isBeat, framebuffer, fbout, w, h );
 	if( isBeat & 0x80000000 ) return 0;
 

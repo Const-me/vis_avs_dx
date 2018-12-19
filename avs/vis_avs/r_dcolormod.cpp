@@ -147,6 +147,9 @@ C_THISCLASS::~C_THISCLASS()
 
 int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
 {
+	__debugbreak();
+	return 0;
+
 	if( need_recompile )
 	{
 		EnterCriticalSection( &rcs );

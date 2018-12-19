@@ -200,6 +200,9 @@ static unsigned int __inline BLEND_ADAPT( unsigned int a, unsigned int b, /*floa
 
 int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
 {
+	__debugbreak();
+	return 0;
+
 #ifdef LASER
 	w = h = 1024;
 #endif

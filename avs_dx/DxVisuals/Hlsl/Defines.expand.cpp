@@ -48,8 +48,7 @@ CStringA Defines::expand( CStringA hlsl ) const
 			continue;	// Not found any
 
 		// Replace them
-		const int valueLen = m.second.GetLength();
-		const int expandLengthDiff = valueLen - macroLen;
+		const int expandLengthDiff = m.second.GetLength() - macroLen;
 
 		int offset = 0;
 		for( int i : ids )

@@ -292,10 +292,6 @@
     <None Include="Effects\Render\Starfield\Star.fx">
       <FileType>Document</FileType>
     </None>
-    <FxCompile Include="Effects\Render\Simple\SimpleCS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
-    </FxCompile>
     <FxCompile Include="Effects\Render\Starfield\StarfieldState.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>

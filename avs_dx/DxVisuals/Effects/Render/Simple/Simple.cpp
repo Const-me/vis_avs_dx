@@ -1,12 +1,11 @@
 #include "stdafx.h"
 #include "Simple.h"
 
-// ==== Common stuff for all styles ====
+// Class factory infrastructure
 
 IMPLEMENT_EFFECT( Simple, C_SimpleClass )
-const EffectBase::Metadata& SimpleDotsFx::metadata() { __debugbreak(); return s_metadada; }
-const EffectBase::Metadata& SimpleSolidFx::metadata() { __debugbreak(); return s_metadada; }
-const EffectBase::Metadata& SimpleLinesFx::metadata() { __debugbreak(); return s_metadada; }
+
+// ==== Common stuff for all styles ====
 
 namespace
 {
@@ -52,33 +51,16 @@ HRESULT SimpleBase::StateData::update( const AvsState& ass )
 
 // ==== Dots rendering ====
 
-HRESULT DotsRendering::CsData::updateAvs( const AvsState& ass )
-{
-	return updateValue( sampleV, ass.sampleV() );
-}
-
 HRESULT SimpleDotsFx::render( RenderTargets& rt )
 {
-	constexpr UINT dotsCount = 768;
-	if( !dotsBuffer )
-		CHECK( dotsBuffer.create( sizeof( Vector2 ), dotsCount ) );
+	const UINT pointsCount = renderer.vertex().pointsCount;
 
 	CHECK( rt.writeToLast( false ) );
 	renderer.bindShaders();
 
-	// Calculate dots positions, with the CS
-	const UINT uavSlot = renderer.compute().bindDotsPosition;
-	bindUav( uavSlot, dotsBuffer.uav() );
-	context->Dispatch( dotsCount / 256, 1, 1 );
-	bindUav( uavSlot );
-
-	// Render the sprites
-	const UINT srvSlot = renderer.vertex().bindDots;
-	bindResource<eStage::Vertex>( srvSlot, dotsBuffer.srv() );
 	iaClearBuffers();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_POINTLIST );
-	context->Draw( dotsCount, 0 );
-	bindResource<eStage::Vertex>( srvSlot );
+	context->Draw( pointsCount, 0 );
 
 	return S_OK;
 }

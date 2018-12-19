@@ -15,7 +15,7 @@ public:
 	};
 
 	// Get the compile-time metadata for this effect instance.
-	virtual const Metadata& metadata() = 0;
+	virtual const Metadata& metadata() { __debugbreak(); return *(Metadata*)( nullptr ); }	// Must override
 
 	// Effects will return S_OK if user has changed their settings in a way that deprecates GPU state buffer data and/or state shaders.
 	// S_FALSE means the previous state is fine.

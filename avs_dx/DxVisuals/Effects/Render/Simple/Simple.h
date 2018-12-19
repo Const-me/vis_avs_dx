@@ -46,21 +46,13 @@ struct DotsRendering : public PointSpritesRender
 	using AvsState = SimpleBase::AvsState;
 	using StateData = EmptyStateData;
 
-	struct CsData : public SimpleCS
-	{
-		HRESULT updateAvs( const AvsState& avs );
-	};
-
 	using VsData = SimpleDotsVS;
 };
 
 class SimpleDotsFx : public EffectBase1<DotsRendering>
 {
-	StructureBuffer dotsBuffer;
-
 public:
 	SimpleDotsFx( AvsState *pState ) : tBase( pState ) { }
-	const Metadata& metadata() override;
 
 	HRESULT render( RenderTargets& rt ) override;
 };
@@ -87,7 +79,6 @@ class SimpleSolidFx : public EffectBase1<SolidRendering>
 {
 public:
 	SimpleSolidFx( AvsState *pState ) : tBase( pState ) { }
-	const Metadata& metadata() override;
 
 	HRESULT render( RenderTargets& rt ) override;
 };
@@ -109,7 +100,6 @@ class SimpleLinesFx : public EffectBase1<LinesRendering>
 {
 public:
 	SimpleLinesFx( AvsState *pState ) : tBase( pState ) { }
-	const Metadata& metadata() override;
 
 	HRESULT render( RenderTargets& rt ) override;
 };

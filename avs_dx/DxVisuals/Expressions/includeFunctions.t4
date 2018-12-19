@@ -33,6 +33,7 @@
 				case "uint": return "u32";
 				case "float": return "f32";
 				case "int": return "i32";
+				case "double": return "f64";
 			}
 			throw new ArgumentException( "Unsupported function type " + hlsl );
 		}

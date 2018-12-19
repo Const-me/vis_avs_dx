@@ -62,7 +62,7 @@ namespace
 		const CStringA fi = getFirstId( rhs );
 		const ShaderFunc* pfn = lookupShaderFunc( fi );
 		if( nullptr != pfn )
-			pfn->returnType;
+			return pfn->returnType;
 		eVarType vt;
 		if( isBuiltinFunction( fi, vt ) )
 			return vt;
@@ -184,7 +184,7 @@ HRESULT Compiler::allocVariables( const std::array<Assignments, 4>& parsed )
 			// Used in state shader, need to place that variable in the state buffer.
 			// TODO [low]: it's possible to slightly reduce the count of loads/stores by doing deeper analysis. Not doing that for now.
 			var.offset = m_stateSize;
-			m_stateSize++;
+			m_stateSize += variableSize( var.vt );
 		}
 		else
 		{

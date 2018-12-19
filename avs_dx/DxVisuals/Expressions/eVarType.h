@@ -11,10 +11,15 @@ namespace Expressions
 		f32,
 		// 32-bit signed integer
 		i32,
+		// double-precision float
+		f64,
 	};
 
 	// HLSL name of the type
 	const char* hlslName( eVarType vt );
+
+	// Count of 4-byte items used by this type
+	int variableSize( eVarType vt );
 
 	// Load HLSL expression, e.g. "asfloat( effectStates.Load( STATE_OFFSET + 8 ) )"
 	CStringA stateLoad( eVarType vt, int offset );

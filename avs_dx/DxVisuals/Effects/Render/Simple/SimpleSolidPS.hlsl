@@ -9,9 +9,9 @@ inline bool shouldDiscard( float val, float tc )
     if( isWaveform )
     {
         tc = tc * 2 - 1;
-        return sign( val ) != sign( tc ) || abs( val ) >= abs( tc );
+        return sign( val ) != sign( tc ) || abs( tc ) > abs( val );
     }
-    return val > tc;
+    return tc > val;
 }
 
 float4 main( float2 tc : TEXCOORD0, float4 color : COLOR0 ) : SV_Target

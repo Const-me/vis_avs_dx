@@ -520,11 +520,10 @@ static unsigned int WINAPI RenderThread( LPVOID a )
 				}
 				framedata_pos++;
 				if( framedata_pos >= sizeof( framedata ) / sizeof( framedata[ 0 ] ) ) framedata_pos = 0;
-
 			}
-			int fs = DDraw_IsFullScreen();
-			int sv = ( fs ? ( cfg_speed >> 8 ) : cfg_speed ) & 0xff;
-			Sleep( min( max( sv, 1 ), 100 ) );
+			// int fs = DDraw_IsFullScreen();
+			// int sv = ( fs ? ( cfg_speed >> 8 ) : cfg_speed ) & 0xff;
+			// Sleep( min( max( sv, 1 ), 100 ) );
 		}
 	}
 	_endthreadex( 0 );

@@ -3,6 +3,7 @@
 #include "../DxVisuals/Resources/staticResources.h"
 #include "interop.h"
 #include "../DxVisuals/Resources/RenderTarget.h"
+#include <dxgi1_3.h>
 
 #pragma comment( lib, "D3D11.lib" )
 CComPtr<ID3D11Device> device;
@@ -10,6 +11,21 @@ CComPtr<ID3D11DeviceContext> context;
 CComAutoCriticalSection renderLock;
 
 constexpr UINT msPresentTimeout = 250;
+
+constexpr uint16_t getWindowsVersion()
+{
+	return 0x0A00;
+}
+
+constexpr UINT buffersCount()
+{
+	return ( getWindowsVersion() >= _WIN32_WINNT_WINBLUE ) ? 2 : 1;
+}
+
+constexpr UINT swapChainFlags()
+{
+	return ( getWindowsVersion() >= _WIN32_WINNT_WINBLUE ) ? DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT : 0;
+}
 
 int RenderWindow::wmCreate( LPCREATESTRUCT lpCreateStruct )
 {
@@ -35,14 +51,34 @@ HRESULT RenderWindow::createDevice()
 	const D3D_FEATURE_LEVEL fl = D3D_FEATURE_LEVEL_11_0;
 
 	DXGI_SWAP_CHAIN_DESC scd = {};
-	scd.BufferCount = 1;
+	scd.BufferCount = buffersCount();
 	scd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 	scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	scd.OutputWindow = m_hWnd;
 	scd.SampleDesc.Count = 1;
 	scd.Windowed = TRUE;
+	scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	scd.Flags = swapChainFlags();
+
+	if( getWindowsVersion() >= _WIN32_WINNT_WIN10 )
+	{
+		scd.BufferCount = 2;
+		scd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+	}
+	else if( getWindowsVersion() >= _WIN32_WINNT_WINBLUE )
+	{
+		scd.BufferCount = 2;
+		scd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+	}
 
 	CHECK( D3D11CreateDeviceAndSwapChain( nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, deviceFlags, &fl, 1, D3D11_SDK_VERSION, &scd, &m_swapChain, &device, nullptr, &context ) );
+
+	if( getWindowsVersion() >= _WIN32_WINNT_WINBLUE )
+	{
+		CComPtr<IDXGISwapChain2> sc2;
+		CHECK( m_swapChain->QueryInterface( IID_PPV_ARGS( &sc2 ) ) );
+		CHECK( sc2->SetMaximumFrameLatency( 1 ) );
+	}
 
 	CComPtr<ID3D11Resource> pBB;
 	CHECK( m_swapChain->GetBuffer( 0, IID_PPV_ARGS( &pBB ) ) );
@@ -67,7 +103,7 @@ void RenderWindow::destroyDevice()
 namespace
 {
 	CSize g_renderSize;
-	CStringA g_renderSizeString;
+	CStringA g_renderSizeString = "float2(0,0)";
 }
 
 CSize getRenderSize()
@@ -98,7 +134,7 @@ HRESULT RenderWindow::wmSize( UINT nType, CSize size )
 		return S_FALSE;
 	}
 
-	CHECK( m_swapChain->ResizeBuffers( 0, 0, 0, DXGI_FORMAT_UNKNOWN, 0 ) );
+	CHECK( m_swapChain->ResizeBuffers( 2, 0, 0, DXGI_FORMAT_UNKNOWN, swapChainFlags() ) );
 
 	CComPtr<ID3D11Texture2D> pBuffer;
 	CHECK( m_swapChain->GetBuffer( 0, IID_PPV_ARGS( &pBuffer ) ) );
@@ -149,8 +185,15 @@ LRESULT RenderWindow::wmPresent( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 
 	bindResource<eStage::Pixel>( 127 );
 
-	*pResult = m_swapChain->Present( 0, 0 );
+	*pResult = doPresent();;
 	return TRUE;
+}
+
+HRESULT RenderWindow::doPresent()
+{
+	CHECK( m_swapChain->Present( 1, 0 ) );
+	// CHECK( m_output->WaitForVBlank() );
+	return S_OK;
 }
 
 HRESULT RenderWindow::sendMessageTimeout( UINT wm, const void* wParam )

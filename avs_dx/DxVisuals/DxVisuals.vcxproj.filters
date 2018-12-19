@@ -140,6 +140,7 @@
     <FxCompile Include="Expressions\shaderFunctions.hlsl" />
     <FxCompile Include="Effects\Render\PolylineGS.hlsl" />
     <FxCompile Include="Effects\Render\PolylinePS.hlsl" />
+    <FxCompile Include="Effects\Render\Simple\SimpleLinesVS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

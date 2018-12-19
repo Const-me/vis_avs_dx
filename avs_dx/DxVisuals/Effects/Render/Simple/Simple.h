@@ -92,11 +92,33 @@ public:
 	HRESULT render( RenderTargets& rt ) override;
 };
 
+// ==== Lines rendering ====
+struct LinesRendering
+{
+	using AvsState = SimpleBase::AvsState;
+	using StateData = EmptyStateData;
+
+	struct VsData : public SimpleLinesVS { };
+
+	struct GsData : public Hlsl::Render::PolylineGS { };
+
+	struct PsData : public Hlsl::Render::PolylinePS { };
+};
+
+class SimpleLinesFx : public EffectBase1<LinesRendering>
+{
+public:
+	SimpleLinesFx( AvsState *pState ) : tBase( pState ) { }
+	const Metadata& metadata() override;
+
+	HRESULT render( RenderTargets& rt ) override;
+};
+
 // ==== The effect itself ====
 class Simple : public EffectBase1<SimpleBase>
 {
 	eSimpleRenderStyle m_style;
-	std::variant<std::monostate, SimpleSolidFx, SimpleDotsFx> m_impl;
+	std::variant<std::monostate, SimpleSolidFx, SimpleDotsFx, SimpleLinesFx> m_impl;
 	EffectBase* m_pImpl = nullptr;
 
 	bool replaceStyleIfNeeded();

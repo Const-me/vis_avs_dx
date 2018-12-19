@@ -4,8 +4,9 @@
 // ==== Common stuff for all styles ====
 
 IMPLEMENT_EFFECT( Simple, C_SimpleClass )
-const EffectBase::Metadata& SimpleDotsFx::metadata() { return s_metadada; }
-const EffectBase::Metadata& SimpleSolidFx::metadata() { return s_metadada; }
+const EffectBase::Metadata& SimpleDotsFx::metadata() { __debugbreak(); return s_metadada; }
+const EffectBase::Metadata& SimpleSolidFx::metadata() { __debugbreak(); return s_metadada; }
+const EffectBase::Metadata& SimpleLinesFx::metadata() { __debugbreak(); return s_metadada; }
 
 namespace
 {
@@ -106,6 +107,19 @@ HRESULT SimpleSolidFx::render( RenderTargets& rt )
 	return S_OK;
 }
 
+// ==== Lines rendering ====
+
+HRESULT SimpleLinesFx::render( RenderTargets& rt )
+{
+	CHECK( rt.writeToLast( false ) );
+	renderer.bindShaders();
+
+	iaClearBuffers();
+	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_LINESTRIP_ADJ );
+	context->Draw( renderer.vertex().pointsCount + 2, 0 );
+	return S_OK;
+}
+
 // ==== The effect itself ====
 
 Simple::Simple( AvsState *pState ) :
@@ -120,16 +134,13 @@ bool Simple::replaceStyleIfNeeded()
 	const eSimpleRenderStyle rs = getRenderStyle( avs->effect );
 	switch( rs )
 	{
-	case eSimpleRenderStyle::Dots:
-		if( std::holds_alternative<SimpleDotsFx>( m_impl ) )
-			return false;
-		m_pImpl = &m_impl.emplace<SimpleDotsFx>( avs );
-		return true;
-	case eSimpleRenderStyle::Solid:
-		if( std::holds_alternative<SimpleSolidFx>( m_impl ) )
-			return false;
-		m_pImpl = &m_impl.emplace<SimpleSolidFx>( avs );
-		return true;
+#define REPLACE_STYLE( eStyle, tEffect ) case eStyle: if( std::holds_alternative<tEffect>( m_impl ) ) return false; m_pImpl = &m_impl.emplace<tEffect>( avs ); return true
+
+		REPLACE_STYLE( eSimpleRenderStyle::Dots, SimpleDotsFx );
+		REPLACE_STYLE( eSimpleRenderStyle::Solid, SimpleSolidFx );
+		REPLACE_STYLE( eSimpleRenderStyle::Lines, SimpleLinesFx );
+
+#undef REPLACE_STYLE
 	}
 	__debugbreak();
 	return false;

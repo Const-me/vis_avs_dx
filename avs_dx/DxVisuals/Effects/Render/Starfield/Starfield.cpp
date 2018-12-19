@@ -53,6 +53,9 @@ HRESULT StarfieldStructs::VsData::updateAvs( const AvsState& ass )
 
 HRESULT Starfield::render( RenderTargets& rt )
 {
+	if( !avs->enabled )
+		return S_FALSE;
+
 	if( prevStars != avs->MaxStars_set )
 	{
 		prevStars = avs->MaxStars_set;

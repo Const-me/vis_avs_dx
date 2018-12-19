@@ -46,13 +46,14 @@ HRESULT Expressions::removeComments( CStringA& code )
 	}
 
 	// Couple of macros
+	using namespace Hlsl;
 	for( int i = 0; true; )
 	{
 		i = code.Find( '$', i );
 		if( i < 0 )
 			break;
 		const int dollar = i;
-		for( i++; isalnum( code[ i ] ); i++ ) {}
+		for( i++; isAlphaNumeric( code[ i ] ); i++ ) {}
 
 		const CStringA m = code.Mid( dollar + 1, i - dollar - 1 );
 		const char* v = expandDollarMacro( m );
@@ -62,7 +63,7 @@ HRESULT Expressions::removeComments( CStringA& code )
 			return E_INVALIDARG;
 		}
 		code = code.Left( dollar ) + v + code.Mid( i );
-		i = dollar;
+		i = dollar + m.GetLength();
 	}
 
 	return S_OK;

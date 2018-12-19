@@ -44,9 +44,9 @@ void main()
 		{
 			if( e.shaderTemplate )
 			{
-				CStringA main = e.values.expand( e.shaderTemplate->hlslMain );
-				offsetString.Format( "%i", stateOffset * 4 );
-				main.Replace( "STATE_OFFSET", offsetString );
+				Hlsl::Defines vals = e.values;
+				vals.set( "STATE_OFFSET", stateOffset * 4 );
+				CStringA main = vals.expand( e.shaderTemplate->hlslMain );
 
 				hlsl += main;
 				hlsl += "\r\n";

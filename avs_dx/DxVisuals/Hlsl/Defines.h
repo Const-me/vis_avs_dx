@@ -10,6 +10,7 @@ namespace Hlsl
 
 	public:
 		Defines() = default;
+		Defines( const Defines& ) = default;
 
 		void set( const CStringA& name, const CStringA& value );
 

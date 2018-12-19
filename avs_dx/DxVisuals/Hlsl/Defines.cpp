@@ -84,13 +84,6 @@ void Defines::setBinding( const CStringA &key, char type, UINT slot )
 	set( key, value );
 }
 
-CStringA Defines::expand( CStringA hlsl ) const
-{
-	for( const auto& m : m_map )
-		hlsl.Replace( m.first, m.second );
-	return hlsl;
-}
-
 std::vector<D3D_SHADER_MACRO> Defines::data() const
 {
 	std::vector<D3D_SHADER_MACRO> macros;

@@ -1,5 +1,5 @@
 #pragma once
-#include <ctype.h>
+#include "../Hlsl/parseId.hpp"
 
 namespace Expressions
 {
@@ -11,10 +11,12 @@ namespace Expressions
 	template<class TFunc>
 	inline bool enumIdentifiers( const CStringA& exp, TFunc fn )
 	{
+		using namespace Hlsl;
+		
 		const int len = exp.GetLength();
 		for( int i = 0; i < len; )
 		{
-			if( !isalpha( exp[ i ] ) )
+			if( !isAlpha( exp[ i ] ) )
 			{
 				i++;
 				continue;
@@ -23,7 +25,7 @@ namespace Expressions
 			const int idStart = i;
 			for( i++; i < len; )
 			{
-				if( isalnum( exp[ i ] ) )
+				if( isAlphaNumeric( exp[ i ] ) )
 				{
 					i++;
 					continue;

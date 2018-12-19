@@ -95,6 +95,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Hlsl\parseId.hpp" />
     <ClInclude Include="Utils\events.h" />
     <ClInclude Include="Expressions\builtinFunctions.h" />
     <ClInclude Include="Expressions\includeFunctions.h" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Utils\MiscUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Hlsl\Defines.expand.cpp" />
     <ClCompile Include="Utils\events.cpp" />
     <ClCompile Include="Expressions\builtinFunctions.cpp" />
     <ClCompile Include="Expressions\CompiledShader.cpp" />

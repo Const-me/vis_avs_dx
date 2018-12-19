@@ -59,6 +59,7 @@
     <ClInclude Include="iTransition.h" />
     <ClInclude Include="RootEffect.h" />
     <ClInclude Include="Utils\events.h" />
+    <ClInclude Include="Hlsl\parseId.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -98,6 +99,7 @@
     <ClCompile Include="Transition.cpp" />
     <ClCompile Include="RootEffect.cpp" />
     <ClCompile Include="Utils\events.cpp" />
+    <ClCompile Include="Hlsl\Defines.expand.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

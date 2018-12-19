@@ -4,8 +4,8 @@
 // ==== Common stuff for all styles ====
 
 IMPLEMENT_EFFECT( Simple, C_SimpleClass )
-const EffectBase::Metadata& SimpleDots::metadata() { return s_metadada; }
-const EffectBase::Metadata& SimpleSolid::metadata() { return s_metadada; }
+const EffectBase::Metadata& SimpleDotsFx::metadata() { return s_metadada; }
+const EffectBase::Metadata& SimpleSolidFx::metadata() { return s_metadada; }
 
 namespace
 {
@@ -36,10 +36,6 @@ namespace
 	}
 }
 
-SimpleBase::ChildStateData::ChildStateData( const SimpleBase::AvsState& avs ) :
-	renderStyle( getRenderStyle( avs.effect ) )
-{ }
-
 float SimpleBase::AvsState::sampleV() const
 {
 	return sourceSampleV( source( effect ), channel( effect ) );
@@ -60,7 +56,7 @@ HRESULT DotsRendering::CsData::updateAvs( const AvsState& ass )
 	return updateValue( sampleV, ass.sampleV() );
 }
 
-HRESULT SimpleDots::render( RenderTargets& rt )
+HRESULT SimpleDotsFx::render( RenderTargets& rt )
 {
 	constexpr UINT dotsCount = 768;
 	if( !dotsBuffer )
@@ -99,7 +95,7 @@ HRESULT SolidRendering::PsData::updateAvs( const AvsState& avs )
 	return updateValue( sampleV, avs.sampleV() );
 }
 
-HRESULT SimpleSolid::render( RenderTargets& rt )
+HRESULT SimpleSolidFx::render( RenderTargets& rt )
 {
 	CHECK( rt.writeToLast( false ) );
 	renderer.bindShaders();
@@ -125,14 +121,14 @@ bool Simple::replaceStyleIfNeeded()
 	switch( rs )
 	{
 	case eSimpleRenderStyle::Dots:
-		if( std::holds_alternative<SimpleDots>( m_impl ) )
+		if( std::holds_alternative<SimpleDotsFx>( m_impl ) )
 			return false;
-		m_pImpl = &m_impl.emplace<SimpleDots>( avs );
+		m_pImpl = &m_impl.emplace<SimpleDotsFx>( avs );
 		return true;
 	case eSimpleRenderStyle::Solid:
-		if( std::holds_alternative<SimpleSolid>( m_impl ) )
+		if( std::holds_alternative<SimpleSolidFx>( m_impl ) )
 			return false;
-		m_pImpl = &m_impl.emplace<SimpleSolid>( avs );
+		m_pImpl = &m_impl.emplace<SimpleSolidFx>( avs );
 		return true;
 	}
 	__debugbreak();
@@ -141,8 +137,10 @@ bool Simple::replaceStyleIfNeeded()
 
 HRESULT Simple::shouldRebuildState()
 {
-	// All rendering use the same state data (cycling colors), no need to rebuild it when user changes these style
-	replaceStyleIfNeeded();
+	if( replaceStyleIfNeeded() )
+		m_pImpl->setStateOffset( stateOffset() );
+
+	// All rendering use the same state data i.e. cycling colors, no need to rebuild it when user switches the rendering style
 	return EffectBase1::shouldRebuildState();
 }
 

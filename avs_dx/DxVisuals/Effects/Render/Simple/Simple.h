@@ -12,7 +12,8 @@ enum eSimpleRenderStyle : uint8_t
 	Lines
 };
 
-class SimpleBase
+// The effect structure for the main effect. It does state management, but all 4 shaders are empty.
+struct SimpleBase
 {
 public:
 	struct AvsState
@@ -36,18 +37,6 @@ public:
 
 		static inline UINT stateSize() { return 4; }
 	};
-
-	struct ChildStateData : public EmptyStateData
-	{
-		eSimpleRenderStyle renderStyle;
-
-		ChildStateData( const AvsState& avs );
-
-		bool operator==( const ChildStateData& that )
-		{
-			return renderStyle == that.renderStyle;
-		}
-	};
 };
 
 // ==== Dots rendering ====
@@ -55,7 +44,7 @@ public:
 struct DotsRendering : public PointSpritesRender
 {
 	using AvsState = SimpleBase::AvsState;
-	using StateData = SimpleBase::ChildStateData;
+	using StateData = EmptyStateData;
 
 	struct CsData : public SimpleCS
 	{
@@ -65,12 +54,12 @@ struct DotsRendering : public PointSpritesRender
 	using VsData = SimpleDotsVS;
 };
 
-class SimpleDots : public EffectBase1<DotsRendering>
+class SimpleDotsFx : public EffectBase1<DotsRendering>
 {
 	StructureBuffer dotsBuffer;
 
 public:
-	SimpleDots( AvsState *pState ) : tBase( pState ) { }
+	SimpleDotsFx( AvsState *pState ) : tBase( pState ) { }
 	const Metadata& metadata() override;
 
 	HRESULT render( RenderTargets& rt ) override;
@@ -81,32 +70,33 @@ public:
 struct SolidRendering
 {
 	using AvsState = SimpleBase::AvsState;
-	using StateData = SimpleBase::ChildStateData;
+	using StateData = EmptyStateData;
+
 	struct VsData : public SimpleSolidVS
 	{
 		HRESULT updateAvs( const AvsState& avs );
 	};
+
 	struct PsData : public SimpleSolidPS
 	{
 		HRESULT updateAvs( const AvsState& avs );
 	};
 };
 
-class SimpleSolid : public EffectBase1<SolidRendering>
+class SimpleSolidFx : public EffectBase1<SolidRendering>
 {
 public:
-	SimpleSolid( AvsState *pState ) : tBase( pState ) { }
+	SimpleSolidFx( AvsState *pState ) : tBase( pState ) { }
 	const Metadata& metadata() override;
 
 	HRESULT render( RenderTargets& rt ) override;
 };
 
-
 // ==== The effect itself ====
 class Simple : public EffectBase1<SimpleBase>
 {
 	eSimpleRenderStyle m_style;
-	std::variant<std::monostate, SimpleSolid, SimpleDots> m_impl;
+	std::variant<std::monostate, SimpleSolidFx, SimpleDotsFx> m_impl;
 	EffectBase* m_pImpl = nullptr;
 
 	bool replaceStyleIfNeeded();
@@ -122,5 +112,6 @@ public:
 
 	// Forward the rest of the calls to specific renderers
 	HRESULT updateParameters( Binder& binder ) override { return m_pImpl->updateParameters( binder ); }
+
 	HRESULT render( RenderTargets& rt ) override { return m_pImpl->render( rt ); }
 };

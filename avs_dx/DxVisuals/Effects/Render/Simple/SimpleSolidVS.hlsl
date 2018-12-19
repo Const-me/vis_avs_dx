@@ -13,7 +13,8 @@ struct SimpleVertex
 
 SimpleVertex main( uint id : SV_VertexID )
 {
-    const float2 xy = float2( id & 1, ( id >> 1 ) ^ 1 );
+    const uint yXor = ( y1y2.y > y1y2.x ) ? 1 : 0;
+    const float2 xy = float2( id & 1, ( id >> 1 ) ^ yXor );
     SimpleVertex res;
     res.pos.xy = lerp( float2( -1, y1y2.x ), float2( +1, y1y2.y ), xy );
     res.pos.zw = float2(0, 1);

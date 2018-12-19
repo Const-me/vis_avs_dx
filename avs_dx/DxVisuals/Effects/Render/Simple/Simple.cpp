@@ -21,24 +21,38 @@ namespace
 		if( 1 == which_ch ) return eChannel::Right;
 		return eChannel::Center;
 	}
-
-	eSimpleRenderStyle getRenderStyle( int effect )
-	{
-		if( effect & ( 1 << 6 ) )
-			return eSimpleRenderStyle::Dots;
-		switch( effect & 3 )
-		{
-		case 0:
-		case 3:
-			return eSimpleRenderStyle::Solid;
-		}
-		return eSimpleRenderStyle::Lines;
-	}
 }
 
 float SimpleBase::AvsState::sampleV() const
 {
 	return sourceSampleV( source( effect ), channel( effect ) );
+}
+
+eSimpleStyle SimpleBase::AvsState::style() const
+{
+	if( effect & ( 1 << 6 ) )
+		return eSimpleStyle::Dots;
+	switch( effect & 3 )
+	{
+	case 0:
+	case 3:
+		return eSimpleStyle::Solid;
+	}
+	return eSimpleStyle::Lines;
+}
+
+static const std::array<float2, 3> s_positions =
+{
+	float2{ 0, 1 },				// top
+	float2{ 0, -1 },			// bottom
+	float2{ -0.5f, +0.5f, },	// center
+};
+
+float2 SimpleBase::AvsState::positionY() const
+{
+	const int ind = ( effect >> 4 ) & 3;
+	assert( ind < 3 );
+	return s_positions[ ind ];
 }
 
 HRESULT SimpleBase::StateData::update( const AvsState& ass )
@@ -50,6 +64,14 @@ HRESULT SimpleBase::StateData::update( const AvsState& ass )
 }
 
 // ==== Dots rendering ====
+
+HRESULT DotsRendering::VsData::updateAvs( const AvsState& avs )
+{
+	BoolHr res;
+	res.updateValue( y1y2, avs.positionY() );
+	res.updateValue( sampleV, avs.sampleV() );
+	return res;
+}
 
 HRESULT SimpleDotsFx::render( RenderTargets& rt )
 {
@@ -69,8 +91,7 @@ HRESULT SimpleDotsFx::render( RenderTargets& rt )
 
 HRESULT SolidRendering::VsData::updateAvs( const AvsState& avs )
 {
-	// TODO: positions
-	return S_FALSE;
+	return updateValue( y1y2, avs.positionY() );
 }
 
 HRESULT SolidRendering::PsData::updateAvs( const AvsState& avs )
@@ -90,6 +111,14 @@ HRESULT SimpleSolidFx::render( RenderTargets& rt )
 }
 
 // ==== Lines rendering ====
+
+HRESULT LinesRendering::VsData::updateAvs( const AvsState& avs )
+{
+	BoolHr res;
+	res.updateValue( y1y2, avs.positionY() );
+	res.updateValue( sampleV, avs.sampleV() );
+	return res;
+}
 
 HRESULT SimpleLinesFx::render( RenderTargets& rt )
 {
@@ -113,14 +142,14 @@ Simple::Simple( AvsState *pState ) :
 
 bool Simple::replaceStyleIfNeeded()
 {
-	const eSimpleRenderStyle rs = getRenderStyle( avs->effect );
+	const eSimpleStyle rs = avs->style();
 	switch( rs )
 	{
 #define REPLACE_STYLE( eStyle, tEffect ) case eStyle: if( std::holds_alternative<tEffect>( m_impl ) ) return false; m_pImpl = &m_impl.emplace<tEffect>( avs ); return true
 
-		REPLACE_STYLE( eSimpleRenderStyle::Dots, SimpleDotsFx );
-		REPLACE_STYLE( eSimpleRenderStyle::Solid, SimpleSolidFx );
-		REPLACE_STYLE( eSimpleRenderStyle::Lines, SimpleLinesFx );
+		REPLACE_STYLE( eSimpleStyle::Dots, SimpleDotsFx );
+		REPLACE_STYLE( eSimpleStyle::Solid, SimpleSolidFx );
+		REPLACE_STYLE( eSimpleStyle::Lines, SimpleLinesFx );
 
 #undef REPLACE_STYLE
 	}

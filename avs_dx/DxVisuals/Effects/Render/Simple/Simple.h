@@ -5,7 +5,7 @@
 using namespace Hlsl::Render::Simple;
 
 // ==== Common stuff for all styles ====
-enum eSimpleRenderStyle : uint8_t
+enum struct eSimpleStyle : uint8_t
 {
 	Dots,
 	Solid,
@@ -23,7 +23,11 @@ public:
 		int colors[ 16 ];
 		int color_pos;
 
+		eSimpleStyle style() const;
+
 		float sampleV() const;
+
+		float2 positionY() const;
 	};
 
 	struct StateData : public SimpleState
@@ -46,7 +50,10 @@ struct DotsRendering : public PointSpritesRender
 	using AvsState = SimpleBase::AvsState;
 	using StateData = EmptyStateData;
 
-	using VsData = SimpleDotsVS;
+	struct VsData : public SimpleDotsVS
+	{
+		HRESULT updateAvs( const AvsState& avs );
+	};
 };
 
 class SimpleDotsFx : public EffectBase1<DotsRendering>
@@ -89,11 +96,14 @@ struct LinesRendering
 	using AvsState = SimpleBase::AvsState;
 	using StateData = EmptyStateData;
 
-	struct VsData : public SimpleLinesVS { };
+	struct VsData : public SimpleLinesVS
+	{
+		HRESULT updateAvs( const AvsState& avs );
+	};
 
-	struct GsData : public Hlsl::Render::PolylineGS { };
+	using GsData = Hlsl::Render::PolylineGS;
 
-	struct PsData : public Hlsl::Render::PolylinePS { };
+	using PsData = Hlsl::Render::PolylinePS;
 };
 
 class SimpleLinesFx : public EffectBase1<LinesRendering>
@@ -107,7 +117,7 @@ public:
 // ==== The effect itself ====
 class Simple : public EffectBase1<SimpleBase>
 {
-	eSimpleRenderStyle m_style;
+	eSimpleStyle m_style;
 	std::variant<std::monostate, SimpleSolidFx, SimpleDotsFx, SimpleLinesFx> m_impl;
 	EffectBase* m_pImpl = nullptr;
 

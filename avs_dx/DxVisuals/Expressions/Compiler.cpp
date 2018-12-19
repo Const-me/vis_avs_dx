@@ -110,7 +110,7 @@ HRESULT Compiler::allocVariables( const std::array<Assignments, 4>& parsed )
 		for( const auto &a : parsed[ i ] )
 		{
 			HRESULT hr = S_OK;
-			enumIdentifiers( a.second, [ & ]( const CStringA& id )
+			findIdentifier( a.second, [ & ]( const CStringA& id )
 			{
 				auto p = vars.Lookup( id );
 				if( nullptr != p )

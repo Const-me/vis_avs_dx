@@ -9,39 +9,15 @@ namespace Expressions
 	HRESULT parseAssignments( CStringA code, Assignments& assignments );
 
 	template<class TFunc>
-	inline bool enumIdentifiers( const CStringA& exp, TFunc fn )
+	inline bool findIdentifier( const CStringA& exp, TFunc fnGotId )
 	{
-		using namespace Hlsl;
-		
-		const int len = exp.GetLength();
-		for( int i = 0; i < len; )
-		{
-			if( !isAlpha( exp[ i ] ) )
-			{
-				i++;
-				continue;
-			}
-
-			const int idStart = i;
-			for( i++; i < len; )
-			{
-				if( isAlphaNumeric( exp[ i ] ) )
-				{
-					i++;
-					continue;
-				}
-				break;
-			}
-			if( fn( exp.Mid( idStart, i - idStart ) ) )
-				return true;
-		}
-		return false;
+		return Hlsl::enumIdentifiers( exp, [ =, &exp ]( int start, int length ) { return fnGotId( exp.Mid( start, length ) ); } );
 	}
 
 	inline CStringA getFirstId( const CStringA& exp )
 	{
 		CStringA res;
-		enumIdentifiers( exp, [ & ]( auto id ) { res = id; return true; } );
+		findIdentifier( exp, [ & ]( const CStringA& id ) { res = id; return true; } );
 		return res;
 	}
 }

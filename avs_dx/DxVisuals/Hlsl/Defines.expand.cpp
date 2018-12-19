@@ -11,38 +11,20 @@ CStringA Defines::expand( CStringA hlsl ) const
 	for( const auto& m : m_map )
 	{
 		const int macroLen = m.first.GetLength();
-
-		// Find the identifiers, collect them in the vector
 		const char* const src = hlsl;
 		ids.clear();
-		const int len = hlsl.GetLength();
-		for( int i = 0; i < len; )
+
+		// Find the identifiers, collect macro keys into the vector
+		enumIdentifiers( hlsl, [ =, &ids ]( int idStart, int idLength )
 		{
-			if( !isAlpha( src[ i ] ) )
-			{
-				i++;
-				continue;
-			}
-			const int idStart = i;
-
-			for( i++; i < len; )
-			{
-				if( isAlphaNumeric( src[ i ] ) )
-				{
-					i++;
-					continue;
-				}
-				break;
-			}
-			const int idLength = i - idStart;
-
 			if( idLength != macroLen )
-				continue;
+				return false;
 			if( 0 != strncmp( src + idStart, m.first, (size_t)idLength ) )
-				continue;
-			// Found the macro
+				return false;
+			// Found the macro we're looking for
 			ids.push_back( idStart );
-		}
+			return false;
+		} );
 
 		if( ids.empty() )
 			continue;	// Not found any

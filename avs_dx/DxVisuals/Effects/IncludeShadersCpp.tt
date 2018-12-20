@@ -271,7 +271,7 @@ class Compressor
 		byte[] orig = origBuffer.ToArray();
 		byte[] compressed = compressBuffer( orig );
 		printBytes( sb, compressed );
-		sb.tl( "static const std::vector<uint8_t> buffer = decompressBytes( src, {0}, {1} );", compressed.Length, orig.Length );
+		sb.tl( "static const std::vector<uint8_t> buffer = decompressBytes( src, {0}, {1} );	// {2:P1}", compressed.Length, orig.Length, (double)compressed.Length / orig.Length );
 		return sb.ToString();
 	}
 }

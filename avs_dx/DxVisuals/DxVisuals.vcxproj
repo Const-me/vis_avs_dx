@@ -270,7 +270,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
     </FxCompile>
-    <None Include="Effects\trigDouble.fx">
+    <None Include="Effects\doubleFuncs.fx">
       <FileType>Document</FileType>
     </None>
     <FxCompile Include="Expressions\shaderFunctions.hlsl">

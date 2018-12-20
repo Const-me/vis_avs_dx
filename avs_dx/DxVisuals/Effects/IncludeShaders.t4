@@ -1,5 +1,4 @@
-<#@ include file="../CppBuilder.t4" #>
-<#+
+<#@ include file="../CppBuilder.t4" #><#+
 	static string[] findFiles( string inputDir, string filter, bool recursive, ref string[] found )
 	{
 		if( null != found )

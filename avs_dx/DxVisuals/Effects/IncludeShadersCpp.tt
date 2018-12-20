@@ -79,8 +79,7 @@ namespace
 <#= compressDxbc.compress()
 #>		return buffer.data();
 	}
-}
-<#@ include file="IncludeShaders.t4"#>
+}<#@ include file="IncludeShaders.t4"#>
 <#@ include file="../compress.t4"#><#+
 
 void makeShader( CppBuilder sb, string path )

@@ -13,6 +13,7 @@ namespace Hlsl
 		Defines( const Defines& ) = default;
 
 		void set( const CStringA& name, const CStringA& value );
+		void set( const CStringA& name, const char* value );
 
 		void clear() { m_map.clear(); }
 

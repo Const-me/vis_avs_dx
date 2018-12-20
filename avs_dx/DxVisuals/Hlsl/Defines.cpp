@@ -17,6 +17,11 @@ void Defines::set( const CStringA& key, const CStringA& value )
 	m_map.emplace_back( std::make_pair( key, value ) );
 }
 
+void Defines::set( const CStringA& name, const char* value )
+{
+	set( name, CStringA{ value } );
+}
+
 void Defines::set( const CStringA &key, uint32_t value )
 {
 	CStringA str;

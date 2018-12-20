@@ -60,6 +60,7 @@
     <ClInclude Include="RootEffect.h" />
     <ClInclude Include="Utils\events.h" />
     <ClInclude Include="Hlsl\parseId.hpp" />
+    <ClInclude Include="Utils\ByteRange.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

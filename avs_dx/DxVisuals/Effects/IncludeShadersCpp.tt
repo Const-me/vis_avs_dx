@@ -16,26 +16,38 @@
 
 namespace
 {
-	template<size_t size>
+	const uint8_t* dxbcBufferPointer();
+	const char* hlslBufferPointer();
+
+	struct Source
+	{
+		const char* const name;
+		const uint32_t offset, length;
+		constexpr Source( const char* n, uint32_t off, uint32_t l ) :
+			name( n ), offset( off ), length( l ) { }
+	};
+
 	class IncludesMap
 	{
-		void decompress( std::array<const char*, size> names, std::array<std::tuple<const uint8_t*, int, int>, size> compressedValues )
+		void initialize( std::initializer_list<Source> entries )
 		{
-			for( size_t i = 0; i < size; i++ )
-				map[ names[ i ] ] = std::apply( decompressString, compressedValues[ i ] );
+			const char* ptr = hlslBufferPointer();
+			for( auto e : entries )
+				map[ e.name ] = CStringA{ ptr + e.offset, (int)e.length };
 		}
+
 	public:
 		CAtlMap<CStringA, CStringA> map;
 
-		IncludesMap( std::array<const char*, size> names, std::array<std::tuple<const uint8_t*, int, int>, size> compressedValues )
+		IncludesMap( std::initializer_list<Source> entries )
 		{
-			decompress( names, compressedValues );
+			initialize( entries );
 			map.Rehash();
 		}
 
-		IncludesMap( const CAtlMap<CStringA, CStringA>& parent, std::array<const char*, size> names, std::array<std::tuple<const uint8_t*, int, int>, size> compressedValues )
+		IncludesMap( const CAtlMap<CStringA, CStringA>& parent, std::initializer_list<Source> entries )
 		{
-			decompress( names, compressedValues );
+			initialize( entries );
 			for( POSITION pos = parent.GetStartPosition(); nullptr != pos; )
 			{
 				auto p = parent.GetNext( pos );
@@ -53,20 +65,32 @@ namespace Hlsl
 	{
 <#= makeStaticShaders() #>
 	}
-}<#@ include file="IncludeShaders.t4"#>
+}
+
+namespace
+{
+	const char* hlslBufferPointer()
+	{
+<#= compressHlsl.compress() 
+#>		return (const char*)buffer.data();
+	}
+	const uint8_t* dxbcBufferPointer()
+	{
+<#= compressDxbc.compress()
+#>		return buffer.data();
+	}
+}
+<#@ include file="IncludeShaders.t4"#>
 <#@ include file="../compress.t4"#><#+
 
 void makeShader( CppBuilder sb, string path )
 {
+	BytesRange src = compressDxbc.add( path );
 	byte[] orig = File.ReadAllBytes( path );
 	byte[] compressed = compressBuffer( orig );
-	sb.tabs( 2 );
-	sb.line( "std::vector<uint8_t> {0}()", Path.GetFileNameWithoutExtension( path ) );
+	sb.line( "		ByteRange {0}()", Path.GetFileNameWithoutExtension( path ) );
 	sb.line( "		{" );
-	sb.line( "			const uint8_t src[] =", compressed.Length );
-	printBytes( sb, compressed );
-	sb.line( "			std::vector<uint8_t> result = decompressBytes( src, {0}, {1} );", compressed.Length, orig.Length );
-	sb.line( "			return std::move( result );" );
+	sb.line( "			return ByteRange{{ dxbcBufferPointer() + {0}, {1} }};", src.offset, src.length );
 	sb.line( "		};" );
 	Console.WriteLine( "Included a static shader from {0}", Path.GetFileName( path ) );
 }
@@ -75,70 +99,34 @@ string makeStaticShaders()
 {
 	CppBuilder sb = new CppBuilder();
 	foreach( var path in staticShaders )
-	{
 		makeShader( sb, path );
-		sb.line();
-	}
-	return sb.ToString().Trim();
+	return sb.ToString().TrimEnd();
 }
 
 static void writeIncludes( CppBuilder sb, NamespaceData ns, int lvl )
 {
-	sb.line( lvl );
-	sb.print( "const CAtlMap<CStringA, CStringA>& includes()" );
-	sb.line( lvl );
-	sb.line( "{" );
-	int[] origSize = new int[ ns.headers.Length ];
-	int[] cmpSize = new int[ ns.headers.Length ];
-	for( int i = 0; i < ns.headers.Length; i++ )
-	{
-		string hlsl = ns.headers[ i ];
-		byte[] orig = File.ReadAllBytes( hlsl );
-		byte[] compressed = compressBuffer( orig );
+	sb.setTabs( lvl );
+	sb.tl( "const CAtlMap<CStringA, CStringA>& includes()" );
+	sb.tl( "{" );
+	sb.incTabs();
 
-		sb.tabs( lvl + 1 );
-		sb.line( "const uint8_t {0}[] =", Path.GetFileNameWithoutExtension( hlsl ) );
-		printBytes( sb, compressed );
-		origSize[ i ] = orig.Length;
-		cmpSize[ i ] = compressed.Length;
-	}
-
-	sb.line( lvl + 1 );
-	sb.print( "const std::array<std::tuple<const uint8_t*, int, int>, {0}> tuples = ", ns.headers.Length );
-	sb.line( lvl + 2 );
-	sb.print( "{ " );
-	for( int i = 0; i < ns.headers.Length; i++ )
-	{
-		sb.print( "std::make_tuple( &{0}[0], {1}, {2} )", Path.GetFileNameWithoutExtension( ns.headers[ i ] ), cmpSize[ i ], origSize[ i ] );
-		if( i + 1 < ns.headers.Length )
-			sb.print( ", " );
-	}
-	sb.line( " };" );
-
-	sb.tabs( lvl + 1 );
-	sb.print( "const std::array<const char*, {0}> names = ", ns.headers.Length );
-	sb.line( lvl + 2 );
-	sb.print( "{ " );
-	sb.print( string.Join( ", ", ns.headers.Select( p => String.Format( @"R""({0})""", Path.GetFileName( p ).ToLowerInvariant() ) ) ) );
-	sb.line( " };" );
-
-	sb.tabs( lvl + 1 );
+	var ranges = ns.headers
+		.Select( hlsl =>
+		{
+			var range = compressHlsl.addFile( hlsl );
+			string inc = Path.GetFileName( hlsl ).ToLowerInvariant();
+			return string.Format( @"Source{{ ""{0}"", {1}, {2} }}", inc, range.offset, range.length );
+		} );
 
 	// Include parent scope includes, if any
 	NamespaceData parent = ns.parents().FirstOrDefault( n => n.anyInclude );
 	if( null == parent )
-		sb.line( "static const IncludesMap<{0}> result{{ names, tuples }};", ns.headers.Length );
+		sb.tl( "static const IncludesMap result{{ {{ {0} }} }};", string.Join( ", ", ranges ) );
 	else
-	{
-		sb.line( "// Including headers from a parent scope." );
-		sb.tabs( lvl + 1 );
-		sb.line( "static const IncludesMap<{0}> result{{ ::{1}::includes(), names, tuples }};", ns.headers.Length, parent.fullName );
-	}
-	sb.tabs( lvl + 1 );
-	sb.line( "return result.map;" );
-
-	sb.tabs( lvl );
-	sb.line( "};" );
+		sb.tl( "static const IncludesMap result{{ ::{0}::includes(), {{ {1} }} }};", parent.fullName, string.Join( ", ", ranges ) );
+	sb.tl( "return result.map;" );
+	sb.decTabs();
+	sb.tl( "};" );
 
 	Console.WriteLine( "Generated {0} in {1}", pluralString( ns.headers.Length, "include" ), ns.fullName );
 }
@@ -153,40 +141,13 @@ static int firstIndex( string[] lines, Func<string,bool> test, int start = 0 )
 
 void writeTemplate( CppBuilder sb, int lvl, string sourcePath )
 {
-	// Cleanup unused "#ifndef AVS_SHADER" portion of the HLSL, to save a bit of space.
-	string[] lines = File.ReadAllLines( sourcePath );
-	int indAvxShaderIfdef = firstIndex( lines, s => s == "#ifndef AVS_SHADER" );
-
-	if( indAvxShaderIfdef >= 0 )
-	{
-		int indEndif = firstIndex( lines, s => s.StartsWith( "#endif" ), indAvxShaderIfdef );
-		if( indEndif < 0 ) throw new ArgumentException( "Unmatched `#ifndef AVS_SHADER` in " + sourcePath );
-
-		List<string> newLines = new List<string>();
-		newLines.AddRange( lines.Take( indAvxShaderIfdef ) );
-		newLines.AddRange( lines.Skip( indEndif + 1 ) );
-		lines = newLines.ToArray();
-		// Console.WriteLine( string.Join( "\r\n", lines ) );
-	}
-
-	byte[] orig = Encoding.ASCII.GetBytes( string.Join( "\r\n", lines ) );
-	byte[] compressed = compressBuffer( orig );
+	var range = compressHlsl.addFile( sourcePath );
 
 	sb.setTabs( lvl );
 	sb.tl( "const ShaderTemplate* {0}::shaderTemplate()", Path.GetFileNameWithoutExtension( sourcePath ) );
 	sb.tl( "{" );
 	sb.incTabs();
-	if( compressed.Length < ( orig.Length + lines.Length - 1 ) )
-	{
-		sb.tl( "const uint8_t src[] =" );
-		printBytes( sb, compressed );
-		sb.tl( "static const ShaderTemplate result{{ R\"({0})\", decompressString( src, {1}, {2} ) }};", Path.GetFileName( sourcePath ), compressed.Length, orig.Length );
-	}
-	else
-	{
-		sb.tl( @"const char src[] = R""fffuuu({0})fffuuu"";", string.Join( "\r\n", lines ) );
-		sb.tl( "static const ShaderTemplate result{{ R\"({0})\", src }};", Path.GetFileName( sourcePath ) );
-	}
+	sb.tl( "static const ShaderTemplate result{{ \"{0}\", {1} }};", Path.GetFileName( sourcePath ), range.stringCtor() );
 	sb.tl( "return &result;" );
 	sb.decTabs();
 	sb.tl( "};" );
@@ -230,47 +191,29 @@ static void writeStateTemplate( CppBuilder sb, int lvl, string sourcePath )
 	content = content.Substring( iStart ).Trim();
 
 	// Compress and write the data
+	sb.setTabs( lvl );
+	sb.tl( "const StateShaderTemplate* {0}::shaderTemplate()", Path.GetFileNameWithoutExtension( sourcePath ) );
+	sb.tl( "{" );
+	sb.incTabs();
 
-	sb.line( lvl );
-	sb.print( "const StateShaderTemplate* {0}::shaderTemplate()", Path.GetFileNameWithoutExtension( sourcePath ) );
-	sb.line( lvl );
-	sb.line( "{" );
+	string[] rGlobals = globals
+		.Select( s => compressHlsl.addFragment( s ).stringCtor() )
+		.ToArray();
 
-	string[] arr = globals.ToArray();
-	List<byte[]> compressed = arr.Select( compressString ).ToList();
-	for( int i = 0; i < arr.Length; i++ )
-	{
-		sb.tabs( lvl + 1 );
-		sb.line( "const uint8_t globalData{0}[] = ", i );
-		printBytes( sb, compressed[ i ] );
-	}
+	sb.tl( "static const std::vector<CStringA> globals{{ {0} }};", string.Join( ", ", rGlobals ) );
 
-	sb.tabs( lvl + 1 );
-	sb.print( "static const std::vector<CStringA> globals{ " );
-	for( int i = 0; i < arr.Length; i++ )
-	{
-		sb.print( "decompressString( globalData{0}, {1}, {2} )", i, compressed[ i ].Length, arr[ i ].Length );
-		if( i + 1 != arr.Length )
-			sb.print( ", " );
-	}
-	sb.line( " };" );
+	var rMain = compressHlsl.addFragment( content );
 
-	byte[] hlslData = compressString( content );
-	sb.tabs( lvl + 1 );
-	sb.line( "const uint8_t hlslData[] = " );
-	printBytes( sb, hlslData );
+	bool hasBeat = content.Contains( isBeatMacro ) || globals.Any( s => s.Contains( isBeatMacro ) );
 
-	bool hasBeat = content.Contains( isBeatMacro ) || arr.Any( s => s.Contains( isBeatMacro ) );
-	sb.tabs( lvl + 1 );
-	sb.line( "static const StateShaderTemplate result{{ R\"({0})\", decompressString( hlslData, {1}, {2} ), {3}, globals }};",
+	sb.tl( "static const StateShaderTemplate result{{ \"{0}\", {1}, {2}, globals }};",
 		Path.GetFileName( sourcePath ),
-		hlslData.Length, content.Length, 
+		rMain.stringCtor(),
 		hasBeat ? "true" : "false" );
-	sb.tabs( lvl + 1 );
-	sb.line( "return &result;" );
+	sb.tl( "return &result;" );
 
-	sb.tabs( lvl );
-	sb.line( "};" );
+	sb.decTabs();
+	sb.tl( "};" );
 }
 
 void generateNamespaces( CppBuilder sb, NamespaceData ns, int lvl )
@@ -289,4 +232,104 @@ void generateNamespaces( CppBuilder sb, NamespaceData ns, int lvl )
 		}
 	}
 }
+
+class BytesRange
+{
+	public readonly int offset;
+	public readonly int length;
+
+	public BytesRange( int off, int l )
+	{
+		offset = off;
+		length = l;
+	}
+
+	public string stringCtor()
+	{
+		return $"CStringA{{ hlslBufferPointer() + { offset }, { length } }}";
+	}
+}
+
+class Compressor
+{
+	readonly List<byte> origBuffer = new List<byte>();
+
+	protected BytesRange addBytes( byte[] data, bool nullTerminate )
+	{
+		var res = new BytesRange( origBuffer.Count, data.Length );
+		origBuffer.AddRange( data );
+		if( nullTerminate )
+			origBuffer.Add( 0 );
+		return res;
+	}
+
+	public string compress()
+	{
+		CppBuilder sb = new CppBuilder();
+		sb.setTabs( 1 );
+		sb.tl( "const uint8_t src[] = " );
+		byte[] orig = origBuffer.ToArray();
+		byte[] compressed = compressBuffer( orig );
+		printBytes( sb, compressed );
+		sb.tl( "static const std::vector<uint8_t> buffer = decompressBytes( src, {0}, {1} );", compressed.Length, orig.Length );
+		return sb.ToString();
+	}
+}
+
+class HlslCompressor: Compressor
+{
+	static string stripComment( string line )
+	{
+		int ind = line.IndexOf( "//" );
+		if( ind < 0 )
+			return line;
+		return line.Substring( 0, ind );
+	}
+
+	public BytesRange addFile( string path )
+	{
+		// Remove comments and empty lines
+		string[] lines = File.ReadAllLines(path)
+			.Select( stripComment )
+			.Where( l => !string.IsNullOrWhiteSpace( l ) )
+			.ToArray();
+
+		// Cleanup unused "#ifndef AVS_SHADER" portion of the HLSL, if any
+		int indAvxShaderIfdef = firstIndex( lines, s => s == "#ifndef AVS_SHADER" );
+
+		if( indAvxShaderIfdef >= 0 )
+		{
+			int indEndif = firstIndex( lines, s => s.StartsWith( "#endif" ), indAvxShaderIfdef );
+			if( indEndif < 0 ) throw new ArgumentException( "Unmatched `#ifndef AVS_SHADER` in " + path );
+
+			List<string> newLines = new List<string>();
+			newLines.AddRange( lines.Take( indAvxShaderIfdef ) );
+			newLines.AddRange( lines.Skip( indEndif + 1 ) );
+			lines = newLines.ToArray();
+			// Console.WriteLine( string.Join( "\r\n", lines ) );
+		}
+
+		byte[] data = Encoding.ASCII.GetBytes( string.Join( "\r\n", lines ) );
+		return addBytes( data, true );
+	}
+
+	public BytesRange addFragment( string content )
+	{
+		byte[] data = Encoding.ASCII.GetBytes( content );
+		return addBytes( data, true );
+	}
+}
+
+class DxbcCompressor: Compressor
+{
+	public BytesRange add( string path )
+	{
+		byte[] data = File.ReadAllBytes( path );
+		return addBytes( data, false );
+	}
+}
+
+static readonly HlslCompressor compressHlsl = new HlslCompressor();
+static readonly DxbcCompressor compressDxbc = new DxbcCompressor();
+
 #>

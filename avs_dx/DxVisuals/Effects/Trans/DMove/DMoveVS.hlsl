@@ -29,7 +29,7 @@ sOutput main( sInput inputVertex )
     float d = length( centered );
     float r = atan2( centered.y, centered.x ) + ( M_PI / 2 );
 
-	{
+    {
 SHADER_CODE
     }
 

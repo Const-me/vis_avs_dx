@@ -16,12 +16,12 @@ namespace Hlsl
 
 	// Enumerate all valid C identifiers in the string. The function argument must have the following prototype: bool gotId( int start, int length ), return false to continue parsing, true to quit.
 	template<class TFunc>
-	inline bool enumIdentifiers( const CStringA& code, TFunc fnGotId )
+	inline bool enumIdentifiers( const CStringA& code, int begin, int end, TFunc fnGotId )
 	{
 		const char* const src = code;
-		const int len = code.GetLength();
+		end = std::min( code.GetLength(), end );
 
-		for( int i = 0; i < len; )
+		for( int i = begin; i < end; )
 		{
 			if( !isAlpha( src[ i ] ) )
 			{
@@ -30,7 +30,7 @@ namespace Hlsl
 			}
 			const int idStart = i;
 
-			for( i++; i < len; )
+			for( i++; i < end; )
 			{
 				if( isAlphaNumeric( src[ i ] ) )
 				{
@@ -44,5 +44,11 @@ namespace Hlsl
 				return true;
 		}
 		return false;
+	}
+
+	template<class TFunc>
+	inline bool enumIdentifiers( const CStringA& code, TFunc fnGotId )
+	{
+		return enumIdentifiers( code, 0, code.GetLength(), fnGotId );
 	}
 }

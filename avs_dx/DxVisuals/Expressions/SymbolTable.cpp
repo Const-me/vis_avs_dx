@@ -8,6 +8,17 @@ using namespace Expressions;
 
 SymbolTable::SymbolTable()
 {
+	addInternals();
+}
+
+SymbolTable::SymbolTable( const Prototype& proto )
+{
+	addInternals();
+	proto.enumBuiltins( [this]( const CStringA& name, eVarType vt ) { varLookup( name, vt ); } );
+}
+
+void SymbolTable::addInternals()
+{
 	int i = addInternalFunc( "assign" );
 	assert( i == idAssign );
 
@@ -16,6 +27,9 @@ SymbolTable::SymbolTable()
 
 	i = addInternalFunc( "if" );
 	assert( idIf == i );
+
+	i = addFunc( "rand", eFunctionKind::Internal, eVarType::f32 );
+	assert( idRand == i );
 }
 
 int SymbolTable::addFunc( const CStringA& name, eFunctionKind kind, eVarType vt )

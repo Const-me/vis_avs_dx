@@ -108,6 +108,7 @@
     <ClCompile Include="Expressions\Tree.parse.cpp" />
     <ClCompile Include="Expressions\Tree.cpp" />
     <ClCompile Include="Effects\Render\SuperScope\SuperScope.cpp" />
+    <ClCompile Include="Expressions\Tree.debug.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

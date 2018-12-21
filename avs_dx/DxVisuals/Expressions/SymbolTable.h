@@ -1,5 +1,6 @@
 #pragma once
 #include "eVarType.h"
+#include "Prototype.h"
 
 namespace Expressions
 {
@@ -43,13 +44,17 @@ namespace Expressions
 		int addFunc( const CStringA& name, eFunctionKind kind, eVarType vt );
 		int addInternalFunc( const CStringA& name );
 
+		void addInternals();
+
 	public:
 
 		SymbolTable();
+		SymbolTable( const Prototype& proto );
 
 		static constexpr int idAssign = 0;
 		static constexpr int idEquals = 1;
 		static constexpr int idIf = 2;
+		static constexpr int idRand = 3;
 
 		// Insert or lookup a variable
 		int varLookup( const CStringA& name, eVarType& vt );
@@ -59,7 +64,15 @@ namespace Expressions
 
 		eVarType varGetType( int id ) const;
 		eVarType varSetType( int id, eVarType vt );
+		const CStringA& varName( int id ) const
+		{
+			return variables[ id ].name;
+		}
 
 		FunctionType funGetType( int id ) const;
+		const CStringA& funcName( int id ) const
+		{
+			return functions[ id ].name;
+		}
 	};
 }

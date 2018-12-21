@@ -126,4 +126,31 @@ namespace SuperScope
 	  {"Whiplash Spiral","n=80;c=200;f=0","d=i;\r\nr=t+i*3.14159*4;\r\nsdt=sin(dt+(i*3.1415*2));\r\ncdt=cos(dt+(i*3.1415*2));\r\nx=(cos(r)*d) + (sdt * .6 * sin(t) );\r\ny=(sin(r)*d) + ( cdt *.6 * sin(t) );\r\nblue=abs(x);\r\ngreen=abs(y);\r\nred=cos(dt*4)","t=t-0.05;f=f+1;dt=(f*2*3.1415)/c","bb = bb + 1;\r\nbeatdiv = 8;\r\nc=if(equal(bb%beatdiv,0),f,c);\r\nf=if(equal(bb%beatdiv,0),0,f);"},
 	#endif
 	};
+
+	class Proto : public Prototype
+	{
+	public:
+		Proto()
+		{
+			addInput( "b", eVarType::u32 );	// IS_BEAT
+			addInput( "w", eVarType::u32 );	// screen width in pixels
+			addInput( "h", eVarType::u32 );	// screen height in pixels
+
+			addState( "n", 768u );
+
+			addOutput( "x" );
+			addOutput( "y" );
+
+			addOutput( "skip" );
+			addOutput( "linesize" );
+
+			addOutput( "red" );
+			addOutput( "green" );
+			addOutput( "blue" );
+
+			// Actually they're inputs; need to rename the API, e.g. addInput -> addConstant, addOutput -> addVar
+			addOutput( "i" );
+			addOutput( "v" );
+		}
+	};
 }

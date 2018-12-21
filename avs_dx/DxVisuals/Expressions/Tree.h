@@ -59,6 +59,9 @@ namespace Expressions
 		eVarType expressionType( int iFirstChild );
 		eVarType functionType( int iFunc );
 
+		void dbgPrintList( int ind, int level ) const;
+		void dbgPrintNode( int ind, int level ) const;
+
 	public:
 
 		Tree( SymbolTable& symbolsTable );
@@ -70,6 +73,8 @@ namespace Expressions
 		HRESULT appendAssignment( const CStringA& lhs, const CStringA& rhs );
 
 		HRESULT deduceTypes();
+
+		void dbgPrint() const;
 
 		/* template<class Func>
 		void visitVariables( Func&& fn )

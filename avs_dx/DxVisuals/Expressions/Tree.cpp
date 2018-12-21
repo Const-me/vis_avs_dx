@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Tree.h"
-
 using namespace Expressions;
 
 Tree::Tree( SymbolTable& symbolsTable ) :
@@ -33,7 +32,6 @@ HRESULT Tree::deduceTypes()
 		return E_FAIL;
 	}
 }
-
 
 eVarType Tree::nodeType( int indNode )
 {

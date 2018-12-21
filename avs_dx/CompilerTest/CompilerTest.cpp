@@ -17,7 +17,8 @@ HRESULT test2()
 {
 	auto preset = SuperScope::presets[ 12 ];
 
-	SymbolTable stState;
+	const SuperScope::Proto proto;
+	SymbolTable stState{ proto };
 	Tree tree{ stState };
 
 	Assignments ass;
@@ -35,6 +36,7 @@ HRESULT test2()
 		CHECK( tree.appendAssignment( a.first, a.second ) );
 
 	CHECK( tree.deduceTypes() );
+	tree.dbgPrint();
 
 	return S_OK;
 }

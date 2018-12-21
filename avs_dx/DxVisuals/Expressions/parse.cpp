@@ -104,10 +104,30 @@ HRESULT Expressions::parseAssignments( CStringA code, Assignments& assignments )
 	CHECK( removeComments( code ) );
 
 	// Filter out whitespace
-	code.Remove( ' ' );
-	code.Remove( '\t' );
-	code.Remove( '\r' );
-	code.Remove( '\n' );
+	{
+		const int len = code.GetLength();
+		char* const pBegin = code.GetBuffer();
+		char* const pEnd = pBegin + len;
+
+		char* pWrite = pBegin;
+		const char* pRead = pBegin;
+		for( ; pRead < pEnd; )
+		{
+			const char c = *pRead;
+			if( c == ' ' || c == '\t' || c == '\r' || c == '\n' )
+			{
+				pRead++;
+				continue;
+			}
+
+			if( pWrite != pRead )
+				*pWrite = *pRead;
+
+			pRead++;
+			pWrite++;
+		}
+		code.ReleaseBufferSetLength( pWrite - pBegin );
+	}
 
 	if( code.GetLength() <= 0 )
 		return S_FALSE;

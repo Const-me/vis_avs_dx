@@ -5,7 +5,7 @@ using namespace Expressions;
 struct Tree::EmitContext
 {
 	CStringA& result;
-
+	bool haveRandom = false;
 
 	EmitContext( CStringA& hlsl ) :
 		result( hlsl )
@@ -106,7 +106,12 @@ void Tree::emitInternal<eInternalFunc::If>( EmitContext& ec, const Node& node, i
 template<>
 void Tree::emitInternal<eInternalFunc::Rand>( EmitContext& ec, const Node& node, int ind ) const
 {
-	throw std::invalid_argument( "You must call Tree::transformRandoms() to handle RNG" );
+	if( node.length != 1 )
+		throw std::invalid_argument( "rand() must have exactly 1 argument" );
+	ec += "rand_avs( rng_state, ";
+	emitNode( ec, ind + 1 );
+	ec += " )";
+	ec.haveRandom = true;
 }
 
 const std::array<Tree::pfnEmitNode, 4> Tree::s_emitInternal =

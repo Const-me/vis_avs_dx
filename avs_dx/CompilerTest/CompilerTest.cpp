@@ -38,7 +38,6 @@ HRESULT test2()
 	CHECK( tree.deduceTypes() );
 	// tree.dbgPrint();
 
-	tree.transformRandoms();
 	tree.transformDoubleFuncs();
 	// tree.dbgPrint();
 	CStringA hlsl;

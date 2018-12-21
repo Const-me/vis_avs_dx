@@ -50,14 +50,6 @@ namespace Expressions
 		std::vector<char> m_codez;
 		std::vector<Node> m_nodes;
 
-		enum eMiscFlags : uint32_t
-		{
-			None = 0,
-			HasRandom = 1,
-			HasDoubleFunc = 2,
-		};
-		eMiscFlags m_miscFlags;
-
 		struct ExpressionContext
 		{
 			int prevSibling = -1;
@@ -108,8 +100,6 @@ namespace Expressions
 		HRESULT appendAssignment( const CStringA& lhs, const CStringA& rhs );
 
 		HRESULT deduceTypes();
-
-		bool transformRandoms();
 
 		bool transformDoubleFuncs();
 

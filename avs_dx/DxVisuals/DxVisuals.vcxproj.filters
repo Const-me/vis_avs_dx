@@ -62,6 +62,7 @@
     <ClInclude Include="Hlsl\parseId.hpp" />
     <ClInclude Include="Utils\ByteRange.hpp" />
     <ClInclude Include="Expressions\Tree.h" />
+    <ClInclude Include="Expressions\SymbolTable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -102,8 +103,8 @@
     <ClCompile Include="RootEffect.cpp" />
     <ClCompile Include="Utils\events.cpp" />
     <ClCompile Include="Hlsl\Defines.expand.cpp" />
-    <ClCompile Include="Expressions\Compiler.types.cpp" />
     <ClCompile Include="Expressions\Tree.cpp" />
+    <ClCompile Include="Expressions\SymbolTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

@@ -1,6 +1,4 @@
 #pragma once
-#include "../DxVisuals/Expressions/Prototype.h"
-using namespace Expressions;
 
 namespace ColorMod
 {

@@ -1,6 +1,5 @@
 #pragma once
-#include <atlcoll.h>
-#include "eVarType.h"
+#include "SymbolTable.h"
 
 namespace Expressions
 {
@@ -8,24 +7,35 @@ namespace Expressions
 	{
 		// A sub-expression
 		Expr,
-		// an identifier that's variable or maybe a macro
+		// Variable
 		Var,
-		// an identifier that's a function invocation
+		// Function invocation
 		Func,
+		// Everything else, e.g. "(" or ")+14"
+		Code,
 	};
 
 	struct Node
 	{
 		eNode node;
 		eVarType vt = eVarType::unknown;
-		bool hasChildren = false;
 
-		// For expressions, that's the complete string. For variables and functions, just the name part.
-		int start, length;
+#ifdef DEBUG
+		CStringA source;
+		int start, id;
+#else
+		union
+		{
+			// Used for sub-expressions and for code
+			int start;
+			// For variables and functions, this is the ID from SymbolTable.
+			int id;
+		};
+#endif
+		int length;
+
 		// The parser emits nodes in depth-first order. This field holds index in m_nodes of the next sibling element, or -1 of this is the final node of the sub-tree.
 		int nextSibling = -1;
-
-		Node( eNode e, int s, int l ) : node( e ), start( s ), length( l ) { }
 	};
 
 	class Tree
@@ -33,24 +43,24 @@ namespace Expressions
 		CStringA m_source;
 		std::vector<Node> m_nodes;
 
-		struct sPatch
+		struct ExpressionContext
 		{
-			int removeLength;
-			CStringA insert;
+			int prevSibling = -1;
+			int children = 0;
 		};
 
-		CRBMap<int, sPatch> m_patches;
+		void parseExpression( SymbolTable& symbols );
 
-		void parseExpression( const CStringA& expr, int begin, int end );
+		void pushNode( ExpressionContext& ec, Node& node );
+		void pushCode( ExpressionContext& ec, int begin, int end );
+		void pushVar( ExpressionContext& ec, SymbolTable& symbols, int begin, int end );
+		void pushFunc( ExpressionContext& ec, SymbolTable& symbols, int begin, int end );
+
+		void pushExpression( ExpressionContext& ec, int begin, int end );
 
 	public:
 
-		HRESULT parse( const CStringA& expr );
-
-		// Patch rand( xx ) -> rand( rng_state, xx ). Return false if the expression doesn't use random number generation.
-		bool transformRandom();
-
-		// HRESULT deduceTypes
+		HRESULT parse( SymbolTable& symbols, const CStringA& expr );
 
 		template<class Func>
 		void visitVariables( Func&& fn )

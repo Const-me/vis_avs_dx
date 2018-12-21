@@ -9,4 +9,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Effects.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
 </Project>

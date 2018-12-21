@@ -163,6 +163,7 @@
     <ClCompile Include="Expressions\SymbolTable.cpp" />
     <ClCompile Include="Expressions\Tree.cpp" />
     <ClCompile Include="Expressions\Tree.debug.cpp" />
+    <ClCompile Include="Expressions\Tree.types.cpp" />
     <ClCompile Include="Hlsl\Defines.expand.cpp" />
     <ClCompile Include="Expressions\Tree.parse.cpp" />
     <ClCompile Include="Effects\Render\SuperScope\SuperScope.cpp" />

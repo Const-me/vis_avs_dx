@@ -12,11 +12,10 @@ void Tree::dbgPrint() const
 
 void Tree::dbgPrintList( int i, int level ) const
 {
-	for( ; i >= 0; )
+	do
 	{
 		dbgPrintNode( i, level );
-		i = m_nodes[ i ].nextSibling;
-	}
+	} while( nextSibling( i ) );
 }
 
 namespace

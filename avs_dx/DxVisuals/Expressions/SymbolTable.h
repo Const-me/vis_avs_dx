@@ -41,8 +41,7 @@ namespace Expressions
 		std::vector<Function> functions;
 		CAtlMap<CStringA, int> functionsMap;
 
-		int addFunc( const CStringA& name, eFunctionKind kind, eVarType vt );
-		int addInternalFunc( const CStringA& name );
+		int addFunc( const CStringA& name, eFunctionKind kind, eVarType vt = eVarType::unknown );
 
 		void addInternals();
 

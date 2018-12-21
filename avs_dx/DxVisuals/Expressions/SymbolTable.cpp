@@ -19,13 +19,13 @@ SymbolTable::SymbolTable( const Prototype& proto )
 
 void SymbolTable::addInternals()
 {
-	int i = addInternalFunc( "assign" );
+	int i = addFunc( "assign", eFunctionKind::Internal );
 	assert( i == idAssign );
 
 	i = addFunc( "equal", eFunctionKind::Internal, eVarType::u32 );
 	assert( i == idEquals );
 
-	i = addInternalFunc( "if" );
+	i = addFunc( "if", eFunctionKind::Internal );
 	assert( idIf == i );
 
 	i = addFunc( "rand", eFunctionKind::Internal, eVarType::f32 );
@@ -39,11 +39,6 @@ int SymbolTable::addFunc( const CStringA& name, eFunctionKind kind, eVarType vt 
 	functions.emplace_back( Function{ kind, vt, name } );
 	functionsMap[ name ] = id;
 	return id;
-}
-
-int SymbolTable::addInternalFunc( const CStringA& name )
-{
-	return addFunc( name, eFunctionKind::Internal, eVarType::unknown );
 }
 
 int SymbolTable::varLookup( const CStringA& name, eVarType& vt )

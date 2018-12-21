@@ -39,7 +39,12 @@ HRESULT test2()
 	// tree.dbgPrint();
 
 	tree.transformRandoms();
-	tree.dbgPrint();
+	tree.transformDoubleFuncs();
+	// tree.dbgPrint();
+	CStringA hlsl;
+	CHECK( tree.emitHlsl( hlsl ) );
+
+	logInfo( "%s", cstr( hlsl ) );
 
 	return S_OK;
 }

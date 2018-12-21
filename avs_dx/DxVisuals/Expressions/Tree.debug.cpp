@@ -46,7 +46,7 @@ void Tree::dbgPrintNode( int ind, int level ) const
 	if( nt == eNode::Var )
 	{
 		logDebug( "%*svar: %s %s", INDENT,
-			typeName( node.vt ), cstr( symbols.varName( node.id ) ) );
+			typeName( symbols.varGetType( node.id ) ), cstr( symbols.varName( node.id ) ) );
 		return;
 	}
 

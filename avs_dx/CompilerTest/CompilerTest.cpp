@@ -36,6 +36,9 @@ HRESULT test2()
 		CHECK( tree.appendAssignment( a.first, a.second ) );
 
 	CHECK( tree.deduceTypes() );
+	// tree.dbgPrint();
+
+	tree.transformRandoms();
 	tree.dbgPrint();
 
 	return S_OK;

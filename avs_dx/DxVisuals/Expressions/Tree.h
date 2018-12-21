@@ -74,6 +74,8 @@ namespace Expressions
 
 		HRESULT deduceTypes();
 
+		bool transformRandoms();
+
 		void dbgPrint() const;
 
 		/* template<class Func>

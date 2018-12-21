@@ -93,6 +93,17 @@ inline float constantGoldenRatio()
     return 1.618033988749894848;
 }
 
+inline float rand_avs( inout uint rng_state, float maxVal )
+{
+    // Xorshift algorithm from George Marsaglia's paper
+    rng_state ^= ( rng_state << 13 );
+    rng_state ^= ( rng_state >> 17 );
+    rng_state ^= ( rng_state << 5 );
+
+    const float res = float( rng_state ) * ( 1.0 / 4294967296.0 );
+    return maxVal * res;
+}
+
 [numthreads( 1, 1, 1 )]
 void main( uint3 DTid : SV_DispatchThreadID )
 {

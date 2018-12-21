@@ -22,7 +22,7 @@ void SymbolTable::addInternals()
 	int i = addInternalFunc( "assign" );
 	assert( i == idAssign );
 
-	i = addInternalFunc( "equal" );
+	i = addFunc( "equal", eFunctionKind::Internal, eVarType::u32 );
 	assert( i == idEquals );
 
 	i = addInternalFunc( "if" );

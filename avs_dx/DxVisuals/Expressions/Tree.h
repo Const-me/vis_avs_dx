@@ -74,6 +74,12 @@ namespace Expressions
 		void emitNode( EmitContext& ec, int ind ) const;
 		void emitFunction( EmitContext& ec, int ind ) const;
 
+		template<eInternalFunc id>
+		void emitInternal( EmitContext& ec, const Node& node, int ind ) const;
+
+		using pfnEmitNode = void ( Tree::* )( EmitContext& ec, const Node& node, int ind ) const;
+		static const std::array<pfnEmitNode, eInternalFunc::valuesCount> s_emitInternal;
+
 		bool nextSibling( int& ind ) const
 		{
 			ind = m_nodes[ ind ].nextSibling;

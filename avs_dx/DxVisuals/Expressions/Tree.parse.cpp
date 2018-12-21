@@ -36,7 +36,7 @@ HRESULT Tree::appendAssignment( const CStringA& lhs, const CStringA& rhs )
 #ifdef DEBUG
 		node.source = "assign";
 #endif
-		node.id = SymbolTable::idAssign;
+		node.id = eInternalFunc::Assign;
 		pushNode( ec, std::move( node ) );
 
 		ExpressionContext argContext;

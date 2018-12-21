@@ -20,16 +20,16 @@ SymbolTable::SymbolTable( const Prototype& proto )
 void SymbolTable::addInternals()
 {
 	int i = addFunc( "assign", eFunctionKind::Internal );
-	assert( i == idAssign );
+	assert( i == eInternalFunc::Assign );
 
 	i = addFunc( "equal", eFunctionKind::Internal, eVarType::u32 );
-	assert( i == idEquals );
+	assert( i == eInternalFunc::Equals );
 
 	i = addFunc( "if", eFunctionKind::Internal );
-	assert( idIf == i );
+	assert( i == eInternalFunc::If );
 
 	i = addFunc( "rand", eFunctionKind::Internal, eVarType::f32 );
-	assert( idRand == i );
+	assert( i == eInternalFunc::Rand );
 }
 
 int SymbolTable::addFunc( const CStringA& name, eFunctionKind kind, eVarType vt )

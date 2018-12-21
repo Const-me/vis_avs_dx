@@ -23,7 +23,7 @@ bool Tree::transformRandoms()
 		Node& n = m_nodes[ i ];
 		if( n.node != eNode::Func )
 			continue;
-		if( n.id != SymbolTable::idRand )
+		if( n.id != eInternalFunc::Rand )
 			continue;
 		assert( 1 == n.length );
 

@@ -93,7 +93,7 @@ eVarType Tree::functionType( int iFunc )
 
 	if( ft.kind == eFunctionKind::Internal )
 	{
-		if( id == SymbolTable::idAssign )
+		if( id == eInternalFunc::Assign )
 		{
 			const int indLhs = iFunc + 1;
 			const int indRhs = m_nodes[ indLhs ].nextSibling;
@@ -106,10 +106,10 @@ eVarType Tree::functionType( int iFunc )
 			}
 			return vtRight;
 		}
-		if( id == SymbolTable::idEquals )
+		if( id == eInternalFunc::Equals )
 			return eVarType::u32;
 
-		if( id == SymbolTable::idIf )
+		if( id == eInternalFunc::If )
 		{
 			int i = iFunc + 1;	// Ignore first argument, it's condition
 			i = m_nodes[ i ].nextSibling;

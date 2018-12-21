@@ -63,54 +63,70 @@ void Tree::emitNode( EmitContext& ec, int ind ) const
 	emitFunction( ec, ind );
 }
 
+template<>
+void Tree::emitInternal<eInternalFunc::Assign>( EmitContext& ec, const Node& node, int ind ) const
+{
+	if( node.length != 2 )
+		throw std::invalid_argument( "assign() must have exactly 2 arguments" );
+	int i = ind + 1;
+	emitNode( ec, i );
+	ec += " = ";
+	nextSibling( i );
+	emitNode( ec, i );
+}
+
+template<>
+void Tree::emitInternal<eInternalFunc::Equals>( EmitContext& ec, const Node& node, int ind ) const
+{
+	if( node.length != 2 )
+		throw std::invalid_argument( "equals() must have exactly 2 arguments" );
+	int i = ind + 1;
+	emitNode( ec, i );
+	ec += " == ";
+	nextSibling( i );
+	emitNode( ec, i );
+}
+
+template<>
+void Tree::emitInternal<eInternalFunc::If>( EmitContext& ec, const Node& node, int ind ) const
+{
+	if( node.length != 3 )
+		throw std::invalid_argument( "if() must have exactly 3 arguments" );
+	ec += "( ";
+	int i = ind + 1;
+	emitNode( ec, i );
+	ec += " ) ? ";
+	nextSibling( i );
+	emitNode( ec, i );
+	ec += " : ";
+	nextSibling( i );
+	emitNode( ec, i );
+}
+
+template<>
+void Tree::emitInternal<eInternalFunc::Rand>( EmitContext& ec, const Node& node, int ind ) const
+{
+	throw std::invalid_argument( "You must call Tree::transformRandoms() to handle RNG" );
+}
+
+const std::array<Tree::pfnEmitNode, 4> Tree::s_emitInternal =
+{
+	&Tree::emitInternal<0>,
+	&Tree::emitInternal<1>,
+	&Tree::emitInternal<2>,
+	&Tree::emitInternal<3>,
+};
+
 void Tree::emitFunction( EmitContext& ec, int ind ) const
 {
 	const Node& node = m_nodes[ ind ];
 	assert( node.node == eNode::Func );
 
-	// Handle built-in functions
-	if( node.id == SymbolTable::idAssign )
+	if( node.id < (int)s_emitInternal.size() )
 	{
-		if( node.length != 2 )
-			throw std::invalid_argument( "assign() must have exactly 2 arguments" );
-		int i = ind + 1;
-		emitNode( ec, i );
-		ec += " = ";
-		nextSibling( i );
-		emitNode( ec, i );
+		( this->*s_emitInternal[ node.id ] )( ec, node, ind );
 		return;
 	}
-
-	if( node.id == SymbolTable::idEquals )
-	{
-		if( node.length != 2 )
-			throw std::invalid_argument( "equals() must have exactly 2 arguments" );
-		int i = ind + 1;
-		emitNode( ec, i );
-		ec += " == ";
-		nextSibling( i );
-		emitNode( ec, i );
-		return;
-	}
-
-	if( node.id == SymbolTable::idIf )
-	{
-		if( node.length != 3 )
-			throw std::invalid_argument( "if() must have exactly 3 arguments" );
-		ec += "( ";
-		int i = ind + 1;
-		emitNode( ec, i );
-		ec += " ) ? ";
-		nextSibling( i );
-		emitNode( ec, i );
-		ec += " : ";
-		nextSibling( i );
-		emitNode( ec, i );
-		return;
-	}
-
-	if( node.id == SymbolTable::idRand )
-		throw std::invalid_argument( "You must call Tree::transformRandoms() to handle RNG" );
 
 	ec += symbols.funcName( node.id );
 	if( 0 == node.length )

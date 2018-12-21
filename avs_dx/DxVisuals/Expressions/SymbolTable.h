@@ -7,14 +7,24 @@ namespace Expressions
 	enum struct eFunctionKind : uint8_t
 	{
 		unknown,
-		// HLSL built-in
+		// HLSL built-in, e.g. "floor" or "atan2"
 		Hlsl,
-		// AVS built-in, from shaderFunctions.hlsl
+		// AVS built-in from shaderFunctions.hlsl, e.g. "gettime" or "above"
 		Avs,
 		// Can be either, depends on argument types
 		Polymorphic,
-		// Internal to expression engine: "if" compiles to operator ?
+		// Internal to expression engine, e.g. "if" compiles to `operator ?`, "equals" to `operator ==`, etc.
 		Internal
+	};
+
+	// Internal functions have their IDs hardcoded, the ID values are equal to the values in this enum (excluding the valuesCount)
+	enum eInternalFunc: int
+	{
+		Assign,
+		Equals,
+		If,
+		Rand,
+		valuesCount,
 	};
 
 	struct FunctionType
@@ -32,7 +42,6 @@ namespace Expressions
 		};
 		std::vector<Variable> variables;
 		CAtlMap<CStringA, int> variablesMap;
-
 		
 		struct Function: public FunctionType
 		{
@@ -49,11 +58,6 @@ namespace Expressions
 
 		SymbolTable();
 		SymbolTable( const Prototype& proto );
-
-		static constexpr int idAssign = 0;
-		static constexpr int idEquals = 1;
-		static constexpr int idIf = 2;
-		static constexpr int idRand = 3;
 
 		// Insert or lookup a variable
 		int varLookup( const CStringA& name, eVarType& vt );

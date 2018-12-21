@@ -1,7 +1,5 @@
 #pragma once
-#include "SymbolTable.h"
-#include "parse.h"
-#include "varEnums.h"
+#include "../SymbolTable.h"
 
 namespace Expressions
 {

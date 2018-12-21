@@ -21,7 +21,7 @@ using DirectX::SimpleMath::Vector4;
 
 #include "../DxVisuals/Utils/logger.h"
 #include "../DxVisuals/Expressions/Prototype.h"
-#include "../DxVisuals/Expressions/Tree.h"
+#include "../DxVisuals/Expressions/Tree/Tree.h"
 #include "../DxVisuals/Expressions/Compiler.h"
 #include "../DxVisuals/Expressions/utils.hpp"
 

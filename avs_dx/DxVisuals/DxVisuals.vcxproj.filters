@@ -60,11 +60,11 @@
     <ClInclude Include="Utils\events.h" />
     <ClInclude Include="Hlsl\parseId.hpp" />
     <ClInclude Include="Utils\ByteRange.hpp" />
-    <ClInclude Include="Expressions\Tree.h" />
     <ClInclude Include="Expressions\SymbolTable.h" />
     <ClInclude Include="Effects\Render\SuperScope\SuperScope.h" />
     <ClInclude Include="Expressions\varEnums.h" />
     <ClInclude Include="Expressions\VariableDecl.hpp" />
+    <ClInclude Include="Expressions\Tree\Tree.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -105,13 +105,13 @@
     <ClCompile Include="Utils\events.cpp" />
     <ClCompile Include="Hlsl\Defines.expand.cpp" />
     <ClCompile Include="Expressions\SymbolTable.cpp" />
-    <ClCompile Include="Expressions\Tree.parse.cpp" />
-    <ClCompile Include="Expressions\Tree.cpp" />
     <ClCompile Include="Effects\Render\SuperScope\SuperScope.cpp" />
-    <ClCompile Include="Expressions\Tree.debug.cpp" />
-    <ClCompile Include="Expressions\Tree.types.cpp" />
-    <ClCompile Include="Expressions\Tree.emit.cpp" />
     <ClCompile Include="Expressions\varEnums.cpp" />
+    <ClCompile Include="Expressions\Tree\Tree.cpp" />
+    <ClCompile Include="Expressions\Tree\Tree.debug.cpp" />
+    <ClCompile Include="Expressions\Tree\Tree.emit.cpp" />
+    <ClCompile Include="Expressions\Tree\Tree.parse.cpp" />
+    <ClCompile Include="Expressions\Tree\Tree.types.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

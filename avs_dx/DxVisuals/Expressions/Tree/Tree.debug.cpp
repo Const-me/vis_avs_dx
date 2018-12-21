@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Tree.h"
-#include "utils.hpp"
+#include "../utils.hpp"
 using namespace Expressions;
 
 void Tree::dbgPrint() const

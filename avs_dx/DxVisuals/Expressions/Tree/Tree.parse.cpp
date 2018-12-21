@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Tree.h"
-#include "../Hlsl/parseId.hpp"
-#include "utils.hpp"
+#include "../../Hlsl/parseId.hpp"
+#include "../utils.hpp"
 
 using namespace Expressions;
 

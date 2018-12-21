@@ -6,7 +6,7 @@ namespace Expressions
 	// A prototype for the expression-based effect, contains input/output variables/constants.
 	class Prototype
 	{
-		// Count if uint variables in the state block
+		// Count of uint variables in the state block
 		int m_size = 0;
 
 		HRESULT addState( const CStringA& name, eVarType vt, const CStringA& initVal );

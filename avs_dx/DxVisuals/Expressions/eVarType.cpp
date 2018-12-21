@@ -70,7 +70,6 @@ namespace Expressions
 		case eVarType::f64:
 			res.Format( "{ uint lo, hi; asuint( %s, lo, hi ); effectStates.Store2( STATE_OFFSET + %i, uint2( lo, hi ) ); }", varName, offset );
 			return res;
-
 		}
 		__debugbreak();
 		return "";

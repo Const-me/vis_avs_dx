@@ -63,6 +63,7 @@
     <ClInclude Include="Utils\ByteRange.hpp" />
     <ClInclude Include="Expressions\Tree.h" />
     <ClInclude Include="Expressions\SymbolTable.h" />
+    <ClInclude Include="Effects\Render\SuperScope\SuperScope.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -106,6 +107,7 @@
     <ClCompile Include="Expressions\SymbolTable.cpp" />
     <ClCompile Include="Expressions\Tree.parse.cpp" />
     <ClCompile Include="Expressions\Tree.cpp" />
+    <ClCompile Include="Effects\Render\SuperScope\SuperScope.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -130,6 +132,7 @@
     <None Include="Expressions\includeFunctions.t4" />
     <None Include="CppBuilder.t4" />
     <None Include="Effects\Polyline.fx" />
+    <None Include="Effects\doubleFuncs.fx" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Effects\Render\Simple\SimpleDotsVS.hlsl" />
@@ -148,7 +151,8 @@
     <FxCompile Include="Effects\Render\PolylineGS.hlsl" />
     <FxCompile Include="Effects\Render\PolylinePS.hlsl" />
     <FxCompile Include="Effects\Render\Simple\SimpleLinesVS.hlsl" />
-    <FxCompile Include="Effects\trig.fx" />
+    <FxCompile Include="Effects\Render\SuperScope\SuperScopeVS.hlsl" />
+    <FxCompile Include="Effects\Render\SuperScope\SuperScopeState.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

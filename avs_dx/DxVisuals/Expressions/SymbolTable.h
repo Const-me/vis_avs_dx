@@ -5,17 +5,15 @@ namespace Expressions
 {
 	class SymbolTable
 	{
-		std::vector<CStringA> names;
-
 		struct Variable
 		{
-			int id;
+			CStringA name;
 			eVarType vt = eVarType::unknown;
 		};
+		std::vector<Variable> variables;
+		CAtlMap<CStringA, int> variablesMap;
 
-		CAtlMap<CStringA, Variable> variables;
-
-		enum eFunctionKind : uint8_t
+		enum struct eFunctionKind : uint8_t
 		{
 			unknown,
 			// HLSL built-in
@@ -27,19 +25,20 @@ namespace Expressions
 			// Internal to expression engine: "if" compiles to operator ?
 			Internal
 		};
-
 		struct Function
 		{
-			int id;
+			CStringA name;
 			eFunctionKind kind = eFunctionKind::unknown;
 			eVarType vt = eVarType::unknown;
 		};
+		std::vector<Function> functions;
+		CAtlMap<CStringA, int> functionsMap;
 
-		CAtlMap<CStringA, Function> functions;
-
-		void addInternalFunc( const CStringA& name );
+		int addFunc( const CStringA& name, eFunctionKind kind, eVarType vt );
+		int addInternalFunc( const CStringA& name );
 
 	public:
+
 		SymbolTable();
 
 		// Insert or lookup a variable

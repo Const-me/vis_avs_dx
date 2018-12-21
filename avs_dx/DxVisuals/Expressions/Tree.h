@@ -1,5 +1,6 @@
 #pragma once
 #include "SymbolTable.h"
+#include "parse.h"
 
 namespace Expressions
 {
@@ -22,17 +23,11 @@ namespace Expressions
 
 #ifdef DEBUG
 		CStringA source;
-		int start, id;
-#else
-		union
-		{
-			// Used for sub-expressions and for code
-			int start;
-			// For variables and functions, this is the ID from SymbolTable.
-			int id;
-		};
 #endif
-		int length;
+		// For variables and functions, the ID from SymbolTable. For codes, offset in m_codez.
+		int id = -1;
+		// For codes, length of the data in m_codez. For expressions, children count. For functions, arguments count.
+		int length = 0;
 
 		// The parser emits nodes in depth-first order. This field holds index in m_nodes of the next sibling element, or -1 of this is the final node of the sub-tree.
 		int nextSibling = -1;
@@ -40,7 +35,8 @@ namespace Expressions
 
 	class Tree
 	{
-		CStringA m_source;
+		int m_lastStatement = 0;
+		std::vector<char> m_codez;
 		std::vector<Node> m_nodes;
 
 		struct ExpressionContext
@@ -49,20 +45,22 @@ namespace Expressions
 			int children = 0;
 		};
 
-		void parseExpression( SymbolTable& symbols );
+		void pushNode( ExpressionContext& ec, Node&& node );
 
-		void pushNode( ExpressionContext& ec, Node& node );
-		void pushCode( ExpressionContext& ec, int begin, int end );
-		void pushVar( ExpressionContext& ec, SymbolTable& symbols, int begin, int end );
-		void pushFunc( ExpressionContext& ec, SymbolTable& symbols, int begin, int end );
+		void pushCode( const CStringA& expr, ExpressionContext& ec, int begin, int end );
+		void pushVar( const CStringA& expr, ExpressionContext& ec, SymbolTable& symbols, int begin, int end );
+		void pushFunc( const CStringA& expr, ExpressionContext& ec, SymbolTable& symbols, int begin, int end );
+		void pushExpression( const CStringA& expr, ExpressionContext& ec, int begin, int end );
 
-		void pushExpression( ExpressionContext& ec, int begin, int end );
+		void parseExpression( const CStringA& expr, SymbolTable& symbols, int begin, int end );
 
 	public:
 
 		HRESULT parse( SymbolTable& symbols, const CStringA& expr );
 
-		template<class Func>
+		HRESULT appendAssignment( SymbolTable& symbols, const CStringA& lhs, const CStringA& rhs );
+
+		/* template<class Func>
 		void visitVariables( Func&& fn )
 		{
 			for( auto& n : m_nodes )
@@ -72,6 +70,6 @@ namespace Expressions
 				const CStringA id = m_source.Mid( n.start, n.length );
 				fn( n, id );
 			}
-		}
+		} */
 	};
 }

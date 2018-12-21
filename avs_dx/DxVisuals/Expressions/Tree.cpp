@@ -7,14 +7,15 @@ using namespace Expressions;
 
 HRESULT Tree::parse( SymbolTable& symbols, const CStringA& expr )
 {
+	m_codez.clear();
 	m_nodes.clear();
-	m_source = expr;
+	m_lastStatement = 0;
 
 	try
 	{
 		ExpressionContext ec;
-		pushExpression( ec, 0, expr.GetLength() );
-		parseExpression( symbols );
+		pushExpression( expr, ec, 0, expr.GetLength() );
+		parseExpression( expr, symbols, 0, expr.GetLength() );
 		return S_OK;
 	}
 	catch( const std::exception & )
@@ -23,14 +24,41 @@ HRESULT Tree::parse( SymbolTable& symbols, const CStringA& expr )
 	}
 }
 
-void Tree::pushNode( ExpressionContext& ec, Node& node )
+HRESULT Tree::appendAssignment( SymbolTable& symbols, const CStringA& lhs, const CStringA& rhs )
 {
-#ifdef DEBUG
-	node.source = m_source.Mid( node.start, node.length );
-#endif
+	try
+	{
+		ExpressionContext ec;
+		const CStringA ass = "assign";
+		const int indAssign = (int)m_nodes.size();
+		pushFunc( ass, ec, symbols, 0, ass.GetLength() );
 
+		ExpressionContext argContext;
+		pushExpression( lhs, argContext, 0, lhs.GetLength() );
+		parseExpression( lhs, symbols, 0, lhs.GetLength() );
+
+		pushExpression( rhs, argContext, 0, rhs.GetLength() );
+		parseExpression( rhs, symbols, 0, rhs.GetLength() );
+
+		assert( 2 == argContext.children );
+		m_nodes[ indAssign ].length = argContext.children;
+
+		if( indAssign > 0 )
+			m_nodes[ m_lastStatement ].nextSibling = indAssign;
+		m_lastStatement = indAssign;
+
+		return S_OK;
+	}
+	catch( const std::exception & )
+	{
+		return E_FAIL;
+	}
+}
+
+void Tree::pushNode( ExpressionContext& ec, Node&& node )
+{
 	const int ind = (int)m_nodes.size();
-	m_nodes.push_back( node );
+	m_nodes.emplace_back( node );
 
 	if( ec.prevSibling >= 0 )
 		m_nodes[ ec.prevSibling ].nextSibling = ind;
@@ -39,53 +67,64 @@ void Tree::pushNode( ExpressionContext& ec, Node& node )
 	ec.children++;
 }
 
-void Tree::pushExpression( ExpressionContext& ec, int begin, int end )
+void Tree::pushExpression( const CStringA& expr, ExpressionContext& ec, int begin, int end )
 {
 	Node nn;
 	nn.node = eNode::Expr;
-	nn.start = begin;
+#ifdef DEBUG
+	nn.source = expr.Mid( begin, end - begin );
+#endif
 	nn.length = end - begin;
-	pushNode( ec, nn );
+	pushNode( ec, std::move( nn ) );
 }
 
-void Tree::pushCode( ExpressionContext& ec, int begin, int end )
+void Tree::pushCode( const CStringA& expr, ExpressionContext& ec, int begin, int end )
 {
 	Node nn;
 	nn.node = eNode::Code;
-	nn.start = begin;
+#ifdef DEBUG
+	nn.source = expr.Mid( begin, end - begin );
+#endif
+	nn.id = (int)m_codez.size();
 	nn.length = end - begin;
-	pushNode( ec, nn );
+	m_codez.reserve( nn.id + nn.length );
+	for( int i = begin; i < end; i++ )
+		m_codez.push_back( expr[ i ] );
+
+	pushNode( ec, std::move( nn ) );
 }
 
-void Tree::pushVar( ExpressionContext& ec, SymbolTable& symbols, int begin, int end )
+void Tree::pushVar( const CStringA& expr, ExpressionContext& ec, SymbolTable& symbols, int begin, int end )
 {
 	Node nn;
 	nn.node = eNode::Var;
-	nn.start = begin;
+#ifdef DEBUG
+	nn.source = expr.Mid( begin, end - begin );
+#endif
+	nn.id = symbols.varLookup( expr.Mid( begin, end - begin ), nn.vt );
 	nn.length = end - begin;
-	nn.id = symbols.varLookup( m_source.Mid( begin, end - begin ), nn.vt );
-	pushNode( ec, nn );
+	pushNode( ec, std::move( nn ) );
 }
 
-void Tree::pushFunc( ExpressionContext& ec, SymbolTable& symbols, int begin, int end )
+void Tree::pushFunc( const CStringA& expr, ExpressionContext& ec, SymbolTable& symbols, int begin, int end )
 {
 	Node nn;
 	nn.node = eNode::Func;
-	nn.start = begin;
+#ifdef DEBUG
+	nn.source = expr.Mid( begin, end - begin );
+#endif
+	nn.id = symbols.funcLookup( expr.Mid( begin, end - begin ), nn.vt );
 	nn.length = end - begin;
-	nn.id = symbols.funcLookup( m_source.Mid( begin, end - begin ), nn.vt );
-	pushNode( ec, nn );
+	pushNode( ec, std::move( nn ) );
 }
 
-void Tree::parseExpression( SymbolTable& symbols )
+void Tree::parseExpression( const CStringA& expr, SymbolTable& symbols, int begin, int end )
 {
 	using namespace Hlsl;
 
 	const int indThis = (int)m_nodes.size() - 1;
-	const int begin = m_nodes[ indThis ].start;
-	const int end = begin + m_nodes[ indThis ].length;
 	ExpressionContext context;
-	const char* const src = m_source;
+	const char* const src = expr;
 
 	for( int i = begin; i < end; )
 	{
@@ -94,7 +133,7 @@ void Tree::parseExpression( SymbolTable& symbols )
 		{
 			const int codeStart = i;
 			for( i++; i < end && !isAlpha( src[ i ] ); i++ ) { }
-			pushCode( context, codeStart, i );
+			pushCode( expr, context, codeStart, i );
 			continue;
 		}
 
@@ -107,12 +146,13 @@ void Tree::parseExpression( SymbolTable& symbols )
 		if( idEnd >= end || src[ idEnd ] != '(' )
 		{
 			// It's a variable: a function call would continue with '('
-			pushVar( context, symbols, idStart, idEnd );
+			pushVar( expr, context, symbols, idStart, idEnd );
 			continue;
 		}
 
 		// It's a function call.
-		pushFunc( context, symbols, idStart, idEnd );
+		const size_t indFunc = m_nodes.size();
+		pushFunc( expr, context, symbols, idStart, idEnd );
 
 		// Parse function's arguments
 		assert( src[ i ] == '(' );
@@ -139,8 +179,8 @@ void Tree::parseExpression( SymbolTable& symbols )
 				continue;
 
 			// Parsed the function's argument
-			pushExpression( argContext, argStart, i );
-			parseExpression( symbols );
+			pushExpression( expr, argContext, argStart, i );
+			parseExpression( expr, symbols, argStart, i );
 			if( c == ')' )
 			{
 				iLevel--;
@@ -151,18 +191,19 @@ void Tree::parseExpression( SymbolTable& symbols )
 
 		if( 0 != iLevel )
 		{
-			logError( "Unmatched '(' bracket in the expression %s at %i", cstr( m_source ), idEnd );
+			logError( "Unmatched '(' bracket in the expression %s at %i", cstr( expr ), idEnd );
 			throw std::logic_error( "Unmatched bracket" );
 		}
 		assert( src[ i ] == ')' );
 		i++;
+		m_nodes[ indFunc ].length = argContext.children;
 	}
 
 	// If this expression has the only child, erase the expression.
 	if( 1 == context.children )
 	{
 		m_nodes.erase( m_nodes.begin() + indThis );
-		for( int i = 0; i < indThis; i++ )
+		for( int i = m_lastStatement; i < indThis; i++ )
 		{
 			int &ns = m_nodes[ i ].nextSibling;
 			if( ns < indThis )
@@ -170,4 +211,6 @@ void Tree::parseExpression( SymbolTable& symbols )
 			ns--;
 		}
 	}
+	else
+		m_nodes[ indThis ].length = context.children;
 }

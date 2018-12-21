@@ -8,98 +8,89 @@ using namespace Expressions;
 
 SymbolTable::SymbolTable()
 {
+	addInternalFunc( "assign" );
 	addInternalFunc( "equal" );
 	addInternalFunc( "if" );
 }
 
-void SymbolTable::addInternalFunc( const CStringA& name )
+int SymbolTable::addFunc( const CStringA& name, eFunctionKind kind, eVarType vt )
 {
-	const int id = (int)names.size();
-	names.push_back( name );
-	Function func;
-	func.id = id;
-	func.kind = SymbolTable::Internal;
-	functions[ name ] = func;
+	assert( nullptr == functionsMap.Lookup( name ) );
+	const int id = (int)functions.size();
+	functions.emplace_back( Function{ name, kind, vt } );
+	functionsMap[ name ] = id;
+	return id;
+}
+
+int SymbolTable::addInternalFunc( const CStringA& name )
+{
+	return addFunc( name, eFunctionKind::Internal, eVarType::unknown );
 }
 
 int SymbolTable::varLookup( const CStringA& name, eVarType& vt )
 {
-	auto p = variables.Lookup( name );
+	auto p = variablesMap.Lookup( name );
 	if( nullptr == p )
 	{
-		const int id = (int)names.size();
-		names.push_back( name );
-		Variable var;
-		var.id = id;
-		var.vt = vt;
-		variables[ name ] = var;
+		const int id = (int)variables.size();
+		variables.emplace_back( Variable{ name, vt } );
+		variablesMap[ name ] = id;
 		return id;
 	}
 
+	Variable& var = variables[ p->m_value ];
 	int flag = 0;
 	if( vt != eVarType::unknown )
 		flag |= 1;
-	if( p->m_value.vt != eVarType::unknown )
+	if( var.vt != eVarType::unknown )
 		flag |= 2;
 	switch( flag )
 	{
 	case 1:
-		p->m_value.vt = vt;
+		var.vt = vt;
 		break;
 	case 2:
-		vt = p->m_value.vt;
+		vt = var.vt;
 		break;
 	case 3:
-		if( p->m_value.vt != vt )
+		if( var.vt != vt )
 			logWarning( "Variable %s is re-declared as different type", cstr( name ) );
 		break;
 	}
-	return p->m_value.id;
+	return p->m_value;
 }
 
 int SymbolTable::funcLookup( const CStringA& name, eVarType &vt )
 {
-	auto p = functions.Lookup( name );
+	auto p = functionsMap.Lookup( name );
 	if( nullptr != p )
 	{
-		vt = p->m_value.vt;
-		return p->m_value.id;
+		const int id = p->m_value;
+		const Function& func = functions[ id ];
+		vt = func.vt;
+		return id;
 	}
-
-	const int id = (int)names.size();
-	names.push_back( name );
-	Function func;
-	func.id = id;
 
 	auto avs = lookupShaderFunc( name );
 	if( nullptr != avs )
 	{
-		func.kind = eFunctionKind::Avs;
-		vt = func.vt = avs->returnType;
-		functions[ name ] = func;
-		return id;
+		vt = avs->returnType;
+		return addFunc( name, eFunctionKind::Avs, vt );
 	}
 
 	if( hasDoubleVersion( name, vt ) )
 	{
-		func.kind = eFunctionKind::Polymorphic;
 		// sin/cos/tan are polymorphic however they have same return type as the built-in, i.e. it's known already
 		if( vt != eVarType::f32 )
 			vt = eVarType::unknown;
-		func.vt = vt;
-		functions[ name ] = func;
-		return id;
+		return addFunc( name, eFunctionKind::Polymorphic, vt );
 	}
 
 	if( isBuiltinFunction( name, vt ) )
 	{
-		func.kind = eFunctionKind::Hlsl;
-		func.vt = vt;
-		functions[ name ] = func;
-		return id;
+		return addFunc( name, eFunctionKind::Hlsl, vt );
 	}
 
-	functions[ name ] = func;
 	vt = eVarType::unknown;
-	return id;
+	return addFunc( name, eFunctionKind::unknown, vt );
 }

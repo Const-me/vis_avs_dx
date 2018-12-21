@@ -102,8 +102,8 @@
     <ClInclude Include="Effects\Render\SuperScope\SuperScope.h" />
     <ClInclude Include="Utils\ByteRange.hpp" />
     <ClInclude Include="Utils\events.h" />
-    <ClInclude Include="Expressions\builtinFunctions.h" />
-    <ClInclude Include="Expressions\includeFunctions.h" />
+    <ClInclude Include="Expressions\Builtin\builtinFunctions.h" />
+    <ClInclude Include="Expressions\Builtin\includeFunctions.h" />
     <ClInclude Include="Expressions\CompiledShader.h" />
     <ClInclude Include="iTransition.h" />
     <ClInclude Include="Resources\GridMesh.h" />
@@ -170,9 +170,9 @@
     <ClCompile Include="Expressions\Tree\Tree.parse.cpp" />
     <ClCompile Include="Effects\Render\SuperScope\SuperScope.cpp" />
     <ClCompile Include="Utils\events.cpp" />
-    <ClCompile Include="Expressions\builtinFunctions.cpp" />
+    <ClCompile Include="Expressions\Builtin\builtinFunctions.cpp" />
     <ClCompile Include="Expressions\CompiledShader.cpp" />
-    <ClCompile Include="Expressions\includeFunctions.cpp" />
+    <ClCompile Include="Expressions\Builtin\includeFunctions.cpp" />
     <ClCompile Include="Resources\GridMesh.cpp" />
     <ClCompile Include="Transition.cpp" />
     <ClCompile Include="Utils\decompressor.cpp" />
@@ -232,16 +232,16 @@
 "%(FullPath)" -a !!STATIC!$(OutDir)Shaders -a !!SOURCE!$(ProjectDir)Effects -out $(ProjectDir)Effects/shadersCode.h</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Effects/shadersCode.h</Outputs>
     </CustomBuild>
-    <CustomBuild Include="Expressions\includeFunctions.tt">
+    <CustomBuild Include="Expressions\Builtin\includeFunctions.tt">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"C:\Program Files (x86)\Common Files\microsoft shared\TextTemplating\14.0\TextTransform.exe" ^
-"%(FullPath)" -a !!SOURCE!$(ProjectDir)Expressions -out $(ProjectDir)Expressions/includeFunctions.cpp</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Expressions/includeFunctions.cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"C:\Program Files (x86)\Common Files\microsoft shared\TextTemplating\14.0\TextTransform.exe" ^
-"%(FullPath)" -a !!SOURCE!$(ProjectDir)Expressions -out $(ProjectDir)Expressions/includeFunctions.cpp</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Expressions/includeFunctions.cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\TextTransform.exe" ^
+"%(FullPath)" -a !!SOURCE!$(ProjectDir)Expressions/Builtin -out $(ProjectDir)Expressions/Builtin/includeFunctions.cpp</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Expressions/Builtin/includeFunctions.cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\TextTransform.exe" ^
+"%(FullPath)" -a !!SOURCE!$(ProjectDir)Expressions/Builtin -out $(ProjectDir)Expressions/Builtin/includeFunctions.cpp</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Expressions/Builtin/includeFunctions.cpp</Outputs>
     </CustomBuild>
-    <None Include="Expressions\includeFunctions.t4" />
+    <None Include="Expressions\Builtin\includeFunctions.t4" />
     <None Include="packages.config" />
     <None Include="Render\EffectRenderer.inl" />
     <None Include="Utils\DirectXErrors\data\d2d.inl" />
@@ -292,7 +292,7 @@
     <None Include="Effects\doubleFuncs.fx">
       <FileType>Document</FileType>
     </None>
-    <FxCompile Include="Expressions\shaderFunctions.hlsl">
+    <FxCompile Include="Expressions\Builtin\shaderFunctions.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
     </FxCompile>

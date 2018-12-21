@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "SymbolTable.h"
 #include "utils.hpp"
-#include "builtinFunctions.h"
-#include "includeFunctions.h"
+#include "Builtin/builtinFunctions.h"
+#include "Builtin/includeFunctions.h"
 
 using namespace Expressions;
 

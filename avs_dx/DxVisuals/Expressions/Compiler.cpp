@@ -2,8 +2,8 @@
 #include "Compiler.h"
 #include "parse.h"
 #include "utils.hpp"
-#include "includeFunctions.h"
-#include "builtinFunctions.h"
+#include "Builtin/includeFunctions.h"
+#include "Builtin/builtinFunctions.h"
 
 using namespace Expressions;
 

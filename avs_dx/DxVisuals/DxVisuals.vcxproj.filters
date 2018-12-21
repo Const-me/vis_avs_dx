@@ -47,8 +47,6 @@
     <ClInclude Include="Resources\RenderTargets.h" />
     <ClInclude Include="Expressions\parse.h" />
     <ClInclude Include="Utils\decompressor.h" />
-    <ClInclude Include="Expressions\includeFunctions.h" />
-    <ClInclude Include="Expressions\builtinFunctions.h" />
     <ClInclude Include="Hlsl\ShaderBaseStruct.h" />
     <ClInclude Include="Utils\BoolHr.hpp" />
     <ClInclude Include="Expressions\CompiledShader.h" />
@@ -65,6 +63,8 @@
     <ClInclude Include="Expressions\varEnums.h" />
     <ClInclude Include="Expressions\VariableDecl.hpp" />
     <ClInclude Include="Expressions\Tree\Tree.h" />
+    <ClInclude Include="Expressions\Builtin\builtinFunctions.h" />
+    <ClInclude Include="Expressions\Builtin\includeFunctions.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -96,8 +96,6 @@
     <ClCompile Include="Resources\RenderTargets.cpp" />
     <ClCompile Include="Expressions\parse.cpp" />
     <ClCompile Include="Utils\decompressor.cpp" />
-    <ClCompile Include="Expressions\includeFunctions.cpp" />
-    <ClCompile Include="Expressions\builtinFunctions.cpp" />
     <ClCompile Include="Expressions\CompiledShader.cpp" />
     <ClCompile Include="Resources\GridMesh.cpp" />
     <ClCompile Include="Transition.cpp" />
@@ -112,6 +110,8 @@
     <ClCompile Include="Expressions\Tree\Tree.emit.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.parse.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.types.cpp" />
+    <ClCompile Include="Expressions\Builtin\builtinFunctions.cpp" />
+    <ClCompile Include="Expressions\Builtin\includeFunctions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -133,10 +133,10 @@
     <None Include="Effects\VisCommon.fx" />
     <None Include="Effects\Render\Starfield\Star.fx" />
     <None Include="compress.t4" />
-    <None Include="Expressions\includeFunctions.t4" />
     <None Include="CppBuilder.t4" />
     <None Include="Effects\Polyline.fx" />
     <None Include="Effects\doubleFuncs.fx" />
+    <None Include="Expressions\Builtin\includeFunctions.t4" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Effects\Render\Simple\SimpleDotsVS.hlsl" />
@@ -151,16 +151,16 @@
     <FxCompile Include="Effects\Render\Starfield\StarInitCS.hlsl" />
     <FxCompile Include="Effects\Trans\DMove\DMovePS.hlsl" />
     <FxCompile Include="Effects\Trans\DMove\DMoveVS.hlsl" />
-    <FxCompile Include="Expressions\shaderFunctions.hlsl" />
     <FxCompile Include="Effects\Render\PolylineGS.hlsl" />
     <FxCompile Include="Effects\Render\PolylinePS.hlsl" />
     <FxCompile Include="Effects\Render\Simple\SimpleLinesVS.hlsl" />
     <FxCompile Include="Effects\Render\SuperScope\SuperScopeVS.hlsl" />
     <FxCompile Include="Effects\Render\SuperScope\SuperScopeState.hlsl" />
+    <FxCompile Include="Expressions\Builtin\shaderFunctions.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />
     <CustomBuild Include="Effects\IncludeShadersH.tt" />
-    <CustomBuild Include="Expressions\includeFunctions.tt" />
+    <CustomBuild Include="Expressions\Builtin\includeFunctions.tt" />
   </ItemGroup>
 </Project>

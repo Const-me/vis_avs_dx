@@ -108,7 +108,7 @@ void Tree::emitInternal<eInternalFunc::Rand>( EmitContext& ec, const Node& node,
 {
 	if( node.length != 1 )
 		throw std::invalid_argument( "rand() must have exactly 1 argument" );
-	ec += "rand_avs( rng_state, ";
+	ec += "avs_rand( rng_state, ";
 	emitNode( ec, ind + 1 );
 	ec += " )";
 	ec.haveRandom = true;

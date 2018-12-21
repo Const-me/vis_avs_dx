@@ -261,6 +261,9 @@
     <None Include="Effects\Polyline.fx">
       <FileType>Document</FileType>
     </None>
+    <None Include="Effects\Expressions\random.fx">
+      <FileType>Document</FileType>
+    </None>
     <FxCompile Include="Effects\Render\PolylineGS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
@@ -289,7 +292,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
     </FxCompile>
-    <None Include="Effects\doubleFuncs.fx">
+    <None Include="Effects\Expressions\doubleFuncs.fx">
       <FileType>Document</FileType>
     </None>
     <FxCompile Include="Expressions\Builtin\shaderFunctions.hlsl">

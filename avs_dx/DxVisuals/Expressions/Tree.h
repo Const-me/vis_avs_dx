@@ -4,6 +4,16 @@
 
 namespace Expressions
 {
+	// This class parses NSEEL into expression tree, and applies some transformations to the tree.
+	// There's one more downstream compiler, HLSL, so we don't need to parse everything. This class only parses functions and variables, leaving everything else in raw stream of characters.
+	// Reasons we need variables:
+	// * To find their types: in NSEEL everything is double, HLSL is strongly-typed.
+	// * To allocate right amount of space in the state buffer that's updated by the state CS and consumed by per-effects shaders.
+	// Reasons we need functions:
+	// * To transform if(), assign(), equals() functions into statements.
+	// * To detect need for, and implement, RNG.
+	// * To implement double-precision intrinsics: some presets use time to calculate sin/cos for periodic effects, floats don't have enough precision for that, just couple days of PC uptime and sin(time) will stop updating each frame: https://randomascii.wordpress.com/2012/02/13/dont-store-that-in-a-float/
+	// * Also, since we know which custom functions are used by each shader, we assemble global functions without #including too mush stuff, this should improve HLSL compilation times.
 	class Tree
 	{
 		enum struct eNode : uint8_t
@@ -90,6 +100,7 @@ namespace Expressions
 
 		Tree( SymbolTable& symbolsTable );
 
+		// Clear all nodes, however this will keep the symbols.
 		void clear();
 
 		HRESULT parse( const CStringA& expr );

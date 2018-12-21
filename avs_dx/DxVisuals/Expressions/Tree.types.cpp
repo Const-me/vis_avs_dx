@@ -88,7 +88,6 @@ eVarType Tree::expressionType( int iFirstChild )
 eVarType Tree::functionType( int iFunc )
 {
 	const int id = m_nodes[ iFunc ].id;
-
 	const auto ft = symbols.funGetType( id );
 
 	if( ft.kind == eFunctionKind::Internal )

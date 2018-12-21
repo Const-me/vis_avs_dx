@@ -1,6 +1,7 @@
 #pragma once
 #include "SymbolTable.h"
 #include "parse.h"
+#include "varEnums.h"
 
 namespace Expressions
 {
@@ -106,5 +107,7 @@ namespace Expressions
 		void dbgPrint() const;
 
 		HRESULT emitHlsl( CStringA& hlsl ) const;
+
+		std::vector<eVarAccess> getVariableUsage() const;
 	};
 }

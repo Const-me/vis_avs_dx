@@ -11,10 +11,10 @@ namespace
 	public:
 		Proto()
 		{
-			addInput( "beat", eVarType::u32 );	// IS_BEAT
-			addOutput( "red" );
-			addOutput( "green" );
-			addOutput( "blue" );
+			addConstantInput( "beat", eVarType::u32 );	// IS_BEAT
+			addFragmentOutput( "red" );
+			addFragmentOutput( "green" );
+			addFragmentOutput( "blue" );
 		}
 	};
 	static const Prototype& prototype()

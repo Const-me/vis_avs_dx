@@ -72,7 +72,8 @@ namespace
 
 HRESULT Compiler::allocVariables( const std::array<Assignments, 4>& parsed )
 {
-	struct sVarFlags
+	return E_NOTIMPL;
+	/* struct sVarFlags
 	{
 		bool builtin = false;
 		eVarType vt = eVarType::unknown;
@@ -193,7 +194,7 @@ HRESULT Compiler::allocVariables( const std::array<Assignments, 4>& parsed )
 		}
 	}
 
-	return S_OK;
+	return S_OK; */
 }
 
 void Compiler::printAssignments( CStringA& code, const Assignments& ass )

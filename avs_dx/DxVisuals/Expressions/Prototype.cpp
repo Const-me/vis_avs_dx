@@ -22,24 +22,25 @@ HRESULT Prototype::addState( const CStringA& name, eVarType vt, const CStringA& 
 {
 	for( const auto& s : m_fixedState )
 		if( s.name == name )
+		{
+			__debugbreak();
 			return E_INVALIDARG;
+		}
 
-	m_fixedState.emplace_back( sFixedStateVar{} );
-	sFixedStateVar& v = *m_fixedState.rbegin();
-	v.name = name;
-	v.initVal = initVal;
-	v.vt = vt;
-	v.offset = m_size;
-	m_size++;
+	m_fixedState.emplace_back( FixedStateVar{ vt, name, initVal, m_size } );;
+	m_size += variableSize( vt );
 	return S_OK;
 }
 
-HRESULT Prototype::addInputOutput( const CStringA& name, eVarType vt, std::vector<sInputOutput>& vec )
+HRESULT Prototype::addVariable( eVarLocation loc, eVarType vt, const CStringA& name )
 {
-	for( const auto& s : vec )
+	for( const auto& s : m_vars )
 		if( s.name == name )
+		{
+			__debugbreak();
 			return E_INVALIDARG;
-	vec.emplace_back( sInputOutput{ name,vt } );
+		}
+	m_vars.emplace_back( VariableDecl{ loc, vt, name } );
 	return S_OK;
 }
 

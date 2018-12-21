@@ -10,25 +10,24 @@ namespace
 	public:
 		Proto()
 		{
-			addInput( "b", eVarType::u32 );	// IS_BEAT
-			addInput( "w", eVarType::u32 );	// screen width in pixels
-			addInput( "h", eVarType::u32 );	// screen height in pixels
+			addConstantInput( "b", eVarType::u32 );	// IS_BEAT
+			addConstantInput( "w", eVarType::u32 );	// screen width in pixels
+			addConstantInput( "h", eVarType::u32 );	// screen height in pixels
 
 			addState( "n", 768u );
 
-			addOutput( "x" );
-			addOutput( "y" );
+			addFragmentOutput( "x" );
+			addFragmentOutput( "y" );
 
-			addOutput( "skip" );
-			addOutput( "linesize" );
+			addFragmentOutput( "skip" );
+			addFragmentOutput( "linesize" );
 
-			addOutput( "red" );
-			addOutput( "green" );
-			addOutput( "blue" );
+			addFragmentOutput( "red" );
+			addFragmentOutput( "green" );
+			addFragmentOutput( "blue" );
 
-			// Actually they're inputs; need to rename the API, e.g. addInput -> addConstant, addOutput -> addVar
-			addOutput( "i" );
-			addOutput( "v" );
+			addFragmentInput( "i" );
+			addFragmentInput( "v" );
 		}
 	};
 	static const Prototype& prototype()

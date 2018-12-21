@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "eVarType.h"
+#include "varEnums.h"
 
 namespace Expressions
 {

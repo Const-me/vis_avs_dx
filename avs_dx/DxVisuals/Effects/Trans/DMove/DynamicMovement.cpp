@@ -11,16 +11,16 @@ namespace
 	public:
 		Proto()
 		{
-			addInput( "b", eVarType::u32 );	// IS_BEAT
-			addInput( "w", eVarType::u32 );	// screen width in pixels
-			addInput( "h", eVarType::u32 );	// screen height in pixels
+			addConstantInput( "b", eVarType::u32 );	// IS_BEAT
+			addConstantInput( "w", eVarType::u32 );	// screen width in pixels
+			addConstantInput( "h", eVarType::u32 );	// screen height in pixels
 
 			addState( "alpha", 0.5f );
 
-			addOutput( "d" );
-			addOutput( "r" );
-			addOutput( "x" );
-			addOutput( "y" );
+			addFragmentOutput( "d" );
+			addFragmentOutput( "r" );
+			addFragmentOutput( "x" );
+			addFragmentOutput( "y" );
 		}
 	};
 	static const Prototype& prototype()

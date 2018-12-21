@@ -1,5 +1,5 @@
 #pragma once
-#include "eVarType.h"
+#include "VariableDecl.hpp"
 #include "Prototype.h"
 
 namespace Expressions
@@ -35,12 +35,7 @@ namespace Expressions
 
 	class SymbolTable
 	{
-		struct Variable
-		{
-			CStringA name;
-			eVarType vt = eVarType::unknown;
-		};
-		std::vector<Variable> variables;
+		std::vector<VariableDecl> variables;
 		CAtlMap<CStringA, int> variablesMap;
 		
 		struct Function: public FunctionType
@@ -76,6 +71,11 @@ namespace Expressions
 		const CStringA& funcName( int id ) const
 		{
 			return functions[ id ].name;
+		}
+
+		size_t variablesCount() const
+		{
+			return variables.size();
 		}
 	};
 }

@@ -14,7 +14,13 @@ SymbolTable::SymbolTable()
 SymbolTable::SymbolTable( const Prototype& proto )
 {
 	addInternals();
-	proto.enumBuiltins( [this]( const CStringA& name, eVarType vt ) { varLookup( name, vt ); } );
+
+	proto.enumVariables( [ this ]( const VariableDecl& v )
+	{
+		const int id = (int)variables.size();
+		variables.push_back( v );
+		variablesMap[ v.name ] = id;
+	} );
 }
 
 void SymbolTable::addInternals()
@@ -47,12 +53,12 @@ int SymbolTable::varLookup( const CStringA& name, eVarType& vt )
 	if( nullptr == p )
 	{
 		const int id = (int)variables.size();
-		variables.emplace_back( Variable{ name, vt } );
+		variables.emplace_back( VariableDecl{ eVarLocation::local, vt, name } );
 		variablesMap[ name ] = id;
 		return id;
 	}
 
-	Variable& var = variables[ p->m_value ];
+	VariableDecl& var = variables[ p->m_value ];
 	int flag = 0;
 	if( vt != eVarType::unknown )
 		flag |= 1;
@@ -68,7 +74,7 @@ int SymbolTable::varLookup( const CStringA& name, eVarType& vt )
 		break;
 	case 3:
 		if( var.vt != vt )
-			logWarning( "Variable %s is re-declared as different type", cstr( name ) );
+			logWarning( "Variable %s is re-declared as different type, old %s, new %s", cstr( name ), hlslName( var.vt ), hlslName( vt ) );
 		break;
 	}
 	return p->m_value;
@@ -132,7 +138,7 @@ eVarType SymbolTable::varSetType( int id, eVarType vt )
 		return vtOld;
 	case 3:
 		if( vtOld != vt )
-			logWarning( "Variable %s is reset to another type", cstr( variables[ id ].name ) );
+			logWarning( "Variable %s is reset to another type, old %s, new %s", cstr( variables[ id ].name ), hlslName( vtOld ), hlslName( vt ) );
 		return vtOld;
 	}
 	return eVarType::unknown;

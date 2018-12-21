@@ -43,7 +43,6 @@
     <ClInclude Include="Expressions\Compiler.h" />
     <ClInclude Include="Effects\includeDefs.h" />
     <ClInclude Include="Expressions\Prototype.h" />
-    <ClInclude Include="Expressions\eVarType.h" />
     <ClInclude Include="Expressions\utils.hpp" />
     <ClInclude Include="Resources\RenderTargets.h" />
     <ClInclude Include="Expressions\parse.h" />
@@ -64,6 +63,8 @@
     <ClInclude Include="Expressions\Tree.h" />
     <ClInclude Include="Expressions\SymbolTable.h" />
     <ClInclude Include="Effects\Render\SuperScope\SuperScope.h" />
+    <ClInclude Include="Expressions\varEnums.h" />
+    <ClInclude Include="Expressions\VariableDecl.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -92,7 +93,6 @@
     <ClCompile Include="EffectBase\EffectListBase.factory.cpp" />
     <ClCompile Include="Expressions\Compiler.cpp" />
     <ClCompile Include="Expressions\Prototype.cpp" />
-    <ClCompile Include="Expressions\eVarType.cpp" />
     <ClCompile Include="Resources\RenderTargets.cpp" />
     <ClCompile Include="Expressions\parse.cpp" />
     <ClCompile Include="Utils\decompressor.cpp" />
@@ -111,6 +111,7 @@
     <ClCompile Include="Expressions\Tree.debug.cpp" />
     <ClCompile Include="Expressions\Tree.types.cpp" />
     <ClCompile Include="Expressions\Tree.emit.cpp" />
+    <ClCompile Include="Expressions\varEnums.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

@@ -52,3 +52,37 @@ bool Tree::transformDoubleFuncs()
 	}
 	return any;
 }
+
+std::vector<eVarAccess> Tree::getVariableUsage() const
+{
+	std::vector<eVarAccess> result;
+	result.resize( symbols.variablesCount(), eVarAccess::None );
+
+	const int size = m_nodes.size();
+	for( int i = 0; i < size; i++ )
+	{
+		const Node& n = m_nodes[ i ];
+		if( n.node == eNode::Func && n.id == eInternalFunc::Assign )
+		{
+			i++;
+			const Node& n2 = m_nodes[ i ];
+			if( n2.node == eNode::Var )
+			{
+				eVarAccess a = result[ n2.id ];
+				a = (eVarAccess)( (uint8_t)a | (uint8_t)eVarAccess::Write );
+				result[ n2.id ] = a;
+			}
+			else
+				logWarning( "assign() is used with left-hand side that's not a variable." );
+			continue;
+		}
+
+		if( n.node != eNode::Var )
+			continue;
+		eVarAccess a = result[ n.id ];
+		a = (eVarAccess)( (uint8_t)a | (uint8_t)eVarAccess::Read );
+		result[ n.id ] = a;
+	}
+
+	return std::move( result );
+}

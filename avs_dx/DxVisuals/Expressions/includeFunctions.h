@@ -1,5 +1,5 @@
 #pragma once
-#include "eVarType.h"
+#include "varEnums.h"
 
 namespace Expressions
 {

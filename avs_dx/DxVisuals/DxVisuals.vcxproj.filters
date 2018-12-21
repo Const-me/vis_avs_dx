@@ -103,8 +103,9 @@
     <ClCompile Include="RootEffect.cpp" />
     <ClCompile Include="Utils\events.cpp" />
     <ClCompile Include="Hlsl\Defines.expand.cpp" />
-    <ClCompile Include="Expressions\Tree.cpp" />
     <ClCompile Include="Expressions\SymbolTable.cpp" />
+    <ClCompile Include="Expressions\Tree.parse.cpp" />
+    <ClCompile Include="Expressions\Tree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

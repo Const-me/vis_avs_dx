@@ -5,27 +5,36 @@
 
 HRESULT test1()
 {
+	SymbolTable stState;
+	Tree tree{ stState };
+
+	const char* e = "if(equal(bb%beatdiv,0),30+rand(30),n)";
+	CHECK( tree.parse( e ) );
+	return S_OK;
+}
+
+HRESULT test2()
+{
 	auto preset = SuperScope::presets[ 12 ];
 
 	SymbolTable stState;
-	Tree tree;
-
-	// const char* e = "if(equal(bb%beatdiv,0),f,c)";
-	// CHECK( tree.parse( stState, e ) );
+	Tree tree{ stState };
 
 	Assignments ass;
 	CHECK( parseAssignments( preset.init, ass ) );
 
 	for( auto& a : ass )
-		CHECK( tree.appendAssignment( stState, a.first, a.second ) );
+		CHECK( tree.appendAssignment( a.first, a.second ) );
 
 	CHECK( parseAssignments( preset.frame, ass ) );
 	for( auto& a : ass )
-		CHECK( tree.appendAssignment( stState, a.first, a.second ) );
+		CHECK( tree.appendAssignment( a.first, a.second ) );
 
 	CHECK( parseAssignments( preset.beat, ass ) );
 	for( auto& a : ass )
-		CHECK( tree.appendAssignment( stState, a.first, a.second ) );
+		CHECK( tree.appendAssignment( a.first, a.second ) );
+
+	CHECK( tree.deduceTypes() );
 
 	return S_OK;
 }
@@ -33,4 +42,6 @@ HRESULT test1()
 int main()
 {
 	test1();
+	test2();
+	return 0;
 }

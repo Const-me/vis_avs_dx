@@ -13,6 +13,8 @@ namespace Expressions
 		i32,
 		// double-precision float
 		f64,
+
+		count
 	};
 
 	// HLSL name of the type

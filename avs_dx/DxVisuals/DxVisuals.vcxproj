@@ -160,8 +160,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Expressions\SymbolTable.cpp" />
-    <ClCompile Include="Hlsl\Defines.expand.cpp" />
     <ClCompile Include="Expressions\Tree.cpp" />
+    <ClCompile Include="Hlsl\Defines.expand.cpp" />
+    <ClCompile Include="Expressions\Tree.parse.cpp" />
     <ClCompile Include="Utils\events.cpp" />
     <ClCompile Include="Expressions\builtinFunctions.cpp" />
     <ClCompile Include="Expressions\CompiledShader.cpp" />

@@ -1,21 +1,31 @@
 #include "stdafx.h"
 #include "Tree.h"
-#include "../Hlsl/parseId.hpp"
-#include "utils.hpp"
 
 using namespace Expressions;
 
-HRESULT Tree::parse( SymbolTable& symbols, const CStringA& expr )
+Tree::Tree( SymbolTable& symbolsTable ) :
+	symbols( symbolsTable )
+{ }
+
+void Tree::clear()
 {
+	m_lastStatement = -1;
 	m_codez.clear();
 	m_nodes.clear();
-	m_lastStatement = 0;
+}
+
+HRESULT Tree::deduceTypes()
+{
+	if( m_nodes.empty() )
+		return S_FALSE;
 
 	try
 	{
-		ExpressionContext ec;
-		pushExpression( expr, ec, 0, expr.GetLength() );
-		parseExpression( expr, symbols, 0, expr.GetLength() );
+		for( int i = 0; i >= 0; )
+		{
+			nodeType( i );
+			i = m_nodes[ i ].nextSibling;
+		}
 		return S_OK;
 	}
 	catch( const std::exception & )
@@ -24,193 +34,114 @@ HRESULT Tree::parse( SymbolTable& symbols, const CStringA& expr )
 	}
 }
 
-HRESULT Tree::appendAssignment( SymbolTable& symbols, const CStringA& lhs, const CStringA& rhs )
+
+eVarType Tree::nodeType( int indNode )
 {
-	try
+	Node& n = m_nodes[ indNode ];
+	if( n.vt != eVarType::unknown )
+		return n.vt;
+
+	if( eNode::Code == n.node )
+		return eVarType::unknown;
+
+	if( eNode::Var == n.node )
 	{
-		ExpressionContext ec;
-		const CStringA ass = "assign";
-		const int indAssign = (int)m_nodes.size();
-		pushFunc( ass, ec, symbols, 0, ass.GetLength() );
-
-		ExpressionContext argContext;
-		pushExpression( lhs, argContext, 0, lhs.GetLength() );
-		parseExpression( lhs, symbols, 0, lhs.GetLength() );
-
-		pushExpression( rhs, argContext, 0, rhs.GetLength() );
-		parseExpression( rhs, symbols, 0, rhs.GetLength() );
-
-		assert( 2 == argContext.children );
-		m_nodes[ indAssign ].length = argContext.children;
-
-		if( indAssign > 0 )
-			m_nodes[ m_lastStatement ].nextSibling = indAssign;
-		m_lastStatement = indAssign;
-
-		return S_OK;
+		n.vt = symbols.varGetType( n.id );
+		return n.vt;
 	}
-	catch( const std::exception & )
+	if( eNode::Expr == n.node )
 	{
-		return E_FAIL;
+		n.vt = expressionType( indNode + 1 );
+		return n.vt;
+	}
+	if( eNode::Func == n.node )
+	{
+		n.vt = functionType( indNode );
+		return n.vt;
+	}
+	__debugbreak();
+	return eVarType::unknown;
+}
+
+namespace
+{
+	constexpr uint32_t typeBit( eVarType vt )
+	{
+		return (uint32_t)1 << (uint32_t)( (uint8_t)vt );
+	}
+
+	eVarType combineTypes( uint32_t mask )
+	{
+		mask &= ~typeBit( eVarType::unknown );
+		if( 0 == mask )
+			return eVarType::unknown;
+
+		if( 0 != ( mask & typeBit( eVarType::f64 ) ) )
+			return eVarType::f64;
+		if( 0 != ( mask & typeBit( eVarType::f32 ) ) )
+			return eVarType::f32;
+		if( 0 != ( mask & typeBit( eVarType::i32 ) ) )
+			return eVarType::i32;
+		return eVarType::u32;
 	}
 }
 
-void Tree::pushNode( ExpressionContext& ec, Node&& node )
+eVarType Tree::expressionType( int iFirstChild )
 {
-	const int ind = (int)m_nodes.size();
-	m_nodes.emplace_back( node );
-
-	if( ec.prevSibling >= 0 )
-		m_nodes[ ec.prevSibling ].nextSibling = ind;
-
-	ec.prevSibling = ind;
-	ec.children++;
-}
-
-void Tree::pushExpression( const CStringA& expr, ExpressionContext& ec, int begin, int end )
-{
-	Node nn;
-	nn.node = eNode::Expr;
-#ifdef DEBUG
-	nn.source = expr.Mid( begin, end - begin );
-#endif
-	nn.length = end - begin;
-	pushNode( ec, std::move( nn ) );
-}
-
-void Tree::pushCode( const CStringA& expr, ExpressionContext& ec, int begin, int end )
-{
-	Node nn;
-	nn.node = eNode::Code;
-#ifdef DEBUG
-	nn.source = expr.Mid( begin, end - begin );
-#endif
-	nn.id = (int)m_codez.size();
-	nn.length = end - begin;
-	m_codez.reserve( nn.id + nn.length );
-	for( int i = begin; i < end; i++ )
-		m_codez.push_back( expr[ i ] );
-
-	pushNode( ec, std::move( nn ) );
-}
-
-void Tree::pushVar( const CStringA& expr, ExpressionContext& ec, SymbolTable& symbols, int begin, int end )
-{
-	Node nn;
-	nn.node = eNode::Var;
-#ifdef DEBUG
-	nn.source = expr.Mid( begin, end - begin );
-#endif
-	nn.id = symbols.varLookup( expr.Mid( begin, end - begin ), nn.vt );
-	nn.length = end - begin;
-	pushNode( ec, std::move( nn ) );
-}
-
-void Tree::pushFunc( const CStringA& expr, ExpressionContext& ec, SymbolTable& symbols, int begin, int end )
-{
-	Node nn;
-	nn.node = eNode::Func;
-#ifdef DEBUG
-	nn.source = expr.Mid( begin, end - begin );
-#endif
-	nn.id = symbols.funcLookup( expr.Mid( begin, end - begin ), nn.vt );
-	nn.length = end - begin;
-	pushNode( ec, std::move( nn ) );
-}
-
-void Tree::parseExpression( const CStringA& expr, SymbolTable& symbols, int begin, int end )
-{
-	using namespace Hlsl;
-
-	const int indThis = (int)m_nodes.size() - 1;
-	ExpressionContext context;
-	const char* const src = expr;
-
-	for( int i = begin; i < end; )
+	static_assert( (int)eVarType::count <= 32 );
+	uint32_t mask = 0;
+	for( ; iFirstChild >= 0; )
 	{
-		// Skip non-ID part, if any
-		if( !isAlpha( src[ i ] ) )
+		mask |= typeBit( nodeType( iFirstChild ) );
+		iFirstChild = m_nodes[ iFirstChild ].nextSibling;
+	}
+	return combineTypes( mask );
+}
+
+eVarType Tree::functionType( int iFunc )
+{
+	const int id = m_nodes[ iFunc ].id;
+
+	const auto ft = symbols.funGetType( id );
+
+	if( ft.kind == eFunctionKind::Internal )
+	{
+		if( id == SymbolTable::idAssign )
 		{
-			const int codeStart = i;
-			for( i++; i < end && !isAlpha( src[ i ] ); i++ ) { }
-			pushCode( expr, context, codeStart, i );
-			continue;
-		}
+			const int indLhs = iFunc + 1;
+			const int indRhs = m_nodes[ indLhs ].nextSibling;
 
-		// Found first ID character
-		const int idStart = i;
-		for( i++; i < end && isAlphaNumeric( src[ i ] ); i++ ) { }
-		const int idEnd = i;
-
-		// Parsed the complete ID.
-		if( idEnd >= end || src[ idEnd ] != '(' )
-		{
-			// It's a variable: a function call would continue with '('
-			pushVar( expr, context, symbols, idStart, idEnd );
-			continue;
-		}
-
-		// It's a function call.
-		const size_t indFunc = m_nodes.size();
-		pushFunc( expr, context, symbols, idStart, idEnd );
-
-		// Parse function's arguments
-		assert( src[ i ] == '(' );
-		i++;
-		int iLevel = 1;
-		ExpressionContext argContext;
-		int argStart = i;
-		for( ; i < end; i++ )
-		{
-			const char c = src[ i ];
-			if( c == '(' )
+			const auto vtRight = nodeType( indRhs );
+			if( m_nodes[ indLhs ].node == eNode::Var )
 			{
-				iLevel++;
-				continue;
+				symbols.varSetType( m_nodes[ indLhs ].id, vtRight );
+				m_nodes[ indLhs ].vt = vtRight;
 			}
-			if( 1 != iLevel )
-			{
-				if( c == ')' )
-					iLevel--;
-				continue;
-			}
-			// OK, we're at the correct level
-			if( c != ')' && c != ',' )
-				continue;
-
-			// Parsed the function's argument
-			pushExpression( expr, argContext, argStart, i );
-			parseExpression( expr, symbols, argStart, i );
-			if( c == ')' )
-			{
-				iLevel--;
-				break;
-			}
-			argStart = i + 1;
+			return vtRight;
 		}
+		if( id == SymbolTable::idEquals )
+			return eVarType::u32;
 
-		if( 0 != iLevel )
+		if( id == SymbolTable::idIf )
 		{
-			logError( "Unmatched '(' bracket in the expression %s at %i", cstr( expr ), idEnd );
-			throw std::logic_error( "Unmatched bracket" );
+			int i = iFunc + 1;	// Ignore first argument, it's condition
+			i = m_nodes[ i ].nextSibling;
+
+			uint32_t mask = typeBit( nodeType( i ) );
+			i = m_nodes[ i ].nextSibling;
+			mask |= typeBit( nodeType( i ) );
+			return combineTypes( mask );
 		}
-		assert( src[ i ] == ')' );
-		i++;
-		m_nodes[ indFunc ].length = argContext.children;
 	}
 
-	// If this expression has the only child, erase the expression.
-	if( 1 == context.children )
+	if( ft.kind != eFunctionKind::Polymorphic || ft.kind != eFunctionKind::unknown )
+		return ft.vt;
+
+	uint32_t mask = 0;
+	for( int i = iFunc + 1; i >= 0; )
 	{
-		m_nodes.erase( m_nodes.begin() + indThis );
-		for( int i = m_lastStatement; i < indThis; i++ )
-		{
-			int &ns = m_nodes[ i ].nextSibling;
-			if( ns < indThis )
-				continue;
-			ns--;
-		}
+		mask |= typeBit( nodeType( i ) );
+		i = m_nodes[ i ].nextSibling;
 	}
-	else
-		m_nodes[ indThis ].length = context.children;
+	return combineTypes( mask );
 }

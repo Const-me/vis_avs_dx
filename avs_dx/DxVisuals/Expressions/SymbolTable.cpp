@@ -8,16 +8,21 @@ using namespace Expressions;
 
 SymbolTable::SymbolTable()
 {
-	addInternalFunc( "assign" );
-	addInternalFunc( "equal" );
-	addInternalFunc( "if" );
+	int i = addInternalFunc( "assign" );
+	assert( i == idAssign );
+
+	i = addInternalFunc( "equal" );
+	assert( i == idEquals );
+
+	i = addInternalFunc( "if" );
+	assert( idIf == i );
 }
 
 int SymbolTable::addFunc( const CStringA& name, eFunctionKind kind, eVarType vt )
 {
 	assert( nullptr == functionsMap.Lookup( name ) );
 	const int id = (int)functions.size();
-	functions.emplace_back( Function{ name, kind, vt } );
+	functions.emplace_back( Function{ kind, vt, name } );
 	functionsMap[ name ] = id;
 	return id;
 }
@@ -93,4 +98,38 @@ int SymbolTable::funcLookup( const CStringA& name, eVarType &vt )
 
 	vt = eVarType::unknown;
 	return addFunc( name, eFunctionKind::unknown, vt );
+}
+
+eVarType SymbolTable::varGetType( int id ) const
+{
+	return variables[ id ].vt;
+}
+
+eVarType SymbolTable::varSetType( int id, eVarType vt )
+{
+	auto& vtOld = variables[ id ].vt;
+
+	int flag = 0;
+	if( vt != eVarType::unknown )
+		flag |= 1;
+	if( vtOld != eVarType::unknown )
+		flag |= 2;
+	switch( flag )
+	{
+	case 1:
+		vtOld = vt;
+		return vt;
+	case 2:
+		return vtOld;
+	case 3:
+		if( vtOld != vt )
+			logWarning( "Variable %s is reset to another type", cstr( variables[ id ].name ) );
+		return vtOld;
+	}
+	return eVarType::unknown;
+}
+
+FunctionType SymbolTable::funGetType( int id ) const
+{
+	return functions[ id ];
 }

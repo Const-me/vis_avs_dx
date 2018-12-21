@@ -35,7 +35,8 @@ namespace Expressions
 
 	class Tree
 	{
-		int m_lastStatement = 0;
+		SymbolTable& symbols;
+		int m_lastStatement = -1;
 		std::vector<char> m_codez;
 		std::vector<Node> m_nodes;
 
@@ -48,17 +49,27 @@ namespace Expressions
 		void pushNode( ExpressionContext& ec, Node&& node );
 
 		void pushCode( const CStringA& expr, ExpressionContext& ec, int begin, int end );
-		void pushVar( const CStringA& expr, ExpressionContext& ec, SymbolTable& symbols, int begin, int end );
-		void pushFunc( const CStringA& expr, ExpressionContext& ec, SymbolTable& symbols, int begin, int end );
+		void pushVar( const CStringA& expr, ExpressionContext& ec, int begin, int end );
+		void pushFunc( const CStringA& expr, ExpressionContext& ec, int begin, int end );
 		void pushExpression( const CStringA& expr, ExpressionContext& ec, int begin, int end );
 
-		void parseExpression( const CStringA& expr, SymbolTable& symbols, int begin, int end );
+		void parseExpression( const CStringA& expr, int begin, int end );
+
+		eVarType nodeType( int indNode );
+		eVarType expressionType( int iFirstChild );
+		eVarType functionType( int iFunc );
 
 	public:
 
-		HRESULT parse( SymbolTable& symbols, const CStringA& expr );
+		Tree( SymbolTable& symbolsTable );
 
-		HRESULT appendAssignment( SymbolTable& symbols, const CStringA& lhs, const CStringA& rhs );
+		void clear();
+
+		HRESULT parse( const CStringA& expr );
+
+		HRESULT appendAssignment( const CStringA& lhs, const CStringA& rhs );
+
+		HRESULT deduceTypes();
 
 		/* template<class Func>
 		void visitVariables( Func&& fn )

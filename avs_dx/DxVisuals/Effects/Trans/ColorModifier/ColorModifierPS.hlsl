@@ -17,6 +17,10 @@ float4 main( float4 screenSpace : SV_Position ) : SV_Target
 	float red = color.x;
 	float green = color.y;
 	float blue = color.z;
+#if NEEDS_RNG
+    uint rng_state = avs_rand_init( getRandomSeed( screenSpace.xy ) );
+#endif
+
 	SHADER_CODE
 	return float4( red, green, blue, 1 );
 }

@@ -10,6 +10,7 @@ namespace Expressions
 		std::array<CStringA, 3> templatePieces;
 		// Copy of the code produced by Expressions::Compiler class. That code will go into the placeholders.
 		CStringA fragmentCode, fragmentGlobals;
+		bool needsRng = false;
 
 	public:
 
@@ -23,6 +24,8 @@ namespace Expressions
 		{
 			return &m_template;
 		}
+
+		HRESULT compiledDefines( Hlsl::Defines& def ) const;
 	};
 
 	// A shader template with SHADER_GLOBALS & SHADER_CODE placeholder to be filled by the expression compiler.
@@ -35,6 +38,12 @@ namespace Expressions
 		const ShaderTemplate* shaderTemplate() const
 		{
 			return compiledTemplate();
+		}
+
+		HRESULT defines( Hlsl::Defines& def ) const
+		{
+			compiledDefines( def );
+			return T::defines( def );
 		}
 	};
 }

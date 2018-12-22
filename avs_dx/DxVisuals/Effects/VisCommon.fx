@@ -81,4 +81,13 @@ inline float2 randomPos( inout uint rng_state )
     return res * 2 - float2( 1, 1 );
 }
 
-#define M_PI 3.1415926535897932384626433832795
+inline uint getRandomSeed( float2 src )
+{
+	// https://stackoverflow.com/a/1646913/126995
+    const uint2 ui = asuint( src );
+    uint hash = 17;
+    hash = hash * 31 + getTickCount;
+    hash = hash * 31 + ui.x;
+    hash = hash * 31 + ui.y;
+    return hash;
+}

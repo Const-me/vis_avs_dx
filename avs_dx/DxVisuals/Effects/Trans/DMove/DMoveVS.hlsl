@@ -29,6 +29,10 @@ sOutput main( sInput inputVertex )
     float d = length( centered );
     float r = atan2( centered.y, centered.x ) + ( M_PI / 2 );
 
+#if NEEDS_RNG
+    uint rng_state = avs_rand_init( getRandomSeed( inputVertex.tc ) );
+#endif
+
     {
 SHADER_CODE
     }

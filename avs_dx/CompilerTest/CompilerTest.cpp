@@ -36,8 +36,13 @@ HRESULT test1()
 	SymbolTable stState;
 	Tree tree{ stState };
 
-	const char* e = "if(equal(bb%beatdiv,0),30+rand(30),sin(n*$PI))";
-	CHECK( tree.parse( e ) );
+	const char* e =
+		// "if(equal(bb%beatdiv,0),30+rand(30),sin(n*$PI))";
+		"red=red*3;\r\ngreen=green*2.7;\r\nblue=rand()";
+
+	CStringA str = e;
+	preprocess( str );
+	CHECK( tree.parse( str ) );
 	tree.dbgPrint();
 	return S_OK;
 }
@@ -57,7 +62,7 @@ HRESULT test2()
 int main()
 {
 	// test0();
-	// test1();
-	test2();
+	test1();
+	// test2();
 	return 0;
 }

@@ -41,6 +41,8 @@ eVarType Tree::nodeType( int indNode )
 	}
 	if( eNode::Expr == n.node )
 	{
+		if( n.length <= 0 )
+			return eVarType::unknown;
 		n.vt = expressionType( indNode + 1 );
 		return n.vt;
 	}

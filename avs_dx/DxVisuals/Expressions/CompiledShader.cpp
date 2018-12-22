@@ -47,5 +47,13 @@ HRESULT CompiledShaderBase::updateDx( const Expressions::Compiler& compiler )
 	m_template.hlsl += templatePieces[ 1 ];
 	m_template.hlsl += fragmentCode;
 	m_template.hlsl += templatePieces[ 2 ];
+
+	needsRng = compiler.fragmentUsesRng();
+	return S_OK;
+}
+
+HRESULT CompiledShaderBase::compiledDefines( Hlsl::Defines& def ) const
+{
+	def.set( "NEEDS_RNG", needsRng ? "1" : "0" );
 	return S_OK;
 }

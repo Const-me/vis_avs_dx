@@ -25,6 +25,12 @@ HRESULT Tree::parse( const CStringA& expr )
 
 HRESULT Tree::appendAssignment( const CStringA& lhs, const CStringA& rhs )
 {
+	if( lhs.GetLength() <= 0 || rhs.GetLength() <= 0 )
+	{
+		logError( "Empty assignment" );
+		return E_INVALIDARG;
+	}
+
 	try
 	{
 		ExpressionContext ec;

@@ -65,6 +65,7 @@
     <ClInclude Include="Expressions\Tree\Tree.h" />
     <ClInclude Include="Expressions\Builtin\builtinFunctions.h" />
     <ClInclude Include="Expressions\Builtin\includeFunctions.h" />
+    <ClInclude Include="Expressions\preprocess.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -112,6 +113,7 @@
     <ClCompile Include="Expressions\Tree\Tree.types.cpp" />
     <ClCompile Include="Expressions\Builtin\builtinFunctions.cpp" />
     <ClCompile Include="Expressions\Builtin\includeFunctions.cpp" />
+    <ClCompile Include="Expressions\preprocess.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

@@ -1,15 +1,44 @@
 #include "stdafx.h"
 #include "Effects.hpp"
+#include "../DxVisuals/Expressions/preprocess.h"
 
 #define CHECK( hr ) { const HRESULT __hr = ( hr ); if( FAILED( __hr ) ) { __debugbreak(); logError( __hr, #hr ); return __hr; } }
+
+HRESULT test0()
+{
+	CStringA str = R"fffuuu(
+
+fff;
+aa=bb;
+/****  // */
+		cc = dd;
+// /* */
+12*/3/4
+
+/*
+567
+//*/
+
+890
+
+//*
+567
+//*/
+
+)fffuuu";
+
+	preprocess( str );
+	return S_OK;
+}
 
 HRESULT test1()
 {
 	SymbolTable stState;
 	Tree tree{ stState };
 
-	const char* e = "if(equal(bb%beatdiv,0),30+rand(30),n)";
+	const char* e = "if(equal(bb%beatdiv,0),30+rand(30),sin(n*$PI))";
 	CHECK( tree.parse( e ) );
+	tree.dbgPrint();
 	return S_OK;
 }
 
@@ -50,7 +79,8 @@ HRESULT test2()
 
 int main()
 {
+	// test0();
 	test1();
-	test2();
+	// test2();
 	return 0;
 }

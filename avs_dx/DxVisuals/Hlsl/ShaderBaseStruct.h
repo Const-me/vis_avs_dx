@@ -7,6 +7,7 @@ namespace Hlsl
 	template<eStage stage>
 	struct ShaderBaseStruct
 	{
+		static constexpr eStage shaderStage = stage;
 		ShaderBaseStruct() = default;
 		ShaderBaseStruct( const ShaderBaseStruct& ) = delete;
 	};

@@ -266,9 +266,11 @@
     <None Include="Effects\Polyline.fx">
       <FileType>Document</FileType>
     </None>
-    <None Include="Effects\Expressions\random.fx">
+    <FxCompile Include="Expressions\Builtin\random.hlsl">
       <FileType>Document</FileType>
-    </None>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+    </FxCompile>
     <FxCompile Include="Effects\Render\PolylineGS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>

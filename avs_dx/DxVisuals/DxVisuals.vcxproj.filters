@@ -141,8 +141,8 @@
     <None Include="CppBuilder.t4" />
     <None Include="Effects\Polyline.fx" />
     <None Include="Expressions\Builtin\includeFunctions.t4" />
-    <None Include="Effects\Expressions\random.fx" />
     <None Include="Expressions\Builtin\doubleFunctions.hlsl" />
+    <None Include="Expressions\Builtin\random.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Effects\Render\Simple\SimpleDotsVS.hlsl" />

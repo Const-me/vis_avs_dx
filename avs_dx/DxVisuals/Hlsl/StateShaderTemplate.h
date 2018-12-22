@@ -15,6 +15,7 @@ struct StateShaderTemplate
 	// Some part of the shader uses IS_BEAT macro. The runtime will compile two different versions of the shader.
 	// This way it's slightly faster than runtime branching on `beat` from FrameGlobalData cbuffer
 	bool hasBeat = false;
+	bool hasRandomNumbers = false;
 
 	StateShaderTemplate( const char *n ) : name( n ) { }
 

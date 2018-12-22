@@ -45,14 +45,12 @@ bool Tree::transformDoubleFuncs()
 		if( ft.vt == eVarType::f32 )
 		{
 			// It's sin/cos/tan, inject extra dependency before that.
-			eVarType vtWrap = eVarType::unknown;
-			const int idWrap = symbols.functions.lookup( "wrap_double_2pi", vtWrap );
-			assert( vtWrap == eVarType::f32 );
+			symbols.functions.addAvs( "wrap_double_2pi" );
 		}
 
 		CStringA name = symbols.functions.name( n.id );
 		name += "_d";
-		n.id = symbols.functions.lookup( name, n.vt );
+		n.id = symbols.functions.addAvs( name, n.vt );
 #ifdef DEBUG
 		n.source = name;
 #endif

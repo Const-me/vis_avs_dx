@@ -42,6 +42,7 @@ namespace
 	CStringA assembleEffects( const std::vector<EffectStateShader> &effects, bool &anyBeat, UINT& totalStateSize )
 	{
 		anyBeat = false;
+		bool needRng = false;
 		GlobalPieces globals;
 		for( const auto &e : effects )
 		{
@@ -49,6 +50,7 @@ namespace
 				continue;
 
 			anyBeat = anyBeat || e.shaderTemplate->hasBeat;
+			needRng = needRng || e.shaderTemplate->hasRandomNumbers;
 			globals.add( e.shaderTemplate->globals );
 		}
 
@@ -64,6 +66,12 @@ RWByteAddressBuffer effectStates : register(u0);
 void main()
 {
 )fffuuu";
+
+		if( needRng )
+		{
+			hlsl += R"fffuuu(	uint rng_state = avs_rand_init( getTickCount );
+)fffuuu";
+		}
 
 		UINT stateOffset = 0;
 		CStringA offsetString;

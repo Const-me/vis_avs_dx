@@ -41,7 +41,8 @@ HRESULT Compiler::update( const char* init, const char* frame, const char* beat,
 	m_stateTemplate.hlslMain = "";
 	m_hlslFragment = "";
 	m_stateSize = proto.fixedStateSize();
-	m_stateRng = m_fragmentRng = false;
+	m_stateTemplate.hasRandomNumbers = false;
+	m_fragmentRng = false;
 	if( !hasAny( m_expressions, []( const CStringA& s ) { return s.GetLength() > 0; } ) )
 	{
 		// All expressions are empty
@@ -54,7 +55,7 @@ HRESULT Compiler::update( const char* init, const char* frame, const char* beat,
 		CHECK( parseAssignments( m_expressions[ i ], m_tree ) );
 		CHECK( m_tree.deduceTypes() );
 		m_tree.transformDoubleFuncs();
-		CHECK( m_tree.emitHlsl( m_hlsl[ i ], m_stateRng ) );
+		CHECK( m_tree.emitHlsl( m_hlsl[ i ], m_stateTemplate.hasRandomNumbers ) );
 		m_tree.getVariablesUsage( m_varUsage, false );
 	}
 
@@ -80,7 +81,7 @@ HRESULT Compiler::allocateState()
 	const int size = (int)m_varUsage.size();
 
 	// Detect variables that are used in both state & fragment expressions, place them in the state
-	m_stateSize = 0;
+	m_stateSize = proto.fixedStateSize();
 	m_dynStateLoad = "";
 	m_dynStateStore = "";
 	for( int i = 0; i < size; i++ )
@@ -90,8 +91,6 @@ HRESULT Compiler::allocateState()
 
 		if( loc == eVarLocation::stateStatic )
 		{
-			// Allocate static vars even when not used by user's code: might be used by the hardcoded parts of the HLSL
-			m_stateSize += variableSize( m_symbols.vars.type( i ) );
 			if( usage & 0b1000 )
 				logWarning( "Incorrect variable use: point/vertex expression writing to %s", cstr( m_symbols.vars.name( i ) ) );
 			continue;
@@ -131,7 +130,12 @@ HRESULT Compiler::allocateState()
 			continue;
 		}
 		if( usage & 0b1000 )
+		{
+			// This warning means there's data dependency between point/vertex loop iterations.
+			// Very hard to fix in a way that wouldn't ruin the performance: GPUs are massively parallel, and loop with dependencies must run sequentially.
+			// One workaround that might work well enough in practicce is search for simple updates in fragment expressions, like `x += y` or `x *= y`, and replace them with `x += y * n` or `x *= pow(y,n)`, passing vertex/dispatch thread in a variable.
 			logWarning( "Incorrect variable use: writing to %s in point/vertex expression", cstr( m_symbols.vars.name( i ) ) );
+		}
 
 		m_symbols.vars.setLocation( i, eVarLocation::stateDynamic );
 		const int stateOffset = m_stateSize;

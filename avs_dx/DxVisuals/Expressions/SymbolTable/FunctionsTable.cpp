@@ -34,6 +34,27 @@ int FunctionsTable::add( const CStringA& name, eFunctionKind kind, eVarType vt )
 	return id;
 }
 
+int FunctionsTable::addAvs( const CStringA& name )
+{
+	eVarType vt;
+	return addAvs( name, vt );
+}
+
+int FunctionsTable::addAvs( const CStringA& name, eVarType &vt )
+{
+	auto p = map.Lookup( name );
+	if( nullptr != p )
+	{
+		const int id = p->m_value;
+		vt = table[ id ].vt;
+		return id;
+	}
+
+	auto avs = lookupShaderFunc( name );
+	assert( nullptr != avs );
+	return add( name, eFunctionKind::Avs, avs->returnType );
+}
+
 int FunctionsTable::lookup( const CStringA& name, eVarType &vt )
 {
 	auto p = map.Lookup( name );

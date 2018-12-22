@@ -8,7 +8,7 @@ namespace Expressions
 		unknown,
 		// HLSL built-in, e.g. "floor" or "atan2"
 		Hlsl,
-		// AVS built-in from shaderFunctions.hlsl, e.g. "gettime" or "above"
+		// AVS built-in from ../Builtin/*.hlsl, e.g. "gettime" or "above"
 		Avs,
 		// Can be either, depends on argument types
 		Polymorphic,
@@ -51,6 +51,9 @@ namespace Expressions
 	public:
 
 		FunctionsTable();
+
+		int addAvs( const CStringA& name );
+		int addAvs( const CStringA& name, eVarType &vt );
 
 		// Insert or lookup a function
 		int lookup( const CStringA& name, eVarType &vt );

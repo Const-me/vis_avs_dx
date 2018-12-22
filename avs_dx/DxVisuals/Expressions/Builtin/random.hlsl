@@ -1,3 +1,5 @@
+// Built-in functions for RNG
+
 inline uint avs_rand_init( uint seed )
 {
     seed = ( seed ^ 61 ) ^ ( seed >> 16 );
@@ -17,4 +19,9 @@ inline float avs_rand( inout uint rng_state, float maxVal )
 
     const float res = float( rng_state ) * ( 1.0 / 4294967296.0 );
     return maxVal * res;
+}
+
+[numthreads( 1, 1, 1 )]
+void main( uint3 DTid : SV_DispatchThreadID )
+{
 }

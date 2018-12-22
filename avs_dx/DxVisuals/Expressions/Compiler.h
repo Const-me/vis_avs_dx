@@ -22,6 +22,7 @@ namespace Expressions
 
 		const CStringA& fragmentGlobals() const { return m_fragmentGlobals; }
 
+		bool fragmentUsesRng() const { return m_fragmentRng; }
 		const CStringA& fragmentCode() const { return m_hlslFragment; }
 
 	protected:
@@ -48,7 +49,7 @@ namespace Expressions
 		CStringA m_dynStateLoad, m_dynStateStore;
 		
 		int m_stateSize;
-		bool m_stateRng, m_fragmentRng;
+		bool m_fragmentRng;
 
 		CStringA m_fragmentGlobals;
 		CStringA m_hlslFragment;

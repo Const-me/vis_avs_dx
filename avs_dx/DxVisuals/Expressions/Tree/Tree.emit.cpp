@@ -112,6 +112,8 @@ void Tree::emitInternal<eInternalFunc::Rand>( EmitContext& ec, const Node& node,
 	emitNode( ec, ind + 1 );
 	ec += " )";
 	ec.haveRandom = true;
+	symbols.functions.addAvs( "avs_rand_init" );
+	symbols.functions.addAvs( "avs_rand" );
 }
 
 const std::array<Tree::pfnEmitNode, 4> Tree::s_emitInternal =

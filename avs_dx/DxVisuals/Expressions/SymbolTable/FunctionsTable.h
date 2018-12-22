@@ -45,6 +45,9 @@ namespace Expressions
 
 		void addInternals();
 
+		template<class TFunc>
+		void enumAvsFuncs( TFunc callback ) const;
+
 	public:
 
 		FunctionsTable();
@@ -55,5 +58,14 @@ namespace Expressions
 		FunctionType type( int id ) const;
 
 		const CStringA& name( int id ) const;
+
+		// Get code of AVS functions, 1 string per function
+		void getStateGlobals( std::vector<CStringA>& list ) const;
+
+		// Get code of AVS functions, joined with newlines into a single string
+		CStringA getFragmentGlobals() const;
+
+		// Drop all functions from the table, only leave internal ones.
+		void clear();
 	};
 }

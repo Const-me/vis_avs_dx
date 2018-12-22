@@ -18,6 +18,7 @@ namespace Expressions
 		int lookup( const CStringA& name, eVarType& vt );
 
 		eVarType type( int id ) const;
+
 		eVarType setType( int id, eVarType vt );
 
 		const CStringA& name( int id ) const

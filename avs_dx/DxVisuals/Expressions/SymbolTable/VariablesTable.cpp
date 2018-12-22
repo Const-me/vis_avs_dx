@@ -42,7 +42,7 @@ int VariablesTable::lookup( const CStringA& name, eVarType& vt )
 		break;
 	case 3:
 		if( var.vt != vt )
-			logWarning( "Variable %s is re-declared as different type, old %s, new %s", cstr( name ), hlslName( var.vt ), hlslName( vt ) );
+			logWarning( "Variable %s is re-declared as different type, %s -> %s", cstr( name ), hlslName( var.vt ), hlslName( vt ) );
 		break;
 	}
 	return p->m_value;
@@ -72,7 +72,7 @@ eVarType VariablesTable::setType( int id, eVarType vt )
 		return vtOld;
 	case 3:
 		if( vtOld != vt )
-			logWarning( "Variable %s is reset to another type, old %s, new %s", cstr( table[ id ].name ), hlslName( vtOld ), hlslName( vt ) );
+			logWarning( "Variable %s is reset to another type: %s -> %s", cstr( table[ id ].name ), hlslName( vtOld ), hlslName( vt ) );
 		return vtOld;
 	}
 	return eVarType::unknown;

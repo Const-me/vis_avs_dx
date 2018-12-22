@@ -80,3 +80,46 @@ const CStringA& FunctionsTable::name( int id ) const
 {
 	return table[ id ].name;
 }
+
+template<class TFunc>
+void FunctionsTable::enumAvsFuncs( TFunc callback ) const
+{
+	for( const auto& fn : table )
+	{
+		if( fn.kind != eFunctionKind::Avs )
+			continue;
+		const ShaderFunc* impl = lookupShaderFunc( fn.name );
+		assert( nullptr != impl );
+		callback( impl->hlsl );
+	}
+}
+
+void FunctionsTable::getStateGlobals( std::vector<CStringA>& list ) const
+{
+	list.clear();
+	enumAvsFuncs( [ & ]( const char* hlsl )
+	{
+		list.push_back( hlsl );
+	} );
+}
+
+CStringA FunctionsTable::getFragmentGlobals() const
+{
+	CStringA res;
+	res.Preallocate( 1024 );
+	enumAvsFuncs( [ & ]( const char* hlsl )
+	{
+		res += hlsl;
+		res += "\r\n";
+	} );
+	return res;
+}
+
+void FunctionsTable::clear()
+{
+	const int len = eInternalFunc::valuesCount;
+	table.resize( len );
+	map.RemoveAll();
+	for( int i = 0; i < len; i++ )
+		map[ table[ i ].name ] = i;
+}

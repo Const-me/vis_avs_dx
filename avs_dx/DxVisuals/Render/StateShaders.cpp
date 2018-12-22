@@ -6,18 +6,50 @@
 
 namespace
 {
+	// Un-duplicate global pieces but preserve their order, they may depend upon each other.
+	class GlobalPieces
+	{
+		std::vector<CStringA> list;
+		CAtlMap<CStringA, bool> map;
+		int totalLength = 0;
+
+	public:
+		void add( const std::vector<CStringA> *pGlobals )
+		{
+			if( nullptr == pGlobals )
+				return;
+			for( const auto& s : *pGlobals )
+			{
+				if( nullptr != map.Lookup( s ) )
+					continue;
+				map[ s ] = true;
+				list.push_back( s );
+				totalLength += s.GetLength() + 2;
+			}
+		}
+
+		void write( CStringA& hlsl ) const
+		{
+			hlsl.Preallocate( hlsl.GetLength() + totalLength );
+			for( const auto& s : list )
+			{
+				hlsl += s;
+				hlsl += "\r\n";
+			}
+		}
+	};
+
 	CStringA assembleEffects( const std::vector<EffectStateShader> &effects, bool &anyBeat, UINT& totalStateSize )
 	{
 		anyBeat = false;
-		CAtlMap<CStringA, bool> globals;
+		GlobalPieces globals;
 		for( const auto &e : effects )
 		{
 			if( nullptr == e.shaderTemplate )
 				continue;
 
 			anyBeat = anyBeat || e.shaderTemplate->hasBeat;
-			for( const auto &s : *e.shaderTemplate->globals )
-				globals[ s ] = true;
+			globals.add( e.shaderTemplate->globals );
 		}
 
 		CStringA hlsl = R"fffuuu(
@@ -25,12 +57,7 @@ namespace
 RWByteAddressBuffer effectStates : register(u0);
 )fffuuu";
 
-		for( POSITION pos = globals.GetStartPosition(); nullptr != pos; )
-		{
-			const CStringA &gg = globals.GetNextKey( pos );
-			hlsl += gg;
-			hlsl += "\r\n";
-		}
+		globals.write( hlsl );
 
 		hlsl += R"fffuuu(
 [numthreads( 1, 1, 1 )]

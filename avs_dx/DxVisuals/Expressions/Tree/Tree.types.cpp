@@ -54,7 +54,7 @@ namespace
 {
 	constexpr uint32_t typeBit( eVarType vt )
 	{
-		return (uint32_t)1 << (uint32_t)( (uint8_t)vt );
+		return (uint32_t)1 << (uint32_t)( vt );
 	}
 
 	eVarType combineTypes( uint32_t mask )

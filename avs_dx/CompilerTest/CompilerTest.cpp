@@ -47,6 +47,16 @@ HRESULT test2()
 	auto preset = SuperScope::presets[ 12 ];
 
 	const SuperScope::Proto proto;
+
+	Compiler compiler{ "SuperScope", proto };
+	CHECK( compiler.update( preset.init, preset.frame, preset.beat, preset.point ) );
+
+	/* RString effect_exp[ 4 ];
+	effect_exp[ 3 ].assign( preset.init );
+	effect_exp[ 0 ].assign( preset.point );
+	effect_exp[ 2 ].assign( preset.frame );
+	effect_exp[ 3 ].assign( preset.beat );
+
 	SymbolTable stState{ proto };
 	Tree tree{ stState };
 
@@ -72,7 +82,7 @@ HRESULT test2()
 	CStringA hlsl;
 	CHECK( tree.emitHlsl( hlsl ) );
 
-	logInfo( "%s", cstr( hlsl ) );
+	logInfo( "%s", cstr( hlsl ) ); */
 
 	return S_OK;
 }

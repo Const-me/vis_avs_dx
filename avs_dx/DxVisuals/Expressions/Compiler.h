@@ -1,5 +1,4 @@
 #pragma once
-#include "../Effects/includeDefs.h"
 #include "../Render/EffectStateShader.hpp"
 #include "Prototype.h"
 #include "Tree/Tree.h"
@@ -15,7 +14,7 @@ namespace Expressions
 		Compiler( const Compiler & ) = delete;
 
 		// Recompile stuff from the strings
-		HRESULT update( RString effect_exp[ 4 ] );
+		HRESULT update( const char* init, const char* frame, const char* beat, const char* fragment );
 
 		const StateShaderTemplate* shaderTemplate() { return &m_stateTemplate; }
 
@@ -45,10 +44,7 @@ namespace Expressions
 		SymbolTable m_symbols;
 		Tree m_tree;
 
-		// Variable usage by all 3 state expressions combined
-		std::vector<eVarAccess> m_stateUsage;
-		// Variables usage by the fragment expression.
-		std::vector<eVarAccess> m_fragmentUsage;
+		std::vector<uint8_t> m_usage;
 		
 		int m_stateSize;
 

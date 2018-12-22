@@ -8,7 +8,7 @@ using uint2 = CSize;
 using int2 = CPoint;
 using uint = uint32_t;
 
-// Convert Window COLORREF into float3
+// Convert Windows COLORREF into float3
 inline float3 float3FromColor( int rgb )
 {
 	float3 res;

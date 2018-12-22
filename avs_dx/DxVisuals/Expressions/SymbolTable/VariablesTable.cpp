@@ -49,7 +49,6 @@ int VariablesTable::lookup( const CStringA& name, eVarType& vt )
 	return p->m_value;
 }
 
-
 eVarType VariablesTable::type( int id ) const
 {
 	return table[ id ].vt;
@@ -79,7 +78,7 @@ eVarType VariablesTable::setType( int id, eVarType vt )
 	return eVarType::unknown;
 }
 
-void VariablesTable::clear()
+void VariablesTable::clearLocals()
 {
 	table.resize( prototypeSize );
 	map.RemoveAll();

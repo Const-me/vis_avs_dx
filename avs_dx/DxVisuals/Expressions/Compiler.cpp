@@ -15,13 +15,14 @@ Compiler::Compiler( const char* effectName, const Prototype& effectPrototype ) :
 	m_stateTemplate.globals = &m_stateGlobals;
 }
 
-HRESULT Compiler::update( RString effect_exp[ 4 ] )
+HRESULT Compiler::update( const char* init, const char* frame, const char* beat, const char* fragment )
 {
 	bool somethingChanged = false;
+	const std::array<const char*, 4> nseel{ init, frame, beat, fragment };
 	CStringA ee;
 	for( int i = 0; i < 4; i++ )
 	{
-		ee = effect_exp[ i ].get();
+		ee = nseel[ i ] ? nseel[ i ] : "";
 		preprocess( ee );
 		if( ee == m_expressions[ i ] )
 			continue;
@@ -33,8 +34,7 @@ HRESULT Compiler::update( RString effect_exp[ 4 ] )
 
 	m_symbols.clear();
 	m_tree.clear();
-	m_stateUsage.clear();
-	m_fragmentUsage.clear();
+	m_usage.clear();
 
 	m_stateGlobals.clear();
 	m_stateTemplate.hasBeat = false;
@@ -47,26 +47,32 @@ HRESULT Compiler::update( RString effect_exp[ 4 ] )
 		return S_OK;
 	}
 
-	std::array<int, 3> stateExpressions = { 3, 1, 2 };
+	// Parse and recompile the state expressions
 	bool stateUsesRng = false;
-	for( int e : stateExpressions )
+	for( int i = 0; i < 3; i++ )
 	{
-		CHECK( parseAssignments( m_expressions[ e ], m_tree ) );
+		CHECK( parseAssignments( m_expressions[ i ], m_tree ) );
 		m_tree.transformDoubleFuncs();
-		CHECK( m_tree.emitHlsl( m_hlsl[ e ], stateUsesRng ) );
-		m_tree.getVariableUsage( m_stateUsage );
+		CHECK( m_tree.emitHlsl( m_hlsl[ i ], stateUsesRng ) );
+		m_tree.getVariableUsage( m_usage, false );
 	}
 
 	m_symbols.functions.getStateGlobals( m_stateGlobals );
 	m_symbols.functions.clear();
 
-	CHECK( parseAssignments( m_expressions[ 0 ], m_tree ) );
+	// Parse and recompile the fragment expression
+	CHECK( parseAssignments( m_expressions[ 3 ], m_tree ) );
 	m_tree.transformDoubleFuncs();
 	bool fragmentUsesRng = false;
-	CHECK( m_tree.emitHlsl( m_hlsl[ 0 ], fragmentUsesRng ) );
-	m_tree.getVariableUsage( m_fragmentUsage );
-
+	CHECK( m_tree.emitHlsl( m_hlsl[ 3 ], fragmentUsesRng ) );
+	m_tree.getVariableUsage( m_usage, true );
 	m_fragmentGlobals = m_symbols.functions.getFragmentGlobals();
+
+	// Find place for the variables
+	for( int i = m_symbols.vars.sizePrototype(); i < m_symbols.vars.size(); i++ )
+	{
+
+	}
 
 	return E_NOTIMPL;
 }

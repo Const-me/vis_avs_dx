@@ -37,7 +37,7 @@ struct DynamicMovementStructs
 
 		HRESULT update( AvsState& avs )
 		{
-			BoolHr hr = Compiler::update( avs.effect_exp );
+			BoolHr hr = Compiler::update( avs.effect_exp[ 3 ].get(), avs.effect_exp[ 1 ].get(), avs.effect_exp[ 2 ].get(), avs.effect_exp[ 0 ].get() );
 			hr.combine( updateInputs( avs ) );
 			return hr;
 		}

@@ -10,7 +10,7 @@ namespace Expressions
 		CStringA name;
 
 		VariableDecl() = default;
-		VariableDecl( const VariableDecl& ) = default;;
+		VariableDecl( const VariableDecl& ) = default;
 		VariableDecl( eVarLocation c, eVarType t, const CStringA& n ) :
 			loc( c ), vt( t ), name( n ) { }
 	};

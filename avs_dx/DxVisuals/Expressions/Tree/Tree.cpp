@@ -61,9 +61,10 @@ bool Tree::transformDoubleFuncs()
 	return any;
 }
 
-void Tree::getVariableUsage( std::vector<eVarAccess>& result ) const
+void Tree::getVariableUsage( std::vector<uint8_t>& usage, bool fragment ) const
 {
-	result.resize( symbols.vars.size(), eVarAccess::None );
+	usage.resize( symbols.vars.size(), 0 );
+	const uint8_t shift = fragment ? 2 : 0;
 
 	const int size = m_nodes.size();
 	for( int i = 0; i < size; i++ )
@@ -74,11 +75,7 @@ void Tree::getVariableUsage( std::vector<eVarAccess>& result ) const
 			i++;
 			const Node& n2 = m_nodes[ i ];
 			if( n2.node == eNode::Var )
-			{
-				eVarAccess a = result[ n2.id ];
-				a = (eVarAccess)( (uint8_t)a | (uint8_t)eVarAccess::Write );
-				result[ n2.id ] = a;
-			}
+				usage[ n2.id ] |= (uint8_t)eVarAccess::Write << shift;
 			else
 				logWarning( "assign() is used with left-hand side that's not a variable." );
 			continue;
@@ -86,8 +83,6 @@ void Tree::getVariableUsage( std::vector<eVarAccess>& result ) const
 
 		if( n.node != eNode::Var )
 			continue;
-		eVarAccess a = result[ n.id ];
-		a = (eVarAccess)( (uint8_t)a | (uint8_t)eVarAccess::Read );
-		result[ n.id ] = a;
+		usage[ n.id ] |= (uint8_t)eVarAccess::Read << shift;
 	}
 }

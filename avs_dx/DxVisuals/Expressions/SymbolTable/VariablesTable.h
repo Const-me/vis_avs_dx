@@ -27,11 +27,21 @@ namespace Expressions
 			return table[ id ].name;
 		}
 
-		size_t size() const
+		eVarLocation location( int id ) const
 		{
-			return table.size();
+			return table[ id ].loc;
 		}
 
-		void clear();
+		int sizePrototype() const
+		{
+			return prototypeSize;
+		}
+
+		int size() const
+		{
+			return (int)table.size();
+		}
+
+		void clearLocals();
 	};
 }

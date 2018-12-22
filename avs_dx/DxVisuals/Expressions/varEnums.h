@@ -45,7 +45,7 @@ namespace Expressions
 		// A local variable that doesn't go anywhere
 		local,
 
-		// It's not a variable at all but macro, will be compiled into immediate values in DXBC
+		// It's not a variable at all but macro, will be compiled into immediate value in DXBC
 		macro,
 		// Statically allocated in the state, by effect prototype
 		stateStatic,

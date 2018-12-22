@@ -16,7 +16,7 @@ namespace Expressions
 		void clear()
 		{
 			functions.clear();
-			vars.clear();
+			vars.clearLocals();
 		}
 	};
 }

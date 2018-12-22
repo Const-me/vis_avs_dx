@@ -6,8 +6,8 @@ namespace Expressions
 	// This class parses NSEEL into expression tree, and applies some transformations to the tree.
 	// There's one more downstream compiler, HLSL, so we don't need to parse everything. This class only parses functions and variables, leaving everything else in raw stream of characters.
 	// Reasons we need variables:
-	// * To find their types: in NSEEL everything is double, HLSL is strongly-typed.
-	// * To allocate right amount of space in the state buffer that's updated by the state CS and consumed by per-effects shaders.
+	// * To find their types: in NSEEL everything is double, the JIT compiler emitted x87 code. HLSL is strongly-typed.
+	// * To allocate space in the state buffer that's updated by the state CS and consumed by per-effects shaders.
 	// Reasons we need functions:
 	// * To transform if(), assign(), equals() functions into statements.
 	// * To detect need for, and implement, RNG.
@@ -108,6 +108,6 @@ namespace Expressions
 
 		HRESULT emitHlsl( CStringA& hlsl, bool& usesRng ) const;
 
-		void getVariableUsage( std::vector<eVarAccess>& usage ) const;
+		void getVariableUsage( std::vector<uint8_t>& usage, bool fragment ) const;
 	};
 }

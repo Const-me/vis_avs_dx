@@ -25,7 +25,7 @@ namespace Expressions
 			return &m_template;
 		}
 
-		HRESULT compiledDefines( Hlsl::Defines& def ) const;
+		void compiledDefines( Hlsl::Defines& def ) const;
 	};
 
 	// A shader template with SHADER_GLOBALS & SHADER_CODE placeholder to be filled by the expression compiler.

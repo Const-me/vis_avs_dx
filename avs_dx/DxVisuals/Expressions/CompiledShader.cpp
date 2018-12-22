@@ -52,8 +52,8 @@ HRESULT CompiledShaderBase::updateDx( const Expressions::Compiler& compiler )
 	return S_OK;
 }
 
-HRESULT CompiledShaderBase::compiledDefines( Hlsl::Defines& def ) const
+void CompiledShaderBase::compiledDefines( Hlsl::Defines& def ) const
 {
-	def.set( "NEEDS_RNG", needsRng ? "1" : "0" );
-	return S_OK;
+	if( needsRng )
+		def.set( "NEEDS_RNG", "1" );
 }

@@ -29,7 +29,7 @@ eVarType Tree::nodeType( int indNode )
 		return n.vt;
 
 	if( eNode::Code == n.node )
-		return eVarType::unknown;
+		return n.vt;
 
 	if( eNode::Var == n.node )
 	{

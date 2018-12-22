@@ -100,6 +100,35 @@ void Tree::pushCode( const CStringA& expr, ExpressionContext& ec, int begin, int
 	pushNode( ec, std::move( nn ) );
 }
 
+void Tree::pushMacro( const CStringA& expr, ExpressionContext& ec, int begin, int end )
+{
+	const char* const src = expr.operator const char*( ) + begin;
+	const int length = end - begin;
+	if( 2 == length && 0 == strncmp( src, "PI", 2 ) )
+	{
+		pushFloatLiteral( "3.141592653589793238", ec );
+		return;
+	}
+	if( 1 == length && src[ 0 ] == 'E' )
+	{
+		pushFloatLiteral( "2.718281828459045235", ec );
+		return;
+	}
+	if( 3 == length && 0 == strncmp( src, "PHI", 3 ) )
+	{
+		pushFloatLiteral( "1.618033988749894848", ec );
+		return;
+	}
+	logError( "Unrecognized macro \"$%.*s\"", end - begin, src );
+	throw std::invalid_argument( "Unrecognized macro" );
+}
+
+void Tree::pushFloatLiteral( const CStringA& val, ExpressionContext& ec )
+{
+	pushCode( val, ec, 0, val.GetLength() );
+	m_nodes.rbegin()->vt = eVarType::f32;
+}
+
 void Tree::pushVar( const CStringA& expr, ExpressionContext& ec, int begin, int end )
 {
 	Node nn;
@@ -124,6 +153,14 @@ void Tree::pushFunc( const CStringA& expr, ExpressionContext& ec, int begin, int
 	pushNode( ec, std::move( nn ) );
 }
 
+namespace
+{
+	inline bool isAlphaOrDollar( char c )
+	{
+		return isAlpha( c ) || c == '$';
+	}
+}
+
 void Tree::parseExpression( const CStringA& expr, int begin, int end )
 {
 	using namespace Hlsl;
@@ -135,11 +172,21 @@ void Tree::parseExpression( const CStringA& expr, int begin, int end )
 	for( int i = begin; i < end; )
 	{
 		// Skip non-ID part, if any
-		if( !isAlpha( src[ i ] ) )
+		if( !isAlphaOrDollar( src[ i ] ) )
 		{
 			const int codeStart = i;
-			for( i++; i < end && !isAlpha( src[ i ] ); i++ ) {}
+			for( i++; i < end && !isAlphaOrDollar( src[ i ] ); i++ ) {}
 			pushCode( expr, context, codeStart, i );
+			continue;
+		}
+
+		if( src[ i ] == '$' )
+		{
+			// Start of the dollar macro.
+			i++;
+			const int macroStart = i;
+			for( ; i < end && isAlpha( src[ i ] ); i++ ) {}
+			pushMacro( expr, context, macroStart, i );
 			continue;
 		}
 

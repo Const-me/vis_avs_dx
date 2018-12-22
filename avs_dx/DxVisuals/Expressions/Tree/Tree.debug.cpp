@@ -37,8 +37,8 @@ void Tree::dbgPrintNode( int ind, int level ) const
 
 	if( nt == eNode::Code )
 	{
-		logDebug( "%*scode: \"%.*s\"", INDENT,
-			node.length, m_codez.data() + node.id );
+		logDebug( "%*scode: %s \"%.*s\"", INDENT,
+			typeName( node.vt ), node.length, m_codez.data() + node.id );
 		return;
 	}
 

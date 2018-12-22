@@ -58,6 +58,8 @@ namespace Expressions
 		void pushNode( ExpressionContext& ec, Node&& node );
 
 		void pushCode( const CStringA& expr, ExpressionContext& ec, int begin, int end );
+		void pushMacro( const CStringA& expr, ExpressionContext& ec, int begin, int end );
+		void pushFloatLiteral( const CStringA& val, ExpressionContext& ec );
 		void pushVar( const CStringA& expr, ExpressionContext& ec, int begin, int end );
 		void pushFunc( const CStringA& expr, ExpressionContext& ec, int begin, int end );
 		void pushExpression( const CStringA& expr, ExpressionContext& ec, int begin, int end );
@@ -106,6 +108,6 @@ namespace Expressions
 
 		HRESULT emitHlsl( CStringA& hlsl ) const;
 
-		std::vector<eVarAccess> getVariableUsage() const;
+		void getVariableUsage( std::vector<eVarAccess>& usage ) const;
 	};
 }

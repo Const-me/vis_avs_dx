@@ -53,9 +53,8 @@ bool Tree::transformDoubleFuncs()
 	return any;
 }
 
-std::vector<eVarAccess> Tree::getVariableUsage() const
+void Tree::getVariableUsage( std::vector<eVarAccess>& result ) const
 {
-	std::vector<eVarAccess> result;
 	result.resize( symbols.variablesCount(), eVarAccess::None );
 
 	const int size = m_nodes.size();
@@ -83,6 +82,4 @@ std::vector<eVarAccess> Tree::getVariableUsage() const
 		a = (eVarAccess)( (uint8_t)a | (uint8_t)eVarAccess::Read );
 		result[ n.id ] = a;
 	}
-
-	return std::move( result );
 }

@@ -44,13 +44,19 @@ namespace Expressions
 		SymbolTable m_symbols;
 		Tree m_tree;
 
-		std::vector<uint8_t> m_usage;
+		std::vector<uint8_t> m_varUsage;
+		CStringA m_dynStateLoad, m_dynStateStore;
 		
 		int m_stateSize;
+		bool m_stateRng, m_fragmentRng;
 
 		CStringA m_fragmentGlobals;
 		CStringA m_hlslFragment;
 		std::vector<CStringA> m_stateGlobals;
 		StateShaderTemplate m_stateTemplate;
+
+		HRESULT allocateState();
+		HRESULT buildStateHlsl();
+		HRESULT buildFragmentHlsl();
 	};
 }

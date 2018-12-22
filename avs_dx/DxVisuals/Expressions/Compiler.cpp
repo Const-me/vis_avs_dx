@@ -34,13 +34,14 @@ HRESULT Compiler::update( const char* init, const char* frame, const char* beat,
 
 	m_symbols.clear();
 	m_tree.clear();
-	m_usage.clear();
+	m_varUsage.clear();
 
 	m_stateGlobals.clear();
 	m_stateTemplate.hasBeat = false;
 	m_stateTemplate.hlslMain = "";
 	m_hlslFragment = "";
 	m_stateSize = proto.fixedStateSize();
+	m_stateRng = m_fragmentRng = false;
 	if( !hasAny( m_expressions, []( const CStringA& s ) { return s.GetLength() > 0; } ) )
 	{
 		// All expressions are empty
@@ -48,13 +49,13 @@ HRESULT Compiler::update( const char* init, const char* frame, const char* beat,
 	}
 
 	// Parse and recompile the state expressions
-	bool stateUsesRng = false;
 	for( int i = 0; i < 3; i++ )
 	{
 		CHECK( parseAssignments( m_expressions[ i ], m_tree ) );
+		CHECK( m_tree.deduceTypes() );
 		m_tree.transformDoubleFuncs();
-		CHECK( m_tree.emitHlsl( m_hlsl[ i ], stateUsesRng ) );
-		m_tree.getVariableUsage( m_usage, false );
+		CHECK( m_tree.emitHlsl( m_hlsl[ i ], m_stateRng ) );
+		m_tree.getVariablesUsage( m_varUsage, false );
 	}
 
 	m_symbols.functions.getStateGlobals( m_stateGlobals );
@@ -62,84 +63,162 @@ HRESULT Compiler::update( const char* init, const char* frame, const char* beat,
 
 	// Parse and recompile the fragment expression
 	CHECK( parseAssignments( m_expressions[ 3 ], m_tree ) );
+	CHECK( m_tree.deduceTypes() );
 	m_tree.transformDoubleFuncs();
-	bool fragmentUsesRng = false;
-	CHECK( m_tree.emitHlsl( m_hlsl[ 3 ], fragmentUsesRng ) );
-	m_tree.getVariableUsage( m_usage, true );
+	CHECK( m_tree.emitHlsl( m_hlsl[ 3 ], m_fragmentRng ) );
+	m_tree.getVariablesUsage( m_varUsage, true );
 	m_fragmentGlobals = m_symbols.functions.getFragmentGlobals();
 
-	// Find place for the variables
-	for( int i = m_symbols.vars.sizePrototype(); i < m_symbols.vars.size(); i++ )
-	{
+	CHECK( allocateState() );
+	CHECK( buildStateHlsl() );
+	CHECK( buildFragmentHlsl() );
+	return S_OK;
+}
 
+HRESULT Compiler::allocateState()
+{
+	const int size = (int)m_varUsage.size();
+
+	// Detect variables that are used in both state & fragment expressions, place them in the state
+	m_stateSize = 0;
+	m_dynStateLoad = "";
+	m_dynStateStore = "";
+	for( int i = 0; i < size; i++ )
+	{
+		const eVarLocation loc = m_symbols.vars.location( i );
+		const uint8_t usage = m_varUsage[ i ];
+
+		if( loc == eVarLocation::stateStatic )
+		{
+			// Allocate static vars even when not used by user's code: might be used by the hardcoded parts of the HLSL
+			m_stateSize += variableSize( m_symbols.vars.type( i ) );
+			if( usage & 0b1000 )
+				logWarning( "Incorrect variable use: point/vertex expression writing to %s", cstr( m_symbols.vars.name( i ) ) );
+			continue;
+		}
+
+		if( loc != eVarLocation::unknown )
+		{
+			// Validate access
+			switch( loc )
+			{
+			case eVarLocation::macro:
+				if( usage & 0b1010 )
+					logWarning( "Incorrect variable use: writing to constant %s", cstr( m_symbols.vars.name( i ) ) );
+				break;
+			case eVarLocation::fragmentInput:
+				if( usage & 0b1000 )
+					logWarning( "Incorrect variable use: writing to input %s", cstr( m_symbols.vars.name( i ) ) );
+			case eVarLocation::fragmentOutput:
+				if( usage & 0b0011 )
+					logWarning( "Incorrect variable use: %s is only accessible in point/vertex expression", cstr( m_symbols.vars.name( i ) ) );
+				break;
+			}
+			continue;
+		}
+
+		if( 0 == usage )
+			continue;
+
+		if( 0 == ( usage & 0b1100 ) )
+		{
+			m_symbols.vars.setLocation( i, eVarLocation::stateLocal );
+			continue;
+		}
+		if( 0 == ( usage & 0b0011 ) )
+		{
+			m_symbols.vars.setLocation( i, eVarLocation::fragmentLocal );
+			continue;
+		}
+		if( usage & 0b1000 )
+			logWarning( "Incorrect variable use: writing to %s in point/vertex expression", cstr( m_symbols.vars.name( i ) ) );
+
+		m_symbols.vars.setLocation( i, eVarLocation::stateDynamic );
+		const int stateOffset = m_stateSize;
+		m_stateSize += variableSize( m_symbols.vars.type( i ) );
+
+		// Produce the load/store HLSL pieces for such variables
+		const char* name = m_symbols.vars.name( i );
+		const eVarType vt = m_symbols.vars.type( i );
+		const CStringA load = stateLoad( vt, stateOffset );
+		m_dynStateLoad.AppendFormat( "		%s = %s;\r\n", name, cstr( load ) );
+
+		const CStringA store = stateStore( vt, stateOffset, name );
+		m_dynStateStore.AppendFormat( "		%s;\r\n", cstr( store ) );
 	}
 
-	return E_NOTIMPL;
+	return S_OK;
 }
 
-/* void Compiler::printLoadState( CStringA& code ) const
+HRESULT Compiler::buildStateHlsl()
 {
-	for( const auto &v : m_vars )
-		if( v.offset >= 0 )
-			code.AppendFormat( "\t\t%s = %s;\r\n", cstr( v.name ), cstr( stateLoad( v.vt, v.offset ) ) );
-}
-
-void Compiler::printStoreState( CStringA& code ) const
-{
-	for( const auto &v : m_vars )
-		if( v.offset >= 0 )
-			code.AppendFormat( "\t\t%s;\r\n", cstr( stateStore( v.vt, v.offset, v.name ) ) );
-}
-
-HRESULT Compiler::buildStateCode( const std::array<Assignments, 4>& parsed )
-{
-	CStringA code = "	{\r\n";
-	for( const auto &v : m_vars )
-		if( v.usedInState )
-			code.AppendFormat( "		%s %s;\r\n", hlslName( v.vt ), cstr( v.name ) );
+	CStringA &code = m_stateTemplate.hlslMain;
+	code = "	{\r\n";
+	const int size = (int)m_varUsage.size();
+	for( int i = 0; i < size; i++ )
+	{
+		bool isVar = false;
+		switch( m_symbols.vars.location( i ) )
+		{
+		case eVarLocation::stateDynamic:
+		case eVarLocation::stateLocal:
+			isVar = true;
+		}
+		if( !isVar )
+			continue;
+		
+		code.AppendFormat( "		%s %s;\r\n", hlslName( m_symbols.vars.type( i ) ), cstr( m_symbols.vars.name( i ) ) );
+	}
 
 	code += "#if INIT_STATE\r\n";
 	code += proto.initState();
-	printAssignments( code, parsed[ 3 ] );
+	code += m_hlsl[ 0 ];	// Init
 
 	code += "#else\r\n";
 	code += proto.stateLoad();
-	printLoadState( code );
+	code += m_dynStateLoad;
+	
+	code += m_hlsl[ 1 ];	// Frame
 
-	printAssignments( code, parsed[ 1 ] );
-
-	m_stateTemplate.hasBeat = !parsed[ 2 ].empty();
+	m_stateTemplate.hasBeat = m_hlsl[ 2 ].GetLength() > 0;
 	if( m_stateTemplate.hasBeat )
 	{
 		code += "#if IS_BEAT\r\n";
-		printAssignments( code, parsed[ 2 ] );
+		code += m_hlsl[ 2 ];	// Beat
 		code += "#endif\r\n";
 	}
 	code += "#endif\r\n";
 	code += proto.stateStore();
-	printStoreState( code );
+	code += m_dynStateStore;
 	code += "	}\r\n";
 
-	m_stateTemplate.hlslMain = code;
 	return S_OK;
 }
 
-HRESULT Compiler::buildFragmentCode( const Assignments& parsed )
+HRESULT Compiler::buildFragmentHlsl()
 {
-	CStringA code = proto.stateLoad();
-	for( const auto &v : m_vars )
+	CStringA &code = m_hlslFragment;
+	code = proto.stateLoad();
+
+	const int size = (int)m_varUsage.size();
+	for( int i = 0; i < size; i++ )
 	{
-		if( !v.usedInFragment )
-			continue;
-		if( v.offset >= 0 )
+		bool isVar = false;
+		switch( m_symbols.vars.location( i ) )
 		{
-			const CStringA load = Expressions::stateLoad( v.vt, v.offset );
-			code.AppendFormat( "		%s %s = %s;\r\n", hlslName( v.vt ), cstr( v.name ), cstr( load ) );
+		case eVarLocation::stateDynamic:
+		case eVarLocation::fragmentLocal:
+			isVar = true;
 		}
-		else
-			code.AppendFormat( "		%s %s;\r\n", hlslName( v.vt ), cstr( v.name ) );
+		if( !isVar )
+			continue;
+
+		code.AppendFormat( "		%s %s;\r\n", hlslName( m_symbols.vars.type( i ) ), cstr( m_symbols.vars.name( i ) ) );
 	}
-	printAssignments( code, parsed );
-	m_hlslFragment = code;
+
+	code += m_dynStateLoad;
+
+	code += m_hlsl[ 3 ];
+
 	return S_OK;
-} */
+}

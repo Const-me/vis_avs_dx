@@ -108,6 +108,8 @@ namespace Expressions
 
 		HRESULT emitHlsl( CStringA& hlsl, bool& usesRng ) const;
 
-		void getVariableUsage( std::vector<uint8_t>& usage, bool fragment ) const;
+		// Gather data on how variables are used by the expression. The values are from eVarAccess enum, they're written to the vector with bitwise OR.
+		// fragment=false will write bits 0-1, fragment=true will write bits 2-3.
+		void getVariablesUsage( std::vector<uint8_t>& usage, bool fragment ) const;
 	};
 }

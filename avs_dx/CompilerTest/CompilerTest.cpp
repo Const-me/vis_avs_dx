@@ -51,39 +51,6 @@ HRESULT test2()
 	Compiler compiler{ "SuperScope", proto };
 	CHECK( compiler.update( preset.init, preset.frame, preset.beat, preset.point ) );
 
-	/* RString effect_exp[ 4 ];
-	effect_exp[ 3 ].assign( preset.init );
-	effect_exp[ 0 ].assign( preset.point );
-	effect_exp[ 2 ].assign( preset.frame );
-	effect_exp[ 3 ].assign( preset.beat );
-
-	SymbolTable stState{ proto };
-	Tree tree{ stState };
-
-	Assignments ass;
-	CHECK( parseAssignments( preset.init, ass ) );
-
-	for( auto& a : ass )
-		CHECK( tree.appendAssignment( a.first, a.second ) );
-
-	CHECK( parseAssignments( preset.frame, ass ) );
-	for( auto& a : ass )
-		CHECK( tree.appendAssignment( a.first, a.second ) );
-
-	CHECK( parseAssignments( preset.beat, ass ) );
-	for( auto& a : ass )
-		CHECK( tree.appendAssignment( a.first, a.second ) );
-
-	CHECK( tree.deduceTypes() );
-	// tree.dbgPrint();
-
-	tree.transformDoubleFuncs();
-	// tree.dbgPrint();
-	CStringA hlsl;
-	CHECK( tree.emitHlsl( hlsl ) );
-
-	logInfo( "%s", cstr( hlsl ) ); */
-
 	return S_OK;
 }
 

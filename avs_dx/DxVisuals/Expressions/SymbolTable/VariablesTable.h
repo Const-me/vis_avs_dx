@@ -32,6 +32,12 @@ namespace Expressions
 			return table[ id ].loc;
 		}
 
+		void setLocation( int id, eVarLocation loc )
+		{
+			assert( table[ id ].loc == eVarLocation::unknown );
+			table[ id ].loc = loc;
+		}
+
 		int sizePrototype() const
 		{
 			return prototypeSize;
@@ -43,5 +49,7 @@ namespace Expressions
 		}
 
 		void clearLocals();
+
+		void defaultTypesToFloat();
 	};
 }

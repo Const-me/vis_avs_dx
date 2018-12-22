@@ -5,7 +5,7 @@ namespace Expressions
 {
 	struct VariableDecl
 	{
-		eVarLocation loc = eVarLocation::local;
+		eVarLocation loc = eVarLocation::unknown;
 		eVarType vt = eVarType::unknown;
 		CStringA name;
 

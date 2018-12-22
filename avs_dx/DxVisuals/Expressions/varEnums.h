@@ -42,8 +42,7 @@ namespace Expressions
 	// Where the variable is located
 	enum struct eVarLocation : uint8_t
 	{
-		// A local variable that doesn't go anywhere
-		local,
+		unknown,
 
 		// It's not a variable at all but macro, will be compiled into immediate value in DXBC
 		macro,
@@ -56,6 +55,12 @@ namespace Expressions
 		fragmentInput,
 
 		// Set by hardcoded part of the fragment code, and used by another hardcoded part to produce the output vertex/pixel.
-		fragmentOutput
+		fragmentOutput,
+
+		// Local variables that doesn't go anywhere
+		stateLocal,
+		fragmentLocal,
+
+		valuesCount
 	};
 }

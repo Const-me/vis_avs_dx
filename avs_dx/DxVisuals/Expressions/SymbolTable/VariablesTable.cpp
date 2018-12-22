@@ -22,7 +22,7 @@ int VariablesTable::lookup( const CStringA& name, eVarType& vt )
 	if( nullptr == p )
 	{
 		const int id = (int)table.size();
-		table.emplace_back( VariableDecl{ eVarLocation::local, vt, name } );
+		table.emplace_back( VariableDecl{ eVarLocation::unknown, vt, name } );
 		map[ name ] = id;
 		return id;
 	}
@@ -84,4 +84,14 @@ void VariablesTable::clearLocals()
 	map.RemoveAll();
 	for( int i = 0; i < prototypeSize; i++ )
 		map[ table[ i ].name ] = i;
+}
+
+void VariablesTable::defaultTypesToFloat()
+{
+	for( auto& v : table )
+	{
+		if( v.vt != eVarType::unknown )
+			continue;
+		v.vt = eVarType::f32;
+	}
 }

@@ -14,6 +14,9 @@ HRESULT Tree::deduceTypes()
 			nodeType( i );
 			i = m_nodes[ i ].nextSibling;
 		}
+
+		symbols.vars.defaultTypesToFloat();
+
 		return S_OK;
 	}
 	catch( const std::exception & )

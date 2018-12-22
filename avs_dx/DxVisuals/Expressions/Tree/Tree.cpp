@@ -61,7 +61,7 @@ bool Tree::transformDoubleFuncs()
 	return any;
 }
 
-void Tree::getVariableUsage( std::vector<uint8_t>& usage, bool fragment ) const
+void Tree::getVariablesUsage( std::vector<uint8_t>& usage, bool fragment ) const
 {
 	usage.resize( symbols.vars.size(), 0 );
 	const uint8_t shift = fragment ? 2 : 0;

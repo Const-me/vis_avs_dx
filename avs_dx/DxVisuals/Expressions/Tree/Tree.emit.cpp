@@ -154,6 +154,9 @@ void Tree::emitFunction( EmitContext& ec, int ind ) const
 
 HRESULT Tree::emitHlsl( CStringA& hlsl, bool& usesRng ) const
 {
+	if( m_nodes.empty() )
+		return S_FALSE;
+
 	try
 	{
 		EmitContext ec{ hlsl };

@@ -45,14 +45,14 @@ void Tree::dbgPrintNode( int ind, int level ) const
 	if( nt == eNode::Var )
 	{
 		logDebug( "%*svar: %s %s", INDENT,
-			typeName( symbols.varGetType( node.id ) ), cstr( symbols.varName( node.id ) ) );
+			typeName( symbols.vars.type( node.id ) ), cstr( symbols.vars.name( node.id ) ) );
 		return;
 	}
 
 	if( nt == eNode::Func )
 	{
 		logDebug( "%*sfunc: %s %s[ %i ]", INDENT,
-			typeName( node.vt ), cstr( symbols.funcName( node.id ) ), node.length );
+			typeName( node.vt ), cstr( symbols.functions.name( node.id ) ), node.length );
 		if( node.length > 0 )
 			dbgPrintList( ind + 1, level + 1 );
 	}

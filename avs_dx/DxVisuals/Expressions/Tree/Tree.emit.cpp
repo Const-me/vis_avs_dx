@@ -48,7 +48,7 @@ void Tree::emitNode( EmitContext& ec, int ind ) const
 		ec.code( node, m_codez );
 		return;
 	case eNode::Var:
-		ec += symbols.varName( node.id );
+		ec += symbols.vars.name( node.id );
 		return;
 	case eNode::Expr:
 		for( int i = ind + 1; true; )
@@ -133,7 +133,7 @@ void Tree::emitFunction( EmitContext& ec, int ind ) const
 		return;
 	}
 
-	ec += symbols.funcName( node.id );
+	ec += symbols.functions.name( node.id );
 	if( 0 == node.length )
 	{
 		ec += "()";

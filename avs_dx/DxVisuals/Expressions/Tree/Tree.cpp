@@ -22,7 +22,7 @@ bool Tree::transformDoubleFuncs()
 		Node& n = m_nodes[ i ];
 		if( n.node != eNode::Func )
 			continue;
-		const FunctionType ft = symbols.funGetType( n.id );
+		const FunctionType ft = symbols.functions.type( n.id );
 		if( ft.kind != eFunctionKind::Polymorphic )
 			continue;
 
@@ -42,9 +42,9 @@ bool Tree::transformDoubleFuncs()
 			continue;
 
 		// It accepts double argument
-		CStringA name = symbols.funcName( n.id );
+		CStringA name = symbols.functions.name( n.id );
 		name += "_d";
-		n.id = symbols.funcLookup( name, n.vt );
+		n.id = symbols.functions.lookup( name, n.vt );
 #ifdef DEBUG
 		n.source = name;
 #endif
@@ -55,7 +55,7 @@ bool Tree::transformDoubleFuncs()
 
 void Tree::getVariableUsage( std::vector<eVarAccess>& result ) const
 {
-	result.resize( symbols.variablesCount(), eVarAccess::None );
+	result.resize( symbols.vars.size(), eVarAccess::None );
 
 	const int size = m_nodes.size();
 	for( int i = 0; i < size; i++ )

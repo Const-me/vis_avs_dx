@@ -1,5 +1,5 @@
 #pragma once
-#include "../SymbolTable.h"
+#include "../SymbolTable/SymbolTable.h"
 
 namespace Expressions
 {

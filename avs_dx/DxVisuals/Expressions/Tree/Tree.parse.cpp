@@ -136,7 +136,7 @@ void Tree::pushVar( const CStringA& expr, ExpressionContext& ec, int begin, int 
 #ifdef DEBUG
 	nn.source = expr.Mid( begin, end - begin );
 #endif
-	nn.id = symbols.varLookup( expr.Mid( begin, end - begin ), nn.vt );
+	nn.id = symbols.vars.lookup( expr.Mid( begin, end - begin ), nn.vt );
 	nn.length = end - begin;
 	pushNode( ec, std::move( nn ) );
 }
@@ -148,7 +148,7 @@ void Tree::pushFunc( const CStringA& expr, ExpressionContext& ec, int begin, int
 #ifdef DEBUG
 	nn.source = expr.Mid( begin, end - begin );
 #endif
-	nn.id = symbols.funcLookup( expr.Mid( begin, end - begin ), nn.vt );
+	nn.id = symbols.functions.lookup( expr.Mid( begin, end - begin ), nn.vt );
 	nn.length = end - begin;
 	pushNode( ec, std::move( nn ) );
 }

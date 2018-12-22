@@ -58,7 +58,6 @@
     <ClInclude Include="Utils\events.h" />
     <ClInclude Include="Hlsl\parseId.hpp" />
     <ClInclude Include="Utils\ByteRange.hpp" />
-    <ClInclude Include="Expressions\SymbolTable.h" />
     <ClInclude Include="Effects\Render\SuperScope\SuperScope.h" />
     <ClInclude Include="Expressions\varEnums.h" />
     <ClInclude Include="Expressions\VariableDecl.hpp" />
@@ -66,6 +65,9 @@
     <ClInclude Include="Expressions\Builtin\builtinFunctions.h" />
     <ClInclude Include="Expressions\Builtin\includeFunctions.h" />
     <ClInclude Include="Expressions\preprocess.h" />
+    <ClInclude Include="Expressions\SymbolTable\SymbolTable.h" />
+    <ClInclude Include="Expressions\SymbolTable\VariablesTable.h" />
+    <ClInclude Include="Expressions\SymbolTable\FunctionsTable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -103,7 +105,6 @@
     <ClCompile Include="RootEffect.cpp" />
     <ClCompile Include="Utils\events.cpp" />
     <ClCompile Include="Hlsl\Defines.expand.cpp" />
-    <ClCompile Include="Expressions\SymbolTable.cpp" />
     <ClCompile Include="Effects\Render\SuperScope\SuperScope.cpp" />
     <ClCompile Include="Expressions\varEnums.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.cpp" />
@@ -114,6 +115,8 @@
     <ClCompile Include="Expressions\Builtin\builtinFunctions.cpp" />
     <ClCompile Include="Expressions\Builtin\includeFunctions.cpp" />
     <ClCompile Include="Expressions\preprocess.cpp" />
+    <ClCompile Include="Expressions\SymbolTable\VariablesTable.cpp" />
+    <ClCompile Include="Expressions\SymbolTable\FunctionsTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -138,8 +141,8 @@
     <None Include="CppBuilder.t4" />
     <None Include="Effects\Polyline.fx" />
     <None Include="Expressions\Builtin\includeFunctions.t4" />
-    <None Include="Effects\Expressions\doubleFuncs.fx" />
     <None Include="Effects\Expressions\random.fx" />
+    <None Include="Expressions\Builtin\doubleFunctions.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Effects\Render\Simple\SimpleDotsVS.hlsl" />

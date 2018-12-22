@@ -95,8 +95,9 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Expressions\SymbolTable.h" />
+    <ClInclude Include="Expressions\SymbolTable\SymbolTable.h" />
     <ClInclude Include="Expressions\VariableDecl.hpp" />
+    <ClInclude Include="Expressions\SymbolTable\FunctionsTable.h" />
     <ClInclude Include="Hlsl\parseId.hpp" />
     <ClInclude Include="Expressions\Tree\Tree.h" />
     <ClInclude Include="Effects\Render\SuperScope\SuperScope.h" />
@@ -160,13 +161,14 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Hlsl\Variable.h" />
     <ClInclude Include="Utils\MiscUtils.h" />
+    <ClInclude Include="Expressions\SymbolTable\VariablesTable.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Expressions\SymbolTable.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.debug.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.emit.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.types.cpp" />
+    <ClCompile Include="Expressions\SymbolTable\FunctionsTable.cpp" />
     <ClCompile Include="Hlsl\Defines.expand.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.parse.cpp" />
     <ClCompile Include="Effects\Render\SuperScope\SuperScope.cpp" />
@@ -211,6 +213,7 @@
     <ClCompile Include="Utils\DirectXErrors\DirectXErrors.cpp" />
     <ClCompile Include="Utils\DirectXErrors\formatCString.cpp" />
     <ClCompile Include="Utils\SimpleMath.cpp" />
+    <ClCompile Include="Expressions\SymbolTable\VariablesTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt">
@@ -294,9 +297,11 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
     </FxCompile>
-    <None Include="Effects\Expressions\doubleFuncs.fx">
+    <FxCompile Include="Expressions\Builtin\doubleFunctions.hlsl">
       <FileType>Document</FileType>
-    </None>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+    </FxCompile>
     <FxCompile Include="Expressions\Builtin\shaderFunctions.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>

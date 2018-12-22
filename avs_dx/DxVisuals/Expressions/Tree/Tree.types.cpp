@@ -33,7 +33,7 @@ eVarType Tree::nodeType( int indNode )
 
 	if( eNode::Var == n.node )
 	{
-		n.vt = symbols.varGetType( n.id );
+		n.vt = symbols.vars.type( n.id );
 		return n.vt;
 	}
 	if( eNode::Expr == n.node )
@@ -88,7 +88,7 @@ eVarType Tree::expressionType( int iFirstChild )
 eVarType Tree::functionType( int iFunc )
 {
 	const int id = m_nodes[ iFunc ].id;
-	const auto ft = symbols.funGetType( id );
+	const FunctionType ft = symbols.functions.type( id );
 
 	if( ft.kind == eFunctionKind::Internal )
 	{
@@ -100,7 +100,7 @@ eVarType Tree::functionType( int iFunc )
 			const auto vtRight = nodeType( indRhs );
 			if( m_nodes[ indLhs ].node == eNode::Var )
 			{
-				symbols.varSetType( m_nodes[ indLhs ].id, vtRight );
+				symbols.vars.setType( m_nodes[ indLhs ].id, vtRight );
 				m_nodes[ indLhs ].vt = vtRight;
 			}
 			return vtRight;

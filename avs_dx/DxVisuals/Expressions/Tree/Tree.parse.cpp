@@ -232,6 +232,11 @@ void Tree::parseExpression( const CStringA& expr, int begin, int end )
 				continue;
 
 			// Parsed the function's argument
+			if( argStart == i )
+			{
+				logError( "Empty argument of function %.*s()", idEnd - idStart, src + idStart );
+				throw std::invalid_argument( "Empty function argument" );
+			}
 			pushExpression( expr, argContext, argStart, i );
 			parseExpression( expr, argStart, i );
 			if( c == ')' )

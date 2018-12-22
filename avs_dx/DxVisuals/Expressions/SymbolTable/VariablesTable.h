@@ -8,6 +8,7 @@ namespace Expressions
 	{
 		std::vector<VariableDecl> table;
 		CAtlMap<CStringA, int> map;
+		int prototypeSize = 0;
 
 	public:
 
@@ -30,5 +31,7 @@ namespace Expressions
 		{
 			return table.size();
 		}
+
+		void clear();
 	};
 }

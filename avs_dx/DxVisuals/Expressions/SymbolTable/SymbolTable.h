@@ -12,5 +12,11 @@ namespace Expressions
 		SymbolTable() = default;
 		SymbolTable( const Prototype& proto ) :
 			vars( proto ) { }
+
+		void clear()
+		{
+			functions.clear();
+			vars.clear();
+		}
 	};
 }

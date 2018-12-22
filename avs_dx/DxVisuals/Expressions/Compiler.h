@@ -2,8 +2,7 @@
 #include "../Effects/includeDefs.h"
 #include "../Render/EffectStateShader.hpp"
 #include "Prototype.h"
-#include "../Hlsl/Defines.h"
-#include "parse.h"
+#include "Tree/Tree.h"
 
 namespace Expressions
 {
@@ -37,35 +36,25 @@ namespace Expressions
 		}
 
 	private:
-
 		// Local copy of the effect's expression strings
 		std::array<CStringA, 4> m_expressions;
+		// Recompiled from NSEEL to HLSL
+		std::array<CStringA, 4> m_hlsl;
 
-		struct sVariable
-		{
-			// Name of the variable from the user's expressions
-			CStringA name;
-			// Offset inside effectStates, from the start of this effect's state block, in 32-bit elements. -1 indicates local variables which that don't need to hit the state buffer.
-			int offset = -1;
-			eVarType vt = eVarType::unknown;
-			bool usedInState;
-			bool usedInFragment;
-		};
-		std::vector<sVariable> m_vars;
+		// Symbols table. The VariablesTable accumulates variables from all 4 expressions, FunctionsTable is temporary.
+		SymbolTable m_symbols;
+		Tree m_tree;
+
+		// Variable usage by all 3 state expressions combined
+		std::vector<eVarAccess> m_stateUsage;
+		// Variables usage by the fragment expression.
+		std::vector<eVarAccess> m_fragmentUsage;
+		
 		int m_stateSize;
 
 		CStringA m_fragmentGlobals;
 		CStringA m_hlslFragment;
 		std::vector<CStringA> m_stateGlobals;
 		StateShaderTemplate m_stateTemplate;
-
-		HRESULT allocVariables( const std::array<Assignments, 4>& parsed );
-
-		static void printAssignments( CStringA& code, const Assignments& ass );
-		void printLoadState( CStringA& code ) const;
-		void printStoreState( CStringA& code ) const;
-
-		HRESULT buildStateCode( const std::array<Assignments, 4>& parsed );
-		HRESULT buildFragmentCode( const Assignments& parsed );
 	};
 }

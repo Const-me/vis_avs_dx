@@ -106,7 +106,7 @@ namespace Expressions
 
 		void dbgPrint() const;
 
-		HRESULT emitHlsl( CStringA& hlsl ) const;
+		HRESULT emitHlsl( CStringA& hlsl, bool& usesRng ) const;
 
 		void getVariableUsage( std::vector<eVarAccess>& usage ) const;
 	};

@@ -13,6 +13,7 @@ VariablesTable::VariablesTable( const Prototype& proto )
 		table.push_back( v );
 		map[ v.name ] = id;
 	} );
+	prototypeSize = (int)table.size();
 }
 
 int VariablesTable::lookup( const CStringA& name, eVarType& vt )
@@ -76,4 +77,12 @@ eVarType VariablesTable::setType( int id, eVarType vt )
 		return vtOld;
 	}
 	return eVarType::unknown;
+}
+
+void VariablesTable::clear()
+{
+	table.resize( prototypeSize );
+	map.RemoveAll();
+	for( int i = 0; i < prototypeSize; i++ )
+		map[ table[ i ].name ] = i;
 }

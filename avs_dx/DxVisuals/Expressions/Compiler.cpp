@@ -1,15 +1,16 @@
 #include "stdafx.h"
 #include "Compiler.h"
-#include "parse.h"
+#include "preprocess.h"
 #include "utils.hpp"
-#include "Builtin/includeFunctions.h"
-#include "Builtin/builtinFunctions.h"
+#include "parse.h"
 
 using namespace Expressions;
 
 Compiler::Compiler( const char* effectName, const Prototype& effectPrototype ) :
 	m_stateTemplate( effectName ),
-	proto( effectPrototype )
+	proto( effectPrototype ),
+	m_symbols( effectPrototype ),
+	m_tree( m_symbols )
 {
 	m_stateTemplate.globals = &m_stateGlobals;
 }
@@ -21,6 +22,7 @@ HRESULT Compiler::update( RString effect_exp[ 4 ] )
 	for( int i = 0; i < 4; i++ )
 	{
 		ee = effect_exp[ i ].get();
+		preprocess( ee );
 		if( ee == m_expressions[ i ] )
 			continue;
 		m_expressions[ i ] = ee;
@@ -29,12 +31,15 @@ HRESULT Compiler::update( RString effect_exp[ 4 ] )
 	if( !somethingChanged )
 		return S_FALSE;
 
-	m_vars.clear();
+	m_symbols.clear();
+	m_tree.clear();
+	m_stateUsage.clear();
+	m_fragmentUsage.clear();
+
 	m_stateGlobals.clear();
 	m_stateTemplate.hasBeat = false;
 	m_stateTemplate.hlslMain = "";
 	m_hlslFragment = "";
-	m_vars.clear();
 	m_stateSize = proto.fixedStateSize();
 	if( !hasAny( m_expressions, []( const CStringA& s ) { return s.GetLength() > 0; } ) )
 	{
@@ -42,168 +47,31 @@ HRESULT Compiler::update( RString effect_exp[ 4 ] )
 		return S_OK;
 	}
 
-	std::array<Assignments, 4> parsed;
-	for( int i = 0; i < 4; i++ )
-		CHECK( parseAssignments( m_expressions[ i ], parsed[ i ] ) );
-
-	CHECK( allocVariables( parsed ) );
-
-	CHECK( buildStateCode( parsed ) );
-
-	CHECK( buildFragmentCode( parsed[ 0 ] ) );
-
-	return S_OK;
-}
-
-namespace
-{
-	eVarType guessVarType( const CStringA& rhs )
+	std::array<int, 3> stateExpressions = { 3, 1, 2 };
+	bool stateUsesRng = false;
+	for( int e : stateExpressions )
 	{
-		const CStringA fi = getFirstId( rhs );
-		const ShaderFunc* pfn = lookupShaderFunc( fi );
-		if( nullptr != pfn )
-			return pfn->returnType;
-		eVarType vt;
-		if( isBuiltinFunction( fi, vt ) )
-			return vt;
-		return eVarType::f32;
+		CHECK( parseAssignments( m_expressions[ e ], m_tree ) );
+		m_tree.transformDoubleFuncs();
+		CHECK( m_tree.emitHlsl( m_hlsl[ e ], stateUsesRng ) );
+		m_tree.getVariableUsage( m_stateUsage );
 	}
-}
 
-HRESULT Compiler::allocVariables( const std::array<Assignments, 4>& parsed )
-{
+	m_symbols.functions.getStateGlobals( m_stateGlobals );
+	m_symbols.functions.clear();
+
+	CHECK( parseAssignments( m_expressions[ 0 ], m_tree ) );
+	m_tree.transformDoubleFuncs();
+	bool fragmentUsesRng = false;
+	CHECK( m_tree.emitHlsl( m_hlsl[ 0 ], fragmentUsesRng ) );
+	m_tree.getVariableUsage( m_fragmentUsage );
+
+	m_fragmentGlobals = m_symbols.functions.getFragmentGlobals();
+
 	return E_NOTIMPL;
-	/* struct sVarFlags
-	{
-		bool builtin = false;
-		eVarType vt = eVarType::unknown;
-		uint8_t writeMask = 0;
-		uint8_t readMask = 0;
-	};
-
-	// Include builtin vars, both state, inputs and outputs
-	CAtlMap<CStringA, sVarFlags> vars;
-	proto.enumBuiltins( [ & ]( const CStringA& name, eVarType vt )
-	{
-		sVarFlags &vf = vars[ name ];
-		vf.builtin = true;
-		vf.vt = vt;
-	} );
-
-	// Create vars defined by "x=value" statements, guess their types.
-	for( uint8_t i = 0; i < 4; i++ )
-	{
-		const uint8_t maskBit = (uint8_t)1 << i;
-		for( const auto &a : parsed[ i ] )
-		{
-			sVarFlags& vf = vars[ a.first ];
-			vf.writeMask |= maskBit;
-			if( vf.vt == eVarType::unknown )
-				vf.vt = guessVarType( a.second );
-		}
-	}
-
-	// Parse right sides into a set of identifiers, resolve the functions. Also populate `readMask` fields.
-	CAtlMap<CStringA, ShaderFunc> funcsState, funcsFragment;
-	for( uint8_t i = 0; i < 4; i++ )
-	{
-		const uint8_t maskBit = (uint8_t)1 << i;
-		for( const auto &a : parsed[ i ] )
-		{
-			HRESULT hr = S_OK;
-			findIdentifier( a.second, [ & ]( const CStringA& id )
-			{
-				auto p = vars.Lookup( id );
-				if( nullptr != p )
-				{
-					// it's a variable.
-					p->m_value.readMask |= maskBit;
-					return false;
-				}
-
-				const ShaderFunc* pFunc = lookupShaderFunc( id );
-				if( nullptr != pFunc )
-				{
-					// Custom shader function
-					CAtlMap<CStringA, ShaderFunc>& funcMap = ( 0 == i ) ? funcsFragment : funcsState;
-					funcMap[ id ] = *pFunc;
-					return false;
-				}
-				if( isBuiltinFunction( id ) )
-				{
-					// Built-in i.e. HLSL-implemented shader function
-					return false;
-				}
-				logError( "Undefined function %s", cstr( id ) );
-				hr = E_INVALIDARG;
-				return true;
-			} );
-			CHECK( hr );
-		}
-	}
-
-	// Gather state shader global functions
-	m_stateGlobals.clear();
-	for( POSITION pos = funcsState.GetStartPosition(); nullptr != pos; )
-	{
-		const ShaderFunc sf = funcsState.GetNextValue( pos );
-		m_stateGlobals.push_back( CStringA{ sf.hlsl } );
-	}
-
-	// Gather global functions used by the fragment
-	m_fragmentGlobals = "";
-	for( POSITION pos = funcsFragment.GetStartPosition(); nullptr != pos; )
-	{
-		const ShaderFunc sf = funcsFragment.GetNextValue( pos );
-		if( m_fragmentGlobals.GetLength() > 0 )
-			m_fragmentGlobals += "\r\n";
-		m_fragmentGlobals += sf.hlsl;
-	}
-
-	// Finally, gather the variables.
-	m_vars.clear();
-	m_stateSize = proto.fixedStateSize();
-
-	for( POSITION pos = vars.GetStartPosition(); nullptr != pos; )
-	{
-		auto p = vars.GetNext( pos );
-		const sVarFlags vf = p->m_value;
-		if( vf.builtin )
-			continue;
-
-		m_vars.emplace_back( sVariable{} );
-		sVariable& var = *m_vars.rbegin();
-		var.name = p->m_key;
-		var.vt = vf.vt;
-
-		const uint8_t usageMask = vf.readMask | vf.writeMask;
-		var.usedInState = 0 != ( usageMask & 0xE );
-		var.usedInFragment = 0 != ( usageMask & 1 );
-
-		if( var.usedInState )
-		{
-			// Used in state shader, need to place that variable in the state buffer.
-			// TODO [low]: it's possible to slightly reduce the count of loads/stores by doing deeper analysis. Not doing that for now.
-			var.offset = m_stateSize;
-			m_stateSize += variableSize( var.vt );
-		}
-		else
-		{
-			// Just a local variable, no need to persist.
-			var.offset = -1;
-		}
-	}
-
-	return S_OK; */
 }
 
-void Compiler::printAssignments( CStringA& code, const Assignments& ass )
-{
-	for( const auto &a : ass )
-		code.AppendFormat( "		%s = %s;\r\n", cstr( a.first ), cstr( a.second ) );
-}
-
-void Compiler::printLoadState( CStringA& code ) const
+/* void Compiler::printLoadState( CStringA& code ) const
 {
 	for( const auto &v : m_vars )
 		if( v.offset >= 0 )
@@ -268,4 +136,4 @@ HRESULT Compiler::buildFragmentCode( const Assignments& parsed )
 	printAssignments( code, parsed );
 	m_hlslFragment = code;
 	return S_OK;
-}
+} */

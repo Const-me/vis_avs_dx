@@ -3,7 +3,10 @@
 
 void Expressions::preprocess( CStringA& nseel )
 {
-	// Not that important for this particular use case, but still, memmove is implemented in assembly with SSE, i.e. speed is limited by RAM bandwidth.
+	if( nseel.GetLength() <= 0 )
+		return;
+
+	// Not that important for this particular use case, but still, memmove is implemented in assembly with SSE, speed is limited by RAM bandwidth.
 	// For larger strings, simpler char-by-char copy will be couple times slower.
 	// The Context class below exposes char-by-char API to filter the string, but implements it with memmove i.e. fast.
 	class Context

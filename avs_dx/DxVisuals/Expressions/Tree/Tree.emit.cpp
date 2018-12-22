@@ -152,7 +152,7 @@ void Tree::emitFunction( EmitContext& ec, int ind ) const
 	ec += " )";
 }
 
-HRESULT Tree::emitHlsl( CStringA& hlsl ) const
+HRESULT Tree::emitHlsl( CStringA& hlsl, bool& usesRng ) const
 {
 	try
 	{
@@ -168,6 +168,7 @@ HRESULT Tree::emitHlsl( CStringA& hlsl ) const
 			ec.lineEnd();
 			i = m_nodes[ i ].nextSibling;
 		}
+		usesRng = usesRng || ec.haveRandom;
 		return S_OK;
 	}
 	catch( const std::exception& ex )

@@ -8,8 +8,6 @@ namespace Expressions
 
 	// If the expression is x=y, return the index of the '=' character, otherwise S_FALSE
 	HRESULT isAssign( const CStringA& expr, int& indEqual );
-
-	const char* expandDollarMacro( const CStringA& m );
 }
 
 HRESULT Expressions::isAssign( const CStringA& expr, int& idx )

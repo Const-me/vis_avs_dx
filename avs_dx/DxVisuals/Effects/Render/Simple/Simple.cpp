@@ -80,7 +80,7 @@ HRESULT SimpleDotsFx::render( RenderTargets& rt )
 	CHECK( rt.writeToLast( false ) );
 	renderer.bindShaders();
 
-	iaClearBuffers();
+	iaClearBuffer();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_POINTLIST );
 	context->Draw( pointsCount, 0 );
 
@@ -104,7 +104,7 @@ HRESULT SimpleSolidFx::render( RenderTargets& rt )
 	CHECK( rt.writeToLast( false ) );
 	renderer.bindShaders();
 
-	iaClearBuffers();
+	iaClearBuffer();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP );
 	context->Draw( 4, 0 );
 	return S_OK;
@@ -125,7 +125,7 @@ HRESULT SimpleLinesFx::render( RenderTargets& rt )
 	CHECK( rt.writeToLast( false ) );
 	renderer.bindShaders();
 
-	iaClearBuffers();
+	iaClearBuffer();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_LINESTRIP_ADJ );
 	context->Draw( renderer.vertex().pointsCount + 2, 0 );
 	return S_OK;
@@ -170,4 +170,10 @@ void Simple::setStateOffset( UINT off )
 {
 	EffectBase1::setStateOffset( off );
 	m_pImpl->setStateOffset( off );
+}
+
+HRESULT Simple::render( RenderTargets& rt ) 
+{
+	omBlend();
+	return m_pImpl->render( rt );
 }

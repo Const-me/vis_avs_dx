@@ -176,12 +176,9 @@ LRESULT RenderWindow::wmPresent( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 
 	setShaders( StaticResources::fullScreenTriangle, nullptr, StaticResources::copyTexture );
 	omSetTarget( m_rtv );
-	context->OMSetBlendState( nullptr, nullptr, 0xffffffff );
 	pSource->bindView( 127 );
-
-	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
-	iaClearBuffers();
-	context->Draw( 3, 0 );
+	omDontBlend();
+	drawFullscreenTriangle( false );
 
 	bindResource<eStage::Pixel>( 127 );
 

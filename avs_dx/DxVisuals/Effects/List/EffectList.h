@@ -8,9 +8,9 @@ class EffectList : public EffectListBase
 	RenderTargets m_rt;
 	Blender m_blendIn, m_blendOut;
 
-	int blendin() const;
+	eBlendMode blendin() const;
 	float inblendval() const;
-	int blendout() const;
+	eBlendMode blendout() const;
 	float outblendval() const;
 
 public:

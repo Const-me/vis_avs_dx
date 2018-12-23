@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MiscUtils.h"
+#include "../Resources/staticResources.h"
 
 void iaSetBuffer( ID3D11Buffer* vb, UINT vbStride, ID3D11Buffer* ib, DXGI_FORMAT ibFormat )
 {
@@ -8,11 +9,11 @@ void iaSetBuffer( ID3D11Buffer* vb, UINT vbStride, ID3D11Buffer* ib, DXGI_FORMAT
 	context->IASetIndexBuffer( ib, ibFormat, 0 );
 }
 
-void iaClearBuffers()
+void iaClearBuffer()
 {
-	ID3D11Buffer* const buffers[ D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ] = {};
-	UINT zeros[ D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ] = {};
-	context->IASetVertexBuffers( 0, D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT, buffers, zeros, zeros );
+	ID3D11Buffer* const buffer = nullptr;
+	const UINT zero = 0;
+	context->IASetVertexBuffers( 0, 1, &buffer, &zero, &zero );
 	context->IASetInputLayout( nullptr );
 }
 
@@ -46,4 +47,26 @@ void setMacro( std::vector<std::pair<CStringA, CStringA>> &macros, const CString
 		}
 	}
 	macros.emplace_back( std::make_pair( key, value ) );
+}
+
+void omBlend()
+{
+	context->OMSetBlendState( StaticResources::blendPremultipliedAlpha, nullptr, 0xffffffff );
+}
+
+void omDontBlend()
+{
+	context->OMSetBlendState( nullptr, nullptr, 0xffffffff );
+}
+
+void drawFullscreenTriangle( bool bindShaders )
+{
+	if( bindShaders )
+	{
+		bindShader<eStage::Vertex>( StaticResources::fullScreenTriangle );
+		bindShader<eStage::Geometry>( nullptr );
+	}
+	iaClearBuffer();
+	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+	context->Draw( 3, 0 );
 }

@@ -67,7 +67,19 @@ HRESULT DynamicMovementStructs::VsData::updateAvs( const AvsState &avs )
 
 DynamicMovement::DynamicMovement( AvsState *pState ) :
 	tBase( pState )
-{ }
+{
+	subscribeHandler( this );
+}
+
+DynamicMovement::~DynamicMovement()
+{
+	unsubscribeHandler( this );
+}
+
+void DynamicMovement::onRenderSizeChanged()
+{
+	m_mesh.destroy();
+}
 
 HRESULT DynamicMovement::render( RenderTargets& rt )
 {
@@ -78,7 +90,6 @@ HRESULT DynamicMovement::render( RenderTargets& rt )
 		const CSize gridSize = GridMesh::pickSize( rtSize, 32 );
 		CHECK( m_mesh.create( gridSize ) );
 	}
-	// TODO: drop mesh if resized
 
 	const UINT psReadSlot = renderer.pixel().bindPrevFrame;
 	CHECK( rt.blendToNext( psReadSlot ) );

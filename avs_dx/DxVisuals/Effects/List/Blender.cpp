@@ -8,18 +8,14 @@ Blender::Blender()
 	blendShader.data().dest = 12;
 }
 
-HRESULT Blender::blend( RenderTargets& source, RenderTargets& dest, uint8_t mode, float blendVal )
+HRESULT Blender::blend( RenderTargets& source, RenderTargets& dest, eBlendMode mode, float blendVal )
 {
-	// Ignore
-	if( 0 == mode )
-	{
+	if( eBlendMode::Ignore == mode )
 		return S_FALSE;
-	}
 
 	RenderTarget& src = source.lastWritten();
 
-	// Replace
-	if( 1 == mode )
+	if( eBlendMode::Replace == mode )
 	{
 		RenderTarget& dst = dest.lastWritten();
 		if( !dst )
@@ -34,9 +30,9 @@ HRESULT Blender::blend( RenderTargets& source, RenderTargets& dest, uint8_t mode
 		return S_FALSE;
 	}
 
-	if( mode > 13 )
+	if( (uint8_t)mode > (uint8_t)eBlendMode::Minimum )
 		return E_INVALIDARG;
-	if( mode == 12 )	// Buffer
+	if( mode == eBlendMode::Buffer )
 		return E_NOTIMPL;
 
 	// Do the custom blending
@@ -47,35 +43,33 @@ HRESULT Blender::blend( RenderTargets& source, RenderTargets& dest, uint8_t mode
 	const UINT bindSource = blendShader.data().source;
 	const UINT bindDest = blendShader.data().dest;
 
+	CHECK( dest.writeToNext( bindDest, false ) );
+
 	if( src )
 		src.bindView( bindSource );
 	else
 		bindResource<eStage::Pixel>( bindSource, StaticResources::blackTexture );
 
-	CHECK( dest.writeToNext( bindDest, false ) );
-
-	// TODO: disable D3D blending.
-
-	iaClearBuffers();
-	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
-	context->Draw( 3, 0 );
+	omDontBlend();
+	blendShader.bind();
+	drawFullscreenTriangle();
 
 	bindResource<eStage::Pixel>( bindSource );
 	bindResource<eStage::Pixel>( bindDest );
 	return S_OK;
 }
 
-HRESULT Blender::ensureShader( uint8_t mode, float blendVal )
+HRESULT Blender::ensureShader( eBlendMode mode, float blendVal )
 {
 	if( blendShader )
 	{
-		if( blendShader.data().blend == mode && blendShader.data().blendVal == blendVal )
+		if( blendShader.data().blend == (uint8_t)mode && blendShader.data().blendVal == blendVal )
 			return S_FALSE;
 
 		blendShader.dropShader();
 	}
 
-	blendShader.data().blend = mode;
+	blendShader.data().blend = (uint8_t)mode;
 	blendShader.data().blendVal = blendVal;
 
 	CHECK( blendShader.compile( Hlsl::includes(), 0 ) );

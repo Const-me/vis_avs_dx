@@ -36,14 +36,12 @@ ColorModifierStructs::StateData::StateData( AvsState& ass ) :
 
 HRESULT ColorModifier::render( RenderTargets& rt )
 {
+	omDontBlend();
 	const UINT psReadSlot = renderer.pixel().bindPrevFrame;
 	CHECK( rt.writeToNext( psReadSlot, false ) );
 
 	renderer.bindShaders();
-
-	iaClearBuffers();
-	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
-	context->Draw( 3, 0 );
+	drawFullscreenTriangle( false );
 
 	bindResource<eStage::Pixel>( psReadSlot );
 	return S_OK;

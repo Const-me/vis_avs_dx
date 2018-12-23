@@ -1,7 +1,8 @@
 #pragma once
-#include "../../EffectImpl.hpp"
-#include "../../../Expressions/CompiledShader.h"
-#include "../../../Resources/GridMesh.h"
+#include <Effects/EffectImpl.hpp>
+#include <Expressions/CompiledShader.h>
+#include <Resources/GridMesh.h>
+#include <Utils/resizeHandler.h>
 using namespace Hlsl::Trans::DMove;
 
 struct DynamicMovementStructs
@@ -59,12 +60,15 @@ struct DynamicMovementStructs
 	using PsData = DMovePS;
 };
 
-class DynamicMovement : public EffectBase1<DynamicMovementStructs>
+class DynamicMovement : public EffectBase1<DynamicMovementStructs>, public iResizeHandler
 {
 	GridMesh m_mesh;
 
+	void onRenderSizeChanged() override;
+
 public:
 	DynamicMovement( AvsState *pState );
+	~DynamicMovement();
 
 	const Metadata& metadata() override;
 

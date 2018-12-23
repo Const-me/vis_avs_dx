@@ -20,8 +20,6 @@ HRESULT Transition::prepare( char visdata[ 2 ][ 2 ][ 576 ], int isBeat )
 	// Upload visualization data to GPU
 	CHECK( StaticResources::sourceData.update( visdata, isBeat ) );
 
-	context->OMSetBlendState( StaticResources::blendPremultipliedAlpha, nullptr, 0xffffffff );
-
 	// Handle resize
 	const CSize currentSize = getRenderSize();
 	if( m_renderSize != currentSize )
@@ -29,7 +27,6 @@ HRESULT Transition::prepare( char visdata[ 2 ][ 2 ][ 576 ], int isBeat )
 		m_renderSize = currentSize;
 		callResizeHandlers();
 	}
-
 	return S_OK;
 }
 

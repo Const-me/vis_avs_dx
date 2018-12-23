@@ -29,7 +29,7 @@ inline void setShaders( ID3D11VertexShader* vs, ID3D11GeometryShader* gs, ID3D11
 
 void iaSetBuffer( ID3D11Buffer* vb, UINT vbStride, ID3D11Buffer* ib, DXGI_FORMAT ibFormat = DXGI_FORMAT_R16_UINT );
 
-void iaClearBuffers();
+void iaClearBuffer();
 
 class LockExternCs
 {
@@ -56,3 +56,12 @@ public:
 };
 
 void setMacro( std::vector<std::pair<CStringA, CStringA>> &macros, const CStringA& key, const CStringA& value );
+
+// Set premultiplied alpha blending mode
+void omBlend();
+
+// Disable blending, just write whatever was produced by pixel shader
+void omDontBlend();
+
+// Draw the full-screen triangle; you must bind the pixel shader before this call. Pass bindShaders=true to bind vertex & geometry shaders, false if already bound.
+void drawFullscreenTriangle( bool bindShaders = true );

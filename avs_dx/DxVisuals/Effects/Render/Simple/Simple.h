@@ -135,5 +135,5 @@ public:
 	// Forward the rest of the calls to specific renderers
 	HRESULT updateParameters( Binder& binder ) override { return m_pImpl->updateParameters( binder ); }
 
-	HRESULT render( RenderTargets& rt ) override { return m_pImpl->render( rt ); }
+	HRESULT render( RenderTargets& rt ) override;
 };

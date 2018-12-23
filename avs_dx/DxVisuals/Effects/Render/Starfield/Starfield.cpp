@@ -66,6 +66,7 @@ HRESULT Starfield::render( RenderTargets& rt )
 		nComputeGroups = ( nStars + csThreads - 1 ) / csThreads;
 	}
 
+	omBlend();
 	CHECK( rt.writeToLast( false ) );
 	renderer.bindShaders();
 
@@ -78,7 +79,7 @@ HRESULT Starfield::render( RenderTargets& rt )
 	// Render the sprites
 	const UINT srvSlot = renderer.vertex().bindStarsPosition;
 	bindResource<eStage::Vertex>( srvSlot, starsBuffer.srv() );
-	iaClearBuffers();
+	iaClearBuffer();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_POINTLIST );
 	context->Draw( nStars, 0 );
 	bindResource<eStage::Vertex>( srvSlot );

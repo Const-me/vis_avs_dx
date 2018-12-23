@@ -49,6 +49,8 @@ HRESULT Compiler::update( const char* init, const char* frame, const char* beat,
 		return S_OK;
 	}
 
+	// TODO [optimization]: find sub-expressions of the fragment expression that don't depend on per-fragment inputs, move these calculations to the state shader.
+
 	// Parse and recompile the state expressions
 	for( int i = 0; i < 3; i++ )
 	{

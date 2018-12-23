@@ -2,6 +2,7 @@
 #include "GridMesh.h"
 #include "staticResources.h"
 
+// Example mesh topology, for 3x2 grid:
 //  x---x---x---x
 //  |\ / \ / \ /|
 //  x-x---x---x-x
@@ -197,12 +198,3 @@ HRESULT GridMesh::draw() const
 	context->DrawIndexed( m_indexCount, 0, 0 );
 	return S_OK;
 }
-
-/* std::vector<D3D11_INPUT_ELEMENT_DESC> GridMesh::inputLayoutDesc()
-{
-	return std::vector<D3D11_INPUT_ELEMENT_DESC>
-	{
-		{ "SV_Position", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD",    0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
-} */

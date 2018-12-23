@@ -3,16 +3,6 @@
 #include "staticResources.h"
 #include <../InteropLib/interop.h>
 
-RenderTargets::RenderTargets()
-{
-	subscribeHandler( this );
-}
-
-RenderTargets::~RenderTargets()
-{
-	unsubscribeHandler( this );
-}
-
 void RenderTargets::onRenderSizeChanged()
 {
 	for( auto& t : m_targets )

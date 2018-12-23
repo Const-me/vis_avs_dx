@@ -28,3 +28,13 @@ void callResizeHandlers()
 		p->onRenderSizeChanged();
 	}
 }
+
+ResizeHandler::ResizeHandler()
+{
+	subscribeHandler( this );
+}
+
+ResizeHandler::~ResizeHandler()
+{
+	unsubscribeHandler( this );
+}

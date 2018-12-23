@@ -67,14 +67,7 @@ HRESULT DynamicMovementStructs::VsData::updateAvs( const AvsState &avs )
 
 DynamicMovement::DynamicMovement( AvsState *pState ) :
 	tBase( pState )
-{
-	subscribeHandler( this );
-}
-
-DynamicMovement::~DynamicMovement()
-{
-	unsubscribeHandler( this );
-}
+{ }
 
 void DynamicMovement::onRenderSizeChanged()
 {

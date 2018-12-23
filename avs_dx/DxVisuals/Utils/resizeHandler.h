@@ -12,3 +12,11 @@ void subscribeHandler( iResizeHandler* pHandler );
 void unsubscribeHandler( iResizeHandler* pHandler );
 
 void callResizeHandlers();
+
+// An abstract base class for iResizeHandler that automatically handles the subscription.
+class ResizeHandler : public iResizeHandler
+{
+public:
+	ResizeHandler();
+	~ResizeHandler();
+};

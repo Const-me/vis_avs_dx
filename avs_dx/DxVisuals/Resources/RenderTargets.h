@@ -3,7 +3,7 @@
 #include <Utils/resizeHandler.h>
 
 // A set of 2 render target textures.
-class RenderTargets: public iResizeHandler
+class RenderTargets: public ResizeHandler
 {
 	std::array<RenderTarget, 2> m_targets;
 	size_t m_lastTarget = 0;
@@ -11,8 +11,6 @@ class RenderTargets: public iResizeHandler
 	void onRenderSizeChanged() override;
 
 public:
-	RenderTargets();
-	~RenderTargets();
 
 	void destroy()
 	{

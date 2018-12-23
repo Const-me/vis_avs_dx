@@ -60,7 +60,7 @@ struct DynamicMovementStructs
 	using PsData = DMovePS;
 };
 
-class DynamicMovement : public EffectBase1<DynamicMovementStructs>, public iResizeHandler
+class DynamicMovement : public EffectBase1<DynamicMovementStructs>, public ResizeHandler
 {
 	GridMesh m_mesh;
 
@@ -68,7 +68,6 @@ class DynamicMovement : public EffectBase1<DynamicMovementStructs>, public iResi
 
 public:
 	DynamicMovement( AvsState *pState );
-	~DynamicMovement();
 
 	const Metadata& metadata() override;
 

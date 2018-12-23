@@ -13,6 +13,8 @@ namespace Expressions
 		Compiler( const char* effectName, const Prototype& effectPrototype );
 		Compiler( const Compiler & ) = delete;
 
+		static HRESULT defines( Hlsl::Defines& def ) { return S_FALSE; };
+
 		// Recompile stuff from the strings
 		HRESULT update( const char* init, const char* frame, const char* beat, const char* fragment );
 
@@ -23,6 +25,7 @@ namespace Expressions
 		const CStringA& fragmentGlobals() const { return m_fragmentGlobals; }
 
 		bool fragmentUsesRng() const { return m_fragmentRng; }
+		bool fragmentUsesBeat() const { return m_fragmentBeat; }
 		const CStringA& fragmentCode() const { return m_hlslFragment; }
 
 	protected:
@@ -50,6 +53,7 @@ namespace Expressions
 		
 		int m_stateSize;
 		bool m_fragmentRng;
+		bool m_fragmentBeat;
 
 		CStringA m_fragmentGlobals;
 		CStringA m_hlslFragment;

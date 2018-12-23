@@ -49,6 +49,7 @@ HRESULT CompiledShaderBase::updateDx( const Expressions::Compiler& compiler )
 	m_template.hlsl += templatePieces[ 2 ];
 
 	needsRng = compiler.fragmentUsesRng();
+	m_template.usesBeat = compiler.fragmentUsesBeat();
 	return S_OK;
 }
 

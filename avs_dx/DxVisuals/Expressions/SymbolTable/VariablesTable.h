@@ -9,6 +9,7 @@ namespace Expressions
 		std::vector<VariableDecl> table;
 		CAtlMap<CStringA, int> map;
 		int prototypeSize = 0;
+		int m_beatMacro = -1;
 
 	public:
 
@@ -51,5 +52,8 @@ namespace Expressions
 		void clearLocals();
 
 		void defaultTypesToFloat();
+
+		// If the prototype defines beat macro, will return the ID of the variable. Otherwise, -1.
+		int getBeatMacro() const { return m_beatMacro; }
 	};
 }

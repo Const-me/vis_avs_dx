@@ -92,7 +92,7 @@ public:
 		// Invoke optional compiledShader method. Some shaders need that to create input layouts.
 		__if_exists( TSourceData::compiledShader )
 		{
-			CHECK( m_sourceData.compiledShader( dxbc ) );
+			CHECK( m_sourceData.compiledShader( ( const std::vector<uint8_t>& )dxbc ) );
 		}
 
 		return S_OK;

@@ -37,8 +37,6 @@ struct ColorModifierStructs
 		{
 			return Compiler::update( avs.effect_exp[ 3 ].get(), avs.effect_exp[ 1 ].get(), avs.effect_exp[ 2 ].get(), avs.effect_exp[ 0 ].get() );
 		}
-
-		static HRESULT defines( Hlsl::Defines& def );
 	};
 };
 

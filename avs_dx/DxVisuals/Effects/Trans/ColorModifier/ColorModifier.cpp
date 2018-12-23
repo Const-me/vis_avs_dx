@@ -11,7 +11,7 @@ namespace
 	public:
 		Proto()
 		{
-			addConstantInput( "beat", eVarType::u32 );	// IS_BEAT
+			addBeatConstant( "beat" );
 			addFragmentOutput( "red" );
 			addFragmentOutput( "green" );
 			addFragmentOutput( "blue" );
@@ -22,12 +22,6 @@ namespace
 		static const Proto p;
 		return p;
 	}
-}
-
-HRESULT ColorModifierStructs::StateData::defines( Hlsl::Defines& def )
-{
-	def.set( "beat", "IS_BEAT" );
-	return S_OK;
 }
 
 ColorModifierStructs::StateData::StateData( AvsState& ass ) :

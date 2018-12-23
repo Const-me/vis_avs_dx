@@ -177,6 +177,10 @@ HRESULT Compiler::buildStateHlsl()
 		code.AppendFormat( "		%s %s;\r\n", hlslName( m_symbols.vars.type( i ) ), cstr( m_symbols.vars.name( i ) ) );
 	}
 
+	const bool stateUsesBeat = ( m_symbols.vars.getBeatMacro() >= 0 ) && ( 0 != ( m_varUsage[ m_symbols.vars.getBeatMacro() ] & 0b0011 ) );
+	if( stateUsesBeat )
+		code.AppendFormat( "		const uint %s = IS_BEAT;", cstr( proto.getBeatMacro() ) );
+
 	code += "#if INIT_STATE\r\n";
 	code += proto.initState();
 	code += m_hlsl[ 0 ];	// Init
@@ -187,13 +191,15 @@ HRESULT Compiler::buildStateHlsl()
 	
 	code += m_hlsl[ 1 ];	// Frame
 
-	m_stateTemplate.hasBeat = m_hlsl[ 2 ].GetLength() > 0;
-	if( m_stateTemplate.hasBeat )
+	const bool hasBeatExpression = m_hlsl[ 2 ].GetLength() > 0;
+	if( hasBeatExpression )
 	{
 		code += "#if IS_BEAT\r\n";
 		code += m_hlsl[ 2 ];	// Beat
 		code += "#endif\r\n";
 	}
+	m_stateTemplate.hasBeat = stateUsesBeat || hasBeatExpression;
+
 	code += "#endif\r\n";
 	code += proto.stateStore();
 	code += m_dynStateStore;
@@ -222,6 +228,10 @@ HRESULT Compiler::buildFragmentHlsl()
 
 		code.AppendFormat( "		%s %s;\r\n", hlslName( m_symbols.vars.type( i ) ), cstr( m_symbols.vars.name( i ) ) );
 	}
+
+	m_fragmentBeat = ( m_symbols.vars.getBeatMacro() >= 0 ) && ( 0 != ( m_varUsage[ m_symbols.vars.getBeatMacro() ] & 0b1100 ) );
+	if( m_fragmentBeat )
+		code.AppendFormat( "		const uint %s = IS_BEAT;", cstr( proto.getBeatMacro() ) );
 
 	code += m_dynStateLoad;
 

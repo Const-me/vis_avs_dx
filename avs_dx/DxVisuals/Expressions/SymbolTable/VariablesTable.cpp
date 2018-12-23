@@ -7,11 +7,13 @@ VariablesTable::VariablesTable() = default;
 
 VariablesTable::VariablesTable( const Prototype& proto )
 {
-	proto.enumVariables( [ this ]( const VariableDecl& v )
+	proto.enumVariables( [ this, &proto ]( const VariableDecl& v )
 	{
 		const int id = (int)table.size();
 		table.push_back( v );
 		map[ v.name ] = id;
+		if( v.name == proto.getBeatMacro() )
+			m_beatMacro = id;
 	} );
 	prototypeSize = (int)table.size();
 }

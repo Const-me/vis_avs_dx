@@ -23,6 +23,7 @@ namespace Expressions
 		std::vector<FixedStateVar> m_fixedState;
 
 		std::vector<VariableDecl> m_vars;
+		CStringA m_beatMacro;
 
 		HRESULT addVariable( eVarLocation loc, eVarType vt, const CStringA& name );
 
@@ -39,6 +40,9 @@ namespace Expressions
 		{
 			return addVariable( eVarLocation::macro, vt, name );
 		}
+
+		// Declare variable that IS_BEAT macro will go to. If the effect will actually use this, it will cause 2 versions of the shader to be compiled, saving per-pixel branching in runtime.
+		HRESULT addBeatConstant( const CStringA& name );
 
 		// Declare input variable used by fragment expression, read-only.
 		HRESULT addFragmentInput( const CStringA& name, eVarType vt = eVarType::f32 )
@@ -70,6 +74,11 @@ namespace Expressions
 				fn( fs );
 			for( const auto& v : m_vars )
 				fn( v );
+		}
+
+		const CStringA& getBeatMacro() const
+		{
+			return m_beatMacro;
 		}
 	};
 }

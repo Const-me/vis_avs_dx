@@ -44,6 +44,18 @@ HRESULT Prototype::addVariable( eVarLocation loc, eVarType vt, const CStringA& n
 	return S_OK;
 }
 
+HRESULT Prototype::addBeatConstant( const CStringA& name )
+{
+	if( m_beatMacro.GetLength() > 0 )
+	{
+		assert( false );
+		return E_INVALIDARG;
+	}
+	CHECK( addVariable( eVarLocation::macro, eVarType::u32, name ) );
+	m_beatMacro = name;
+	return S_OK;
+}
+
 CStringA Prototype::initState() const
 {
 	CStringA hlsl;

@@ -10,7 +10,7 @@ namespace
 	public:
 		Proto()
 		{
-			addConstantInput( "b", eVarType::u32 );	// IS_BEAT
+			addBeatConstant( "b" );
 			addConstantInput( "w", eVarType::u32 );	// screen width in pixels
 			addConstantInput( "h", eVarType::u32 );	// screen height in pixels
 

@@ -19,8 +19,9 @@ HRESULT Tree::deduceTypes()
 
 		return S_OK;
 	}
-	catch( const std::exception & )
+	catch( const std::exception & ex )
 	{
+		logError( "%s", ex.what() );
 		return E_FAIL;
 	}
 }
@@ -91,8 +92,8 @@ eVarType Tree::expressionType( int iFirstChild )
 template<>
 eVarType Tree::functionTypeInternal<eInternalFunc::Assign>( int indFunc )
 {
-	const Node& n = m_nodes[ indFunc ];
-	assert( 2 == n.length );
+	if( m_nodes[ indFunc ].length != 2 )
+		throw std::invalid_argument( "assign() must have exactly 2 arguments" );
 
 	const int indLhs = indFunc + 1;
 	nodeType( indLhs );
@@ -111,8 +112,8 @@ eVarType Tree::functionTypeInternal<eInternalFunc::Assign>( int indFunc )
 template<>
 eVarType Tree::functionTypeInternal<eInternalFunc::Equals>( int indFunc )
 {
-	const Node& n = m_nodes[ indFunc ];
-	assert( 2 == n.length );
+	if( m_nodes[ indFunc ].length != 2 )
+		throw std::invalid_argument( "equals() must have exactly 2 arguments" );
 
 	int i = indFunc + 1;
 	nodeType( i );
@@ -124,12 +125,12 @@ eVarType Tree::functionTypeInternal<eInternalFunc::Equals>( int indFunc )
 template<>
 eVarType Tree::functionTypeInternal<eInternalFunc::If>( int indFunc )
 {
-	const Node& n = m_nodes[ indFunc ];
-	assert( 3 == n.length );
+	if( m_nodes[ indFunc ].length != 3 )
+		throw std::invalid_argument( "if() must have exactly 3 arguments" );
 
 	int i = indFunc + 1;
 	nodeType( i );
-	i = m_nodes[ i ].nextSibling;	
+	i = m_nodes[ i ].nextSibling;
 
 	uint32_t mask = typeBit( nodeType( i ) );
 	i = m_nodes[ i ].nextSibling;
@@ -140,8 +141,8 @@ eVarType Tree::functionTypeInternal<eInternalFunc::If>( int indFunc )
 template<>
 eVarType Tree::functionTypeInternal<eInternalFunc::Rand>( int indFunc )
 {
-	const Node& n = m_nodes[ indFunc ];
-	assert( 1 == n.length );
+	if( m_nodes[ indFunc ].length != 1 )
+		throw std::invalid_argument( "rand() must have exactly 1 argument" );
 	nodeType( indFunc + 1 );
 	return eVarType::f32;
 }

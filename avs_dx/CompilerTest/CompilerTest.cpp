@@ -78,7 +78,6 @@ z = floor( p ) + 0.14;
 
 	CHECK( parseAssignments( str, tree ) );
 	CHECK( tree.deduceTypes() );
-	// tree.transformDoubleFuncs();
 	tree.dbgPrint();
 
 	tree.transformDoubleFuncs();

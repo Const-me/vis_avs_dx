@@ -282,7 +282,7 @@ class HlslCompressor: Compressor
 		int ind = line.IndexOf( "//" );
 		if( ind < 0 )
 			return line;
-		return line.Substring( 0, ind );
+		return line.Substring( 0, ind ).TrimEnd();
 	}
 
 	public BytesRange addFile( string path )

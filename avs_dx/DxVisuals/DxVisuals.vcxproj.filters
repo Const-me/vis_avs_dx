@@ -163,6 +163,7 @@
     <FxCompile Include="Effects\Render\SuperScope\SuperScopeVS.hlsl" />
     <FxCompile Include="Effects\Render\SuperScope\SuperScopeState.hlsl" />
     <FxCompile Include="Expressions\Builtin\shaderFunctions.hlsl" />
+    <FxCompile Include="Effects\BlendPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

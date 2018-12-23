@@ -1,5 +1,5 @@
 #pragma once
-#include "EffectListBase.h"
+#include "../../EffectBase/EffectListBase.h"
 
 class EffectList : public EffectListBase
 {

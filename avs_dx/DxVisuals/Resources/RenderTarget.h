@@ -9,7 +9,7 @@ class RenderTarget
 
 public:
 
-	HRESULT create( const CSize& size );
+	HRESULT create();
 
 	void destroy();
 

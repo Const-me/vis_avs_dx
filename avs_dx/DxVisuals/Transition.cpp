@@ -2,6 +2,7 @@
 #include "Transition.h"
 #include "Resources/staticResources.h"
 #include "Utils/events.h"
+#include "../InteropLib/interop.h"
 
 // The critical section that guards renderers, linked from deep inside AVS.
 extern CRITICAL_SECTION g_render_cs;
@@ -25,8 +26,6 @@ HRESULT Transition::prepare( char visdata[ 2 ][ 2 ][ 576 ], int isBeat )
 	const CSize currentSize = getRenderSize();
 	if( m_renderSize != currentSize )
 	{
-		m_targets1.destroy();
-		m_targets2.destroy();
 		m_renderSize = currentSize;
 		callResizeHandlers();
 	}

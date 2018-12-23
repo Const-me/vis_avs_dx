@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "Blender.h"
-#include "../Resources/staticResources.h"
+#include "../../Resources/staticResources.h"
 
 Blender::Blender()
 {
-	blendShader.data().source = 125;
-	blendShader.data().dest = 126;
+	blendShader.data().source = 11;
+	blendShader.data().dest = 12;
 }
 
 HRESULT Blender::blend( RenderTargets& source, RenderTargets& dest, uint8_t mode, float blendVal )
@@ -17,14 +17,14 @@ HRESULT Blender::blend( RenderTargets& source, RenderTargets& dest, uint8_t mode
 	}
 
 	RenderTarget& src = source.lastWritten();
-	RenderTarget& dst = dest.lastWritten();
-
-	if( !dst )
-		CHECK( dst.create( getRenderSize() ) );
 
 	// Replace
 	if( 1 == mode )
 	{
+		RenderTarget& dst = dest.lastWritten();
+		if( !dst )
+			CHECK( dst.create() );
+
 		if( src )
 		{
 			src.copyTo( dst );
@@ -34,7 +34,12 @@ HRESULT Blender::blend( RenderTargets& source, RenderTargets& dest, uint8_t mode
 		return S_FALSE;
 	}
 
-	// Do the blending
+	if( mode > 13 )
+		return E_INVALIDARG;
+	if( mode == 12 )	// Buffer
+		return E_NOTIMPL;
+
+	// Do the custom blending
 	CHECK( ensureShader( mode, blendVal ) );
 
 	setShaders( StaticResources::fullScreenTriangle, nullptr, blendShader );
@@ -48,6 +53,8 @@ HRESULT Blender::blend( RenderTargets& source, RenderTargets& dest, uint8_t mode
 		bindResource<eStage::Pixel>( bindSource, StaticResources::blackTexture );
 
 	CHECK( dest.writeToNext( bindDest, false ) );
+
+	// TODO: disable D3D blending.
 
 	iaClearBuffers();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST );

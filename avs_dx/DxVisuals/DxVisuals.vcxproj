@@ -95,7 +95,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Effects\Blender.h" />
+    <ClInclude Include="Effects\List\Blender.h" />
     <ClInclude Include="Expressions\SymbolTable\SymbolTable.h" />
     <ClInclude Include="Expressions\VariableDecl.hpp" />
     <ClInclude Include="Expressions\SymbolTable\FunctionsTable.h" />
@@ -116,7 +116,7 @@
     <ClInclude Include="Expressions\parse.h" />
     <ClInclude Include="Effects\includeDefs.h" />
     <ClInclude Include="Expressions\Compiler.h" />
-    <ClInclude Include="EffectBase\EffectList.h" />
+    <ClInclude Include="Effects\List\EffectList.h" />
     <ClInclude Include="Effects\EffectBase1.hpp" />
     <ClInclude Include="Effects\EffectImpl.hpp" />
     <ClInclude Include="RootEffect.h" />
@@ -165,7 +165,7 @@
     <ClInclude Include="Expressions\SymbolTable\VariablesTable.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Effects\Blender.cpp" />
+    <ClCompile Include="Effects\List\Blender.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.debug.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.emit.cpp" />
@@ -268,7 +268,7 @@
     <None Include="Effects\Polyline.fx">
       <FileType>Document</FileType>
     </None>
-    <FxCompile Include="Effects\BlendPS.hlsl">
+    <FxCompile Include="Effects\List\BlenderPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>

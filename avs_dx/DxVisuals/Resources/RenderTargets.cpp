@@ -1,6 +1,23 @@
 #include "stdafx.h"
 #include "RenderTargets.h"
 #include "staticResources.h"
+#include <../InteropLib/interop.h>
+
+RenderTargets::RenderTargets()
+{
+	subscribeHandler( this );
+}
+
+RenderTargets::~RenderTargets()
+{
+	unsubscribeHandler( this );
+}
+
+void RenderTargets::onRenderSizeChanged()
+{
+	for( auto& t : m_targets )
+		t.destroy();
+}
 
 inline void unbindTarget()
 {
@@ -11,7 +28,7 @@ HRESULT RenderTargets::writeToLast( bool clear )
 {
 	RenderTarget& t = m_targets[ m_lastTarget ];
 	if( !t )
-		CHECK( t.create( getRenderSize() ) );
+		CHECK( t.create() );
 	if( clear )
 		t.clear();
 	t.bindTarget();
@@ -31,7 +48,7 @@ HRESULT RenderTargets::writeToNext( UINT readPsSlot, bool clearNext )
 	m_lastTarget ^= 1;
 	RenderTarget& tWrite = m_targets[ m_lastTarget ];
 	if( !tWrite )
-		CHECK( tWrite.create( getRenderSize() ) );
+		CHECK( tWrite.create() );
 	if( clearNext )
 		tWrite.clear();
 	tWrite.bindTarget();
@@ -48,7 +65,7 @@ HRESULT RenderTargets::blendToNext( UINT readPsSlot )
 	m_lastTarget ^= 1;
 	RenderTarget& tWrite = m_targets[ m_lastTarget ];
 	if( !tWrite )
-		CHECK( tWrite.create( getRenderSize() ) );
+		CHECK( tWrite.create() );
 
 	tRead.copyTo( tWrite );
 

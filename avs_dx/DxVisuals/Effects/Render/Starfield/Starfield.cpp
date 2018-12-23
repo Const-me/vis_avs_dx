@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Starfield.h"
+#include <../InteropLib/interop.h>
 
 IMPLEMENT_EFFECT( Starfield, C_StarField );
 

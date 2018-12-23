@@ -1,14 +1,19 @@
 #pragma once
 #include "RenderTarget.h"
-#include "../../InteropLib/interop.h"
+#include "../Utils/events.h"
 
-// A set of 2 render targets textures.
-class RenderTargets
+// A set of 2 render target textures.
+class RenderTargets: public iResizeHandler
 {
 	std::array<RenderTarget, 2> m_targets;
 	size_t m_lastTarget = 0;
 
+	void onRenderSizeChanged() override;
+
 public:
+	RenderTargets();
+	~RenderTargets();
+
 	void destroy()
 	{
 		for( auto& t : m_targets )

@@ -1,10 +1,13 @@
 #include "stdafx.h"
 #include "RenderTarget.h"
+#include "../../InteropLib/interop.h"
 
 constexpr DXGI_FORMAT rtFormat = DXGI_FORMAT_R10G10B10A2_UNORM;
 
-HRESULT RenderTarget::create( const CSize& size )
+HRESULT RenderTarget::create()
 {
+	const CSize size = getRenderSize();
+
 	CD3D11_TEXTURE2D_DESC texDesc{ rtFormat, (UINT)size.cx, (UINT)size.cy, 1, 0, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET };
 	CHECK( device->CreateTexture2D( &texDesc, nullptr, &m_tex ) );
 

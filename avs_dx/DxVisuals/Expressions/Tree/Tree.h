@@ -49,6 +49,14 @@ namespace Expressions
 		std::vector<char> m_codez;
 		std::vector<Node> m_nodes;
 
+		bool nextSibling( int& ind ) const
+		{
+			ind = m_nodes[ ind ].nextSibling;
+			return ind > 0;
+		}
+
+		// ==== Parsing ====
+
 		struct ExpressionContext
 		{
 			int prevSibling = -1;
@@ -66,12 +74,18 @@ namespace Expressions
 
 		void parseExpression( const CStringA& expr, int begin, int end );
 
+		// ==== Type deduction ====
+
 		eVarType nodeType( int indNode );
 		eVarType expressionType( int iFirstChild );
 		eVarType functionType( int iFunc );
 
+		// ==== Debugging ====
+
 		void dbgPrintList( int ind, int level ) const;
 		void dbgPrintNode( int ind, int level ) const;
+
+		// ==== Emit HLSL ====
 
 		struct EmitContext;
 		void emitNode( EmitContext& ec, int ind ) const;
@@ -83,17 +97,11 @@ namespace Expressions
 		using pfnEmitNode = void ( Tree::* )( EmitContext& ec, const Node& node, int ind ) const;
 		static const std::array<pfnEmitNode, eInternalFunc::valuesCount> s_emitInternal;
 
-		bool nextSibling( int& ind ) const
-		{
-			ind = m_nodes[ ind ].nextSibling;
-			return ind >= 0;
-		}
-
 	public:
 
 		Tree( SymbolTable& symbolsTable );
 
-		// Clear all nodes, however this will keep the symbols.
+		// Clear nodes, keeping the symbols
 		void clear();
 
 		HRESULT parse( const CStringA& expr );
@@ -108,7 +116,7 @@ namespace Expressions
 
 		HRESULT emitHlsl( CStringA& hlsl, bool& usesRng ) const;
 
-		// Gather data on how variables are used by the expression. The values are from eVarAccess enum, they're written to the vector with bitwise OR.
+		// Gather data on how variables are used by this expression tree. The values are from eVarAccess enum, they're written to the vector with bitwise OR.
 		// fragment=false will write bits 0-1, fragment=true will write bits 2-3.
 		void getVariablesUsage( std::vector<uint8_t>& usage, bool fragment ) const;
 	};

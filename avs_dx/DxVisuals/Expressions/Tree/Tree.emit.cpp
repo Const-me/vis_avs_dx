@@ -26,7 +26,7 @@ struct Tree::EmitContext
 
 	void code( const Node& node, const std::vector<char> &codez )
 	{
-		assert( node.node == Tree::eNode::Code );
+		assert( node.node == eNode::Code );
 		result.AppendFormat( "%.*s", node.length, codez.data() + node.id );
 	}
 	void operator+=( const CStringA& str )
@@ -112,10 +112,13 @@ void Tree::emitInternal<eInternalFunc::Rand>( EmitContext& ec, const Node& node,
 	emitNode( ec, ind + 1 );
 	ec += " )";
 	ec.haveRandom = true;
+	// Include the relevant functions into the symbols table, so they're included in the global sections of the output shader.
 	symbols.functions.addAvs( "avs_rand_init" );
 	symbols.functions.addAvs( "avs_rand" );
 }
 
+// A bit of C++ magic here: instantiate the emitters for internal functions.
+// They're specialized templates but the following code instantiates them, and places pointers to these functions into the static array.
 const std::array<Tree::pfnEmitNode, 4> Tree::s_emitInternal =
 {
 	&Tree::emitInternal<0>,

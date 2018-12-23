@@ -10,6 +10,7 @@ namespace Expressions
 		VariablesTable vars;
 
 		SymbolTable() = default;
+		SymbolTable( const SymbolTable& ) = delete;
 		SymbolTable( const Prototype& proto ) :
 			vars( proto ) { }
 

@@ -28,8 +28,6 @@ HRESULT Tree::deduceTypes()
 eVarType Tree::nodeType( int indNode )
 {
 	Node& n = m_nodes[ indNode ];
-	if( n.vt != eVarType::unknown )
-		return n.vt;
 
 	if( eNode::Code == n.node )
 		return n.vt;
@@ -125,7 +123,7 @@ eVarType Tree::functionType( int iFunc )
 		}
 	}
 
-	if( ft.kind != eFunctionKind::Polymorphic || ft.kind != eFunctionKind::unknown )
+	if( ft.kind != eFunctionKind::Polymorphic )
 		return ft.vt;
 
 	uint32_t mask = 0;
@@ -134,5 +132,10 @@ eVarType Tree::functionType( int iFunc )
 		mask |= typeBit( nodeType( i ) );
 		i = m_nodes[ i ].nextSibling;
 	}
+
+	// For polymorphic sin/cos, we need to run the recursion deeper to deduce the argument types. However, we aren't using the type.
+	if( ft.kind != eFunctionKind::unknown )
+		return ft.vt;
+
 	return combineTypes( mask );
 }

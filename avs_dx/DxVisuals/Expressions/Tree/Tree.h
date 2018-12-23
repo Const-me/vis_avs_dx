@@ -76,6 +76,11 @@ namespace Expressions
 
 		// ==== Type deduction ====
 
+		using pfnFunctionType = eVarType( Tree::* )( int indFunc );
+		static const std::array<pfnFunctionType, eInternalFunc::valuesCount> s_functionTypeInternal;
+		template<eInternalFunc id>
+		eVarType functionTypeInternal( int indFunc );
+
 		eVarType nodeType( int indNode );
 		eVarType expressionType( int iFirstChild );
 		eVarType functionType( int iFunc );

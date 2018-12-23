@@ -66,7 +66,12 @@ HRESULT test3()
 	SymbolTable stState{ proto };
 	Tree tree{ stState };
 
-	const char* e = "p=gettime(0); v=1-(y+1)*0.5; y=y+0.25*(getosc(v,0.2,0)) + sin(p-1)*0.03;";
+	const char* e = R"fffuuu(
+p = gettime( 0 );	// To make it double
+v = 1 - ( y + 1 ) * 0.5;
+// y = y + 0.25 * ( getosc( v, 0.2, 0 ) ) + sin( p - 1 ) * 0.03;
+z = floor( p ) + 0.14;
+)fffuuu";
 
 	CStringA str = e;
 	preprocess( str );

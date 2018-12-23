@@ -88,39 +88,81 @@ eVarType Tree::expressionType( int iFirstChild )
 	return combineTypes( mask );
 }
 
+template<>
+eVarType Tree::functionTypeInternal<eInternalFunc::Assign>( int indFunc )
+{
+	const Node& n = m_nodes[ indFunc ];
+	assert( 2 == n.length );
+
+	const int indLhs = indFunc + 1;
+	nodeType( indLhs );
+
+	const int indRhs = m_nodes[ indLhs ].nextSibling;
+
+	const auto vtRight = nodeType( indRhs );
+	if( m_nodes[ indLhs ].node == eNode::Var )
+	{
+		symbols.vars.setType( m_nodes[ indLhs ].id, vtRight );
+		m_nodes[ indLhs ].vt = vtRight;
+	}
+	return vtRight;
+}
+
+template<>
+eVarType Tree::functionTypeInternal<eInternalFunc::Equals>( int indFunc )
+{
+	const Node& n = m_nodes[ indFunc ];
+	assert( 2 == n.length );
+
+	int i = indFunc + 1;
+	nodeType( i );
+	i = m_nodes[ i ].nextSibling;
+	nodeType( i );
+	return eVarType::u32;
+}
+
+template<>
+eVarType Tree::functionTypeInternal<eInternalFunc::If>( int indFunc )
+{
+	const Node& n = m_nodes[ indFunc ];
+	assert( 3 == n.length );
+
+	int i = indFunc + 1;
+	nodeType( i );
+	i = m_nodes[ i ].nextSibling;	
+
+	uint32_t mask = typeBit( nodeType( i ) );
+	i = m_nodes[ i ].nextSibling;
+	mask |= typeBit( nodeType( i ) );
+	return combineTypes( mask );
+}
+
+template<>
+eVarType Tree::functionTypeInternal<eInternalFunc::Rand>( int indFunc )
+{
+	const Node& n = m_nodes[ indFunc ];
+	assert( 1 == n.length );
+	nodeType( indFunc + 1 );
+	return eVarType::f32;
+}
+
+const std::array<Tree::pfnFunctionType, 4> Tree::s_functionTypeInternal =
+{
+	&Tree::functionTypeInternal<0>,
+	&Tree::functionTypeInternal<1>,
+	&Tree::functionTypeInternal<2>,
+	&Tree::functionTypeInternal<3>,
+};
+
 eVarType Tree::functionType( int iFunc )
 {
 	const int id = m_nodes[ iFunc ].id;
 	const FunctionType ft = symbols.functions.type( id );
 
-	if( ft.kind == eFunctionKind::Internal )
+	if( id < (int)s_functionTypeInternal.size() )
 	{
-		if( id == eInternalFunc::Assign )
-		{
-			const int indLhs = iFunc + 1;
-			const int indRhs = m_nodes[ indLhs ].nextSibling;
-
-			const auto vtRight = nodeType( indRhs );
-			if( m_nodes[ indLhs ].node == eNode::Var )
-			{
-				symbols.vars.setType( m_nodes[ indLhs ].id, vtRight );
-				m_nodes[ indLhs ].vt = vtRight;
-			}
-			return vtRight;
-		}
-		if( id == eInternalFunc::Equals )
-			return eVarType::u32;
-
-		if( id == eInternalFunc::If )
-		{
-			int i = iFunc + 1;	// Ignore first argument, it's condition
-			i = m_nodes[ i ].nextSibling;
-
-			uint32_t mask = typeBit( nodeType( i ) );
-			i = m_nodes[ i ].nextSibling;
-			mask |= typeBit( nodeType( i ) );
-			return combineTypes( mask );
-		}
+		assert( ft.kind == eFunctionKind::Internal );
+		return ( this->*s_functionTypeInternal[ id ] )( iFunc );
 	}
 
 	if( ft.kind != eFunctionKind::Polymorphic )

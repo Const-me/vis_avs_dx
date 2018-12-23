@@ -28,12 +28,12 @@ namespace
 	};
 	using Ind3 = std::array<uint16_t, 3>;
 
-	HRESULT reserveBuffer( const CSize &size, std::vector<sInput> &vb )
+	HRESULT reserveVertexBuffer( const CSize &size, std::vector<sInput> &vb )
 	{
 		const size_t vbEven = (size_t)size.cx + 1;
 		const size_t vbOdd = vbEven + 1;
-		const size_t nEven = (size_t)( size.cy + 1 ) / 2;
-		const size_t nOdd = (size_t)( size.cy + 2 ) / 2;
+		const size_t nEven = (size_t)( size.cy + 2 ) / 2;
+		const size_t nOdd = (size_t)( size.cy + 1 ) / 2;
 		const size_t totalVerts = vbEven * nEven + vbOdd * nOdd;
 		if( totalVerts > 0xFFFF )
 			return E_INVALIDARG;
@@ -41,7 +41,7 @@ namespace
 		return S_OK;
 	}
 
-	void reserveBuffer( const CSize &size, std::vector<Ind3> &ib )
+	void reserveIndexBuffer( const CSize &size, std::vector<Ind3> &ib )
 	{
 		size_t trisPerStripe = size_t( size.cx );
 		trisPerStripe = trisPerStripe + trisPerStripe + 1;
@@ -50,8 +50,8 @@ namespace
 
 	HRESULT reserveBuffers( const CSize &size, std::vector<sInput> &vb, std::vector<Ind3> &ib )
 	{
-		CHECK( reserveBuffer( size, vb ) );
-		reserveBuffer( size, ib );
+		CHECK( reserveVertexBuffer( size, vb ) );
+		reserveIndexBuffer( size, ib );
 		return S_OK;
 	}
 
@@ -62,32 +62,33 @@ namespace
 
 		GridDim( const CSize &size ) : cx( size.cx ), mulx( 1.0 / size.cx ), muly( 1.0 / size.cy ) { }
 
-		sInput posEven( int y, int x ) const
+		sInput vertex( int y, double x ) const
 		{
+			const double yy = y * muly;
+
 			sInput r;
-			r.pos.x = (float)( x * mulx * 2.0 - 1.0 );
-			r.pos.y = (float)( y * muly * 2.0 - 1.0 );
-			r.tc.x = (float)( x * mulx );
-			r.tc.y = (float)( 1.0 - y * muly );
+			r.pos.x = (float)( x * 2 - 1 );
+			r.pos.y = (float)( yy * 2 - 1 );
+			r.tc.x = (float)( x );
+			r.tc.y = (float)( 1 - yy );
 			return r;
 		}
-
+		sInput posEven( int y, int x ) const
+		{
+			assert( x >= 0 && x <= cx );
+			return vertex( y, x * mulx );
+		}
 		sInput posOdd( int y, int x ) const
 		{
+			assert( x >= -1 && x <= cx );
 			double xx;
 			if( x == -1 )
 				xx = 0;
-			if( x == cx )
+			else if( x == cx )
 				xx = 1;
 			else
 				xx = ( x + 0.5 ) * mulx;
-
-			sInput r;
-			r.pos.x = (float)( xx * 2.0 - 1.0 );
-			r.pos.y = (float)( y * muly * 2.0 - 1.0 );
-			r.tc.x = (float)( x * mulx );
-			r.tc.y = (float)( 1.0 - y * muly );
-			return r;
+			return vertex( y, xx );
 		}
 	};
 
@@ -109,26 +110,30 @@ namespace
 		ib.emplace_back( Ind3{ a, b, c } );
 	}
 
-	// Push triangle strip where bottom row is odd.
+	// Push triangle strip indices where bottom row has odd index.
 	void pushOddStrip( const GridDim &dim, std::vector<Ind3> &ib, uint16_t r1, uint16_t r2 )
 	{
-		for( uint16_t i = 0; i <= dim.cx; i++ )
+		for( int i = 0; i < dim.cx; i++ )
 		{
 			pt( ib, r2, r2 + 1, r1 );
 			pt( ib, r1, r2 + 1, r1 + 1 );
 			r1++;
 			r2++;
 		}
+		pt( ib, r2, r2 + 1, r1 );
 	}
+
+	// Push triangle strip indices where bottom row has even index.
 	void pushEvenStrip( const GridDim &dim, std::vector<Ind3> &ib, uint16_t r1, uint16_t r2 )
 	{
-		for( uint16_t i = 0; i <= dim.cx; i++ )
+		for( int i = 0; i < dim.cx; i++ )
 		{
 			pt( ib, r1, r2, r1 + 1 );
 			pt( ib, r1 + 1, r2, r2 + 1 );
 			r1++;
 			r2++;
 		}
+		pt( ib, r1, r2, r1 + 1 );
 	}
 
 	template<class T>
@@ -150,24 +155,24 @@ HRESULT GridMesh::create( const CSize& size )
 	CHECK( reserveBuffers( size, vb, ib ) );
 
 	const GridDim dim{ size };
-	uint16_t prevLine = 0;
+	uint16_t prevRow = 0;
 	pushEvenRow( dim, vb, 0 );
 
-	for( int i = 1; i <= size.cy; i++ )
+	for( int y = 1; y <= size.cy; y++ )
 	{
-		const bool odd = ( 0 != ( i & 1 ) );
-		const uint16_t ip = (uint16_t)vb.size();
+		const bool odd = ( 0 != ( y & 1 ) );
+		const uint16_t thisRow = (uint16_t)vb.size();
 		if( odd )
 		{
-			pushOddRow( dim, vb, i );
-			pushOddStrip( dim, ib, prevLine, ip );
+			pushOddRow( dim, vb, y );
+			pushOddStrip( dim, ib, prevRow, thisRow );
 		}
 		else
 		{
-			pushEvenRow( dim, vb, i );
-			pushEvenStrip( dim, ib, prevLine, ip );
+			pushEvenRow( dim, vb, y );
+			pushEvenStrip( dim, ib, prevRow, thisRow );
 		}
-		prevLine = ip;
+		prevRow = thisRow;
 	}
 
 	{
@@ -184,6 +189,7 @@ HRESULT GridMesh::create( const CSize& size )
 	}
 
 	m_indexCount = ib.size() * 3;
+	logDebug( "Created a grid mesh %i x %i cells", size.cx, size.cy );
 	return S_OK;
 }
 

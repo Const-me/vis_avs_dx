@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "events.h"
+#include "resizeHandler.h"
 
 namespace
 {

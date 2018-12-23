@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Transition.h"
 #include "Resources/staticResources.h"
-#include "Utils/events.h"
+#include <Utils/resizeHandler.h>
 #include "../InteropLib/interop.h"
 
 // The critical section that guards renderers, linked from deep inside AVS.

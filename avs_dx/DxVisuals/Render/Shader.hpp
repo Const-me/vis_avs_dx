@@ -4,7 +4,7 @@
 #include "../Hlsl/Defines.h"
 #include "../Hlsl/compile.h"
 #include "../Resources/createShader.hpp"
-#include "../Utils/events.h"
+#include <Utils/resizeHandler.h>
 
 class Binder;
 

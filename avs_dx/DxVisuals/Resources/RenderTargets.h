@@ -1,6 +1,6 @@
 #pragma once
 #include "RenderTarget.h"
-#include "../Utils/events.h"
+#include <Utils/resizeHandler.h>
 
 // A set of 2 render target textures.
 class RenderTargets: public iResizeHandler

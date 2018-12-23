@@ -104,7 +104,7 @@
     <ClInclude Include="Effects\Render\SuperScope\SuperScope.h" />
     <ClInclude Include="Expressions\preprocess.h" />
     <ClInclude Include="Utils\ByteRange.hpp" />
-    <ClInclude Include="Utils\events.h" />
+    <ClInclude Include="Utils\resizeHandler.h" />
     <ClInclude Include="Expressions\Builtin\builtinFunctions.h" />
     <ClInclude Include="Expressions\Builtin\includeFunctions.h" />
     <ClInclude Include="Expressions\CompiledShader.h" />
@@ -176,7 +176,7 @@
     <ClCompile Include="Expressions\Tree\Tree.parse.cpp" />
     <ClCompile Include="Effects\Render\SuperScope\SuperScope.cpp" />
     <ClCompile Include="Expressions\preprocess.cpp" />
-    <ClCompile Include="Utils\events.cpp" />
+    <ClCompile Include="Utils\resizeHandler.cpp" />
     <ClCompile Include="Expressions\Builtin\builtinFunctions.cpp" />
     <ClCompile Include="Expressions\CompiledShader.cpp" />
     <ClCompile Include="Expressions\Builtin\includeFunctions.cpp" />

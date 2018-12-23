@@ -1,6 +1,6 @@
 #pragma once
 #include "EffectStateShader.hpp"
-#include "../Utils/events.h"
+#include <Utils/resizeHandler.h>
 
 struct StateShaders: public iResizeHandler
 {

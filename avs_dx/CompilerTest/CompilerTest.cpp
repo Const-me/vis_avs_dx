@@ -43,7 +43,7 @@ HRESULT test1()
 
 	CStringA str = e;
 	preprocess( str );
-	CHECK( tree.parse( str ) );
+	CHECK( parseStatements( str, tree ) );
 	tree.dbgPrint();
 	return S_OK;
 }
@@ -76,7 +76,7 @@ z = floor( p ) + 0.14;
 	CStringA str = e;
 	preprocess( str );
 
-	CHECK( parseAssignments( str, tree ) );
+	CHECK( parseStatements( str, tree ) );
 	CHECK( tree.deduceTypes() );
 	tree.dbgPrint();
 

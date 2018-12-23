@@ -55,7 +55,7 @@ HRESULT Compiler::update( const char* init, const char* frame, const char* beat,
 	// Parse and recompile the state expressions
 	for( int i = 0; i < 3; i++ )
 	{
-		CHECK( parseAssignments( m_expressions[ i ], m_tree ) );
+		CHECK( parseStatements( m_expressions[ i ], m_tree ) );
 		CHECK( m_tree.deduceTypes() );
 		m_tree.transformDoubleFuncs();
 		CHECK( m_tree.emitHlsl( m_hlsl[ i ], m_stateTemplate.hasRandomNumbers ) );
@@ -66,7 +66,7 @@ HRESULT Compiler::update( const char* init, const char* frame, const char* beat,
 	m_symbols.functions.clear();
 
 	// Parse and recompile the fragment expression
-	CHECK( parseAssignments( m_expressions[ 3 ], m_tree ) );
+	CHECK( parseStatements( m_expressions[ 3 ], m_tree ) );
 	CHECK( m_tree.deduceTypes() );
 	m_tree.transformDoubleFuncs();
 	CHECK( m_tree.emitHlsl( m_hlsl[ 3 ], m_fragmentRng ) );

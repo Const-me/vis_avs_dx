@@ -5,52 +5,62 @@
 
 namespace Expressions
 {
-
-	// If the expression is x=y, return the index of the '=' character, otherwise S_FALSE
-	HRESULT isAssign( const CStringA& expr, int& indEqual );
+	HRESULT parseStatement( const CStringA& nseel, Expressions::Tree& tree, int begin, int equals, int end );
 }
 
-HRESULT Expressions::isAssign( const CStringA& expr, int& idx )
+HRESULT Expressions::parseStatement( const CStringA& nseel, Expressions::Tree& tree, int begin, int equals, int end )
 {
-	idx = expr.Find( '=' );
-	if( idx < 0 )
+	if( end <= begin )
 		return S_FALSE;
-	if( 0 == idx )
+	if( equals < 0 )
+		return tree.appendStatement( nseel, begin, end );
+
+	if( equals + 1 >= end )
 	{
-		logError( "Syntax error, '=' in expression %s", cstr( expr.Left( idx ) ) );
-		return E_INVALIDARG;
+		logWarning( "Error in the expression, '=' without the right hand side." );
+		return S_FALSE;
 	}
-	if( !isAlpha( expr[ 0 ] ) )
-	{
-		logError( "Syntax error: '=', invalid left operand %s", cstr( expr.Left( idx ) ) );
-		return E_INVALIDARG;
-	}
-	return S_OK;
+	return tree.appendAssignment( nseel, begin, equals, end );
 }
 
-HRESULT Expressions::parseAssignments( const CStringA& code, Expressions::Tree& tree )
+HRESULT Expressions::parseStatements( const CStringA& nseel, Expressions::Tree& tree )
 {
 	tree.clear();
-	CStringA exp;
-	for( int i = 0; true; )
-	{
-		exp = code.Tokenize( ";", i );
-		if( exp.GetLength() <= 0 )
-			break;
 
-		int indEqual;
-		const HRESULT hr = isAssign( exp, indEqual );
-		CHECK( hr );
-		if( S_FALSE == hr )
+	int begin = 0;
+	int equals = -1;
+	const int end = nseel.GetLength();
+	bool error = false;
+	for( int i = 0; i < end; i++ )
+	{
+		const char c = nseel[ i ];
+		if( c != ';' && c != '=' )
+			continue;
+		if( c == '=' )
 		{
-			logWarning( "Unknown expression \"%s\" - ignoring", cstr( exp ) );
+			if( equals >= 0 )
+			{
+				logWarning( "Error in the expression: too many '=' in the statement." );
+				error = true;
+			}
+			else if( i == begin )
+			{
+				logWarning( "Error in the expression, '=' must be preceded by a variable." );
+				begin = i + 1;
+			}
+			else
+				equals = i;
 			continue;
 		}
-
-		const CStringA lhs = exp.Left( indEqual );
-		const CStringA rhs = exp.Mid( indEqual + 1 );
-
-		CHECK( tree.appendAssignment( lhs, rhs ) );
+		// Found the semicolon.
+		if( !error )
+			CHECK( parseStatement( nseel, tree, begin, equals, i ) );
+		error = false;
+		equals = -1;
+		begin = i + 1;
 	}
+	if( !error )
+		CHECK( parseStatement( nseel, tree, begin, equals, end ) );
+
 	return S_OK;
 }

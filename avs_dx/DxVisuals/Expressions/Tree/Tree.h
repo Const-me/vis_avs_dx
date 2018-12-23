@@ -109,9 +109,8 @@ namespace Expressions
 		// Clear nodes, keeping the symbols
 		void clear();
 
-		HRESULT parse( const CStringA& expr );
-
-		HRESULT appendAssignment( const CStringA& lhs, const CStringA& rhs );
+		HRESULT appendStatement( const CStringA& nseel, int begin, int end );
+		HRESULT appendAssignment( const CStringA& nseel, int begin, int equals, int end );
 
 		HRESULT deduceTypes();
 

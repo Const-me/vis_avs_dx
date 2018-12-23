@@ -3,5 +3,5 @@
 namespace Expressions
 {
 	class Tree;
-	HRESULT parseAssignments( const CStringA& preprocessed, Tree& tree );
+	HRESULT parseStatements( const CStringA& preprocessed, Tree& tree );
 }

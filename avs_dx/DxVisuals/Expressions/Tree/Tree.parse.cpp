@@ -5,16 +5,25 @@
 
 using namespace Expressions;
 
-HRESULT Tree::parse( const CStringA& expr )
+HRESULT Tree::appendStatement( const CStringA& nseel, int begin, int end )
 {
-	clear();
+	if( end <= begin )
+	{
+		logError( "Empty statement" );
+		return E_INVALIDARG;
+	}
 
 	try
 	{
+		const int indNew = (int)m_nodes.size();
 		ExpressionContext ec;
-		pushExpression( expr, ec, 0, expr.GetLength() );
-		parseExpression( expr, 0, expr.GetLength() );
-		m_lastStatement = 0;
+		pushExpression( nseel, ec, begin, end );
+		parseExpression( nseel, begin, end );
+
+		if( m_lastStatement >= 0 )
+			m_nodes[ m_lastStatement ].nextSibling = indNew;
+		m_lastStatement = indNew;
+
 		return S_OK;
 	}
 	catch( const std::exception & )
@@ -23,9 +32,9 @@ HRESULT Tree::parse( const CStringA& expr )
 	}
 }
 
-HRESULT Tree::appendAssignment( const CStringA& lhs, const CStringA& rhs )
+HRESULT Tree::appendAssignment( const CStringA& nseel, int begin, int equals, int end )
 {
-	if( lhs.GetLength() <= 0 || rhs.GetLength() <= 0 )
+	if( equals <= begin || end <= equals + 1 )
 	{
 		logError( "Empty assignment" );
 		return E_INVALIDARG;
@@ -46,11 +55,12 @@ HRESULT Tree::appendAssignment( const CStringA& lhs, const CStringA& rhs )
 		pushNode( ec, std::move( node ) );
 
 		ExpressionContext argContext;
-		pushExpression( lhs, argContext, 0, lhs.GetLength() );
-		parseExpression( lhs, 0, lhs.GetLength() );
+		pushExpression( nseel, argContext, begin, equals );
+		parseExpression( nseel, begin, equals );
 
-		pushExpression( rhs, argContext, 0, rhs.GetLength() );
-		parseExpression( rhs, 0, rhs.GetLength() );
+		equals++;
+		pushExpression( nseel, argContext, equals, end );
+		parseExpression( nseel, equals, end );
 
 		assert( 2 == argContext.children );
 		m_nodes[ indAssign ].length = argContext.children;

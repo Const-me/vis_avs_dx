@@ -61,7 +61,7 @@ namespace
 	template<class T>                                               \
 	struct ShaderTypeHelper<T, stage, eShaderKind::Dynamic>         \
 	{                                                               \
-		using Type = Shader<stage, typename T::DataClass>;          \
+		using Type = Shader<typename T::DataClass>;                 \
 		static constexpr bool ctorArg() { return false; }           \
 	}
 

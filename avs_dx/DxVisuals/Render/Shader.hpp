@@ -10,11 +10,13 @@ class Binder;
 
 // A shader that's instantiated from a template. Source data is what defines the macros.
 // Source needs to be copyable, needs to have operator==, and needs to have HRESULT defines( Hlsl::Defines &def ); method.
-template<eStage stage, class TSourceData>
+template<class TSourceData>
 class Shader: public iResizeHandler
 {
 public:
 	using tStageData = TSourceData;
+	static constexpr eStage shaderStage = TSourceData::shaderStage;
+
 	Shader() = default;
 	Shader( bool unused ) { }
 	~Shader()
@@ -71,7 +73,7 @@ public:
 
 		// Compile HLSL into DXBC
 		std::vector<uint8_t> dxbc;
-		CHECK( Hlsl::compile( stage, tmpl.hlsl, tmpl.name, inc, def, dxbc ) );
+		CHECK( Hlsl::compile( shaderStage, tmpl.hlsl, tmpl.name, inc, def, dxbc ) );
 
 		// Upload DXBC to GPU
 		CHECK( createShader( dxbc, result ) );
@@ -91,8 +93,8 @@ public:
 	void bind() const
 	{
 		if( nullptr == result )
-			logWarning( "%s shader %s: binding shader that wasn't compiled", Hlsl::targetName( stage ), m_sourceData.shaderTemplate()->name );
-		bindShader<stage>( result );
+			logWarning( "%s shader %s: binding shader that wasn't compiled", Hlsl::targetName( shaderStage ), m_sourceData.shaderTemplate()->name );
+		bindShader<shaderStage>( result );
 	}
 
 	// Check if this shader was compiled successfully.
@@ -107,14 +109,14 @@ public:
 		result = nullptr;
 	}
 
-	operator IShader<stage>* const( ) 
+	operator IShader<shaderStage>* const( )
 	{
 		return result;
 	}
 
 private:
 	TSourceData m_sourceData;
-	ShaderPtr<stage> result;
+	ShaderPtr<shaderStage> result;
 
 	// iResizeHandler
 	void onRenderSizeChanged() override

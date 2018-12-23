@@ -15,7 +15,7 @@ HRESULT Starfield::initializedState()
 		CHECK( starsBuffer.create( 16, nStarsCapacity ) );
 
 	// Compile & run stars initial update shader
-	Shader<eStage::Compute, StarInitCS> initShader;
+	Shader<StarInitCS> initShader;
 	Binder b;
 	CHECK( initShader.update( b, nullptr, nullptr ) );
 	CHECK( initShader.compile( effectIncludes(), stateOffset() ) );

@@ -5,7 +5,7 @@
 
 class Blender
 {
-	Shader<eStage::Pixel, Hlsl::BlendPS> blendShader;
+	Shader<Hlsl::BlendPS> blendShader;
 
 	HRESULT ensureShader( uint8_t mode, float blendVal );
 

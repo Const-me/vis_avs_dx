@@ -2,11 +2,15 @@
 
 inline float wrap_double_2pi( double x )
 {
-    const double pi2 = 3.141592653589793238 * 2;
-    int div = (int) ( x / pi2 );
-    if( x < 0 )
-        div--;
-    return (float) ( ( x - div * pi2 ) * pi2 );
+    const double pi = 3.141592653589793238;
+    const double _2pi = pi * 2;
+    const double _2piinv = 1.0 / _2pi;
+    int divInt;
+    if( x >= 0 )
+        divInt = (int) ( x * _2piinv );
+    else
+        divInt = -(int) ( -x * _2piinv );
+    return (float) ( x - (double) divInt * _2pi );
 }
 
 inline float sin_d( double x )
@@ -53,4 +57,6 @@ inline double max_d( double a, double b )
 [numthreads( 1, 1, 1 )]
 void main( uint3 DTid : SV_DispatchThreadID )
 {
+    wrap_double_2pi( 0.5 );
+
 }

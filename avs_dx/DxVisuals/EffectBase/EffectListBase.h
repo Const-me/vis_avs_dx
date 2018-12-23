@@ -52,7 +52,7 @@ public:
 
 	HRESULT updateParameters( Binder& binder ) override;
 
-	HRESULT render( RenderTargets& rt ) override;
+	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 
 	std::vector<EffectBase*> m_effects;
 

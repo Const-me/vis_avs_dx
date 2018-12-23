@@ -28,7 +28,7 @@ public:
 	// If user has changed something with the GUI controls, this method will recompile shaders / update GPU resources accordingly.
 	virtual HRESULT updateParameters( Binder& binder ) { return S_FALSE; }
 
-	virtual HRESULT render( RenderTargets& rt ) = 0;
+	virtual HRESULT render( bool isBeat, RenderTargets& rt ) = 0;
 
 	virtual void setStateOffset( UINT off ) { m_stateOffset = off; }
 

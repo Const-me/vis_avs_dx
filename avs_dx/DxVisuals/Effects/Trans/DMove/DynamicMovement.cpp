@@ -74,7 +74,7 @@ void DynamicMovement::onRenderSizeChanged()
 	m_mesh.destroy();
 }
 
-HRESULT DynamicMovement::render( RenderTargets& rt )
+HRESULT DynamicMovement::render( bool isBeat, RenderTargets& rt )
 {
 	if( !m_mesh )
 	{
@@ -87,7 +87,7 @@ HRESULT DynamicMovement::render( RenderTargets& rt )
 	const UINT psReadSlot = renderer.pixel().bindPrevFrame;
 	CHECK( rt.blendToNext( psReadSlot ) );
 
-	renderer.bindShaders();
+	renderer.bindShaders( isBeat );
 	CHECK( m_mesh.draw() );
 
 	bindResource<eStage::Pixel>( psReadSlot );

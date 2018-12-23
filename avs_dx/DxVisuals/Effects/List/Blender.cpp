@@ -38,7 +38,7 @@ HRESULT Blender::blend( RenderTargets& source, RenderTargets& dest, eBlendMode m
 	// Do the custom blending
 	CHECK( ensureShader( mode, blendVal ) );
 
-	setShaders( StaticResources::fullScreenTriangle, nullptr, blendShader );
+	setShaders( StaticResources::fullScreenTriangle, nullptr, blendShader.ptr( false ) );
 
 	const UINT bindSource = blendShader.data().source;
 	const UINT bindDest = blendShader.data().dest;
@@ -51,7 +51,7 @@ HRESULT Blender::blend( RenderTargets& source, RenderTargets& dest, eBlendMode m
 		bindResource<eStage::Pixel>( bindSource, StaticResources::blackTexture );
 
 	omDontBlend();
-	blendShader.bind();
+	blendShader.bind( false );
 	drawFullscreenTriangle();
 
 	bindResource<eStage::Pixel>( bindSource );
@@ -61,7 +61,7 @@ HRESULT Blender::blend( RenderTargets& source, RenderTargets& dest, eBlendMode m
 
 HRESULT Blender::ensureShader( eBlendMode mode, float blendVal )
 {
-	if( blendShader )
+	if( blendShader.hasShader() )
 	{
 		if( blendShader.data().blend == (uint8_t)mode && blendShader.data().blendVal == blendVal )
 			return S_FALSE;

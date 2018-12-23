@@ -21,7 +21,7 @@ HRESULT Starfield::initializedState()
 	CHECK( initShader.update( b, nullptr, nullptr ) );
 	CHECK( initShader.compile( effectIncludes(), stateOffset() ) );
 
-	initShader.bind();
+	initShader.bind( false );
 	bindUav( initShader.data().bindStarsPosition, starsBuffer.uav() );
 	constexpr UINT nThreadGroupsTotal = nStarsCapacity / csThreads;
 	context->Dispatch( nThreadGroupsTotal, 1, 1 );
@@ -52,7 +52,7 @@ HRESULT StarfieldStructs::VsData::updateAvs( const AvsState& ass )
 	return S_OK;
 }
 
-HRESULT Starfield::render( RenderTargets& rt )
+HRESULT Starfield::render( bool isBeat, RenderTargets& rt )
 {
 	if( !avs->enabled )
 		return S_FALSE;
@@ -68,7 +68,7 @@ HRESULT Starfield::render( RenderTargets& rt )
 
 	omBlend();
 	CHECK( rt.writeToLast( false ) );
-	renderer.bindShaders();
+	renderer.bindShaders( isBeat );
 
 	// Calculate dots positions with the CS
 	const UINT uavSlot = renderer.compute().bindStarsPosition;

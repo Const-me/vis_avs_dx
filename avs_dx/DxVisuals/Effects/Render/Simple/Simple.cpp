@@ -73,12 +73,12 @@ HRESULT DotsRendering::VsData::updateAvs( const AvsState& avs )
 	return res;
 }
 
-HRESULT SimpleDotsFx::render( RenderTargets& rt )
+HRESULT SimpleDotsFx::render( bool isBeat, RenderTargets& rt )
 {
 	const UINT pointsCount = renderer.vertex().pointsCount;
 
 	CHECK( rt.writeToLast( false ) );
-	renderer.bindShaders();
+	renderer.bindShaders( isBeat );
 
 	iaClearBuffer();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_POINTLIST );
@@ -99,10 +99,10 @@ HRESULT SolidRendering::PsData::updateAvs( const AvsState& avs )
 	return updateValue( sampleV, avs.sampleV() );
 }
 
-HRESULT SimpleSolidFx::render( RenderTargets& rt )
+HRESULT SimpleSolidFx::render( bool isBeat, RenderTargets& rt )
 {
 	CHECK( rt.writeToLast( false ) );
-	renderer.bindShaders();
+	renderer.bindShaders( isBeat );
 
 	iaClearBuffer();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP );
@@ -120,10 +120,10 @@ HRESULT LinesRendering::VsData::updateAvs( const AvsState& avs )
 	return res;
 }
 
-HRESULT SimpleLinesFx::render( RenderTargets& rt )
+HRESULT SimpleLinesFx::render( bool isBeat, RenderTargets& rt )
 {
 	CHECK( rt.writeToLast( false ) );
-	renderer.bindShaders();
+	renderer.bindShaders( isBeat );
 
 	iaClearBuffer();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_LINESTRIP_ADJ );
@@ -172,8 +172,8 @@ void Simple::setStateOffset( UINT off )
 	m_pImpl->setStateOffset( off );
 }
 
-HRESULT Simple::render( RenderTargets& rt ) 
+HRESULT Simple::render( bool isBeat, RenderTargets& rt )
 {
 	omBlend();
-	return m_pImpl->render( rt );
+	return m_pImpl->render( isBeat, rt );
 }

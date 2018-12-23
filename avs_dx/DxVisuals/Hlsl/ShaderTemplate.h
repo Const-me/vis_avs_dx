@@ -9,6 +9,9 @@ struct ShaderTemplate
 	// HLSL source code of the template
 	CStringA hlsl;
 
+	// True if this shader uses IS_BEAT macro. The runtime will then compile two different versions of this shader.
+	bool usesBeat = false;
+
 	constexpr ShaderTemplate( const char *n, const CStringA& src ) : name( n ), hlsl( src ) { }
 	ShaderTemplate( const ShaderTemplate& that ) : name( that.name ), hlsl( that.hlsl ) { }
 };

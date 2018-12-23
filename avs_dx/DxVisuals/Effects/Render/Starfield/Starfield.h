@@ -67,5 +67,5 @@ public:
 
 	HRESULT initializedState() override;
 
-	HRESULT render( RenderTargets& rt ) override;
+	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 };

@@ -3,18 +3,32 @@
 
 using namespace Hlsl;
 
-void Defines::set( const CStringA& key, const CStringA& value )
+void Defines::set( const CStringA& name, const CStringA& value )
 {
 	for( auto& p : m_map )
 	{
-		if( p.first == key )
+		if( p.first == name )
 		{
-			logWarning( "Redefining HLSL macro %s", key.operator const char*() );
+			logWarning( "Redefining HLSL macro %s", name.operator const char*() );
 			p.second = value;
 			return;
 		}
 	}
-	m_map.emplace_back( std::make_pair( key, value ) );
+	m_map.emplace_back( std::make_pair( name, value ) );
+}
+
+void Defines::reset( const CStringA& name, const char* value )
+{
+	for( auto& p : m_map )
+	{
+		if( p.first == name )
+		{
+			p.second = value;
+			return;
+		}
+	}
+	assert( false );
+	set( name, value );
 }
 
 void Defines::set( const CStringA& name, const char* value )

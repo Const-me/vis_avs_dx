@@ -103,7 +103,7 @@ HRESULT StateShaders::compile( const std::vector<EffectStateShader> &effects, UI
 
 	std::vector<uint8_t> dxbc;
 	Hlsl::Defines def;
-	if( anyBeat ) def.set( "IS_BEAT", "false" );
+	if( anyBeat ) def.set( "IS_BEAT", "0" );
 
 	CHECK( Hlsl::compile( eStage::Compute, hlsl, "UpdateState", Hlsl::includes(), def, dxbc ) );
 
@@ -112,7 +112,7 @@ HRESULT StateShaders::compile( const std::vector<EffectStateShader> &effects, UI
 	if( anyBeat )
 	{
 		def.clear();
-		def.set( "IS_BEAT", "true" );
+		def.set( "IS_BEAT", "1" );
 
 		CHECK( Hlsl::compile( eStage::Compute, hlsl, "UpdateStateOnBeat", Hlsl::includes(), def, dxbc ) );
 
@@ -123,7 +123,7 @@ HRESULT StateShaders::compile( const std::vector<EffectStateShader> &effects, UI
 
 	def.clear();
 	def.set( "INIT_STATE", "true" );
-	if( anyBeat ) def.set( "IS_BEAT", "false" );
+	if( anyBeat ) def.set( "IS_BEAT", "0" );
 
 	if( hlsl.Find( "AVS_RENDER_SIZE" ) >= 0 )
 	{

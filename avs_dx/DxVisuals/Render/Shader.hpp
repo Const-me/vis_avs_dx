@@ -43,15 +43,14 @@ public:
 			if( hr.combine( m_sourceData.updateDx( dx ) ) )
 				return hr;
 		}
-		if( !result )
+		if( !hasShader() )
 			hr.combine( true );
 		return hr;
 	}
 
 	HRESULT compile( const CAtlMap<CStringA, CStringA>& inc, UINT stateOffset )
 	{
-		// Drop the old shader
-		result = nullptr;
+		dropShader();
 
 		// Generate preprocessor macro values, from the current copy of the state
 		Hlsl::Defines def;
@@ -71,12 +70,24 @@ public:
 		else
 			unsubscribeHandler( this );
 
+		if( tmpl.usesBeat )
+			def.set( "IS_BEAT", "0" );
+
 		// Compile HLSL into DXBC
 		std::vector<uint8_t> dxbc;
 		CHECK( Hlsl::compile( shaderStage, tmpl.hlsl, tmpl.name, inc, def, dxbc ) );
 
 		// Upload DXBC to GPU
-		CHECK( createShader( dxbc, result ) );
+		CHECK( createShader( dxbc, shader ) );
+
+		if( tmpl.usesBeat )
+		{
+			def.reset( "IS_BEAT", "1" );
+			CHECK( Hlsl::compile( shaderStage, tmpl.hlsl, tmpl.name, inc, def, dxbc ) );
+			CHECK( createShader( dxbc, beatShader ) );
+		}
+		else
+			beatShader = shader;
 
 		// Invoke optional compiledShader method. Some shaders need that to create input layouts.
 		__if_exists( TSourceData::compiledShader )
@@ -90,37 +101,38 @@ public:
 	TSourceData& data() { return m_sourceData; }
 	const TSourceData& data() const { return m_sourceData; }
 
-	void bind() const
+	void bind( bool isBeat ) const
 	{
-		if( nullptr == result )
+		const ShaderPtr<shaderStage>& s = isBeat ? beatShader : shader;
+		if( nullptr == s )
 			logWarning( "%s shader %s: binding shader that wasn't compiled", Hlsl::targetName( shaderStage ), m_sourceData.shaderTemplate()->name );
-		bindShader<shaderStage>( result );
+		bindShader<shaderStage>( s );
 	}
 
 	// Check if this shader was compiled successfully.
 	bool hasShader() const
 	{
-		return nullptr != result;
+		return nullptr != shader && nullptr != beatShader;
 	}
 
 	// Drop the compiled shader
 	void dropShader()
 	{
-		result = nullptr;
+		shader = beatShader = nullptr;
 	}
 
-	operator IShader<shaderStage>* const( )
+	IShader<shaderStage> *ptr( bool isBeat ) const
 	{
-		return result;
+		return isBeat ? beatShader : shader;
 	}
 
 private:
 	TSourceData m_sourceData;
-	ShaderPtr<shaderStage> result;
+	ShaderPtr<shaderStage> shader, beatShader;
 
 	// iResizeHandler
 	void onRenderSizeChanged() override
 	{
-		result = nullptr;
+		dropShader();
 	}
 };

@@ -34,7 +34,7 @@ HRESULT RootEffect::renderRoot( bool isBeat, RenderTargets& rt )
 	if( clearfb() && rt.lastWritten() )
 		rt.lastWritten().clear();
 
-	CHECK( render( rt ) );
+	CHECK( render( isBeat, rt ) );
 
 	return S_OK;
 }

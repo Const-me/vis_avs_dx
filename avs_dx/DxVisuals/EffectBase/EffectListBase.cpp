@@ -68,7 +68,7 @@ HRESULT EffectListBase::updateParameters( Binder& binder )
 	return apply( [ &binder ]( EffectBase &e ) { return e.updateParameters( binder ); } );
 }
 
-HRESULT EffectListBase::render( RenderTargets& rt )
+HRESULT EffectListBase::render( bool isBeat, RenderTargets& rt )
 {
-	return apply( [ &rt ]( EffectBase &e ) { return e.render( rt ); } );
+	return apply( [ isBeat, &rt ]( EffectBase &e ) { return e.render( isBeat, rt ); } );
 }

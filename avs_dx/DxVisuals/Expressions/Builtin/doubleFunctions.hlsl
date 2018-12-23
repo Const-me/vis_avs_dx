@@ -58,5 +58,4 @@ inline double max_d( double a, double b )
 void main( uint3 DTid : SV_DispatchThreadID )
 {
     wrap_double_2pi( 0.5 );
-
 }

@@ -19,7 +19,7 @@ public:
 		return false;
 	};
 
-	void bind() const
+	void bind( bool isBeat ) const
 	{
 		bindShader<stage>( m_shader );
 	}
@@ -36,7 +36,7 @@ struct NoShader
 		return false;
 	};
 
-	void bind() const
+	void bind( bool isBeat ) const
 	{
 		bindShader<stage>( nullptr );
 	}
@@ -99,9 +99,9 @@ public:
 		return std::get<3>( m_shaders ).data();
 	}
 
-	void bindShaders()
+	void bindShaders( bool isBeat )
 	{
-		forEachStage( []( auto& p ) { p.bind(); } );
+		forEachStage( [ isBeat ]( auto& p ) { p.bind( isBeat ); } );
 	}
 
 private:

@@ -23,7 +23,7 @@ float EffectList::outblendval() const
 	return div255 * avs->outblendval;
 }
 
-HRESULT EffectList::render( RenderTargets& rt )
+HRESULT EffectList::render( bool isBeat, RenderTargets& rt )
 {
 	const eBlendMode blendIn = blendin();
 	if( clearfb() && blendIn != eBlendMode::Replace && m_rt.lastWritten() )
@@ -31,7 +31,7 @@ HRESULT EffectList::render( RenderTargets& rt )
 
 	CHECK( m_blendIn.blend( rt, m_rt, blendIn, inblendval() ) );
 
-	CHECK( EffectListBase::render( m_rt ) );
+	CHECK( EffectListBase::render( isBeat, m_rt ) );
 
 	CHECK( m_blendOut.blend( m_rt, rt, blendout(), outblendval() ) );
 

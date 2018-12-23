@@ -14,6 +14,7 @@ namespace Hlsl
 
 		void set( const CStringA& name, const CStringA& value );
 		void set( const CStringA& name, const char* value );
+		void reset( const CStringA& name, const char* value );
 
 		void clear() { m_map.clear(); }
 

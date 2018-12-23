@@ -34,13 +34,13 @@ ColorModifierStructs::StateData::StateData( AvsState& ass ) :
 	Compiler( "ColorModifier", prototype() )
 { }
 
-HRESULT ColorModifier::render( RenderTargets& rt )
+HRESULT ColorModifier::render( bool isBeat, RenderTargets& rt )
 {
 	omDontBlend();
 	const UINT psReadSlot = renderer.pixel().bindPrevFrame;
 	CHECK( rt.writeToNext( psReadSlot, false ) );
 
-	renderer.bindShaders();
+	renderer.bindShaders( isBeat );
 	drawFullscreenTriangle( false );
 
 	bindResource<eStage::Pixel>( psReadSlot );

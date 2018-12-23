@@ -61,7 +61,7 @@ class SimpleDotsFx : public EffectBase1<DotsRendering>
 public:
 	SimpleDotsFx( AvsState *pState ) : tBase( pState ) { }
 
-	HRESULT render( RenderTargets& rt ) override;
+	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 };
 
 // ==== Solid rendering ====
@@ -87,7 +87,7 @@ class SimpleSolidFx : public EffectBase1<SolidRendering>
 public:
 	SimpleSolidFx( AvsState *pState ) : tBase( pState ) { }
 
-	HRESULT render( RenderTargets& rt ) override;
+	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 };
 
 // ==== Lines rendering ====
@@ -111,7 +111,7 @@ class SimpleLinesFx : public EffectBase1<LinesRendering>
 public:
 	SimpleLinesFx( AvsState *pState ) : tBase( pState ) { }
 
-	HRESULT render( RenderTargets& rt ) override;
+	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 };
 
 // ==== The effect itself ====
@@ -135,5 +135,5 @@ public:
 	// Forward the rest of the calls to specific renderers
 	HRESULT updateParameters( Binder& binder ) override { return m_pImpl->updateParameters( binder ); }
 
-	HRESULT render( RenderTargets& rt ) override;
+	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 };

@@ -37,7 +37,7 @@ namespace Expressions
 #endif
 			// For variables and functions, the ID from SymbolTable. For codes, offset in m_codez.
 			int id = -1;
-			// For codes, length of the data in m_codez. For expressions, children count. For functions, arguments count.
+			// For codes, count of characters in m_codez. For expressions, children count. For functions, arguments count.
 			int length = 0;
 
 			// The parser emits nodes in depth-first order. This field holds index in m_nodes of the next sibling element, or -1 if this is the last node of the sub-tree.
@@ -45,6 +45,7 @@ namespace Expressions
 		};
 
 		SymbolTable& symbols;
+		// Index of the last top-level node, or -1 for an empty tree.
 		int m_lastStatement = -1;
 		std::vector<char> m_codez;
 		std::vector<Node> m_nodes;
@@ -109,7 +110,10 @@ namespace Expressions
 		// Clear nodes, keeping the symbols
 		void clear();
 
+		// Append a single NSEEL statement, the code must not have '=' inside.
 		HRESULT appendStatement( const CStringA& nseel, int begin, int end );
+
+		// Append an assignment NSEEL statement, e.g. "y=f(x)"
 		HRESULT appendAssignment( const CStringA& nseel, int begin, int equals, int end );
 
 		HRESULT deduceTypes();

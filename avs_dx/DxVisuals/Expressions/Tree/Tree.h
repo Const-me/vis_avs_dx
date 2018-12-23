@@ -6,7 +6,7 @@ namespace Expressions
 	// This class parses NSEEL into expression tree, and applies some transformations to the tree.
 	// There's one more downstream compiler, HLSL, so we don't need to parse everything. This class only parses functions and variables, leaving everything else in raw stream of characters.
 	// Reasons we need variables:
-	// * To find their types: in NSEEL everything is double, the JIT compiler emitted x87 code. HLSL is strongly-typed.
+	// * To find their types: in NSEEL everything is double, the JIT compiler emitted x87 code. HLSL is strongly-typed, and doubles are several times slower than floats or uints.
 	// * To allocate space in the state buffer that's updated by the state CS and consumed by per-effects shaders.
 	// Reasons we need functions:
 	// * To transform if(), assign(), equals() functions into statements.
@@ -40,7 +40,7 @@ namespace Expressions
 			// For codes, length of the data in m_codez. For expressions, children count. For functions, arguments count.
 			int length = 0;
 
-			// The parser emits nodes in depth-first order. This field holds index in m_nodes of the next sibling element, or -1 of this is the final node of the sub-tree.
+			// The parser emits nodes in depth-first order. This field holds index in m_nodes of the next sibling element, or -1 if this is the last node of the sub-tree.
 			int nextSibling = -1;
 		};
 

@@ -176,7 +176,7 @@ eVarType Tree::functionType( int iFunc )
 	}
 
 	// For polymorphic sin/cos, we need to run the recursion deeper to deduce the argument types. However, we aren't using the type.
-	if( ft.kind != eFunctionKind::unknown )
+	if( ft.vt != eVarType::unknown )
 		return ft.vt;
 
 	return combineTypes( mask );

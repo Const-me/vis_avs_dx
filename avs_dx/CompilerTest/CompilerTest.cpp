@@ -80,6 +80,14 @@ z = floor( p ) + 0.14;
 	CHECK( tree.deduceTypes() );
 	// tree.transformDoubleFuncs();
 	tree.dbgPrint();
+
+	tree.transformDoubleFuncs();
+
+	CStringA hlsl;
+	bool usesRng = false;
+	CHECK( tree.emitHlsl( hlsl, usesRng ) );
+	logInfo( "%s", cstr( hlsl ) );
+
 	return S_OK;
 }
 

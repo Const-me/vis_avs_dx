@@ -6,6 +6,8 @@
 #include "../Resources/createShader.hpp"
 #include "../Utils/events.h"
 
+class Binder;
+
 // A shader that's instantiated from a template. Source data is what defines the macros.
 // Source needs to be copyable, needs to have operator==, and needs to have HRESULT defines( Hlsl::Defines &def ); method.
 template<eStage stage, class TSourceData>
@@ -103,6 +105,11 @@ public:
 	void dropShader()
 	{
 		result = nullptr;
+	}
+
+	operator IShader<stage>* const( ) 
+	{
+		return result;
 	}
 
 private:

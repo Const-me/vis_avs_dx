@@ -95,6 +95,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Effects\Blender.h" />
     <ClInclude Include="Expressions\SymbolTable\SymbolTable.h" />
     <ClInclude Include="Expressions\VariableDecl.hpp" />
     <ClInclude Include="Expressions\SymbolTable\FunctionsTable.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Expressions\SymbolTable\VariablesTable.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Effects\Blender.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.debug.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.emit.cpp" />

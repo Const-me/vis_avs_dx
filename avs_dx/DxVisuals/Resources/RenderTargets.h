@@ -24,7 +24,7 @@ public:
 	// Copy last written RT to the next one, bind last written RT for input, next one for output.
 	HRESULT blendToNext( UINT readPsSlot );
 
-	const RenderTarget& lastWritten() const
+	RenderTarget& lastWritten()
 	{
 		return m_targets[ m_lastTarget ];
 	}

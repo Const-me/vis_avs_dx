@@ -49,7 +49,8 @@ HRESULT Compiler::update( const char* init, const char* frame, const char* beat,
 		return S_OK;
 	}
 
-	// TODO [optimization]: find sub-expressions of the fragment expression that don't depend on per-fragment inputs, move these calculations to the state shader.
+	// TODO [optimization]: find sub-expressions of the fragment expression that don't depend on per-fragment inputs, and move these calculations to the state shader.
+	// This is only worth doing for sub-expressions that are complex enough, e.g. use sin_d/cos_d, or getspec/getosc calls.
 
 	// Parse and recompile the state expressions
 	for( int i = 0; i < 3; i++ )

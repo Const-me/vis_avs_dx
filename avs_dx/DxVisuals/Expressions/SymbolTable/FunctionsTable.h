@@ -55,8 +55,8 @@ namespace Expressions
 		int addAvs( const CStringA& name );
 		int addAvs( const CStringA& name, eVarType &vt );
 
-		// Insert or lookup a function
-		int lookup( const CStringA& name, eVarType &vt );
+		// Lookup a function
+		bool tryLookup( const CStringA& name, int& id, eVarType &vt );
 
 		FunctionType type( int id ) const;
 

@@ -151,11 +151,15 @@ void Tree::pushFunc( const CStringA& expr, ExpressionContext& ec, int begin, int
 {
 	Node nn;
 	nn.node = eNode::Func;
+	const CStringA name = expr.Mid( begin, end - begin );
 #ifdef DEBUG
-	nn.source = expr.Mid( begin, end - begin );
+	nn.source = name;
 #endif
-	nn.id = symbols.functions.lookup( expr.Mid( begin, end - begin ), nn.vt );
-	nn.length = end - begin;
+	if( !symbols.functions.tryLookup( name, nn.id, nn.vt ) )
+	{
+		logError( "Unknown function %s", cstr( name ) );
+		throw std::invalid_argument( "Unknown function" );
+	}
 	pushNode( ec, std::move( nn ) );
 }
 

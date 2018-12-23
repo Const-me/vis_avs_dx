@@ -55,24 +55,28 @@ int FunctionsTable::addAvs( const CStringA& name, eVarType &vt )
 	return add( name, eFunctionKind::Avs, avs->returnType );
 }
 
-int FunctionsTable::lookup( const CStringA& name, eVarType &vt )
+bool FunctionsTable::tryLookup( const CStringA& name, int& id, eVarType &vt )
 {
+	// Search in this table
 	auto p = map.Lookup( name );
 	if( nullptr != p )
 	{
-		const int id = p->m_value;
-		const Function& func = table[ id ];
-		vt = func.vt;
-		return id;
+		id = p->m_value;
+		vt = table[ id ].vt;
+		return true;
 	}
 
+	// Search for built-in function in ../Builtin/*.hlsl
+	// These sources are parsed in compile time, and the hash map is initialized in static constructors i.e. when DllMain is called with DLL_PROCESS_ATTACH
 	auto avs = lookupShaderFunc( name );
 	if( nullptr != avs )
 	{
 		vt = avs->returnType;
-		return add( name, eFunctionKind::Avs, vt );
+		id = add( name, eFunctionKind::Avs, vt );
+		return true;
 	}
 
+	// Check for polymorphic function
 	if( hasDoubleVersion( name, vt ) )
 	{
 		if( vt != eVarType::f32 )
@@ -80,16 +84,20 @@ int FunctionsTable::lookup( const CStringA& name, eVarType &vt )
 			// abs/floor/min/max, the double-receiving functions return doubles, built-in float versions return floats, that's why unknowns
 			vt = eVarType::unknown;
 		}
-		return add( name, eFunctionKind::Polymorphic, vt );
+		id = add( name, eFunctionKind::Polymorphic, vt );
+		return true;
 	}
 
+	// Search for HLSL built-in func like atan2 or log10
 	if( isBuiltinFunction( name, vt ) )
 	{
-		return add( name, eFunctionKind::Hlsl, vt );
+		id = add( name, eFunctionKind::Hlsl, vt );
+		return true;
 	}
 
-	vt = eVarType::unknown;
-	return add( name, eFunctionKind::unknown, vt );
+	// Failed: user has typed garbage instead of a function.
+	id = -1;
+	return false;
 }
 
 FunctionType FunctionsTable::type( int id ) const

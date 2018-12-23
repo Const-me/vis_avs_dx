@@ -16,7 +16,7 @@ float4 main( float4 screenSpace : SV_Position ) : SV_Target
     const float4 s = texSource.Load( pos );
     const float4 d = texDest.Load( pos );
 
-	// `blend` will become macro in runtime, i.e. these branches are free. And hopefully, HLSL compiler will even optimize away unused texture loads for cases 0 and 1.
+	// `blend` will become macro in runtime, i.e. these branches are free.
     switch( blend )
     {
         case 0: // Ignore
@@ -42,10 +42,11 @@ float4 main( float4 screenSpace : SV_Position ) : SV_Target
             }
         case 9: // XOR
             {
-                const uint3 su = (uint3) ( s.xyz * 255.0 );
-                const uint3 du = (uint3) ( d.xyz * 255.0 );
+				// We use DXGI_FORMAT_R10G10B10A2_UNORM for render targets, that's why 1023 instead of the traditional 255.
+                const uint3 su = (uint3) ( s.xyz * 1023.0 );
+                const uint3 du = (uint3) ( d.xyz * 1023.0 );
                 const uint3 x = su ^ du;
-                return float4( ( (float3) x ) * ( 1.0 / 255.0 ), 1 );
+                return float4( ( (float3) x ) * ( 1.0 / 1023.0 ), 1 );
             }
         case 10: // Adjustable
             return s * blendVal + d * ( 1.0 - blendVal );

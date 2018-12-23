@@ -119,6 +119,7 @@
     <ClCompile Include="Expressions\SymbolTable\VariablesTable.cpp" />
     <ClCompile Include="Expressions\SymbolTable\FunctionsTable.cpp" />
     <ClCompile Include="Effects\List\Blender.cpp" />
+    <ClCompile Include="Effects\List\EffectList.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

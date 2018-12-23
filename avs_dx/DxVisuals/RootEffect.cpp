@@ -31,7 +31,8 @@ HRESULT RootEffect::renderRoot( bool isBeat, RenderTargets& rt )
 	bindUav( 0 );
 	bindGlobalResource( 2, m_state.srv() );
 
-	CHECK( rt.writeToLast( clearfb() ) );
+	if( clearfb() && rt.lastWritten() )
+		rt.lastWritten().clear();
 
 	CHECK( render( rt ) );
 

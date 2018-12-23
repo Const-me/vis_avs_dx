@@ -28,7 +28,10 @@ HRESULT RenderTargets::writeToLast( bool clear )
 {
 	RenderTarget& t = m_targets[ m_lastTarget ];
 	if( !t )
+	{
+		// TODO: delay the creation. If the next effect will call writeToNext or blendToNext, the 1x1 black texture will do the same, only for free.
 		CHECK( t.create() );
+	}
 	if( clear )
 		t.clear();
 	t.bindTarget();

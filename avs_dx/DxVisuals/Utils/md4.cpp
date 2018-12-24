@@ -2,6 +2,7 @@
 #include "md4.h"
 #include <bcrypt.h>
 #pragma comment( lib, "Bcrypt.lib" )
+#include "preciseTickCount.h"
 
 namespace
 {
@@ -68,7 +69,10 @@ namespace
 		~HashHandle()
 		{
 			if( nullptr != h )
+			{
 				BCryptDestroyHash( h );
+				h = nullptr;
+			}
 		}
 
 		HRESULT hashData( const void *pv, size_t cb )
@@ -100,6 +104,7 @@ namespace
 
 __m128i hashString( const CStringA& str )
 {
+	// PerfMeasure _pm{ "hashString" };	// This is fast enough, less than 10 us
 	__m128i result;
 	if( FAILED( md4( str.operator const char*( ), (size_t)str.GetLength(), &result ) ) )
 		return _mm_setzero_si128();

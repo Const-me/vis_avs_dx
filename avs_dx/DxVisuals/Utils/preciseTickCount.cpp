@@ -24,9 +24,10 @@ namespace
 	{
 		const uint32_t msStart;
 		const __int64 qpcStart;
-		const __int64 qpcFrequency;
 
 	public:
+		const __int64 qpcFrequency;
+
 		PreciseTickCount() :
 			msStart( GetTickCount() ),
 			qpcStart( (__int64)queryPerformanceCounter() ),
@@ -47,4 +48,17 @@ namespace
 uint32_t getPreciseTickCount()
 {
 	return s_ptc.get();
+}
+
+const double PerfMeasure::mulToMs = 1000.0 / s_ptc.qpcFrequency;
+
+PerfMeasure::PerfMeasure( const char* w ) :
+	started( queryPerformanceCounter() ),
+	what( w )
+{ }
+
+PerfMeasure::~PerfMeasure()
+{
+	const double ms = ( queryPerformanceCounter() - started ) * mulToMs;
+	logDebug( "PerfMeasure %s: %.4f ms", what, ms );
 }

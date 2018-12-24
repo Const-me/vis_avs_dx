@@ -66,33 +66,33 @@ CStringA Prototype::initState() const
 	return hlsl;
 }
 
-CStringA Prototype::stateLoad() const
+CStringA Prototype::stateLoad( int offset ) const
 {
 	CStringA hlsl;
 	for( const auto& s : m_fixedState )
 	{
-		const CStringA load = Expressions::stateLoad( s.vt, s.offset );
+		const CStringA load = Expressions::stateLoad( s.vt, s.offset + offset );
 		hlsl.AppendFormat( "		%s %s = %s;\r\n", hlslName( s.vt ), cstr( s.name ), cstr( load ) );
 	}
 	for( const auto& a : m_indirectArgs )
 	{
-		hlsl.AppendFormat( "		uint4 %s = effectStates.Load4( STATE_OFFSET + %i );\r\n", cstr( a.name ), a.offset );
+		hlsl.AppendFormat( "		uint4 %s = effectStates.Load4( STATE_OFFSET + %i );\r\n", cstr( a.name ), ( a.offset + offset ) * 4 );
 	}
 	return hlsl;
 }
 
-CStringA Prototype::stateStore() const
+CStringA Prototype::stateStore( int offset ) const
 {
 	CStringA hlsl;
 	for( const auto& s : m_fixedState )
 	{
-		const CStringA store = Expressions::stateStore( s.vt, s.offset, s.name );
+		const CStringA store = Expressions::stateStore( s.vt, s.offset + offset, s.name );
 		hlsl.AppendFormat( "		%s;\r\n", cstr( store ) );
 	}
 	for( const auto& a : m_indirectArgs )
 	{
 		hlsl.AppendFormat( "		%s;\r\n", cstr( a.update ) );
-		hlsl.AppendFormat( "		effectStates.Store4( STATE_OFFSET + %i, %s );\r\n", a.offset, cstr( a.name ) );
+		hlsl.AppendFormat( "		effectStates.Store4( STATE_OFFSET + %i, %s );\r\n", ( a.offset + offset ) * 4, cstr( a.name ) );
 	}
 	return hlsl;
 }
@@ -106,6 +106,6 @@ HRESULT Prototype::addIndirectDrawArgs( const CStringA& name, const uint4& init,
 			return E_INVALIDARG;
 		}
 	m_indirectArgs.emplace_back( IndirectDrawArgs{ name, init, update, m_size } );
-	m_size += 16;
+	m_size += 4;
 	return S_OK;
 }

@@ -6,11 +6,12 @@
 
 using namespace Expressions;
 
-Compiler::Compiler( const char* effectName, const Prototype& effectPrototype ) :
+Compiler::Compiler( const char* effectName, const Prototype& effectPrototype, UINT stateOffset ) :
 	m_stateTemplate( effectName ),
 	proto( effectPrototype ),
 	m_symbols( effectPrototype ),
-	m_tree( m_symbols )
+	m_tree( m_symbols ),
+	m_stateOffset( (int)stateOffset )
 {
 	m_stateTemplate.globals = &m_stateGlobals;
 }
@@ -147,10 +148,10 @@ HRESULT Compiler::allocateState()
 		// Produce the load/store HLSL pieces for such variables
 		const char* name = m_symbols.vars.name( i );
 		const eVarType vt = m_symbols.vars.type( i );
-		const CStringA load = stateLoad( vt, stateOffset );
+		const CStringA load = stateLoad( vt, stateOffset + m_stateOffset );
 		m_dynStateLoad.AppendFormat( "		%s = %s;\r\n", name, cstr( load ) );
 
-		const CStringA store = stateStore( vt, stateOffset, name );
+		const CStringA store = stateStore( vt, stateOffset + m_stateOffset, name );
 		m_dynStateStore.AppendFormat( "		%s;\r\n", cstr( store ) );
 	}
 
@@ -173,7 +174,7 @@ HRESULT Compiler::buildStateHlsl()
 		}
 		if( !isVar )
 			continue;
-		
+
 		code.AppendFormat( "		%s %s;\r\n", hlslName( m_symbols.vars.type( i ) ), cstr( m_symbols.vars.name( i ) ) );
 	}
 
@@ -186,9 +187,9 @@ HRESULT Compiler::buildStateHlsl()
 	code += m_hlsl[ 0 ];	// Init
 
 	code += "#else\r\n";
-	code += proto.stateLoad();
+	code += proto.stateLoad( m_stateOffset );
 	code += m_dynStateLoad;
-	
+
 	code += m_hlsl[ 1 ];	// Frame
 
 	const bool hasBeatExpression = m_hlsl[ 2 ].GetLength() > 0;
@@ -201,7 +202,7 @@ HRESULT Compiler::buildStateHlsl()
 	m_stateTemplate.hasBeat = stateUsesBeat || hasBeatExpression;
 
 	code += "#endif\r\n";
-	code += proto.stateStore();
+	code += proto.stateStore( m_stateOffset );
 	code += m_dynStateStore;
 	code += "	}\r\n";
 
@@ -211,7 +212,7 @@ HRESULT Compiler::buildStateHlsl()
 HRESULT Compiler::buildFragmentHlsl()
 {
 	CStringA &code = m_hlslFragment;
-	code = proto.stateLoad();
+	code = proto.stateLoad( m_stateOffset );
 
 	const int size = (int)m_varUsage.size();
 	for( int i = 0; i < size; i++ )

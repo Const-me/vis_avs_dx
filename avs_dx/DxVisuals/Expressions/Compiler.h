@@ -8,9 +8,10 @@ namespace Expressions
 	class Compiler
 	{
 		const Prototype& proto;
+		const int m_stateOffset;
 
 	public:
-		Compiler( const char* effectName, const Prototype& effectPrototype );
+		Compiler( const char* effectName, const Prototype& effectPrototype, UINT stateOffset = 0 );
 		Compiler( const Compiler & ) = delete;
 
 		static HRESULT defines( Hlsl::Defines& def ) { return S_FALSE; };

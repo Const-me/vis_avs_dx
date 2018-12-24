@@ -12,7 +12,7 @@ namespace Expressions
 
 		HRESULT addState( const CStringA& name, eVarType vt, const CStringA& initVal );
 
-		struct FixedStateVar: public VariableDecl
+		struct FixedStateVar : public VariableDecl
 		{
 			CStringA initVal;
 			int offset = -1;
@@ -60,13 +60,13 @@ namespace Expressions
 		// Declare input variable used by fragment expression, read-only.
 		HRESULT addFragmentInput( const CStringA& name, eVarType vt = eVarType::f32 )
 		{
-			return addVariable( eVarLocation::fragmentInput, vt, name);
+			return addVariable( eVarLocation::fragmentInput, vt, name );
 		}
 
 		// Declare output variable produced by fragment expression, read/write 
 		HRESULT addFragmentOutput( const CStringA& name, eVarType vt = eVarType::f32 )
 		{
-			return addVariable( eVarLocation::fragmentOutput, vt, name);
+			return addVariable( eVarLocation::fragmentOutput, vt, name );
 		}
 
 		int fixedStateSize() const { return m_size; }
@@ -75,10 +75,10 @@ namespace Expressions
 		CStringA initState() const;
 
 		// HLSL piece for loading state variables from the untyped buffer
-		CStringA stateLoad() const;
+		CStringA stateLoad( int offset = 0 ) const;
 
 		// HLSL piece for storing state variables
-		CStringA stateStore() const;
+		CStringA stateStore( int offset = 0 ) const;
 
 		template<class TFunc>
 		void enumVariables( TFunc fn ) const

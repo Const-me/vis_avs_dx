@@ -45,8 +45,23 @@ public:
 		DynamicStateData();
 	};
 
-	struct StateData
+	class StateData
 	{
+		FixedStateData m_fixed;
+		DynamicStateData m_dynamic;
+
+		std::vector<CStringA> m_templateGlobals;
+		StateShaderTemplate m_template;
+
+	public:
+
+		StateData( const AvsState& s );
+
+		HRESULT update( AvsState& ass );
+
+		UINT stateSize() const;
+
+		const StateShaderTemplate* shaderTemplate();
 	};
 };
 

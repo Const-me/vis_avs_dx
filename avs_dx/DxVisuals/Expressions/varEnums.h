@@ -24,10 +24,10 @@ namespace Expressions
 	// Count of 4-byte items used by this type
 	int variableSize( eVarType vt );
 
-	// Load HLSL expression, e.g. "asfloat( effectStates.Load( STATE_OFFSET + 8 ) )"
+	// Load HLSL expression, e.g. "asfloat( effectStates.Load( STATE_OFFSET + 8 ) )". The offset is in 4-byte items.
 	CStringA stateLoad( eVarType vt, int offset );
 
-	// Store HLSL expression, e.g. "effectStates.Store( STATE_OFFSET + 12, asuint( varName ) )"
+	// Store HLSL expression, e.g. "effectStates.Store( STATE_OFFSET + 12, asuint( varName ) )". The offset is in 4-byte items.
 	CStringA stateStore( eVarType vt, int offset, const char* varName );
 
 	// How the variable is used by the code, a 2 bits mask

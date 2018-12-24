@@ -165,6 +165,7 @@
     <ClInclude Include="Hlsl\Variable.h" />
     <ClInclude Include="Utils\MiscUtils.h" />
     <ClInclude Include="Expressions\SymbolTable\VariablesTable.h" />
+    <ClInclude Include="Effects\Video\VideoEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EffectBase\EffectBase.cpp" />
@@ -222,6 +223,7 @@
     <ClCompile Include="Utils\DirectXErrors\formatCString.cpp" />
     <ClCompile Include="Utils\SimpleMath.cpp" />
     <ClCompile Include="Expressions\SymbolTable\VariablesTable.cpp" />
+    <ClCompile Include="Effects\Video\VideoEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt">
@@ -273,6 +275,14 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Effects\Video\VideoPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Video\VideoVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Expressions\Builtin\random.hlsl">
       <FileType>Document</FileType>

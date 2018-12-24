@@ -71,6 +71,7 @@
     <ClInclude Include="Utils\resizeHandler.h" />
     <ClInclude Include="Render\ShaderBase.h" />
     <ClInclude Include="Utils\md4.h" />
+    <ClInclude Include="Effects\Video\VideoEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -125,6 +126,7 @@
     <ClCompile Include="EffectBase\EffectBase.cpp" />
     <ClCompile Include="Render\ShaderBase.cpp" />
     <ClCompile Include="Utils\md4.cpp" />
+    <ClCompile Include="Effects\Video\VideoEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -172,6 +174,8 @@
     <FxCompile Include="Effects\Render\SuperScope\SuperScopeState.hlsl" />
     <FxCompile Include="Expressions\Builtin\shaderFunctions.hlsl" />
     <FxCompile Include="Effects\List\BlenderPS.hlsl" />
+    <FxCompile Include="Effects\Video\VideoPS.hlsl" />
+    <FxCompile Include="Effects\Video\VideoVS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

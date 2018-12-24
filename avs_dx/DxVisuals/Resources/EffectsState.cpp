@@ -8,7 +8,7 @@ HRESULT EffectsState::create( UINT totalSize )
 
 	const UINT byteWidth = ( totalSize ) * 4;
 	constexpr UINT bindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS;
-	CD3D11_BUFFER_DESC bufferDesc{ byteWidth, bindFlags, D3D11_USAGE_DEFAULT, 0, D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS };
+	CD3D11_BUFFER_DESC bufferDesc{ byteWidth, bindFlags, D3D11_USAGE_DEFAULT, 0, D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS | D3D11_RESOURCE_MISC_DRAWINDIRECT_ARGS };
 
 	CComPtr<ID3D11Buffer> buffer;
 	CHECK( device->CreateBuffer( &bufferDesc, nullptr, &buffer ) );

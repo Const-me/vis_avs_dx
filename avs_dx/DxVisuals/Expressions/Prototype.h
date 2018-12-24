@@ -1,5 +1,6 @@
 #pragma once
 #include "VariableDecl.hpp"
+#include "variableTypes.h"
 
 namespace Expressions
 {
@@ -27,6 +28,15 @@ namespace Expressions
 
 		HRESULT addVariable( eVarLocation loc, eVarType vt, const CStringA& name );
 
+		struct IndirectDrawArgs
+		{
+			CStringA name;
+			uint4 init;
+			CStringA update;
+			int offset;
+		};
+		std::vector<IndirectDrawArgs> m_indirectArgs;
+
 	public:
 
 		// Statically allocate `uint` state variable. State variables are read/write in state shader, read-only in fragment expression.
@@ -40,6 +50,9 @@ namespace Expressions
 		{
 			return addVariable( eVarLocation::macro, vt, name );
 		}
+
+		// Statically allocate uint4 state variable to be used with DrawInstancedIndirect API.
+		HRESULT addIndirectDrawArgs( const CStringA& name, const uint4& init, const char* update );
 
 		// Declare variable that IS_BEAT macro will go to. If the effect will actually use this, it will cause 2 versions of the shader to be compiled, saving per-pixel branching in runtime.
 		HRESULT addBeatConstant( const CStringA& name );

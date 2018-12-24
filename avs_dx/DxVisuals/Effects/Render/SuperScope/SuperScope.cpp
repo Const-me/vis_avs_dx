@@ -13,6 +13,7 @@ namespace
 			addBeatConstant( "b" );
 			addConstantInput( "w", eVarType::u32 );	// screen width in pixels
 			addConstantInput( "h", eVarType::u32 );	// screen height in pixels
+			addConstantInput( "drawingLines", eVarType::u32 );
 
 			addState( "n", 768u );
 
@@ -28,6 +29,8 @@ namespace
 
 			addFragmentInput( "i" );
 			addFragmentInput( "v" );
+
+			addIndirectDrawArgs( "drawArgs", uint4{ 0, 1, 0, 0 }, "drawArgs.x = drawingLines ? n + 2 : n;" );
 		}
 	};
 	static const Prototype& prototype()

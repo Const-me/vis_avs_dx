@@ -17,3 +17,5 @@ inline float3 float3FromColor( int rgb )
 	res.z = (float)( rgb & 0xFF );
 	return res * ( 1.0f / 255.0f );
 }
+
+using uint4 = std::array<uint32_t, 4>;

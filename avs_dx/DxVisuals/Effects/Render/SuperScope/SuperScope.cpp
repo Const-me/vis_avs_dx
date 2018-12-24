@@ -148,6 +148,7 @@ HRESULT SuperScope::render( bool isBeat, RenderTargets& rt )
 	omBlend();
 	CHECK( rt.writeToLast( false ) );
 	renderer.bindShaders( isBeat );
+	iaClearBuffer();
 
 	const UINT argsOffset = ( stateOffset() + stateData.compiler().getIndirectArgOffset() ) * 4;
 

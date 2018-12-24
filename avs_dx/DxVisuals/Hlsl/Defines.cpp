@@ -59,7 +59,7 @@ void Defines::set( const CStringA &key, float value )
 
 void Defines::set( const CStringA &key, bool value )
 {
-	const CStringA s = ( value ) ? "true" : "false";
+	const CStringA s = ( value ) ? "1" : "0";
 	set( key, s );
 }
 

@@ -51,7 +51,7 @@ namespace Expressions
 			return addVariable( eVarLocation::macro, vt, name );
 		}
 
-		// Statically allocate uint4 state variable to be used with DrawInstancedIndirect API.
+		// Statically allocate uint4 state variable to be used with DrawInstancedIndirect API. Will not be used by NSEEL code.
 		HRESULT addIndirectDrawArgs( const CStringA& name, const uint4& init, const char* update );
 
 		// Declare variable that IS_BEAT macro will go to. If the effect will actually use this, it will cause 2 versions of the shader to be compiled, saving per-pixel branching in runtime.

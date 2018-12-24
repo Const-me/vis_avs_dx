@@ -5,13 +5,6 @@
 #include <variant>
 using namespace Hlsl::Render::SuperScope;
 
-// ==== Common stuff for all styles ====
-enum struct eScopeStyle : uint8_t
-{
-	Dots,
-	Lines
-};
-
 struct ScopeBase
 {
 public:
@@ -23,7 +16,7 @@ public:
 		int colors[ 16 ];
 		int mode;
 
-		eScopeStyle style() const;
+		bool drawingLines() const;
 
 		float sampleV() const;
 	};
@@ -53,6 +46,9 @@ public:
 		std::vector<CStringA> m_templateGlobals;
 		StateShaderTemplate m_template;
 
+		CSize screenSize;
+		bool drawingLines;
+
 	public:
 
 		StateData( const AvsState& s );
@@ -62,11 +58,32 @@ public:
 		UINT stateSize() const;
 
 		const StateShaderTemplate* shaderTemplate();
+
+		HRESULT defines( Hlsl::Defines& def ) const;
+
+		const Expressions::Compiler& compiler() const
+		{
+			return m_dynamic;
+		}
+	};
+
+	struct VsData : public Expressions::CompiledShader<SuperScopeVS>
+	{
+		HRESULT updateAvs( const AvsState& avs );
+
+		HRESULT updateDx( const StateData& sd )
+		{
+			return CompiledShader::updateDx( sd.compiler() );
+		}
 	};
 };
 
-
-class SuperScope
+class SuperScope : public EffectBase1<ScopeBase>
 {
 public:
+	SuperScope( AvsState *pState ) : EffectBase1( pState ) { }
+
+	const Metadata& metadata() override;
+
+	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 };

@@ -24,6 +24,7 @@ sVertex1 main( uint id : SV_VertexID )
             id = pointsCount - 1;
     }
     float i = (float) id / (float) ( pointsCount - 1 );
+    float v = sampleVisData( float2( i, sampleV ), ( sampleV > 0.5 ) );
 
     float red = color.x;
     float green = color.y;

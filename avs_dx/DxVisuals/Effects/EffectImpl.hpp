@@ -12,6 +12,8 @@ using Hlsl::Defines;
 #include "includeDefs.h"
 #include "../InteropLib/effectsFactory.h"
 
+CSize getRenderSize();
+
 template<class TEffect>
 class EffectImpl : public TEffect
 {

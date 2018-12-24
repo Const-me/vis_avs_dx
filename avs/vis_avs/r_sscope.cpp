@@ -163,6 +163,8 @@ C_THISCLASS::C_THISCLASS()
 #endif
 
 	var_n = 0;
+
+	CREATE_DX_EFFECT( effect_exp );
 }
 
 C_THISCLASS::~C_THISCLASS()

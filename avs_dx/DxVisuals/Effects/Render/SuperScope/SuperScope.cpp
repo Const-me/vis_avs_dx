@@ -1,6 +1,32 @@
 #include "stdafx.h"
 #include "SuperScope.h"
 
+bool ScopeBase::AvsState::drawingLines() const
+{
+	return mode > 0;
+}
+
+namespace
+{
+	eSource source( int which_ch )
+	{
+		return ( which_ch & 4 ) ? eSource::Spectrum : eSource::Wave;
+	}
+
+	eChannel channel( int which_ch )
+	{
+		which_ch &= 3;
+		if( 0 == which_ch ) return eChannel::Left;
+		if( 1 == which_ch ) return eChannel::Right;
+		return eChannel::Center;
+	}
+}
+
+float ScopeBase::AvsState::sampleV() const
+{
+	return sourceSampleV( source( which_ch ), channel( which_ch ) );
+}
+
 using namespace Expressions;
 
 namespace
@@ -55,6 +81,8 @@ HRESULT ScopeBase::StateData::update( AvsState& avs )
 {
 	BoolHr res = m_fixed.update( avs );
 	res.combine( m_dynamic.update( avs.effect_exp[ 3 ].get(), avs.effect_exp[ 1 ].get(), avs.effect_exp[ 2 ].get(), avs.effect_exp[ 0 ].get() ) );
+	res.updateValue( screenSize, getRenderSize() );
+	res.updateValue( drawingLines, avs.drawingLines() );
 	return res;
 }
 
@@ -93,4 +121,27 @@ const StateShaderTemplate* ScopeBase::StateData::shaderTemplate()
 	m_template.hasRandomNumbers = tDynamic.hasRandomNumbers;
 
 	return &m_template;
+}
+
+HRESULT ScopeBase::StateData::defines( Hlsl::Defines& def ) const
+{
+	def.set( "drawingLines", drawingLines ? "1" : "0" );
+	def.set( "w", screenSize.cx );
+	def.set( "h", screenSize.cy );
+	return S_OK;
+}
+
+HRESULT ScopeBase::VsData::updateAvs( const AvsState& avs )
+{
+	BoolHr res;
+	res.updateValue( sampleV, avs.sampleV() );
+	res.updateValue( drawLines, avs.drawingLines() );
+	return res;
+}
+
+IMPLEMENT_EFFECT( SuperScope, C_SScopeClass );
+
+HRESULT SuperScope::render( bool isBeat, RenderTargets& rt )
+{
+	return E_NOTIMPL;
 }

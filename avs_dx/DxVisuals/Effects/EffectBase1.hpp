@@ -12,26 +12,24 @@ public:
 protected:
 
 	typename TStruct::AvsState* const avs;
-	EffectBase1( typename TStruct::AvsState* ass ) : avs( ass ), m_stateData( *ass ) { }
+	EffectBase1( typename TStruct::AvsState* ass ) : avs( ass ), stateData( *ass ) { }
 
 	EffectRenderer<TStruct> renderer;
 
-private:
-	typename TStruct::StateData m_stateData;
+	typename TStruct::StateData stateData;
 
-protected:
 	HRESULT shouldRebuildState() override
 	{
 		__if_exists( TStruct::StateData::update )
 		{
-			return m_stateData.update( *avs );
+			return stateData.update( *avs );
 		}
 		__if_not_exists( TStruct::StateData::update )
 		{
 			const TStruct::StateData newState{ *avs };
-			if( m_stateData == newState )
+			if( stateData == newState )
 				return S_FALSE;
-			m_stateData = newState;
+			stateData = newState;
 			return S_OK;
 		}
 		return E_FAIL;
@@ -40,14 +38,14 @@ protected:
 private:
 	HRESULT buildState( EffectStateShader& ess ) override
 	{
-		ess.shaderTemplate = m_stateData.shaderTemplate();
-		ess.stateSize = m_stateData.stateSize();
-		return m_stateData.defines( ess.values );
+		ess.shaderTemplate = stateData.shaderTemplate();
+		ess.stateSize = stateData.stateSize();
+		return stateData.defines( ess.values );
 	}
 
 	HRESULT updateParameters( Binder& binder ) override
 	{
-		BoolHr hr = renderer.update( binder, *avs, m_stateData );
+		BoolHr hr = renderer.update( binder, *avs, stateData );
 		if( hr.failed() )
 			return hr;
 		if( !hr.value() )

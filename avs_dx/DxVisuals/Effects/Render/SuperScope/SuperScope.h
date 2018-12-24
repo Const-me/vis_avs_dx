@@ -76,10 +76,23 @@ public:
 			return CompiledShader::updateDx( sd.compiler() );
 		}
 	};
+
+	struct DotRendering
+	{
+		Shader<Hlsl::Render::PointSpriteGS> gs;
+	};
+
+	struct LinesRendering
+	{
+		Shader<Hlsl::Render::PolylineGS> gs;
+		Shader<Hlsl::Render::PolylinePS> ps;
+	};
 };
 
 class SuperScope : public EffectBase1<ScopeBase>
 {
+	std::variant<DotRendering, LinesRendering> m_render;
+
 public:
 	SuperScope( AvsState *pState ) : EffectBase1( pState ) { }
 

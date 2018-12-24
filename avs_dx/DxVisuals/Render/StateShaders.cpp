@@ -122,7 +122,7 @@ HRESULT StateShaders::compile( const std::vector<EffectStateShader> &effects, UI
 		updateOnBeat = update;
 
 	def.clear();
-	def.set( "INIT_STATE", "true" );
+	def.set( "INIT_STATE", "1" );
 	if( anyBeat ) def.set( "IS_BEAT", "0" );
 
 	if( hlsl.Find( "AVS_RENDER_SIZE" ) >= 0 )

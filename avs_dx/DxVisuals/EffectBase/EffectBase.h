@@ -3,6 +3,7 @@
 #include "../Render/EffectStateShader.hpp"
 class Binder;
 class RenderTargets;
+class RootEffect;
 
 class EffectBase: public iRootEffect
 {
@@ -15,7 +16,7 @@ public:
 	};
 
 	// Get the compile-time metadata for this effect instance.
-	virtual const Metadata& metadata() { __debugbreak(); return *(Metadata*)( nullptr ); }	// Must override
+	virtual const Metadata& metadata();
 
 	// Effects will return S_OK if user has changed their settings in a way that deprecates GPU state buffer data and/or state shaders.
 	// S_FALSE means the previous state is fine.
@@ -32,9 +33,18 @@ public:
 
 	virtual void setStateOffset( UINT off ) { m_stateOffset = off; }
 
+	void setOwner( RootEffect *p ) { m_pRoot = p; }
+
 protected:
 
 	UINT m_stateOffset;
 
+	// State offset, in 4-byte items
 	UINT stateOffset() const { return m_stateOffset; }
+
+	ID3D11Buffer* stateBuffer() const;
+
+private:
+
+	RootEffect *m_pRoot = nullptr;
 };

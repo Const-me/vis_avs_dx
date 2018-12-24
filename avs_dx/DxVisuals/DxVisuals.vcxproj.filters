@@ -120,6 +120,7 @@
     <ClCompile Include="Effects\List\Blender.cpp" />
     <ClCompile Include="Effects\List\EffectList.cpp" />
     <ClCompile Include="Utils\resizeHandler.cpp" />
+    <ClCompile Include="EffectBase\EffectBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

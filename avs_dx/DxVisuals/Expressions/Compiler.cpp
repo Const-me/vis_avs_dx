@@ -175,7 +175,7 @@ HRESULT Compiler::buildStateHlsl()
 		if( !isVar )
 			continue;
 
-		code.AppendFormat( "		%s %s;\r\n", hlslName( m_symbols.vars.type( i ) ), cstr( m_symbols.vars.name( i ) ) );
+		code.AppendFormat( "		%s %s = 0;\r\n", hlslName( m_symbols.vars.type( i ) ), cstr( m_symbols.vars.name( i ) ) );
 	}
 
 	const bool stateUsesBeat = ( m_symbols.vars.getBeatMacro() >= 0 ) && ( 0 != ( m_varUsage[ m_symbols.vars.getBeatMacro() ] & 0b0011 ) );
@@ -239,4 +239,9 @@ HRESULT Compiler::buildFragmentHlsl()
 	code += m_hlsl[ 3 ];
 
 	return S_OK;
+}
+
+int Compiler::getIndirectArgOffset( int index ) const
+{
+	return m_stateOffset + proto.getIndirectArgOffset( index );
 }

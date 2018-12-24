@@ -93,5 +93,10 @@ namespace Expressions
 		{
 			return m_beatMacro;
 		}
+
+		int getIndirectArgOffset( int index ) const
+		{
+			return m_indirectArgs[ index ].offset;
+		}
 	};
 }

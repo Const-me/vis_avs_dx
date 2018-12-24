@@ -125,6 +125,8 @@ const StateShaderTemplate* ScopeBase::StateData::shaderTemplate()
 
 HRESULT ScopeBase::StateData::defines( Hlsl::Defines& def ) const
 {
+	CHECK( m_fixed.defines( def ) );
+	CHECK( m_dynamic.defines( def ) );
 	def.set( "drawingLines", drawingLines ? "1" : "0" );
 	def.set( "w", screenSize.cx );
 	def.set( "h", screenSize.cy );
@@ -143,5 +145,43 @@ IMPLEMENT_EFFECT( SuperScope, C_SScopeClass );
 
 HRESULT SuperScope::render( bool isBeat, RenderTargets& rt )
 {
-	return E_NOTIMPL;
+	omBlend();
+	CHECK( rt.writeToLast( false ) );
+	renderer.bindShaders( isBeat );
+
+	const UINT argsOffset = ( stateOffset() + stateData.compiler().getIndirectArgOffset() ) * 4;
+
+	if( avs->drawingLines() )
+	{
+		if( !std::holds_alternative<LinesRendering>( m_render ) )
+			m_render.emplace<LinesRendering>();
+
+		LinesRendering& lines = std::get<LinesRendering>( m_render );
+
+		if( !lines.gs.hasShader() )
+			CHECK( lines.gs.compile( Hlsl::includes(), 0 ) );
+		if( !lines.ps.hasShader() )
+			CHECK( lines.ps.compile( Hlsl::includes(), 0 ) );
+
+		bindShader<eStage::Geometry>( lines.gs.ptr( false ) );
+		bindShader<eStage::Pixel>( lines.ps.ptr( false ) );
+		context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_LINESTRIP_ADJ );
+		context->DrawInstancedIndirect( stateBuffer(), argsOffset );
+	}
+	else
+	{
+		if( !std::holds_alternative<DotRendering>( m_render ) )
+			m_render.emplace<DotRendering>();
+
+		DotRendering& dots = std::get<DotRendering>( m_render );
+
+		if( !dots.gs.hasShader() )
+			CHECK( dots.gs.compile( Hlsl::includes(), 0 ) );
+
+		bindShader<eStage::Geometry>( dots.gs.ptr( false ) );
+		bindShader<eStage::Pixel>( StaticResources::pointSprite );
+		context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_POINTLIST );
+		context->DrawInstancedIndirect( stateBuffer(), argsOffset );
+	}
+	return S_OK;
 }

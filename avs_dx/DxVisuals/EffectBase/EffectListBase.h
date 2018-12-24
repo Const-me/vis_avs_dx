@@ -1,6 +1,8 @@
 #pragma once
 #include "../Effects/EffectImpl.hpp"
 
+class RootEffect;
+
 class EffectListBase : public EffectBase
 {
 public:
@@ -74,7 +76,7 @@ protected:
 	}
 
 	// Collect renderers into the local vector. Return false if the list is unchanged, true if they were added, removed or reordered.
-	bool updateList();
+	bool updateList( RootEffect* pRoot );
 
 	HRESULT shouldRebuildState() override;
 

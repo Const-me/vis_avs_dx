@@ -8,7 +8,7 @@
 HRESULT RootEffect::renderRoot( bool isBeat, RenderTargets& rt )
 {
 	// Collect the effects in the local list
-	const bool listChanged = updateList();
+	const bool listChanged = updateList( this );
 	const BoolHr stateChanged = shouldRebuildState();
 	if( stateChanged.failed() )
 		return stateChanged;

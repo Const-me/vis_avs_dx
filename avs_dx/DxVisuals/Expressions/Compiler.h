@@ -29,6 +29,8 @@ namespace Expressions
 		bool fragmentUsesBeat() const { return m_fragmentBeat; }
 		const CStringA& fragmentCode() const { return m_hlslFragment; }
 
+		int getIndirectArgOffset( int index = 0 ) const;
+
 	protected:
 		template<class T>
 		inline HRESULT updateInput( T& oldVal, const T& newVal )

@@ -9,7 +9,7 @@ EffectBase* EffectListBase::T_RenderListType::dxEffect() const
 	return static_cast<EffectBase*>( p );
 }
 
-bool EffectListBase::updateList()
+bool EffectListBase::updateList( RootEffect* pRoot )
 {
 	bool result = false;
 	size_t nextId = 0;
@@ -20,6 +20,7 @@ bool EffectListBase::updateList()
 		if( !item.hasDxEffect() )
 			continue;
 		EffectBase* const pEffect = item.dxEffect();
+		pEffect->setOwner( pRoot );
 
 		if( nextId >= size )
 		{
@@ -38,7 +39,7 @@ bool EffectListBase::updateList()
 		if( !pEffect->metadata().isList )
 			continue;
 		EffectListBase* pList = static_cast<EffectListBase*>( pEffect );
-		if( pList->updateList() )
+		if( pList->updateList( pRoot ) )
 			result = true;
 	}
 

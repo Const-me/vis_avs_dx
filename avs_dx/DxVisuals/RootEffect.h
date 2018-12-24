@@ -14,6 +14,8 @@ public:
 
 	HRESULT clearRenders() override;
 
+	ID3D11Buffer* stateBuffer() const { return m_state.buffer(); }
+
 private:
 	EffectsState m_state;
 	StateShaders m_stateShaders;

@@ -165,6 +165,7 @@
     <ClInclude Include="Expressions\SymbolTable\VariablesTable.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EffectBase\EffectBase.cpp" />
     <ClCompile Include="Effects\List\Blender.cpp" />
     <ClCompile Include="Effects\List\EffectList.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.cpp" />

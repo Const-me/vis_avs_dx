@@ -2,7 +2,6 @@
 #ifndef AVS_SHADER
 #define SHADER_GLOBALS
 #define SHADER_CODE
-// Such scale so 
 static const float2 scaleToUniform = float2( 0.8f, 0.6f );
 static const bool rectangularCoords = false;
 #endif

@@ -33,6 +33,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <commctrl.h>
 #include "resource.h"
 #include "r_defs.h"
+#include "../../avs_dx/DxVisuals/Effects/Video/interop.h"
 
 #ifndef LASER
 
@@ -327,7 +328,8 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 		if( !g_ConfigThis->adapt && !g_ConfigThis->blend && !g_ConfigThis->blendavg )
 			CheckDlgButton( hwndDlg, IDC_REPLACE, BST_CHECKED );
 		EnableWindows( hwndDlg );
-		loadComboBox( GetDlgItem( hwndDlg, OBJ_COMBO ), "*.AVI", g_ConfigThis->ascName );
+		// loadComboBox( GetDlgItem( hwndDlg, OBJ_COMBO ), "*.AVI", g_ConfigThis->ascName );
+		initVideoCombobox( hwndDlg, GetDlgItem( hwndDlg, OBJ_COMBO ), g_ConfigThis->ascName );
 		return 1;
 	case WM_NOTIFY:
 	{

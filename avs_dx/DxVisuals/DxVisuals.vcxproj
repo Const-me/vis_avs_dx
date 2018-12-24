@@ -103,6 +103,8 @@
     <ClInclude Include="Expressions\Tree\Tree.h" />
     <ClInclude Include="Effects\Render\SuperScope\SuperScope.h" />
     <ClInclude Include="Expressions\preprocess.h" />
+    <ClInclude Include="Effects\Video\mfStartup.h" />
+    <ClInclude Include="Effects\Video\interop.h" />
     <ClInclude Include="Utils\md4.h" />
     <ClInclude Include="Render\ShaderBase.h" />
     <ClInclude Include="Utils\ByteRange.hpp" />
@@ -180,6 +182,8 @@
     <ClCompile Include="Expressions\Tree\Tree.parse.cpp" />
     <ClCompile Include="Effects\Render\SuperScope\SuperScope.cpp" />
     <ClCompile Include="Expressions\preprocess.cpp" />
+    <ClCompile Include="Effects\Video\mfStartup.cpp" />
+    <ClCompile Include="Effects\Video\interop.cpp" />
     <ClCompile Include="Utils\md4.cpp" />
     <ClCompile Include="Render\ShaderBase.cpp" />
     <ClCompile Include="Utils\resizeHandler.cpp" />

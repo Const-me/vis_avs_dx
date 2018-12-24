@@ -1,5 +1,5 @@
 #ifndef AVS_SHADER
-static const float4 videoRectangle = float4( -1, -1, 1, 1 );
+static const float4 videoRectangle = float4( -1, +1, +1, -1 );
 #endif
 
 struct sOutput

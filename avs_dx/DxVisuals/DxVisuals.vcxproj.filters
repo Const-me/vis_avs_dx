@@ -72,6 +72,8 @@
     <ClInclude Include="Render\ShaderBase.h" />
     <ClInclude Include="Utils\md4.h" />
     <ClInclude Include="Effects\Video\VideoEffect.h" />
+    <ClInclude Include="Effects\Video\mfStartup.h" />
+    <ClInclude Include="Effects\Video\interop.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -127,6 +129,8 @@
     <ClCompile Include="Render\ShaderBase.cpp" />
     <ClCompile Include="Utils\md4.cpp" />
     <ClCompile Include="Effects\Video\VideoEffect.cpp" />
+    <ClCompile Include="Effects\Video\mfStartup.cpp" />
+    <ClCompile Include="Effects\Video\interop.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

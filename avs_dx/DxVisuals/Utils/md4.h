@@ -4,7 +4,7 @@
 // However, MD4 is quite fast: it takes less than 10us (microseconds) to hash a string, even without Win8+ BCRYPT_HASH_REUSABLE_FLAG.
 // It's included in Windows so we don't have to develop nor support a custom implementation.
 
-// Calculate MD4 hash of a string.
+// Calculate MD4 hash of a string. This function is not thread safe.
 __m128i hashString( const CStringA& str );
 
 // Utility function to compare two 16-byte registers.

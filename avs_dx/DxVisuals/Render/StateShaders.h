@@ -1,21 +1,26 @@
 #pragma once
 #include "EffectStateShader.hpp"
-#include <Utils/resizeHandler.h>
+#include "ShaderBase.h"
 
-struct StateShaders: public iResizeHandler
+class StateShaders:
+	public ShaderBase<eStage::Compute>
 {
+	__m128i m_hash;
+
+public:
 	StateShaders() = default;
 	~StateShaders();
 
-	CComPtr<ID3D11ComputeShader> init, update, updateOnBeat;
+	CComPtr<ID3D11ComputeShader> init;
 
 	operator bool() const
 	{
-		return nullptr != init && nullptr != update && nullptr != updateOnBeat;
+		return nullptr != init && hasShader();
 	}
 
 	HRESULT compile( const std::vector<EffectStateShader> &effects, UINT& totalStateSize );
 
-private:
+protected:
+
 	void onRenderSizeChanged() override;
 };

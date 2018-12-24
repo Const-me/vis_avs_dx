@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "StateShaders.h"
-#include "../Hlsl/compile.h"
-#include "../Effects/shadersCode.h"
-#include "../Resources/createShader.hpp"
+#include <Hlsl/compile.h>
+#include <Effects/shadersCode.h>
+#include <Resources/createShader.hpp>
+#include <Utils/md4.h>
 
 namespace
 {
@@ -97,33 +98,20 @@ void main()
 
 HRESULT StateShaders::compile( const std::vector<EffectStateShader> &effects, UINT& totalStateSize )
 {
-	init = update = updateOnBeat = nullptr;
 	bool anyBeat;
 	const CStringA hlsl = assembleEffects( effects, anyBeat, totalStateSize );
 
+	const __m128i hash = hashString( hlsl );
+	if( isFailed() && hash == m_hash )
+		return S_FALSE;
+	m_hash = hash;
+
+	dropShader();
+	init = nullptr;
+
 	std::vector<uint8_t> dxbc;
 	Hlsl::Defines def;
-	if( anyBeat ) def.set( "IS_BEAT", "0" );
-
-	CHECK( Hlsl::compile( eStage::Compute, hlsl, "UpdateState", Hlsl::includes(), def, dxbc ) );
-
-	CHECK( createShader( dxbc, update ) );
-
-	if( anyBeat )
-	{
-		def.clear();
-		def.set( "IS_BEAT", "1" );
-
-		CHECK( Hlsl::compile( eStage::Compute, hlsl, "UpdateStateOnBeat", Hlsl::includes(), def, dxbc ) );
-
-		CHECK( createShader( dxbc, updateOnBeat ) );
-	}
-	else
-		updateOnBeat = update;
-
-	def.clear();
-	def.set( "INIT_STATE", "1" );
-	if( anyBeat ) def.set( "IS_BEAT", "0" );
+	def.set( "INIT_STATE", "0" );
 
 	if( hlsl.Find( "AVS_RENDER_SIZE" ) >= 0 )
 	{
@@ -133,9 +121,18 @@ HRESULT StateShaders::compile( const std::vector<EffectStateShader> &effects, UI
 	else
 		unsubscribeHandler( this );
 
-	CHECK( Hlsl::compile( eStage::Compute, hlsl, "InitState", Hlsl::includes(), def, dxbc ) );
+	// Compile two main shaders
+	CHECK( __super::compile( "UpdateState", hlsl, Hlsl::includes(), def, anyBeat, dxbc ) );
 
+	// Compile state initialization shader
+	def.reset( "INIT_STATE", "1" );
+	if( anyBeat )
+		def.reset( "IS_BEAT", "0" );
+
+	setFailed();
+	CHECK( Hlsl::compile( eStage::Compute, hlsl, "InitState", Hlsl::includes(), def, dxbc ) );
 	CHECK( createShader( dxbc, init ) );
+	setGood();
 
 	logInfo( "Compiled the state shaders" );
 	return S_OK;
@@ -148,5 +145,6 @@ StateShaders::~StateShaders()
 
 void StateShaders::onRenderSizeChanged()
 {
-	init = update = updateOnBeat = nullptr;
+	init = nullptr;
+	__super::onRenderSizeChanged();
 }

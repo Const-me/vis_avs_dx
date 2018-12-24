@@ -69,6 +69,8 @@
     <ClInclude Include="Effects\List\Blender.h" />
     <ClInclude Include="Effects\List\EffectList.h" />
     <ClInclude Include="Utils\resizeHandler.h" />
+    <ClInclude Include="Render\ShaderBase.h" />
+    <ClInclude Include="Utils\md4.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -121,6 +123,8 @@
     <ClCompile Include="Effects\List\EffectList.cpp" />
     <ClCompile Include="Utils\resizeHandler.cpp" />
     <ClCompile Include="EffectBase\EffectBase.cpp" />
+    <ClCompile Include="Render\ShaderBase.cpp" />
+    <ClCompile Include="Utils\md4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

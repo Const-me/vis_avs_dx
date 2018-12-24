@@ -21,7 +21,8 @@ HRESULT RootEffect::renderRoot( bool isBeat, RenderTargets& rt )
 	CHECK( updateParameters( binder ) );
 
 	// Run a state update shader
-	context->CSSetShader( isBeat ? m_stateShaders.updateOnBeat : m_stateShaders.update, nullptr, 0 );
+	if( !m_stateShaders.bind( isBeat ) )
+		return S_FALSE;
 
 	bindGlobalResource( 2 );
 	bindUav( 0, m_state.uav() );

@@ -109,8 +109,8 @@ namespace Hlsl
 		}
 
 		const size_t cb = blobBinary->GetBufferSize();
-		dxbc.resize( cb );
-		CopyMemory( dxbc.data(), blobBinary->GetBufferPointer(), cb );
+		const uint8_t* pBinary = (const uint8_t*)blobBinary->GetBufferPointer();
+		dxbc.assign( pBinary, pBinary + cb );;
 
 		if( errorMessages.GetLength() > 0 )
 			logWarning( "Warnings in %s shader %s: %s", targetName( stage ), name, errorMessages.operator const char*( ) );

@@ -15,6 +15,14 @@ namespace
 		return ext == L".mp4" || ext == L".mpeg" || ext == L".mkv" || ext == L".avi";
 	}
 
+	// Get lower-case extension including the dot, e.g. ".mp4"
+	CString getExtension( const CPath &path )
+	{
+		CString ext = path.GetExtension();
+		ext.MakeLower();
+		return ext;
+	}
+
 	HRESULT resolveShortcutTarget( HWND wnd, const CString& lnk, CString& target )
 	{
 		// Get a pointer to the IShellLink interface. It is assumed that CoInitialize has already been called. 
@@ -58,8 +66,7 @@ int initVideoCombobox( HWND wndDialog, HWND wndComboBox, char *selectedName )
 			continue;
 
 		path.m_strPath = ff.GetFilePath();
-		CString ext = path.GetExtension();
-		ext.MakeLower();
+		CString ext = getExtension( path );
 
 		if( !isVideoFileExtension( ext ) )
 		{
@@ -79,4 +86,36 @@ int initVideoCombobox( HWND wndDialog, HWND wndComboBox, char *selectedName )
 
 	} while( ff.FindNextFile() );
 	return res;
+}
+
+extern HWND hwnd_WinampParent;
+
+HRESULT getVideoFilePath( const char *selection, CString& result )
+{
+	CString gp{ g_path };
+	CPath path{ gp };
+	CString w{ selection };
+	path.Append( w );
+
+	CString ext = getExtension( path );
+	if( isVideoFileExtension( ext ) )
+	{
+		if( !path.FileExists() )
+			return HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND );
+		result = path.m_strPath;
+		return S_OK;
+	}
+
+	if( ext == ".lnk" )
+	{
+		CHECK( resolveShortcutTarget( hwnd_WinampParent, path, result ) );
+		path.m_strPath = result;
+		if( !path.FileExists() )
+			return HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND );
+
+		ext = getExtension( path );
+		if( isVideoFileExtension( ext ) )
+			return S_OK;
+	}
+	return E_INVALIDARG;
 }

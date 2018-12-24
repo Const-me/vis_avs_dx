@@ -46,4 +46,8 @@ public:
 	const Metadata& metadata() override;
 
 	HRESULT render( bool isBeat, RenderTargets& rt ) override;
+
+	// Open/close the video. Both called from GUI thread.
+	HRESULT open( const char* selection );
+	HRESULT close();
 };

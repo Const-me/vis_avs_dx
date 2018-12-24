@@ -50,7 +50,7 @@ public:
 	void loadAvi( char *name );
 	void closeAvi( void );
 	virtual ~C_THISCLASS();
-	virtual int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
+	int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
 	virtual char *get_desc() { return MOD_NAME; }
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent );
 	virtual void load_config( unsigned char *data, int len );
@@ -84,8 +84,9 @@ static HINSTANCE g_hDllInstance; // global DLL instance pointer (not needed in t
 
 C_THISCLASS::C_THISCLASS() // set up default configuration
 {
-	AVIFileInit();
-	hDrawDib = DrawDibOpen();
+	// AVIFileInit();
+	// hDrawDib = DrawDibOpen();
+	hDrawDib = nullptr;
 	lastWidth = 0;
 	lastHeight = 0;
 	lFrameIndex = 0;
@@ -100,11 +101,15 @@ C_THISCLASS::C_THISCLASS() // set up default configuration
 	speed = 0;
 	lastspeed = 0;
 	old_image = NULL; old_image_h = 0; old_image_w = 0;
+
+	CREATE_DX_EFFECT( enabled );
 }
 
 C_THISCLASS::~C_THISCLASS()
 {
 	closeAvi();
+	return;
+
 	SelectObject( hBitmapDC, hOldBitmap );
 	DeleteDC( hBitmapDC );
 	ReleaseDC( NULL, hDesktopDC );
@@ -119,6 +124,9 @@ C_THISCLASS::~C_THISCLASS()
 
 void C_THISCLASS::loadAvi( char *name )
 {
+	videoOpen( dxEffect.get(), name );
+	return;
+
 	char pathfile[ MAX_PATH ];
 
 	if( loaded ) closeAvi();
@@ -143,6 +151,9 @@ void C_THISCLASS::loadAvi( char *name )
 
 void C_THISCLASS::closeAvi( void )
 {
+	videoClose( dxEffect.get() );
+	return;
+
 	if( loaded )
 	{
 		while( rendering );
@@ -188,6 +199,7 @@ int  C_THISCLASS::save_config( unsigned char *data ) // write configuration to d
 
 void C_THISCLASS::reinit( int w, int h )
 {
+	__debugbreak();
 	if( lastWidth || lastHeight )
 	{
 		SelectObject( hBitmapDC, hOldBitmap );
@@ -221,6 +233,7 @@ void C_THISCLASS::reinit( int w, int h )
 
 int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
 {
+	__debugbreak();
 	int *p, *d;
 	int i, j;
 	static int persistCount = 0;

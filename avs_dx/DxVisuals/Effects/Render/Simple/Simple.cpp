@@ -78,7 +78,8 @@ HRESULT SimpleDotsFx::render( bool isBeat, RenderTargets& rt )
 	const UINT pointsCount = renderer.vertex().pointsCount;
 
 	CHECK( rt.writeToLast( false ) );
-	renderer.bindShaders( isBeat );
+	if( !renderer.bindShaders( isBeat ) )
+		return S_FALSE;
 
 	iaClearBuffer();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_POINTLIST );
@@ -102,7 +103,8 @@ HRESULT SolidRendering::PsData::updateAvs( const AvsState& avs )
 HRESULT SimpleSolidFx::render( bool isBeat, RenderTargets& rt )
 {
 	CHECK( rt.writeToLast( false ) );
-	renderer.bindShaders( isBeat );
+	if( !renderer.bindShaders( isBeat ) )
+		return S_FALSE;
 
 	iaClearBuffer();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP );
@@ -123,7 +125,8 @@ HRESULT LinesRendering::VsData::updateAvs( const AvsState& avs )
 HRESULT SimpleLinesFx::render( bool isBeat, RenderTargets& rt )
 {
 	CHECK( rt.writeToLast( false ) );
-	renderer.bindShaders( isBeat );
+	if( !renderer.bindShaders( isBeat ) )
+		return S_FALSE;
 
 	iaClearBuffer();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_LINESTRIP_ADJ );

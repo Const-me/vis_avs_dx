@@ -83,10 +83,12 @@ HRESULT DynamicMovement::render( bool isBeat, RenderTargets& rt )
 		CHECK( m_mesh.create( gridSize ) );
 	}
 
+	if( !renderer.bindShaders( isBeat ) )
+		return S_FALSE;
+
 	const UINT psReadSlot = renderer.pixel().bindPrevFrame;
 	CHECK( rt.blendToNext( psReadSlot ) );
 
-	renderer.bindShaders( isBeat );
 	CHECK( m_mesh.draw() );
 
 	bindResource<eStage::Pixel>( psReadSlot );

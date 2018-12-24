@@ -34,7 +34,8 @@ HRESULT ColorModifier::render( bool isBeat, RenderTargets& rt )
 	const UINT psReadSlot = renderer.pixel().bindPrevFrame;
 	CHECK( rt.writeToNext( psReadSlot, false ) );
 
-	renderer.bindShaders( isBeat );
+	if( !renderer.bindShaders( isBeat ) )
+		return S_FALSE;
 	drawFullscreenTriangle( false );
 
 	bindResource<eStage::Pixel>( psReadSlot );

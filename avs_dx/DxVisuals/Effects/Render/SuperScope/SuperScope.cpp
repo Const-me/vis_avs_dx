@@ -147,7 +147,8 @@ HRESULT SuperScope::render( bool isBeat, RenderTargets& rt )
 {
 	omBlend();
 	CHECK( rt.writeToLast( false ) );
-	renderer.bindShaders( isBeat );
+	if( !renderer.bindShaders( isBeat ) )
+		return S_FALSE;
 	iaClearBuffer();
 
 	const UINT argsOffset = ( stateOffset() + stateData.compiler().getIndirectArgOffset() ) * 4;
@@ -163,6 +164,8 @@ HRESULT SuperScope::render( bool isBeat, RenderTargets& rt )
 			CHECK( lines.gs.compile( Hlsl::includes(), 0 ) );
 		if( !lines.ps.hasShader() )
 			CHECK( lines.ps.compile( Hlsl::includes(), 0 ) );
+		if( !lines.gs.hasShader() || !lines.ps.hasShader() )
+			return S_FALSE;
 
 		bindShader<eStage::Geometry>( lines.gs.ptr( false ) );
 		bindShader<eStage::Pixel>( lines.ps.ptr( false ) );
@@ -178,6 +181,8 @@ HRESULT SuperScope::render( bool isBeat, RenderTargets& rt )
 
 		if( !dots.gs.hasShader() )
 			CHECK( dots.gs.compile( Hlsl::includes(), 0 ) );
+		if( !dots.gs.hasShader() )
+			return S_FALSE;
 
 		bindShader<eStage::Geometry>( dots.gs.ptr( false ) );
 		bindShader<eStage::Pixel>( StaticResources::pointSprite );

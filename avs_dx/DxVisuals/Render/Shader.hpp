@@ -13,6 +13,15 @@ class Binder;
 template<class TSourceData>
 class Shader: public iResizeHandler
 {
+	enum struct eShaderState : uint8_t
+	{
+		Constructed,
+		Updated,
+		Failed,
+		Good,
+	};
+	eShaderState m_state = eShaderState::Constructed;
+
 public:
 	using tStageData = TSourceData;
 	static constexpr eStage shaderStage = TSourceData::shaderStage;
@@ -43,6 +52,8 @@ public:
 			if( hr.combine( m_sourceData.updateDx( dx ) ) )
 				return hr;
 		}
+		if( hr.value() )
+			m_state = eShaderState::Updated;
 		if( !hasShader() )
 			hr.combine( true );
 		return hr;
@@ -50,7 +61,10 @@ public:
 
 	HRESULT compile( const CAtlMap<CStringA, CStringA>& inc, UINT stateOffset )
 	{
+		if( eShaderState::Failed == m_state )
+			return S_FALSE;
 		dropShader();
+		m_state = eShaderState::Failed;
 
 		// Generate preprocessor macro values, from the current copy of the state
 		Hlsl::Defines def;
@@ -95,30 +109,35 @@ public:
 			CHECK( m_sourceData.compiledShader( ( const std::vector<uint8_t>& )dxbc ) );
 		}
 
+		m_state = eShaderState::Good;
 		return S_OK;
 	}
 
 	TSourceData& data() { return m_sourceData; }
 	const TSourceData& data() const { return m_sourceData; }
 
-	void bind( bool isBeat ) const
+	bool bind( bool isBeat ) const
 	{
 		const ShaderPtr<shaderStage>& s = isBeat ? beatShader : shader;
+		// if( nullptr == s )
+		//	logWarning( "%s shader %s: binding shader that wasn't compiled", Hlsl::targetName( shaderStage ), m_sourceData.shaderTemplate()->name );
 		if( nullptr == s )
-			logWarning( "%s shader %s: binding shader that wasn't compiled", Hlsl::targetName( shaderStage ), m_sourceData.shaderTemplate()->name );
+			return false;
 		bindShader<shaderStage>( s );
+		return true;
 	}
 
 	// Check if this shader was compiled successfully.
 	bool hasShader() const
 	{
-		return nullptr != shader && nullptr != beatShader;
+		return m_state == eShaderState::Good;
 	}
 
 	// Drop the compiled shader
 	void dropShader()
 	{
 		shader = beatShader = nullptr;
+		m_state = eShaderState::Updated;
 	}
 
 	IShader<shaderStage> *ptr( bool isBeat ) const

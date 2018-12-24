@@ -19,9 +19,10 @@ public:
 		return false;
 	};
 
-	void bind( bool isBeat ) const
+	bool bind( bool isBeat ) const
 	{
 		bindShader<stage>( m_shader );
+		return nullptr != m_shader;
 	}
 };
 
@@ -36,9 +37,10 @@ struct NoShader
 		return false;
 	};
 
-	void bind( bool isBeat ) const
+	bool bind( bool isBeat ) const
 	{
 		bindShader<stage>( nullptr );
+		return true;
 	}
 };
 
@@ -61,13 +63,7 @@ public:
 	// If this effect has no dynamic shader stages, just return S_FALSE. Otherwise, call updateBindings(), updateAvs() and updateDx() methods on the state object, and combine the results.
 	HRESULT update( Binder& binder, const tAvxState& avs, const tDxState& dx )
 	{
-		return forEachDynStage( [ & ]( auto& p )
-		{
-			const HRESULT hr = p.update( binder, avs, dx );
-			if( hr != S_FALSE )
-				p.dropShader();
-			return hr;
-		} );
+		return forEachDynStage( [ & ]( auto& p ) { return p.update( binder, avs, dx ); } );
 	}
 
 	HRESULT compileShaders( const CAtlMap<CStringA, CStringA>& inc, UINT stateOffset )
@@ -99,9 +95,15 @@ public:
 		return std::get<3>( m_shaders ).data();
 	}
 
-	void bindShaders( bool isBeat )
+	bool bindShaders( bool isBeat )
 	{
-		forEachStage( [ isBeat ]( auto& p ) { p.bind( isBeat ); } );
+		bool result = true;
+		forEachStage( [ &result, isBeat ]( auto& p )
+		{
+			const bool r = p.bind( isBeat );
+			result = result && r;
+		} );
+		return result;
 	}
 
 private:

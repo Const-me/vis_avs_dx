@@ -68,7 +68,8 @@ HRESULT Starfield::render( bool isBeat, RenderTargets& rt )
 
 	omBlend();
 	CHECK( rt.writeToLast( false ) );
-	renderer.bindShaders( isBeat );
+	if( !renderer.bindShaders( isBeat ) )
+		return S_FALSE;
 
 	// Calculate dots positions with the CS
 	const UINT uavSlot = renderer.compute().bindStarsPosition;

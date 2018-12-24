@@ -221,10 +221,8 @@
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"C:\Program Files (x86)\Common Files\microsoft shared\TextTemplating\14.0\TextTransform.exe" ^
-"%(FullPath)" -a !!STATIC!$(OutDir)Shaders -a !!SOURCE!$(ProjectDir)Effects -out $(ProjectDir)Effects/shadersCode.cpp</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"C:\Program Files (x86)\Common Files\microsoft shared\TextTemplating\14.0\TextTransform.exe" ^
-"%(FullPath)" -a !!STATIC!$(OutDir)Shaders -a !!SOURCE!$(ProjectDir)Effects -out $(ProjectDir)Effects/shadersCode.cpp</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(VSAPPIDDIR)TextTransform.exe" "%(FullPath)" -a !!STATIC!$(OutDir)Shaders -a !!SOURCE!$(ProjectDir)Effects -out $(ProjectDir)Effects/shadersCode.cpp</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(VSAPPIDDIR)TextTransform.exe" "%(FullPath)" -a !!STATIC!$(OutDir)Shaders -a !!SOURCE!$(ProjectDir)Effects -out $(ProjectDir)Effects/shadersCode.cpp</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Effects/shadersCode.cpp</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Effects/shadersCode.cpp</Outputs>
     </CustomBuild>
@@ -233,20 +231,16 @@
     <None Include="Effects\IncludeShaders.t4" />
     <CustomBuild Include="Effects\IncludeShadersH.tt">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"C:\Program Files (x86)\Common Files\microsoft shared\TextTemplating\14.0\TextTransform.exe" ^
-"%(FullPath)" -a !!STATIC!$(OutDir)Shaders -a !!SOURCE!$(ProjectDir)Effects -out $(ProjectDir)Effects/shadersCode.h</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(VSAPPIDDIR)TextTransform.exe" "%(FullPath)" -a !!STATIC!$(OutDir)Shaders -a !!SOURCE!$(ProjectDir)Effects -out $(ProjectDir)Effects/shadersCode.h</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Effects/shadersCode.h</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"C:\Program Files (x86)\Common Files\microsoft shared\TextTemplating\14.0\TextTransform.exe" ^
-"%(FullPath)" -a !!STATIC!$(OutDir)Shaders -a !!SOURCE!$(ProjectDir)Effects -out $(ProjectDir)Effects/shadersCode.h</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(VSAPPIDDIR)TextTransform.exe" "%(FullPath)" -a !!STATIC!$(OutDir)Shaders -a !!SOURCE!$(ProjectDir)Effects -out $(ProjectDir)Effects/shadersCode.h</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Effects/shadersCode.h</Outputs>
     </CustomBuild>
     <CustomBuild Include="Expressions\Builtin\includeFunctions.tt">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\TextTransform.exe" ^
-"%(FullPath)" -a !!SOURCE!$(ProjectDir)Expressions/Builtin -out $(ProjectDir)Expressions/Builtin/includeFunctions.cpp</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(VSAPPIDDIR)TextTransform.exe" "%(FullPath)" -a !!SOURCE!$(ProjectDir)Expressions/Builtin -out $(ProjectDir)Expressions/Builtin/includeFunctions.cpp</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Expressions/Builtin/includeFunctions.cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\TextTransform.exe" ^
-"%(FullPath)" -a !!SOURCE!$(ProjectDir)Expressions/Builtin -out $(ProjectDir)Expressions/Builtin/includeFunctions.cpp</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(VSAPPIDDIR)TextTransform.exe" "%(FullPath)" -a !!SOURCE!$(ProjectDir)Expressions/Builtin -out $(ProjectDir)Expressions/Builtin/includeFunctions.cpp</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Expressions/Builtin/includeFunctions.cpp</Outputs>
     </CustomBuild>
     <None Include="Expressions\Builtin\includeFunctions.t4" />

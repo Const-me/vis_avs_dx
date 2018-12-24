@@ -38,7 +38,7 @@ SHADER_CODE
 	// TODO: use skip / linesize values.
 
     sVertex1 vert;
-    vert.pos = float4( x, y, 0.5, 1 );
-    vert.color = float4( color, 1 );
+    vert.pos = float4( x, -y, 0.5, 1 );
+    vert.color = float4( red, green, blue, 1 );
     return vert;
 }

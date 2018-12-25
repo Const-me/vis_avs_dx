@@ -17,6 +17,8 @@ public:
 
 	HRESULT requestSample();
 
+	void shutdown();
+
 private:
 	CComPtr<IMFMediaSink> m_sink;
 	CComPtr<IMFMediaTypeHandler> m_mtHandler;

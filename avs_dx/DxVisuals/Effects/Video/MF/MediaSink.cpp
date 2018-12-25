@@ -39,19 +39,30 @@ HRESULT __stdcall MediaSink::getStreamSink( DWORD i, IMFStreamSink **ppStreamSin
 HRESULT __stdcall MediaSink::SetPresentationClock( IMFPresentationClock *pPresentationClock )
 {
 	CHECK_SHUTDOWN;
-	return E_NOTIMPL;
+	m_clock = pPresentationClock;
+	return S_OK;
 }
 
 HRESULT __stdcall MediaSink::GetPresentationClock( IMFPresentationClock **ppPresentationClock )
 {
 	CHECK_SHUTDOWN;
-	return E_NOTIMPL;
+	CComPtr<IMFPresentationClock> clock = m_clock;
+	if( !clock )
+		return MF_E_NO_CLOCK;
+	*ppPresentationClock = clock.Detach();
+	return S_OK;
 }
 
 HRESULT __stdcall MediaSink::Shutdown()
 {
 	CHECK_SHUTDOWN;
-	return E_NOTIMPL;
+	if( !m_stream )
+	{
+		return S_FALSE;
+	}
+	m_stream->shutdown();
+	m_stream = nullptr;
+	return S_OK;
 }
 
 HRESULT MediaSink::create( CComPtr<CComObject<MediaSink>>& mediaSinkObj, iSampleSink& sampleSink, CComPtr<IMFStreamSink>& streamSink )

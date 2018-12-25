@@ -1,7 +1,7 @@
 #pragma once
 #include "iSampleSink.h"
 
-// Consumes video samples on background threads, retains the last frame's MF texture, then on rendering thread copies the frames into a normal texture that has a view.
+// Consumes video samples from MF threads, retains the last frame's MF texture, then on rendering thread copies the frames into a normal texture that has a view.
 class FrameTexture: public iSampleSink
 {
 	// Consume video sample

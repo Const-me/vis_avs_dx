@@ -1,6 +1,7 @@
 #pragma once
 #include <mfobjects.h>
 
+// Consumes events from IMFMediaEventGenerator, produces onEvent() callbacks.
 class EventListener: public IMFAsyncCallback
 {
 	HRESULT __stdcall GetParameters( DWORD *pdwFlags, DWORD *pdwQueue ) override;

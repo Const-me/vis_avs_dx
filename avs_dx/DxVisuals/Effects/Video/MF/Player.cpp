@@ -18,6 +18,9 @@ HRESULT Player::start( LPCTSTR pathToVideo )
 	// Create the media session.
 	CHECK( MFCreateMediaSession( nullptr, &m_session ) );
 
+	// Start pulling events from the media session
+	CHECK( startListen( m_session ) );
+
 	CComPtr<IMFSourceResolver> sourceResolver;
 	CHECK( mfSourceResolver( sourceResolver ) );
 
@@ -133,6 +136,7 @@ HRESULT Player::stop()
 	{
 		CHECK( m_session->Close() );
 		CHECK( m_evtClosed.wait() );
+		CHECK( stopListen() );
 	}
 	if( m_sink )
 		CHECK( m_sink->Shutdown() );

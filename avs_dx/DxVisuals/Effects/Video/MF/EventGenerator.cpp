@@ -9,7 +9,7 @@ bool EventGenerator::wasShutdown() const
 
 #define CHECK_SHUTDOWN if( wasShutdown() ) return MF_E_SHUTDOWN
 
-HRESULT EventGenerator::startup()
+HRESULT EventGenerator::startEventGenerator()
 {
 	CHECK_SHUTDOWN;
 	if( nullptr != m_queue )
@@ -22,7 +22,7 @@ HRESULT EventGenerator::startup()
 	return S_OK;
 }
 
-void EventGenerator::shutdown()
+void EventGenerator::shutdownEventGenerator()
 {
 	m_shutdown = true;
 	if( m_queue )

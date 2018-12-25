@@ -1,5 +1,6 @@
 #pragma once
 
+// Mostly user-mode event for thread sync
 class EventSlim
 {
 	CComAutoCriticalSection m_cs;

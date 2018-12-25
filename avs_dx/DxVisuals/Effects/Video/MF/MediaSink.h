@@ -46,4 +46,5 @@ private:
 
 	// ==== Implementation ====
 	CComPtr<CComObject<StreamSink>> m_stream;
+	CComPtr<IMFPresentationClock> m_clock;
 };

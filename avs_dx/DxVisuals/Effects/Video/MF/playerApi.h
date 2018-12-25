@@ -1,4 +1,6 @@
 #pragma once
+// The huge amount of code in this folder is required to implement the following dead simple API.
+// No wonder MF ain't particularly popular technology.
 
 __interface iPlayer : IUnknown
 {

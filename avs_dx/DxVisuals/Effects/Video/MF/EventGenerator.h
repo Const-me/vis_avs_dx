@@ -10,9 +10,11 @@ public:
 
 protected:
 
-	HRESULT startup();
+	HRESULT startEventGenerator();
 
-	void shutdown();
+	void shutdownEventGenerator();
+
+	HRESULT __stdcall QueueEvent( MediaEventType met, const GUID &guidExtendedType = GUID_NULL, HRESULT hrStatus = S_OK, const PROPVARIANT *pvValue = nullptr ) override;
 
 private:
 
@@ -26,8 +28,4 @@ private:
 	HRESULT __stdcall BeginGetEvent( IMFAsyncCallback *pCallback, IUnknown *punkState ) override;
 
 	HRESULT __stdcall EndGetEvent( IMFAsyncResult *pResult, IMFMediaEvent **ppEvent ) override;
-
-protected:
-
-	HRESULT __stdcall QueueEvent( MediaEventType met, const GUID &guidExtendedType = GUID_NULL, HRESULT hrStatus = S_OK, const PROPVARIANT *pvValue = nullptr ) override;
 };

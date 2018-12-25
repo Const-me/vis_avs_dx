@@ -61,13 +61,15 @@ HRESULT __stdcall StreamSink::ProcessSample( IMFSample *pSample )
 HRESULT __stdcall StreamSink::PlaceMarker( MFSTREAMSINK_MARKER_TYPE eMarkerType, const PROPVARIANT *pvarMarkerValue, const PROPVARIANT *pvarContextValue )
 {
 	CHECK_SHUTDOWN;
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT __stdcall StreamSink::Flush()
 {
 	CHECK_SHUTDOWN;
-	return E_NOTIMPL;
+	if( !m_mtHandler )
+		return MF_E_NOT_INITIALIZED;
+	return S_OK;
 }
 
 HRESULT StreamSink::initialize( IMFMediaSink* owner, iSampleSink& sampleSink )
@@ -80,7 +82,16 @@ HRESULT StreamSink::initialize( IMFMediaSink* owner, iSampleSink& sampleSink )
 	CHECK( mt->SetGUID( MF_MT_SUBTYPE, MFVideoFormat_RGB32 ) );
 	CHECK( m_mtHandler->SetCurrentMediaType( mt ) );
 
+	CHECK( startEventGenerator() );
+
 	m_sink = owner;
 	m_pDest = &sampleSink;
 	return S_OK;
+}
+
+void StreamSink::shutdown()
+{
+	m_sink = nullptr;
+	m_mtHandler = nullptr;
+	shutdownEventGenerator();
 }

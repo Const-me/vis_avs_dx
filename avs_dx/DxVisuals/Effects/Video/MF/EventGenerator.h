@@ -29,5 +29,5 @@ private:
 
 protected:
 
-	HRESULT __stdcall QueueEvent( MediaEventType met, const GUID &guidExtendedType, HRESULT hrStatus, const PROPVARIANT *pvValue = nullptr ) override;
+	HRESULT __stdcall QueueEvent( MediaEventType met, const GUID &guidExtendedType = GUID_NULL, HRESULT hrStatus = S_OK, const PROPVARIANT *pvValue = nullptr ) override;
 };

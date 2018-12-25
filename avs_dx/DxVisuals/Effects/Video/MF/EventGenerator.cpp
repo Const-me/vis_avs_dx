@@ -33,7 +33,7 @@ HRESULT __stdcall EventGenerator::GetEvent( DWORD dwFlags, IMFMediaEvent **ppEve
 {
 	CHECK_SHUTDOWN;
 	// GetEvent is a blocking call.
-	// AddRef into a local variable to guarantee the MEQ will stay alive until this method return even if other thread is destroying things.
+	// AddRef into a local variable to guarantee the MEQ will stay alive until this method return even if some other thread is destroying things.
 	CComPtr<IMFMediaEventQueue> pQueue = m_queue;
 	return pQueue->GetEvent( dwFlags, ppEvent );
 }

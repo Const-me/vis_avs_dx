@@ -6,37 +6,33 @@
 HRESULT __stdcall MediaSink::GetCharacteristics( DWORD *pdwCharacteristics )
 {
 	CHECK_SHUTDOWN;
-	return E_NOTIMPL;
-}
-
-HRESULT __stdcall MediaSink::AddStreamSink( DWORD dwStreamSinkIdentifier, IMFMediaType *pMediaType, IMFStreamSink **ppStreamSink )
-{
-	CHECK_SHUTDOWN;
-	return E_NOTIMPL;
-}
-
-HRESULT __stdcall MediaSink::RemoveStreamSink( DWORD dwStreamSinkIdentifier )
-{
-	CHECK_SHUTDOWN;
-	return E_NOTIMPL;
+	if( nullptr == pdwCharacteristics )
+		return E_POINTER;
+	constexpr DWORD flags = MEDIASINK_FIXED_STREAMS;	// TODO: add MEDIASINK_CAN_PREROLL and implement IMFMediaSinkPreroll interface
+	*pdwCharacteristics = flags;
+	return S_OK;
 }
 
 HRESULT __stdcall MediaSink::GetStreamSinkCount( DWORD *pcStreamSinkCount )
 {
 	CHECK_SHUTDOWN;
-	return E_NOTIMPL;
+	if( nullptr == pcStreamSinkCount )
+		return E_POINTER;
+	*pcStreamSinkCount = 1;
+	return S_OK;
 }
 
-HRESULT __stdcall MediaSink::GetStreamSinkByIndex( DWORD dwIndex, IMFStreamSink **ppStreamSink )
+HRESULT MediaSink::getStreamSink( DWORD dwIndex, IMFStreamSink **ppStreamSink )
 {
 	CHECK_SHUTDOWN;
-	return E_NOTIMPL;
-}
+	if( nullptr == ppStreamSink )
+		return E_POINTER;
+	if( 0 != dwIndex )
+		return MF_E_INVALIDSTREAMNUMBER;
 
-HRESULT __stdcall MediaSink::GetStreamSinkById( DWORD dwStreamSinkIdentifier, IMFStreamSink **ppStreamSink )
-{
-	CHECK_SHUTDOWN;
-	return E_NOTIMPL;
+	CComPtr<IMFStreamSink> ss = m_stream.operator ->();
+	*ppStreamSink = ss.Detach();
+	return S_OK;
 }
 
 HRESULT __stdcall MediaSink::SetPresentationClock( IMFPresentationClock *pPresentationClock )

@@ -16,15 +16,23 @@ private:
 	// ==== IMFMediaSink methods ====
 	HRESULT __stdcall GetCharacteristics( DWORD *pdwCharacteristics ) override;
 
-	HRESULT __stdcall AddStreamSink( DWORD dwStreamSinkIdentifier, IMFMediaType *pMediaType, IMFStreamSink **ppStreamSink ) override;
+	HRESULT __stdcall AddStreamSink( DWORD dwStreamSinkIdentifier, IMFMediaType *pMediaType, IMFStreamSink **ppStreamSink ) override { return MF_E_STREAMSINKS_FIXED; }
 
-	HRESULT __stdcall RemoveStreamSink( DWORD dwStreamSinkIdentifier ) override;
+	HRESULT __stdcall RemoveStreamSink( DWORD dwStreamSinkIdentifier ) override { return MF_E_STREAMSINKS_FIXED; }
 
 	HRESULT __stdcall GetStreamSinkCount( DWORD *pcStreamSinkCount ) override;
 
-	HRESULT __stdcall GetStreamSinkByIndex( DWORD dwIndex, IMFStreamSink **ppStreamSink ) override;
+	HRESULT getStreamSink( DWORD dwStreamSinkIdentifier, IMFStreamSink **ppStreamSink );
 
-	HRESULT __stdcall GetStreamSinkById( DWORD dwStreamSinkIdentifier, IMFStreamSink **ppStreamSink ) override;
+	HRESULT __stdcall GetStreamSinkByIndex( DWORD dwIndex, IMFStreamSink **ppStreamSink ) override
+	{
+		return getStreamSink( dwIndex, ppStreamSink );
+	}
+
+	HRESULT __stdcall GetStreamSinkById( DWORD dwStreamSinkIdentifier, IMFStreamSink **ppStreamSink ) override
+	{
+		return getStreamSink( dwStreamSinkIdentifier, ppStreamSink );
+	}
 
 	HRESULT __stdcall SetPresentationClock( IMFPresentationClock *pPresentationClock ) override;
 

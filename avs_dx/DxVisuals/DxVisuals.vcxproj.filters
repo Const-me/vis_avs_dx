@@ -78,6 +78,7 @@
     <ClInclude Include="Effects\Video\MF\StreamSink.h" />
     <ClInclude Include="Effects\Video\MF\mf.h" />
     <ClInclude Include="Effects\Video\MF\EventGenerator.h" />
+    <ClInclude Include="Effects\Video\MF\iSampleSink.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

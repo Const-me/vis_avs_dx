@@ -96,6 +96,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Effects\List\Blender.h" />
+    <ClInclude Include="Effects\Video\MF\iSampleSink.h" />
     <ClInclude Include="Effects\Video\MF\mf.h" />
     <ClInclude Include="Effects\Video\MF\EventGenerator.h" />
     <ClInclude Include="Expressions\SymbolTable\SymbolTable.h" />

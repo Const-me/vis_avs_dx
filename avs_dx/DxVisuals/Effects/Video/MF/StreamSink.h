@@ -1,5 +1,7 @@
 #pragma once
 #include "EventGenerator.h"
+#include "iSampleSink.h"
+
 
 class StreamSink:
 	public CComObjectRootEx<CComMultiThreadModel>,
@@ -13,6 +15,8 @@ public:
 	END_COM_MAP()
 
 private:
+	std::atomic_bool m_requestMoreSamples = true;
+	iSampleSink *m_pDest = nullptr;
 
 	// ==== IMFStreamSink methods ====
 	HRESULT __stdcall GetMediaSink( IMFMediaSink **ppMediaSink ) override;

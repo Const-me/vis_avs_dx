@@ -24,7 +24,18 @@ HRESULT __stdcall StreamSink::GetMediaTypeHandler( IMFMediaTypeHandler **ppHandl
 HRESULT __stdcall StreamSink::ProcessSample( IMFSample *pSample )
 {
 	CHECK_SHUTDOWN;
-	return E_NOTIMPL;
+	iSampleSink *dest = m_pDest;
+	if( dest != nullptr )
+	{
+		const HRESULT hr = dest->haveSample( pSample );
+		if( FAILED( hr ) )
+		{
+			logWarning( hr, "iSampleSink::haveSample failed" );
+		}
+	}
+	if( m_requestMoreSamples )
+		CHECK( QueueEvent( MEStreamSinkRequestSample ) );
+	return S_OK;
 }
 
 HRESULT __stdcall StreamSink::PlaceMarker( MFSTREAMSINK_MARKER_TYPE eMarkerType, const PROPVARIANT *pvarMarkerValue, const PROPVARIANT *pvarContextValue )

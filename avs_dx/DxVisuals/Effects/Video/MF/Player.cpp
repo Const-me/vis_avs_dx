@@ -90,24 +90,27 @@ HRESULT Player::createPlaybackTopology( IMFMediaSource* source, IMFPresentationD
 		CHECK( pd->SelectStream( i ) );
 
 		// Add a source node to a topology
-		CComPtr<IMFTopologyNode> node;
-		CHECK( MFCreateTopologyNode( MF_TOPOLOGY_SOURCESTREAM_NODE, &node ) );
-		CHECK( node->SetUnknown( MF_TOPONODE_SOURCE, source ) );
-		CHECK( node->SetUnknown( MF_TOPONODE_PRESENTATION_DESCRIPTOR, pd ) );
-		CHECK( node->SetUnknown( MF_TOPONODE_STREAM_DESCRIPTOR, sd ) );
-		CHECK( topology->AddNode( node ) );
+		CComPtr<IMFTopologyNode> src;
+		CHECK( MFCreateTopologyNode( MF_TOPOLOGY_SOURCESTREAM_NODE, &src ) );
+		CHECK( src->SetUnknown( MF_TOPONODE_SOURCE, source ) );
+		CHECK( src->SetUnknown( MF_TOPONODE_PRESENTATION_DESCRIPTOR, pd ) );
+		CHECK( src->SetUnknown( MF_TOPONODE_STREAM_DESCRIPTOR, sd ) );
+		CHECK( topology->AddNode( src ) );
 
 		// Create the stream sink
 		CComPtr<IMFStreamSink> streamSink;
 		CHECK( MediaSink::create( m_sink, m_texture, streamSink ) );
 
 		// Add an output node to the topology
-		node = nullptr;
-		CHECK( MFCreateTopologyNode( MF_TOPOLOGY_OUTPUT_NODE, &node ) );
-		CHECK( node->SetObject( streamSink ) );
-		CHECK( node->SetUINT32( MF_TOPONODE_STREAMID, 0 ) );
+		CComPtr<IMFTopologyNode> dest;
+		CHECK( MFCreateTopologyNode( MF_TOPOLOGY_OUTPUT_NODE, &dest ) );
+		CHECK( dest->SetObject( streamSink ) );
+		CHECK( dest->SetUINT32( MF_TOPONODE_STREAMID, 0 ) );
 		// CHECK( node->SetUINT32( MF_TOPONODE_NOSHUTDOWN_ON_REMOVE, FALSE ) );
-		CHECK( topology->AddNode( node ) );
+		CHECK( topology->AddNode( dest ) );
+
+		// Connect the source node to the output node
+		CHECK( src->ConnectOutput( 0, dest, 0 ) );
 	}
 	return S_OK;
 }

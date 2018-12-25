@@ -81,6 +81,7 @@ HRESULT StreamSink::initialize( IMFMediaSink* owner, iSampleSink& sampleSink )
 	CHECK( MFCreateMediaType( &mt ) );
 	CHECK( mt->SetGUID( MF_MT_MAJOR_TYPE, MFMediaType_Video ) );
 	CHECK( mt->SetGUID( MF_MT_SUBTYPE, MFVideoFormat_RGB32 ) );
+	// CHECK( mt->SetGUID( MF_MT_SUBTYPE, MFVideoFormat_NV12 ) );
 	CHECK( m_mtHandler->SetCurrentMediaType( mt ) );
 
 	CHECK( startEventGenerator() );

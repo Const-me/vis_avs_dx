@@ -188,6 +188,7 @@
     <ClCompile Include="Effects\Video\MF\EventGenerator.cpp" />
     <ClCompile Include="Effects\Video\MF\EventSlim.cpp" />
     <ClCompile Include="Effects\Video\MF\MediaSink.clock.cpp" />
+    <ClCompile Include="Effects\Video\MF\mf.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.debug.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.emit.cpp" />

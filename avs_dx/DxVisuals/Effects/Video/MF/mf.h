@@ -22,4 +22,11 @@ inline HRESULT createInstance( CComPtr<CComObject<CoClass>> &p )
 	return S_OK;
 }
 
-constexpr bool dbgLogStuff = true;
+#define dbgLogStuff 1
+
+#if dbgLogStuff
+void dbgLogMediaEvent( const char* what, MediaEventType eventType, HRESULT hrStatus );
+void dbgLogMediaEvent( const char* what, IMFMediaEvent *pEvent );
+#else
+#define dbgLogMediaEvent( ... ) __noop
+#endif

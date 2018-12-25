@@ -37,7 +37,10 @@ HRESULT __stdcall EventGenerator::GetEvent( DWORD dwFlags, IMFMediaEvent **ppEve
 	CComPtr<IMFMediaEventQueue> pQueue = m_queue;
 	if( !pQueue )
 		return E_POINTER;
-	return pQueue->GetEvent( dwFlags, ppEvent );
+	const HRESULT hr = pQueue->GetEvent( dwFlags, ppEvent );
+	if( SUCCEEDED( hr ) )
+		dbgLogMediaEvent( "StreamSink sync", *ppEvent );
+	return hr;
 }
 
 HRESULT __stdcall EventGenerator::BeginGetEvent( IMFAsyncCallback *pCallback, IUnknown *punkState )
@@ -49,7 +52,10 @@ HRESULT __stdcall EventGenerator::BeginGetEvent( IMFAsyncCallback *pCallback, IU
 HRESULT __stdcall EventGenerator::EndGetEvent( IMFAsyncResult *pResult, IMFMediaEvent **ppEvent )
 {
 	CHECK_SHUTDOWN;
-	return m_queue->EndGetEvent( pResult, ppEvent );
+	const HRESULT hr = m_queue->EndGetEvent( pResult, ppEvent );
+	if( SUCCEEDED( hr ) )
+		dbgLogMediaEvent( "StreamSink async", *ppEvent );
+	return hr;
 }
 
 HRESULT __stdcall EventGenerator::QueueEvent( MediaEventType met, const GUID &guidExtendedType, HRESULT hrStatus, const PROPVARIANT *pvValue )

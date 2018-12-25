@@ -115,41 +115,9 @@ HRESULT Player::createPlaybackTopology( IMFMediaSource* source, IMFPresentationD
 	return S_OK;
 }
 
-const char* sessionEventName( MediaEventType eventType )
-{
-#define I2S( T ) case T: return #T
-	switch( eventType )
-	{
-		I2S( MEError );
-		I2S( MESessionUnknown );
-		I2S( MESessionTopologySet );
-		I2S( MESessionTopologiesCleared );
-		I2S( MESessionStarted );
-		I2S( MESessionPaused );
-		I2S( MESessionStopped );
-		I2S( MESessionClosed );
-		I2S( MESessionEnded );
-		I2S( MESessionRateChanged );
-		I2S( MESessionScrubSampleComplete );
-		I2S( MESessionCapabilitiesChanged );
-		I2S( MESessionTopologyStatus );
-		I2S( MESessionNotifyPresentationTime );
-		I2S( MENewPresentation );
-	}
-#undef I2S
-	return nullptr;
-}
-
 HRESULT Player::onEvent( MediaEventType eventType, HRESULT hrStatus )
 {
-	if( dbgLogStuff )
-	{
-		auto s = sessionEventName( eventType );
-		if( s )
-			logDebug( "Player::onEvent %s: %s", s, cstr( formatDxMessageA( hrStatus ) ) );
-		else
-			logDebug( "Player::onEvent %i: %s", (int)eventType, cstr( formatDxMessageA( hrStatus ) ) );
-	}
+	dbgLogMediaEvent( "Player::onEvent", eventType, hrStatus );
 
 	switch( eventType )
 	{

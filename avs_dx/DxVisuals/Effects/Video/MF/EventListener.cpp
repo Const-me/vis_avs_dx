@@ -17,8 +17,10 @@ HRESULT __stdcall EventListener::Invoke( IMFAsyncResult *pAsyncResult )
 
 	MediaEventType met;
 	CHECK( me->GetType( &met ) );
+	HRESULT hr = E_FAIL;
+	CHECK( me->GetStatus( &hr ) );
 
-	CHECK( onEvent( met ) );
+	CHECK( onEvent( met, hr ) );
 
 	if( met != METransformDrainComplete )
 		CHECK( gen->BeginGetEvent( this, nullptr ) );

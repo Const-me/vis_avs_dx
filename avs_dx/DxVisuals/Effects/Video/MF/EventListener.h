@@ -16,5 +16,5 @@ protected:
 
 	HRESULT stopListen();
 
-	virtual HRESULT onEvent( MediaEventType eventType ) = 0;
+	virtual HRESULT onEvent( MediaEventType eventType, HRESULT hrStatus ) = 0;
 };

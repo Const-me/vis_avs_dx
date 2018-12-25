@@ -19,7 +19,7 @@ class Player:
 
 	HRESULT stop() override;
 
-	HRESULT onEvent( MediaEventType eventType ) override;
+	HRESULT onEvent( MediaEventType eventType, HRESULT hrStatus ) override;
 
 	HRESULT getTexture( CComPtr<ID3D11ShaderResourceView>& srv ) override
 	{

@@ -136,15 +136,15 @@ const char* sessionEventName( MediaEventType eventType )
 	return nullptr;
 }
 
-HRESULT Player::onEvent( MediaEventType eventType )
+HRESULT Player::onEvent( MediaEventType eventType, HRESULT hrStatus )
 {
 	if( dbgLogStuff )
 	{
 		auto s = sessionEventName( eventType );
 		if( s )
-			logDebug( "Player::onEvent %s", s );
+			logDebug( "Player::onEvent %s: %s", s, cstr( formatDxMessageA( hrStatus ) ) );
 		else
-			logDebug( "Player::onEvent %i", (int)eventType );
+			logDebug( "Player::onEvent %i: %s", (int)eventType, cstr( formatDxMessageA( hrStatus ) ) );
 	}
 
 	switch( eventType )

@@ -65,3 +65,5 @@ void omDontBlend();
 
 // Draw the full-screen triangle; you must bind the pixel shader before this call. Pass bindShaders=true to bind vertex & geometry shaders, false if already bound.
 void drawFullscreenTriangle( bool bindShaders = true );
+
+inline const char* cstr( const CStringA &str ) { return str; }

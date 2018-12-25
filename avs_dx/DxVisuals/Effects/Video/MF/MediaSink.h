@@ -11,7 +11,11 @@ public:
 		COM_INTERFACE_ENTRY( IMFMediaSink )
 	END_COM_MAP()
 
+	static HRESULT create( CComPtr<CComObject<MediaSink>>& mediaSinkObj, iSampleSink& sampleSink, CComPtr<IMFStreamSink>& streamSink );
+
 private:
+
+	HRESULT initialize( iSampleSink& sampleSink, CComPtr<IMFStreamSink>& streamSink );
 
 	// ==== IMFMediaSink methods ====
 	HRESULT __stdcall GetCharacteristics( DWORD *pdwCharacteristics ) override;
@@ -22,7 +26,7 @@ private:
 
 	HRESULT __stdcall GetStreamSinkCount( DWORD *pcStreamSinkCount ) override;
 
-	HRESULT getStreamSink( DWORD dwStreamSinkIdentifier, IMFStreamSink **ppStreamSink );
+	HRESULT __stdcall getStreamSink( DWORD i, IMFStreamSink **ppStreamSink );
 
 	HRESULT __stdcall GetStreamSinkByIndex( DWORD dwIndex, IMFStreamSink **ppStreamSink ) override
 	{

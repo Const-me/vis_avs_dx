@@ -1,3 +1,0 @@
-#pragma once
-
-HRESULT mfStartup();

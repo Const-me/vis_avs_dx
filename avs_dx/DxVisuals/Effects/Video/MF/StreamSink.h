@@ -2,7 +2,6 @@
 #include "EventGenerator.h"
 #include "iSampleSink.h"
 
-
 class StreamSink:
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public EventGenerator
@@ -14,8 +13,13 @@ public:
 		COM_INTERFACE_ENTRY( IMFStreamSink )
 	END_COM_MAP()
 
+	HRESULT initialize( IMFMediaSink* owner, iSampleSink& sampleSink );
+
+	HRESULT requestSample();
+
 private:
-	std::atomic_bool m_requestMoreSamples = true;
+	CComPtr<IMFMediaSink> m_sink;
+	CComPtr<IMFMediaTypeHandler> m_mtHandler;
 	iSampleSink *m_pDest = nullptr;
 
 	// ==== IMFStreamSink methods ====

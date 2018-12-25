@@ -127,7 +127,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <LinkDLL>true</LinkDLL>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <OutputFile>C:\Soft\Winamp\Plugins\vis_avs.dll</OutputFile>
       <ImportLibrary>.\Debug\vis_avs.lib</ImportLibrary>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ddraw.lib;vfw32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -146,9 +146,9 @@
       <PrecompiledHeaderOutputFile>.\Release\vis_avs.pch</PrecompiledHeaderOutputFile>
       <ObjectFileName>.\Release\</ObjectFileName>
       <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
-      <WholeProgramOptimization>true</WholeProgramOptimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -168,7 +168,7 @@
     <Link>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <LinkDLL>true</LinkDLL>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <OutputFile>C:\Soft\Winamp\Plugins\vis_avs.dll</OutputFile>
       <ImportLibrary>.\Release\vis_avs.lib</ImportLibrary>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ddraw.lib;vfw32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -213,7 +213,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <LinkDLL>true</LinkDLL>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <OutputFile>C:\Soft\Winamp\Plugins\vis_avs.dll</OutputFile>
       <ImportLibrary>.\vis_avs___Win32_NoMMX_Release\vis_avs.lib</ImportLibrary>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ddraw.lib;vfw32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -256,7 +256,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <LinkDLL>true</LinkDLL>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <OutputFile>C:\Soft\Winamp\Plugins\vis_avs.dll</OutputFile>
       <ImportLibrary>.\vis_avs___Win32_Laser_Release\vis_avs_laser.lib</ImportLibrary>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ddraw.lib;vfw32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -279,6 +279,7 @@
     </ClCompile>
     <ClCompile Include="bpm.cpp" />
     <ClCompile Include="cfgwin.cpp" />
+    <ClCompile Include="dllMain.cpp" />
     <ClCompile Include="laser\laser.cpp" />
     <ClCompile Include="laser\laserline.cpp" />
     <ClCompile Include="laser\ld32.c" />

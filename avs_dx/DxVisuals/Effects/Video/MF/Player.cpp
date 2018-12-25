@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "mfStatic.h"
+#include "PropVariant.hpp"
 #pragma comment( lib, "Mf.lib" )
 
 HRESULT Player::start( LPCTSTR pathToVideo )
@@ -39,15 +40,9 @@ HRESULT Player::start( LPCTSTR pathToVideo )
 
 	CHECK( m_session->SetTopology( 0, topology ) );
 
-	return E_NOTIMPL;
-}
+	PropVariant startTime{ 0 };
+	CHECK( m_session->Start( &GUID_NULL, startTime ) );
 
-HRESULT Player::stop()
-{
-	if( !m_sink )
-		return S_FALSE;
-	m_sink->Shutdown();
-	m_sink = nullptr;
 	return S_OK;
 }
 
@@ -109,5 +104,51 @@ HRESULT Player::createPlaybackTopology( IMFMediaSource* source, IMFPresentationD
 		// CHECK( node->SetUINT32( MF_TOPONODE_NOSHUTDOWN_ON_REMOVE, FALSE ) );
 		CHECK( topology->AddNode( node ) );
 	}
+	return S_OK;
+}
+
+HRESULT Player::onEvent( MediaEventType eventType )
+{
+	switch( eventType )
+	{
+	case MESessionClosed:
+		m_evtClosed.set();
+		return S_OK;
+
+	case MEEndOfPresentation:
+		CHECK( m_session->Stop() );
+		return S_OK;
+
+	case MESessionStopped:
+		PropVariant startTime{ 0 };
+		CHECK( m_session->Start( &GUID_NULL, startTime ) );
+		return S_OK;
+	}
+	return S_FALSE;
+}
+
+HRESULT Player::stop()
+{
+	if( m_session )
+	{
+		CHECK( m_session->Close() );
+		CHECK( m_evtClosed.wait() );
+	}
+	if( m_sink )
+		CHECK( m_sink->Shutdown() );
+
+	m_session = nullptr;
+	m_sink = nullptr;
+	m_texture.destroy();
+	return S_OK;
+}
+
+HRESULT createPlayer( LPCTSTR pathToVideo, CComPtr<iPlayer>& player )
+{
+	CComPtr<CComObject<Player>> result;
+	CHECK( createInstance( result ) );
+	CHECK( result->start( pathToVideo ) );
+
+	player = result.operator ->();
 	return S_OK;
 }

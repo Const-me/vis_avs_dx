@@ -34,12 +34,24 @@ HRESULT VideoEffect::open( const char* selection )
 		close();
 		return hr;
 	}
-	return E_NOTIMPL;
+
+	if( m_player )
+	{
+		CHECK( m_player->stop() );
+		m_player = nullptr;
+	}
+
+	CHECK( createPlayer( target, m_player ) );
+	return S_OK;
 }
 
 HRESULT VideoEffect::close()
 {
-	return E_NOTIMPL;
+	if( !m_player )
+		return S_FALSE;
+	CHECK( m_player->stop() );
+	m_player = nullptr;
+	return S_OK;
 }
 
 HRESULT VideoStructs::VsData::updateAvs( const AvsState& ass )
@@ -49,5 +61,11 @@ HRESULT VideoStructs::VsData::updateAvs( const AvsState& ass )
 
 HRESULT VideoEffect::render( bool isBeat, RenderTargets& rt )
 {
+	if( !m_player )
+		return S_FALSE;
+
+	CComPtr<ID3D11ShaderResourceView> srv;
+	CHECK( m_player->getTexture( srv ) );
+
 	return E_NOTIMPL;
 }

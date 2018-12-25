@@ -54,15 +54,6 @@ HRESULT __stdcall MediaSink::Shutdown()
 	return E_NOTIMPL;
 }
 
-template<class CoClass>
-inline HRESULT createInstance( CComPtr<CComObject<CoClass>> &p )
-{
-	CComObject<CoClass>** pp = &p;
-	CHECK( CComObject<CoClass>::CreateInstance( pp ) );
-	( *pp )->AddRef();
-	return S_OK;
-}
-
 HRESULT MediaSink::create( CComPtr<CComObject<MediaSink>>& mediaSinkObj, iSampleSink& sampleSink, CComPtr<IMFStreamSink>& streamSink )
 {
 	CComPtr<CComObject<MediaSink>> res;

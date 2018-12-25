@@ -13,6 +13,8 @@ public:
 
 	static HRESULT create( CComPtr<CComObject<MediaSink>>& mediaSinkObj, iSampleSink& sampleSink, CComPtr<IMFStreamSink>& streamSink );
 
+	HRESULT __stdcall Shutdown() override;
+
 private:
 
 	HRESULT initialize( iSampleSink& sampleSink, CComPtr<IMFStreamSink>& streamSink );
@@ -41,8 +43,6 @@ private:
 	HRESULT __stdcall SetPresentationClock( IMFPresentationClock *pPresentationClock ) override;
 
 	HRESULT __stdcall GetPresentationClock( IMFPresentationClock **ppPresentationClock ) override;
-
-	HRESULT __stdcall Shutdown() override;
 
 	// ==== Implementation ====
 	CComPtr<CComObject<StreamSink>> m_stream;

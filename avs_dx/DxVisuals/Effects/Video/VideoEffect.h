@@ -1,6 +1,8 @@
 #pragma once
 #include "../EffectImpl.hpp"
 #include <Vfw.h>
+#include "MF/playerApi.h"
+
 using namespace Hlsl::Video;
 
 struct VideoStructs
@@ -40,6 +42,8 @@ struct VideoStructs
 
 class VideoEffect : public EffectBase1<VideoStructs>
 {
+	CComPtr<iPlayer> m_player;
+
 public:
 	VideoEffect( AvsState *pState ) : tBase( pState ) { }
 

@@ -39,7 +39,11 @@ HRESULT __stdcall MediaSink::getStreamSink( DWORD i, IMFStreamSink **ppStreamSin
 HRESULT __stdcall MediaSink::SetPresentationClock( IMFPresentationClock *pPresentationClock )
 {
 	CHECK_SHUTDOWN;
+	if( m_clock )
+		CHECK( m_clock->RemoveClockStateSink( this ) );
 	m_clock = pPresentationClock;
+	if( m_clock )
+		CHECK( m_clock->AddClockStateSink( this ) );
 	return S_OK;
 }
 
@@ -59,6 +63,11 @@ HRESULT __stdcall MediaSink::Shutdown()
 	if( !m_stream )
 	{
 		return S_FALSE;
+	}
+	if( m_clock )
+	{
+		CHECK( m_clock->RemoveClockStateSink( this ) );
+		m_clock = nullptr;
 	}
 	m_stream->shutdown();
 	m_stream = nullptr;

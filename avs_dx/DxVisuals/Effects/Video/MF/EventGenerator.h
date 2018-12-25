@@ -8,13 +8,13 @@ public:
 
 	bool wasShutdown() const;
 
+	HRESULT __stdcall QueueEvent( MediaEventType met, const GUID &guidExtendedType = GUID_NULL, HRESULT hrStatus = S_OK, const PROPVARIANT *pvValue = nullptr ) override;
+
 protected:
 
 	HRESULT startEventGenerator();
 
 	void shutdownEventGenerator();
-
-	HRESULT __stdcall QueueEvent( MediaEventType met, const GUID &guidExtendedType = GUID_NULL, HRESULT hrStatus = S_OK, const PROPVARIANT *pvValue = nullptr ) override;
 
 private:
 

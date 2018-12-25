@@ -49,13 +49,15 @@ private:
 	HRESULT __stdcall GetPresentationClock( IMFPresentationClock **ppPresentationClock ) override;
 
 	// ==== IMFClockStateSink methods ====
-	HRESULT __stdcall OnClockStart( MFTIME hnsSystemTime, LONGLONG llClockStartOffset ) override;
+	HRESULT __stdcall onClockStart( MFTIME hnsSystemTime, LONGLONG llClockStartOffset );
+
+	HRESULT __stdcall OnClockStart( MFTIME hnsSystemTime, LONGLONG llClockStartOffset ) override { return onClockStart( hnsSystemTime, llClockStartOffset ); }
 
 	HRESULT __stdcall OnClockStop( MFTIME hnsSystemTime ) override;
 
 	HRESULT __stdcall OnClockPause( MFTIME hnsSystemTime ) override;
 
-	HRESULT __stdcall OnClockRestart( MFTIME hnsSystemTime ) override;
+	HRESULT __stdcall OnClockRestart( MFTIME hnsSystemTime ) override { return onClockStart( hnsSystemTime, 0 ); }
 
 	HRESULT __stdcall OnClockSetRate( MFTIME hnsSystemTime, float flRate ) override;
 

@@ -120,6 +120,7 @@ const char* sessionEventName( MediaEventType eventType )
 #define I2S( T ) case T: return #T
 	switch( eventType )
 	{
+		I2S( MEError );
 		I2S( MESessionUnknown );
 		I2S( MESessionTopologySet );
 		I2S( MESessionTopologiesCleared );

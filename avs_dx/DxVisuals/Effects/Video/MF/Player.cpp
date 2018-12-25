@@ -46,6 +46,8 @@ HRESULT Player::start( LPCTSTR pathToVideo )
 	PropVariant startTime{ 0 };
 	CHECK( m_session->Start( &GUID_NULL, startTime ) );
 
+	if( dbgLogStuff )
+		logDebug( "Player::start completed successfully" );
 	return S_OK;
 }
 
@@ -110,10 +112,46 @@ HRESULT Player::createPlaybackTopology( IMFMediaSource* source, IMFPresentationD
 	return S_OK;
 }
 
-HRESULT Player::onEvent( MediaEventType eventType )
+const char* sessionEventName( MediaEventType eventType )
 {
+#define I2S( T ) case T: return #T
 	switch( eventType )
 	{
+		I2S( MESessionUnknown );
+		I2S( MESessionTopologySet );
+		I2S( MESessionTopologiesCleared );
+		I2S( MESessionStarted );
+		I2S( MESessionPaused );
+		I2S( MESessionStopped );
+		I2S( MESessionClosed );
+		I2S( MESessionEnded );
+		I2S( MESessionRateChanged );
+		I2S( MESessionScrubSampleComplete );
+		I2S( MESessionCapabilitiesChanged );
+		I2S( MESessionTopologyStatus );
+		I2S( MESessionNotifyPresentationTime );
+		I2S( MENewPresentation );
+	}
+#undef I2S
+	return nullptr;
+}
+
+HRESULT Player::onEvent( MediaEventType eventType )
+{
+	if( dbgLogStuff )
+	{
+		auto s = sessionEventName( eventType );
+		if( s )
+			logDebug( "Player::onEvent %s", s );
+		else
+			logDebug( "Player::onEvent %i", (int)eventType );
+	}
+
+	switch( eventType )
+	{
+	case MESessionStarted:
+		return m_sink->requestSample();
+
 	case MESessionClosed:
 		m_evtClosed.set();
 		return S_OK;

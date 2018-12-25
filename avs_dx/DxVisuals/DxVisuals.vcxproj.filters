@@ -149,6 +149,7 @@
     <ClCompile Include="Effects\Video\MF\mfStatic.cpp" />
     <ClCompile Include="Effects\Video\MF\EventListener.cpp" />
     <ClCompile Include="Effects\Video\MF\EventSlim.cpp" />
+    <ClCompile Include="Effects\Video\MF\MediaSink.clock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

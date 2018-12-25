@@ -21,3 +21,5 @@ inline HRESULT createInstance( CComPtr<CComObject<CoClass>> &p )
 	( *pp )->AddRef();
 	return S_OK;
 }
+
+constexpr bool dbgLogStuff = true;

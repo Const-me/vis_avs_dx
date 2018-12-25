@@ -67,5 +67,5 @@ HRESULT VideoEffect::render( bool isBeat, RenderTargets& rt )
 	CComPtr<ID3D11ShaderResourceView> srv;
 	CHECK( m_player->getTexture( srv ) );
 
-	return E_NOTIMPL;
+	return S_FALSE;
 }

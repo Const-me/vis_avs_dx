@@ -1,9 +1,13 @@
 #include "stdafx.h"
 #include "FrameTexture.h"
+#include "mf.h"
 #include <Resources/staticResources.h>
 
 HRESULT FrameTexture::haveSample( IMFSample* sample )
 {
+	if( dbgLogStuff )
+		logDebug( "FrameTexture::haveSample" );
+
 	DWORD nBuffers;
 	CHECK( sample->GetBufferCount( &nBuffers ) );
 	if( 0 == nBuffers )

@@ -4,14 +4,18 @@
 
 class MediaSink :
 	public CComObjectRootEx<CComMultiThreadModel>,
-	public IMFMediaSink
+	public IMFMediaSink,
+	public IMFClockStateSink
 {
 public:
 	BEGIN_COM_MAP( MediaSink )
 		COM_INTERFACE_ENTRY( IMFMediaSink )
+		COM_INTERFACE_ENTRY( IMFClockStateSink )
 	END_COM_MAP()
 
 	static HRESULT create( CComPtr<CComObject<MediaSink>>& mediaSinkObj, iSampleSink& sampleSink, CComPtr<IMFStreamSink>& streamSink );
+
+	HRESULT requestSample();
 
 	HRESULT __stdcall Shutdown() override;
 
@@ -43,6 +47,17 @@ private:
 	HRESULT __stdcall SetPresentationClock( IMFPresentationClock *pPresentationClock ) override;
 
 	HRESULT __stdcall GetPresentationClock( IMFPresentationClock **ppPresentationClock ) override;
+
+	// ==== IMFClockStateSink methods ====
+	HRESULT __stdcall OnClockStart( MFTIME hnsSystemTime, LONGLONG llClockStartOffset ) override;
+
+	HRESULT __stdcall OnClockStop( MFTIME hnsSystemTime ) override;
+
+	HRESULT __stdcall OnClockPause( MFTIME hnsSystemTime ) override;
+
+	HRESULT __stdcall OnClockRestart( MFTIME hnsSystemTime ) override;
+
+	HRESULT __stdcall OnClockSetRate( MFTIME hnsSystemTime, float flRate ) override;
 
 	// ==== Implementation ====
 	CComPtr<CComObject<StreamSink>> m_stream;

@@ -122,7 +122,8 @@ HRESULT Player::onEvent( MediaEventType eventType, HRESULT hrStatus )
 	switch( eventType )
 	{
 	case MESessionStarted:
-		return m_sink->requestSample();
+		// return m_sink->requestSample();
+		return S_OK;
 
 	case MESessionClosed:
 		m_evtClosed.set();
@@ -137,7 +138,7 @@ HRESULT Player::onEvent( MediaEventType eventType, HRESULT hrStatus )
 		CHECK( m_session->Start( &GUID_NULL, startTime ) );
 		return S_OK;
 	}
-	return S_FALSE;
+	return S_OK;
 }
 
 HRESULT Player::stop()

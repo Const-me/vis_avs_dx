@@ -57,7 +57,9 @@ void dbgLogMediaEvent( const char* what, MediaEventType eventType, HRESULT hrSta
 			logError( "%s: %s %s", what, ts, cstr( error ) );
 		else
 			logError( "%s: %i %s", what, (int)eventType, cstr( error ) );
+		return;
 	}
+
 	if( nullptr != ts )
 		logDebug( "%s: %s", what, ts );
 	else

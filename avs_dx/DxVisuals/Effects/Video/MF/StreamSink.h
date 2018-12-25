@@ -15,14 +15,14 @@ public:
 
 	HRESULT initialize( IMFMediaSink* owner, iSampleSink& sampleSink );
 
-	HRESULT requestSample();
-
 	void shutdown();
 
 private:
 	CComPtr<IMFMediaSink> m_sink;
 	CComPtr<IMFMediaTypeHandler> m_mtHandler;
 	iSampleSink *m_pDest = nullptr;
+
+	HRESULT requestSample();
 
 	// ==== IMFStreamSink methods ====
 	HRESULT __stdcall GetMediaSink( IMFMediaSink **ppMediaSink ) override;

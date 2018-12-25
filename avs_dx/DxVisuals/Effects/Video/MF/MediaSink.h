@@ -15,7 +15,7 @@ public:
 
 	static HRESULT create( CComPtr<CComObject<MediaSink>>& mediaSinkObj, iSampleSink& sampleSink, CComPtr<IMFStreamSink>& streamSink );
 
-	HRESULT requestSample();
+	// HRESULT requestSample();
 
 	HRESULT __stdcall Shutdown() override;
 

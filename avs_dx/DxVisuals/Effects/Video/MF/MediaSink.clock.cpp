@@ -6,8 +6,11 @@
 HRESULT __stdcall MediaSink::onClockStart( MFTIME hnsSystemTime, LONGLONG llClockStartOffset )
 {
 	CHECK_SHUTDOWN;
-	if( m_stream )
-		return m_stream->QueueEvent( MEStreamSinkStarted );
+	if( !m_stream )
+		return S_OK;
+
+	CHECK( m_stream->QueueEvent( MEStreamSinkStarted ) );
+	CHECK( m_stream->QueueEvent( MEStreamSinkRequestSample ) );
 	return S_OK;
 }
 

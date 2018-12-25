@@ -91,10 +91,10 @@ HRESULT MediaSink::initialize( iSampleSink& sampleSink, CComPtr<IMFStreamSink>& 
 	return S_OK;
 }
 
-HRESULT MediaSink::requestSample()
+/* HRESULT MediaSink::requestSample()
 {
 	CHECK_SHUTDOWN;
 	if( !m_stream )
 		return OLE_E_BLANK;
 	return m_stream->requestSample();
-}
+} */

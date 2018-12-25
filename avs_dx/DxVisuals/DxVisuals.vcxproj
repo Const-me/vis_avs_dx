@@ -116,6 +116,8 @@
     <ClInclude Include="Effects\Video\MF\StreamSink.h" />
     <ClInclude Include="Effects\Video\MF\Player.h" />
     <ClInclude Include="Effects\Video\MF\playerApi.h" />
+    <ClInclude Include="Effects\Video\MF\MediaTypeHandler.h" />
+    <ClInclude Include="Effects\Video\MF\magicNumbers.h" />
     <ClInclude Include="Utils\md4.h" />
     <ClInclude Include="Render\ShaderBase.h" />
     <ClInclude Include="Utils\ByteRange.hpp" />
@@ -204,6 +206,8 @@
     <ClCompile Include="Effects\Video\MF\MediaSink.cpp" />
     <ClCompile Include="Effects\Video\MF\StreamSink.cpp" />
     <ClCompile Include="Effects\Video\MF\Player.cpp" />
+    <ClCompile Include="Effects\Video\MF\MediaTypeHandler.cpp" />
+    <ClCompile Include="Effects\Video\MF\magicNumbers.cpp" />
     <ClCompile Include="Utils\md4.cpp" />
     <ClCompile Include="Render\ShaderBase.cpp" />
     <ClCompile Include="Utils\resizeHandler.cpp" />

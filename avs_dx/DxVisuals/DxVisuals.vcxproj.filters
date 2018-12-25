@@ -85,6 +85,8 @@
     <ClInclude Include="Effects\Video\MF\playerApi.h" />
     <ClInclude Include="Effects\Video\MF\EventListener.h" />
     <ClInclude Include="Effects\Video\MF\EventSlim.h" />
+    <ClInclude Include="Effects\Video\MF\MediaTypeHandler.h" />
+    <ClInclude Include="Effects\Video\MF\magicNumbers.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -151,6 +153,8 @@
     <ClCompile Include="Effects\Video\MF\EventSlim.cpp" />
     <ClCompile Include="Effects\Video\MF\MediaSink.clock.cpp" />
     <ClCompile Include="Effects\Video\MF\mf.cpp" />
+    <ClCompile Include="Effects\Video\MF\MediaTypeHandler.cpp" />
+    <ClCompile Include="Effects\Video\MF\magicNumbers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

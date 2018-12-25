@@ -27,6 +27,7 @@ inline HRESULT createInstance( CComPtr<CComObject<CoClass>> &p )
 #if dbgLogStuff
 void dbgLogMediaEvent( const char* what, MediaEventType eventType, HRESULT hrStatus );
 void dbgLogMediaEvent( const char* what, IMFMediaEvent *pEvent );
+void dbgLogMediaType( const char* what, IMFMediaType *mt );
 #else
 #define dbgLogMediaEvent( ... ) __noop
 #endif

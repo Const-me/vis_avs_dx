@@ -73,15 +73,28 @@ HRESULT __stdcall StreamSink::Flush()
 	return S_OK;
 }
 
-HRESULT StreamSink::initialize( IMFMediaSink* owner, iSampleSink& sampleSink )
+HRESULT StreamSink::initialize( IMFMediaSink* owner, iSampleSink& sampleSink, IMFMediaTypeHandler* mth )
 {
+	CComPtr<IMFMediaType> mtSource;
+	CHECK( mth->GetCurrentMediaType( &mtSource ) );
+
+	uint64_t size, rate, aspect;
+	CHECK( mtSource->GetUINT64( MF_MT_FRAME_SIZE, &size ) );
+	CHECK( mtSource->GetUINT64( MF_MT_FRAME_RATE, &rate ) );
+	CHECK( mtSource->GetUINT64( MF_MT_PIXEL_ASPECT_RATIO, &aspect ) );
+
 	CHECK( MFCreateSimpleTypeHandler( &m_mtHandler ) );
 
 	CComPtr<IMFMediaType> mt;
 	CHECK( MFCreateMediaType( &mt ) );
+
 	CHECK( mt->SetGUID( MF_MT_MAJOR_TYPE, MFMediaType_Video ) );
 	CHECK( mt->SetGUID( MF_MT_SUBTYPE, MFVideoFormat_RGB32 ) );
-	// CHECK( mt->SetGUID( MF_MT_SUBTYPE, MFVideoFormat_NV12 ) );
+
+	// CHECK( mt->SetUINT64( MF_MT_FRAME_SIZE, size ) );
+	// CHECK( mt->SetUINT64( MF_MT_FRAME_RATE, rate ) );
+	// CHECK( mt->SetUINT64( MF_MT_PIXEL_ASPECT_RATIO, aspect ) );
+	
 	CHECK( m_mtHandler->SetCurrentMediaType( mt ) );
 
 	CHECK( startEventGenerator() );

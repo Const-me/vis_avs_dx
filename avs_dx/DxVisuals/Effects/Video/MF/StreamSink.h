@@ -13,7 +13,7 @@ public:
 		COM_INTERFACE_ENTRY( IMFStreamSink )
 	END_COM_MAP()
 
-	HRESULT initialize( IMFMediaSink* owner, iSampleSink& sampleSink );
+	HRESULT initialize( IMFMediaSink* owner, iSampleSink& sampleSink, IMFMediaTypeHandler* mth );
 
 	void shutdown();
 

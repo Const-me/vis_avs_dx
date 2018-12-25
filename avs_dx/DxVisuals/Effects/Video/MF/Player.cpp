@@ -99,7 +99,7 @@ HRESULT Player::createPlaybackTopology( IMFMediaSource* source, IMFPresentationD
 
 		// Create the stream sink
 		CComPtr<IMFStreamSink> streamSink;
-		CHECK( MediaSink::create( m_sink, m_texture, streamSink ) );
+		CHECK( MediaSink::create( m_sink, m_texture, mth, streamSink ) );
 
 		// Add an output node to the topology
 		CComPtr<IMFTopologyNode> dest;

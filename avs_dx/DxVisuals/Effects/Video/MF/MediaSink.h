@@ -13,7 +13,7 @@ public:
 		COM_INTERFACE_ENTRY( IMFClockStateSink )
 	END_COM_MAP()
 
-	static HRESULT create( CComPtr<CComObject<MediaSink>>& mediaSinkObj, iSampleSink& sampleSink, CComPtr<IMFStreamSink>& streamSink );
+	static HRESULT create( CComPtr<CComObject<MediaSink>>& mediaSinkObj, iSampleSink& sampleSink, IMFMediaTypeHandler* mth, CComPtr<IMFStreamSink>& streamSink );
 
 	// HRESULT requestSample();
 
@@ -21,7 +21,7 @@ public:
 
 private:
 
-	HRESULT initialize( iSampleSink& sampleSink, CComPtr<IMFStreamSink>& streamSink );
+	HRESULT initialize( iSampleSink& sampleSink, IMFMediaTypeHandler* mth, CComPtr<IMFStreamSink>& streamSink );
 
 	// ==== IMFMediaSink methods ====
 	HRESULT __stdcall GetCharacteristics( DWORD *pdwCharacteristics ) override;

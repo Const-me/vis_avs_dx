@@ -74,20 +74,21 @@ HRESULT __stdcall MediaSink::Shutdown()
 	return S_OK;
 }
 
-HRESULT MediaSink::create( CComPtr<CComObject<MediaSink>>& mediaSinkObj, iSampleSink& sampleSink, CComPtr<IMFStreamSink>& streamSink )
+HRESULT MediaSink::create( CComPtr<CComObject<MediaSink>>& mediaSinkObj, iSampleSink& sampleSink, IMFMediaTypeHandler* mth, CComPtr<IMFStreamSink>& streamSink )
 {
 	CComPtr<CComObject<MediaSink>> res;
 	CHECK( createInstance( res ) );
-	CHECK( res->initialize( sampleSink, streamSink ) );
+	CHECK( res->initialize( sampleSink, mth, streamSink ) );
 	mediaSinkObj = res;
 	return S_OK;
 }
 
-HRESULT MediaSink::initialize( iSampleSink& sampleSink, CComPtr<IMFStreamSink>& streamSink )
+HRESULT MediaSink::initialize( iSampleSink& sampleSink, IMFMediaTypeHandler* mth, CComPtr<IMFStreamSink>& streamSink )
 {
 	CHECK( createInstance( m_stream ) );
-	CHECK( m_stream->initialize( this, sampleSink ) );
-	streamSink = m_stream;
+	CHECK( m_stream->initialize( this, sampleSink, mth ) );
+	IMFStreamSink* pss = m_stream;
+	streamSink = pss;
 	return S_OK;
 }
 

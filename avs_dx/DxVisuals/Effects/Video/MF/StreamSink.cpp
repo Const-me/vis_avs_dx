@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "StreamSink.h"
+#pragma comment( lib, "Mfuuid.lib" )
 
 HRESULT StreamSink::requestSample()
 {

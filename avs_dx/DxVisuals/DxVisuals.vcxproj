@@ -96,6 +96,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Effects\List\Blender.h" />
+    <ClInclude Include="Effects\Video\MF\mf.h" />
+    <ClInclude Include="Effects\Video\MF\EventGenerator.h" />
     <ClInclude Include="Expressions\SymbolTable\SymbolTable.h" />
     <ClInclude Include="Expressions\VariableDecl.hpp" />
     <ClInclude Include="Expressions\SymbolTable\FunctionsTable.h" />
@@ -103,8 +105,10 @@
     <ClInclude Include="Expressions\Tree\Tree.h" />
     <ClInclude Include="Effects\Render\SuperScope\SuperScope.h" />
     <ClInclude Include="Expressions\preprocess.h" />
-    <ClInclude Include="Effects\Video\mfStartup.h" />
+    <ClInclude Include="Effects\Video\MF\mfStartup.h" />
     <ClInclude Include="Effects\Video\interop.h" />
+    <ClInclude Include="Effects\Video\MF\MediaSink.h" />
+    <ClInclude Include="Effects\Video\MF\StreamSink.h" />
     <ClInclude Include="Utils\md4.h" />
     <ClInclude Include="Render\ShaderBase.h" />
     <ClInclude Include="Utils\ByteRange.hpp" />
@@ -173,6 +177,7 @@
     <ClCompile Include="EffectBase\EffectBase.cpp" />
     <ClCompile Include="Effects\List\Blender.cpp" />
     <ClCompile Include="Effects\List\EffectList.cpp" />
+    <ClCompile Include="Effects\Video\MF\EventGenerator.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.debug.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.emit.cpp" />
@@ -182,8 +187,10 @@
     <ClCompile Include="Expressions\Tree\Tree.parse.cpp" />
     <ClCompile Include="Effects\Render\SuperScope\SuperScope.cpp" />
     <ClCompile Include="Expressions\preprocess.cpp" />
-    <ClCompile Include="Effects\Video\mfStartup.cpp" />
+    <ClCompile Include="Effects\Video\MF\mfStartup.cpp" />
     <ClCompile Include="Effects\Video\interop.cpp" />
+    <ClCompile Include="Effects\Video\MF\MediaSink.cpp" />
+    <ClCompile Include="Effects\Video\MF\StreamSink.cpp" />
     <ClCompile Include="Utils\md4.cpp" />
     <ClCompile Include="Render\ShaderBase.cpp" />
     <ClCompile Include="Utils\resizeHandler.cpp" />

@@ -12,7 +12,7 @@ namespace
 {
 	bool isVideoFileExtension( const CString& ext )
 	{
-		return ext == L".mp4" || ext == L".mpeg" || ext == L".mkv" || ext == L".avi";
+		return ext == L".mp4" || ext == L".mpeg" || ext == L".mkv" || ext == L".avi" || ext == L".wmv";
 	}
 
 	// Get lower-case extension including the dot, e.g. ".mp4"
@@ -23,6 +23,7 @@ namespace
 		return ext;
 	}
 
+	// https://stackoverflow.com/q/22986845/126995
 	HRESULT resolveShortcutTarget( HWND wnd, const CString& lnk, CString& target )
 	{
 		// Get a pointer to the IShellLink interface. It is assumed that CoInitialize has already been called. 

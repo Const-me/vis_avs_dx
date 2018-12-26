@@ -2,6 +2,7 @@
 #include <memory>
 #include "iRootEffect.h"
 
+// This interface acts as a rendering entry point of the whole DxVisuals library.
 class iTransition
 {
 public:

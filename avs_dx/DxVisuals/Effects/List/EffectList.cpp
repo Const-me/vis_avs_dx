@@ -25,6 +25,10 @@ float EffectList::outblendval() const
 
 HRESULT EffectList::render( bool isBeat, RenderTargets& rt )
 {
+	const int enabled = ( avs->mode & 2 ) ^ 2;
+	if( !enabled )
+		return S_FALSE;
+
 	const eBlendMode blendIn = blendin();
 	if( clearfb() && blendIn != eBlendMode::Replace && m_rt.lastWritten() )
 		m_rt.lastWritten().clear();

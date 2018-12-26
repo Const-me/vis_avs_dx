@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "FrameTexture.h"
-#include <Resources/staticResources.h>
 
 CSize getRenderSize();
 

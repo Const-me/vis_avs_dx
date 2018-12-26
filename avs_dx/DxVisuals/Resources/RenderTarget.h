@@ -9,7 +9,9 @@ class RenderTarget
 
 public:
 
-	static constexpr DXGI_FORMAT format = DXGI_FORMAT_R10G10B10A2_UNORM;
+	static constexpr DXGI_FORMAT format =
+		DXGI_FORMAT_R10G10B10A2_UNORM;
+		// DXGI_FORMAT_R8G8B8A8_UNORM;
 
 	HRESULT create();
 

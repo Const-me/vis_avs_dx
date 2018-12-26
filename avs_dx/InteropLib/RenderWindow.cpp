@@ -38,17 +38,11 @@ void RenderWindow::destroyDevice()
 namespace
 {
 	CSize g_renderSize;
-	CStringA g_renderSizeString = "float2(0,0)";
 }
 
-CSize getRenderSize()
+CSize getCurrentRenderSize()
 {
 	return g_renderSize;
-}
-
-const CStringA& getRenderSizeString()
-{
-	return g_renderSizeString;
 }
 
 HRESULT RenderWindow::wmSize( UINT nType, CSize size )
@@ -60,7 +54,6 @@ HRESULT RenderWindow::wmSize( UINT nType, CSize size )
 	CHECK( resizeSwapChain( size ) );
 
 	g_renderSize = size;
-	g_renderSizeString.Format( "float2( %i, %i )", size.cx, size.cy );
 	return S_OK;
 }
 

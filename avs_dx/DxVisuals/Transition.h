@@ -4,7 +4,6 @@
 
 class Transition: public iTransition
 {
-	CSize m_renderSize;
 	RenderTargets m_targets1, m_targets2;
 
 public:

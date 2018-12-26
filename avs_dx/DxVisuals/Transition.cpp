@@ -7,6 +7,22 @@
 // The critical section that guards renderers, linked from deep inside AVS.
 extern CRITICAL_SECTION g_render_cs;
 
+namespace
+{
+	CSize g_renderSize = CSize{ 0, 0 };
+	CStringA g_renderSizeString = "float2(0,0)";
+}
+
+CSize getRenderSize()
+{
+	return g_renderSize;
+}
+
+const CStringA& getRenderSizeString()
+{
+	return g_renderSizeString;
+}
+
 void createTransition( std::unique_ptr<iTransition>& up )
 {
 	up = std::make_unique<Transition>();
@@ -21,10 +37,11 @@ HRESULT Transition::prepare( char visdata[ 2 ][ 2 ][ 576 ], int isBeat )
 	CHECK( StaticResources::sourceData.update( visdata, isBeat ) );
 
 	// Handle resize
-	const CSize currentSize = getRenderSize();
-	if( m_renderSize != currentSize )
+	const CSize currentSize = getCurrentRenderSize();
+	if( g_renderSize != currentSize )
 	{
-		m_renderSize = currentSize;
+		g_renderSize = currentSize;
+		g_renderSizeString.Format( "float2( %i, %i )", currentSize.cx, currentSize.cy );
 		callResizeHandlers();
 	}
 	return S_OK;

@@ -5,6 +5,7 @@
 #include "../DxVisuals/Resources/RenderTarget.h"
 #include <dxgi1_3.h>
 #include <mfapi.h>
+#include <d3d11_4.h>
 
 #pragma comment( lib, "D3D11.lib" )
 CComPtr<ID3D11Device> device;
@@ -44,13 +45,17 @@ static HRESULT initVideo()
 
 	CHECK( dxgiDeviceManager->ResetDevice( device, resetToken ) );
 
+	CComQIPtr<ID3D10Multithread> mt = context.operator ->();
+	if( mt )
+		mt->SetMultithreadProtected( TRUE );
+
 	return S_OK;
 }
 
 HRESULT RenderWindow::createDevice()
 {
 	UINT deviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_VIDEO_SUPPORT;
-#ifdef NDEBUG
+#ifdef DEBUG
 	deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 

@@ -78,7 +78,8 @@ HRESULT Player::getTexture( CComPtr<ID3D11ShaderResourceView>& srv )
 			CHECK( m_texture.create( sz ) );
 		}
 		const MFARGB border = { 0, 0, 0, 0 };
-		CHECK( m_engine->TransferVideoFrame( m_texture.texture(), nullptr, m_texture.rectangle(), &border ) );
+		const HRESULT hr = m_engine->TransferVideoFrame( m_texture.texture(), nullptr, m_texture.rectangle(), &border );
+		CHECK( hr );
 	}
 
 	return m_texture.getView( srv );
@@ -100,7 +101,7 @@ HRESULT Player::ensureEngine()
 
 	IMFMediaEngineNotify* men = this;
 	CHECK( a->SetUnknown( MF_MEDIA_ENGINE_CALLBACK, men ) );
-	CHECK( a->SetUINT32( MF_MEDIA_ENGINE_VIDEO_OUTPUT_FORMAT, DXGI_FORMAT_R10G10B10A2_UNORM ) );
+	CHECK( a->SetUINT32( MF_MEDIA_ENGINE_VIDEO_OUTPUT_FORMAT, FrameTexture::videoFormat ) );
 
 	if( dxgiDeviceManager )
 		CHECK( a->SetUnknown( MF_MEDIA_ENGINE_DXGI_MANAGER, dxgiDeviceManager ) );

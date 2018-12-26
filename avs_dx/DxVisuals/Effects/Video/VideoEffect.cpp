@@ -63,5 +63,11 @@ HRESULT VideoEffect::render( bool isBeat, RenderTargets& rt )
 	CComPtr<ID3D11ShaderResourceView> srv;
 	CHECK( m_player->getTexture( srv ) );
 
-	return S_FALSE;
+	CHECK( renderer.bindShaders( isBeat ) );
+
+	iaClearBuffer();
+	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP );
+	context->Draw( 4, 0 );
+
+	return S_OK;
 }

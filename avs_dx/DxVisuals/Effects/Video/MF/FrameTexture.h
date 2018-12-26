@@ -1,5 +1,6 @@
 #pragma once
 
+
 class FrameTexture
 {
 	CComPtr<ID3D11Texture2D> m_texture;
@@ -7,6 +8,9 @@ class FrameTexture
 	CRect m_rect;
 
 public:
+
+	static constexpr DXGI_FORMAT videoFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
+
 
 	operator bool() const { return nullptr != m_srv; }
 

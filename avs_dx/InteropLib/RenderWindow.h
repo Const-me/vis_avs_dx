@@ -29,9 +29,6 @@ public:
 
 private:
 	HWND m_hWnd = nullptr;
-	CComPtr<IDXGISwapChain> m_swapChain;
-	// CComPtr<IDXGIOutput> m_output;
-	CComPtr<ID3D11RenderTargetView> m_rtv;
 
 	int wmCreate( LPCREATESTRUCT lpCreateStruct );
 

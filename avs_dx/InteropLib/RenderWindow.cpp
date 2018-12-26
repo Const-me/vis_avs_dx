@@ -3,27 +3,11 @@
 #include "../DxVisuals/Resources/staticResources.h"
 #include "interop.h"
 #include "../DxVisuals/Resources/RenderTarget.h"
-#include <dxgi1_3.h>
-#include <mfapi.h>
-#include <d3d11_4.h>
+#include "deviceCreation.h"
 
-#pragma comment( lib, "D3D11.lib" )
-CComPtr<ID3D11Device> device;
-CComPtr<ID3D11DeviceContext> context;
-CComPtr<IMFDXGIDeviceManager> dxgiDeviceManager;
 CComAutoCriticalSection renderLock;
 
 constexpr UINT msPresentTimeout = 250;
-
-constexpr UINT buffersCount()
-{
-	return ( IsWindows8Point1OrGreater() ) ? 2 : 1;
-}
-
-constexpr UINT swapChainFlags()
-{
-	return ( IsWindows8Point1OrGreater() ) ? DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT : 0;
-}
 
 int RenderWindow::wmCreate( LPCREATESTRUCT lpCreateStruct )
 {
@@ -38,105 +22,17 @@ void RenderWindow::wmDestroy()
 	destroyDevice();
 }
 
-static HRESULT initVideo()
-{
-	UINT resetToken = 0;
-	CHECK( MFCreateDXGIDeviceManager( &resetToken, &dxgiDeviceManager ) );
-
-	CHECK( dxgiDeviceManager->ResetDevice( device, resetToken ) );
-
-	CComQIPtr<ID3D10Multithread> mt = context.operator ->();
-	if( mt )
-		mt->SetMultithreadProtected( TRUE );
-
-	return S_OK;
-}
-
 HRESULT RenderWindow::createDevice()
 {
-	UINT deviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_VIDEO_SUPPORT;
-#ifdef DEBUG
-	deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-#endif
-
-	const D3D_FEATURE_LEVEL fl = D3D_FEATURE_LEVEL_11_0;
-
-	DXGI_SWAP_CHAIN_DESC scd = {};
-	scd.BufferCount = buffersCount();
-	scd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-	scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	scd.OutputWindow = m_hWnd;
-	scd.SampleDesc.Count = 1;
-	scd.Windowed = TRUE;
-	scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-	scd.Flags = swapChainFlags();
-
-	if( IsWindows10OrGreater() )
-	{
-		scd.BufferCount = 2;
-		scd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-	}
-	else if( IsWindows8Point1OrGreater() )
-	{
-		scd.BufferCount = 2;
-		scd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
-	}
-
-	if( IsWindows8OrGreater() )
-	{
-		bool haveVideo = true;
-		if( FAILED( D3D11CreateDeviceAndSwapChain( nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, deviceFlags, &fl, 1, D3D11_SDK_VERSION, &scd, &m_swapChain, &device, nullptr, &context ) ) )
-		{
-			haveVideo = false;
-			deviceFlags &= ~D3D11_CREATE_DEVICE_VIDEO_SUPPORT;
-			CHECK( D3D11CreateDeviceAndSwapChain( nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, deviceFlags, &fl, 1, D3D11_SDK_VERSION, &scd, &m_swapChain, &device, nullptr, &context ) );
-		}
-
-		if( haveVideo )
-		{
-			if( FAILED( initVideo() ) )
-			{
-				dxgiDeviceManager = nullptr;
-				haveVideo = false;
-			}
-		}
-
-		if( !haveVideo )
-			logWarning( "Your GPU driver doesn't report support for hardware video decoding. Videos will decode on CPU." );
-	}
-	else
-	{
-		deviceFlags &= ~D3D11_CREATE_DEVICE_VIDEO_SUPPORT;
-		CHECK( D3D11CreateDeviceAndSwapChain( nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, deviceFlags, &fl, 1, D3D11_SDK_VERSION, &scd, &m_swapChain, &device, nullptr, &context ) );
-	}
-
-
-	if( IsWindows8Point1OrGreater() )
-	{
-		CComPtr<IDXGISwapChain2> sc2;
-		CHECK( m_swapChain->QueryInterface( IID_PPV_ARGS( &sc2 ) ) );
-		CHECK( sc2->SetMaximumFrameLatency( 1 ) );
-	}
-
-	CComPtr<ID3D11Resource> pBB;
-	CHECK( m_swapChain->GetBuffer( 0, IID_PPV_ARGS( &pBB ) ) );
-
-	CHECK( device->CreateRenderTargetView( pBB, nullptr, &m_rtv ) );
-
+	CHECK( ::createDevice( m_hWnd ) );
 	CHECK( StaticResources::create() );
-
-	logDebug( "Created device + swap chain" );
 	return S_OK;
 }
 
 void RenderWindow::destroyDevice()
 {
 	StaticResources::destroy();
-	m_rtv = nullptr;
-	m_swapChain = nullptr;
-	dxgiDeviceManager = nullptr;
-	device = nullptr;
-	context = nullptr;
+	::destroyDevice();
 }
 
 namespace
@@ -160,33 +56,11 @@ HRESULT RenderWindow::wmSize( UINT nType, CSize size )
 	logDebug( "WM_SIZE: %i, %i x %i", nType, size.cx, size.cy );
 
 	// https://docs.microsoft.com/en-us/windows/desktop/direct3ddxgi/d3d10-graphics-programming-guide-dxgi#handling-window-resizing
-	if( !m_swapChain )
-		return S_FALSE;
 	CSLock __lock( renderLock );
-
-	context->OMSetRenderTargets( 0, nullptr, nullptr );
-	m_rtv = nullptr;
-
-	if( size.cx <= 0 || size.cy <= 0 )
-	{
-		logInfo( "WM_SIZE with an empty size, ignoring." );
-		return S_FALSE;
-	}
-
-	CHECK( m_swapChain->ResizeBuffers( 2, 0, 0, DXGI_FORMAT_UNKNOWN, swapChainFlags() ) );
-
-	CComPtr<ID3D11Texture2D> pBuffer;
-	CHECK( m_swapChain->GetBuffer( 0, IID_PPV_ARGS( &pBuffer ) ) );
-	CHECK( device->CreateRenderTargetView( pBuffer, nullptr, &m_rtv ) );
-
-	CD3D11_VIEWPORT vp{ 0.0f, 0.0f, (float)size.cx, (float)size.cy };
-	context->RSSetViewports( 1, &vp );
-
-	logInfo( "Resized the swap chain to %i x %i", size.cx, size.cy );
+	CHECK( resizeSwapChain( size ) );
 
 	g_renderSize = size;
 	g_renderSizeString.Format( "float2( %i, %i )", size.cx, size.cy );
-
 	return S_OK;
 }
 
@@ -197,7 +71,7 @@ LRESULT RenderWindow::wmPresent( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	const RenderTarget* pSource = (const RenderTarget*)( wParam );
 	HRESULT* pResult = (HRESULT*)lParam;
 
-	if( !m_rtv )
+	if( !renderTargetView )
 	{
 		logWarning( "Present is called while there's no render target" );
 		*pResult = S_FALSE;
@@ -208,13 +82,13 @@ LRESULT RenderWindow::wmPresent( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	{
 		// Debug code: just clear the RT
 		const float rgba[ 4 ] = { 0,1,0,1 };
-		context->ClearRenderTargetView( m_rtv, rgba );
-		*pResult = m_swapChain->Present( 0, 0 );
+		context->ClearRenderTargetView( renderTargetView, rgba );
+		*pResult = swapChain->Present( 0, 0 );
 		return 0;
 	}
 
 	setShaders( StaticResources::fullScreenTriangle, nullptr, StaticResources::copyTexture );
-	omSetTarget( m_rtv );
+	omSetTarget( renderTargetView );
 	pSource->bindView( 127 );
 	omBlend( eBlend::None );
 	drawFullscreenTriangle( false );
@@ -227,7 +101,7 @@ LRESULT RenderWindow::wmPresent( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 
 HRESULT RenderWindow::doPresent()
 {
-	CHECK( m_swapChain->Present( 1, 0 ) );
+	CHECK( swapChain->Present( 1, 0 ) );
 	// CHECK( m_output->WaitForVBlank() );
 	return S_OK;
 }
@@ -288,7 +162,7 @@ LRESULT RenderWindow::wmTransition( UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 	const sPresentTransition spt = *(sPresentTransition*)( wParam );
 	HRESULT* pResult = (HRESULT*)lParam;
 
-	if( !m_rtv )
+	if( !renderTargetView )
 	{
 		logWarning( "Present is called while there's no render target" );
 		*pResult = S_FALSE;

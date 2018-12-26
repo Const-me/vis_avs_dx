@@ -74,6 +74,8 @@
     <ClInclude Include="drawDx.h" />
     <ClInclude Include="avsUtils.h" />
     <ClInclude Include="enumDisplays.h" />
+    <ClInclude Include="device.h" />
+    <ClInclude Include="deviceCreation.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -84,6 +86,7 @@
     <ClCompile Include="avsUtils.cpp" />
     <ClCompile Include="module.cpp" />
     <ClCompile Include="enumDisplays.cpp" />
+    <ClCompile Include="deviceCreation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

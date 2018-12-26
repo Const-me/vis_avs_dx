@@ -32,7 +32,18 @@ using namespace Expressions;
 CompiledShaderBase::CompiledShaderBase( const ShaderTemplate* origTemplate ) :
 	m_template( *origTemplate ),
 	templatePieces( splitTemplate( m_template.hlsl ) )
-{ }
+{
+	assembleShader();
+}
+
+void CompiledShaderBase::assembleShader()
+{
+	m_template.hlsl = templatePieces[ 0 ];
+	m_template.hlsl += fragmentGlobals;
+	m_template.hlsl += templatePieces[ 1 ];
+	m_template.hlsl += fragmentCode;
+	m_template.hlsl += templatePieces[ 2 ];
+}
 
 HRESULT CompiledShaderBase::updateDx( const Expressions::Compiler& compiler )
 {
@@ -42,11 +53,7 @@ HRESULT CompiledShaderBase::updateDx( const Expressions::Compiler& compiler )
 	fragmentCode = compiler.fragmentCode();
 	fragmentGlobals = compiler.fragmentGlobals();
 
-	m_template.hlsl = templatePieces[ 0 ];
-	m_template.hlsl += fragmentGlobals;
-	m_template.hlsl += templatePieces[ 1 ];
-	m_template.hlsl += fragmentCode;
-	m_template.hlsl += templatePieces[ 2 ];
+	assembleShader();
 
 	needsRng = compiler.fragmentUsesRng();
 	m_template.usesBeat = compiler.fragmentUsesBeat();

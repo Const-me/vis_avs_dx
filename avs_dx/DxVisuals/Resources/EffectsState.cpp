@@ -9,7 +9,12 @@ HRESULT EffectsState::create( UINT totalSize )
 
 	const UINT byteWidth = ( totalSize ) * 4;
 	constexpr UINT bindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS;
-	CD3D11_BUFFER_DESC bufferDesc{ byteWidth, bindFlags, D3D11_USAGE_DEFAULT, 0, D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS | D3D11_RESOURCE_MISC_DRAWINDIRECT_ARGS };
+
+	UINT miscFlags = D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS;
+	// D3D11 ERROR: ID3D11Device::CreateBuffer: The Dimensions are invalid. ByteWidth must be 12 or larger to be used with D3D11_RESOURCE_MISC_DRAWINDIRECT_ARGS. [ STATE_CREATION ERROR #66: CREATEBUFFER_INVALIDDIMENSIONS]
+	if( totalSize >= 4 )
+		miscFlags |= D3D11_RESOURCE_MISC_DRAWINDIRECT_ARGS;
+	CD3D11_BUFFER_DESC bufferDesc{ byteWidth, bindFlags, D3D11_USAGE_DEFAULT, 0, miscFlags };
 
 	CHECK( device->CreateBuffer( &bufferDesc, nullptr, &m_buffer ) );
 

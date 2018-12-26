@@ -12,6 +12,8 @@ namespace Expressions
 		CStringA fragmentCode, fragmentGlobals;
 		bool needsRng = false;
 
+		void assembleShader();
+
 	public:
 
 		CompiledShaderBase( const ShaderTemplate* origTemplate );

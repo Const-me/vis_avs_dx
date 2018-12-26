@@ -2,6 +2,7 @@
 #include <Utils/resizeHandler.h>
 #include <Resources/RenderTarget.h>
 
+// Very similar to RenderTarget, with 2 small differences: this class doesn't create render target view, and it keeps rectangle with the size of the texture.
 class FrameTexture: public ResizeHandler
 {
 	CComPtr<ID3D11Texture2D> m_texture;

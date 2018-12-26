@@ -12,7 +12,7 @@ HRESULT FrameTexture::create()
 	const CSize size = getRenderSize();
 	CD3D11_TEXTURE2D_DESC desc{ videoFormat, (UINT)size.cx, (UINT)size.cy, 1, 1 };
 
-	// Fix the followinug error:
+	// Fixes the following error:
 	// D3D11 ERROR: ID3D11DeviceContext::CreateVideoProcessorOutputView: Resource must have bind flag D3D11_BIND_RENDER_TARGET - was created with 8! [ STATE_CREATION ERROR #3145933: CREATEVIDEOPROCESSOROUTPUTVIEW_INVALIDBIND]
 	desc.BindFlags |= D3D11_BIND_RENDER_TARGET;
 

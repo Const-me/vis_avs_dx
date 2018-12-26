@@ -3,10 +3,9 @@
 #include <Vfw.h>
 #include "MF/playerApi.h"
 
-using namespace Hlsl::Video;
-
-struct VideoStructs
+class VideoEffect : public EffectBase
 {
+public:
 	struct AvsState
 	{
 		int enabled;
@@ -30,22 +29,7 @@ struct VideoStructs
 		int *old_image, old_image_w, old_image_h;
 	};
 
-	using StateData = EmptyStateData;
-
-	class VsData : public VideoVS
-	{
-	public:
-		HRESULT updateAvs( const AvsState& ass );
-	};
-
-};
-
-class VideoEffect : public EffectBase1<VideoStructs>
-{
-	CComPtr<iPlayer> m_player;
-
-public:
-	VideoEffect( AvsState *pState ) : tBase( pState ) { }
+	VideoEffect( AvsState *pState ) : avs( *pState ) { }
 
 	const Metadata& metadata() override;
 
@@ -54,4 +38,9 @@ public:
 	// Open/close the video. Both called from GUI thread.
 	HRESULT open( const char* selection );
 	HRESULT close();
+
+private:
+
+	AvsState& avs;
+	CComPtr<iPlayer> m_player;
 };

@@ -93,10 +93,8 @@ extern HWND hwnd_WinampParent;
 
 HRESULT getVideoFilePath( const char *selection, CString& result )
 {
-	CString gp{ g_path };
-	CPath path{ gp };
-	CString w{ selection };
-	path.Append( w );
+	CPath path{ CString{ g_path } };
+	path.Append( CString{ selection } );
 
 	CString ext = getExtension( path );
 	if( isVideoFileExtension( ext ) )

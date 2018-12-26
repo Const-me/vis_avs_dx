@@ -182,8 +182,6 @@
     <FxCompile Include="Effects\Render\SuperScope\SuperScopeState.hlsl" />
     <FxCompile Include="Expressions\Builtin\shaderFunctions.hlsl" />
     <FxCompile Include="Effects\List\BlenderPS.hlsl" />
-    <FxCompile Include="Effects\Video\VideoPS.hlsl" />
-    <FxCompile Include="Effects\Video\VideoVS.hlsl" />
     <FxCompile Include="Expressions\Builtin\random.hlsl" />
     <FxCompile Include="Expressions\Builtin\doubleFunctions.hlsl" />
   </ItemGroup>

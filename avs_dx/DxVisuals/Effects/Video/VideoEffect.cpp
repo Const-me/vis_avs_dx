@@ -50,27 +50,19 @@ HRESULT VideoEffect::close()
 	return S_OK;
 }
 
-HRESULT VideoStructs::VsData::updateAvs( const AvsState& ass )
-{
-	return S_FALSE;
-}
-
 HRESULT VideoEffect::render( bool isBeat, RenderTargets& rt )
 {
-	if( !m_player )
+	if( !m_player || !avs.enabled )
+		return S_FALSE;
+
+	const HRESULT hr = m_player->render();
+	CHECK( hr );
+	if( hr == S_FALSE )
 		return S_FALSE;
 
 	RenderTarget& target = rt.lastWritten();
 	if( !target )
 		CHECK( target.create() );
-	const HRESULT hr = m_player->render();
-	CHECK( hr );
-	if( hr == S_FALSE )
-	{
-		target.clear();
-		return S_FALSE;
-	}
-
 	context->CopyResource( target.texture(), m_player->texture() );
 	return S_OK;
 }

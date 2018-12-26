@@ -29,6 +29,30 @@ namespace
 			}
 		}
 	};
+
+	class CoInit
+	{
+		bool started = false;
+
+	public:
+		HRESULT startup()
+		{
+			if( started )
+				return S_FALSE;
+			CHECK( CoInitializeEx( nullptr, COINIT_MULTITHREADED ) );
+			started = true;
+			return S_OK;
+		}
+
+		~CoInit()
+		{
+			if( started )
+			{
+				CoUninitialize();
+				started = false;
+			}
+		}
+	};
 }
 
 HRESULT mfStartup()
@@ -37,7 +61,13 @@ HRESULT mfStartup()
 	return s_startup.startup();
 }
 
-HRESULT mfSourceResolver( CComPtr<IMFSourceResolver>& resolver )
+HRESULT coInit()
+{
+	static thread_local CoInit s_coInit;
+	return s_coInit.startup();
+}
+
+/* HRESULT mfSourceResolver( CComPtr<IMFSourceResolver>& resolver )
 {
 	static CComPtr<IMFSourceResolver> res;
 	if( res )
@@ -48,5 +78,19 @@ HRESULT mfSourceResolver( CComPtr<IMFSourceResolver>& resolver )
 
 	CHECK( MFCreateSourceResolver( &res ) );
 	resolver = res;
+	return S_OK;
+} */
+
+HRESULT mfEngineFactory( CComPtr<IMFMediaEngineClassFactory>& factory )
+{
+	static CComPtr<IMFMediaEngineClassFactory> res;
+	if( res )
+	{
+		factory = res;
+		return S_FALSE;
+	}
+
+	CHECK( res.CoCreateInstance( CLSID_MFMediaEngineClassFactory, nullptr, CLSCTX_INPROC_SERVER ) );
+	factory = res;
 	return S_OK;
 }

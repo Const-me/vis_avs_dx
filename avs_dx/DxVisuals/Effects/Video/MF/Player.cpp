@@ -1,169 +1,122 @@
 #include "stdafx.h"
+#include <versionhelpers.h>
 #include "Player.h"
 #include "mfStatic.h"
-#include "PropVariant.hpp"
-#pragma comment( lib, "Mf.lib" )
+#include <Resources/staticResources.h>
 
-HRESULT Player::start( LPCTSTR pathToVideo )
+HRESULT createPlayer( CComPtr<iPlayer>& player )
 {
-	m_session = nullptr;
-	m_sink = nullptr;
-	m_texture.destroy();
-
-	if( !PathFileExists( pathToVideo ) )
-		return HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND );
-
-	CHECK( mfStartup() );
-
-	// Create the media session.
-	CHECK( MFCreateMediaSession( nullptr, &m_session ) );
-
-	// Start pulling events from the media session
-	CHECK( startListen( m_session ) );
-
-	CComPtr<IMFSourceResolver> sourceResolver;
-	CHECK( mfSourceResolver( sourceResolver ) );
-
-	// Create the media source
-	CComPtr<IMFMediaSource> source;
+	if( !IsWindows8OrGreater() )
 	{
-		MF_OBJECT_TYPE objectType = MF_OBJECT_INVALID;
-		CComPtr<IUnknown> unkSource;
-		CHECK( sourceResolver->CreateObjectFromURL( pathToVideo, MF_RESOLUTION_MEDIASOURCE, nullptr, &objectType, &unkSource ) );
-		CHECK( unkSource->QueryInterface( IID_PPV_ARGS( &source ) ) );
+		logError( "Video rendering is only supported on Windows 8.0 or newer" );
+		return HRESULT_FROM_WIN32( ERROR_OLD_WIN_VERSION );
 	}
 
-	// Create the presentation descriptor for the media source.
-	CComPtr<IMFPresentationDescriptor> pd;
-	CHECK( source->CreatePresentationDescriptor( &pd ) );
-
-	// Create a partial topology
-	CComPtr<IMFTopology> topology;
-	CHECK( createPlaybackTopology( source, pd, topology ) );
-
-	CHECK( m_session->SetTopology( 0, topology ) );
-
-	PropVariant startTime{ 0 };
-	CHECK( m_session->Start( &GUID_NULL, startTime ) );
-
-	if( dbgLogStuff )
-		logDebug( "Player::start completed successfully" );
-	return S_OK;
-}
-
-HRESULT Player::createPlaybackTopology( IMFMediaSource* source, IMFPresentationDescriptor *pd, CComPtr<IMFTopology>& topology )
-{
-	// Create a new topology
-	CHECK( MFCreateTopology( &topology ) );
-
-	// Get the number of streams in the media source
-	DWORD cSourceStreams = 0;
-	CHECK( pd->GetStreamDescriptorCount( &cSourceStreams ) );
-
-	bool selectedStream = false;
-	for( DWORD i = 0; i < cSourceStreams; i++ )
-	{
-		if( selectedStream )
-		{
-			CHECK( pd->DeselectStream( i ) );
-			continue;
-		}
-
-		BOOL selected;
-		CComPtr<IMFStreamDescriptor> sd;
-		CHECK( pd->GetStreamDescriptorByIndex( i, &selected, &sd ) );
-
-		CComPtr<IMFMediaTypeHandler> mth;
-		CHECK( sd->GetMediaTypeHandler( &mth ) );
-
-		GUID majorType = GUID_NULL;
-		CHECK( mth->GetMajorType( &majorType ) );
-
-		if( majorType != MFMediaType_Video )
-		{
-			CHECK( pd->DeselectStream( i ) );
-			continue;
-		}
-
-		// Found the first video stream. Use it.
-		selectedStream = true;
-		CHECK( pd->SelectStream( i ) );
-
-		// Add a source node to a topology
-		CComPtr<IMFTopologyNode> src;
-		CHECK( MFCreateTopologyNode( MF_TOPOLOGY_SOURCESTREAM_NODE, &src ) );
-		CHECK( src->SetUnknown( MF_TOPONODE_SOURCE, source ) );
-		CHECK( src->SetUnknown( MF_TOPONODE_PRESENTATION_DESCRIPTOR, pd ) );
-		CHECK( src->SetUnknown( MF_TOPONODE_STREAM_DESCRIPTOR, sd ) );
-		CHECK( topology->AddNode( src ) );
-
-		// Create the stream sink
-		CComPtr<IMFStreamSink> streamSink;
-		CHECK( MediaSink::create( m_sink, m_texture, mth, streamSink ) );
-
-		// Add an output node to the topology
-		CComPtr<IMFTopologyNode> dest;
-		CHECK( MFCreateTopologyNode( MF_TOPOLOGY_OUTPUT_NODE, &dest ) );
-		CHECK( dest->SetObject( streamSink ) );
-		CHECK( dest->SetUINT32( MF_TOPONODE_STREAMID, 0 ) );
-		// CHECK( node->SetUINT32( MF_TOPONODE_NOSHUTDOWN_ON_REMOVE, FALSE ) );
-		CHECK( topology->AddNode( dest ) );
-
-		// Connect the source node to the output node
-		CHECK( src->ConnectOutput( 0, dest, 0 ) );
-	}
-	return S_OK;
-}
-
-HRESULT Player::onEvent( MediaEventType eventType, HRESULT hrStatus )
-{
-	dbgLogMediaEvent( "Player::onEvent", eventType, hrStatus );
-
-	switch( eventType )
-	{
-	case MESessionStarted:
-		// return m_sink->requestSample();
-		return S_OK;
-
-	case MESessionClosed:
-		m_evtClosed.set();
-		return S_OK;
-
-	case MEEndOfPresentation:
-		CHECK( m_session->Stop() );
-		return S_OK;
-
-	case MESessionStopped:
-		PropVariant startTime{ 0 };
-		CHECK( m_session->Start( &GUID_NULL, startTime ) );
-		return S_OK;
-	}
-	return S_OK;
-}
-
-HRESULT Player::stop()
-{
-	if( m_session )
-	{
-		CHECK( m_session->Close() );
-		CHECK( m_evtClosed.wait() );
-		CHECK( stopListen() );
-	}
-	if( m_sink )
-		CHECK( m_sink->Shutdown() );
-
-	m_session = nullptr;
-	m_sink = nullptr;
-	m_texture.destroy();
-	return S_OK;
-}
-
-HRESULT createPlayer( LPCTSTR pathToVideo, CComPtr<iPlayer>& player )
-{
 	CComPtr<CComObject<Player>> result;
 	CHECK( createInstance( result ) );
-	CHECK( result->start( pathToVideo ) );
-
 	player = result.operator ->();
+	return S_OK;
+}
+
+HRESULT Player::open( LPCTSTR pathToVideo )
+{
+	CSLock __lock( m_cs );
+	m_path = pathToVideo;
+	m_updated = true;
+	// Can't do nothing on this thread, it has wrong COM apartment type.
+	return S_OK;
+}
+
+HRESULT Player::close()
+{
+	CSLock __lock( m_cs );
+	m_path.Empty();
+	m_updated = true;
+	return S_OK;
+}
+
+HRESULT Player::getTexture( CComPtr<ID3D11ShaderResourceView>& srv )
+{
+	bool updated;
+	CComBSTR path;;
+	{
+		CSLock __lock( m_cs );
+		path = m_path;
+		updated = m_updated;
+		m_updated = false;
+	}
+
+	if( updated )
+	{
+		if( path )
+		{
+			CHECK( ensureEngine() );
+			CHECK( m_engine->SetSource( path ) );
+			CHECK( m_engine->Play() );
+		}
+		else
+		{
+			if( m_engine )
+				CHECK( m_engine->Pause() );
+			m_texture.destroy();
+		}
+	}
+
+	if( !path )
+	{
+		srv = StaticResources::blackTexture;
+		return S_FALSE;
+	}
+
+	LONGLONG pts;
+	if( m_engine->OnVideoStreamTick( &pts ) == S_OK )
+	{
+		if( !m_texture )
+		{
+			CSize sz;
+			CHECK( m_engine->GetNativeVideoSize( (DWORD*)&sz.cx, (DWORD*)&sz.cy ) );
+			CHECK( m_texture.create( sz ) );
+		}
+		const MFARGB border = { 0, 0, 0, 0 };
+		CHECK( m_engine->TransferVideoFrame( m_texture.texture(), nullptr, m_texture.rectangle(), &border ) );
+	}
+
+	return m_texture.getView( srv );
+}
+
+HRESULT Player::ensureEngine()
+{
+	if( m_engine )
+		return S_FALSE;
+
+	CHECK( coInit() );
+	CHECK( mfStartup() );
+	CComPtr<IMFMediaEngineClassFactory> factory;
+	CHECK( mfEngineFactory( factory ) );
+
+
+	CComPtr<IMFAttributes> a;
+	CHECK( MFCreateAttributes( &a, 4 ) );
+
+	IMFMediaEngineNotify* men = this;
+	CHECK( a->SetUnknown( MF_MEDIA_ENGINE_CALLBACK, men ) );
+	CHECK( a->SetUINT32( MF_MEDIA_ENGINE_VIDEO_OUTPUT_FORMAT, DXGI_FORMAT_R10G10B10A2_UNORM ) );
+
+	if( dxgiDeviceManager )
+		CHECK( a->SetUnknown( MF_MEDIA_ENGINE_DXGI_MANAGER, dxgiDeviceManager ) );
+
+	constexpr DWORD flags = MF_MEDIA_ENGINE_FORCEMUTE;
+
+	CHECK( factory->CreateInstance( flags, a, &m_engine ) );
+
+	CHECK( m_engine->SetMuted( TRUE ) );
+	CHECK( m_engine->SetLoop( TRUE ) );
+	CHECK( m_engine->SetAutoPlay( TRUE ) );
+
+	return S_OK;
+}
+
+HRESULT __stdcall Player::EventNotify( DWORD e, DWORD_PTR param1, DWORD param2 )
+{
 	return S_OK;
 }

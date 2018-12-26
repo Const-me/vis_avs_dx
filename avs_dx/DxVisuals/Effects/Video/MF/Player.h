@@ -1,36 +1,37 @@
 #pragma once
 #include "playerApi.h"
-#include "EventListener.h"
-#include "MediaSink.h"
+#include "mf.h"
 #include "FrameTexture.h"
-#include "EventSlim.h"
 
 class Player:
 	public CComObjectRootEx<CComMultiThreadModel>,
-	public EventListener,
+	public IMFMediaEngineNotify,
 	public iPlayer
 {
-	CComPtr<IMFMediaSession> m_session;
-	CComPtr<CComObject<MediaSink>> m_sink;
+	CComAutoCriticalSection m_cs;
+	CComBSTR m_path;
+	bool m_updated;
+
+	CComPtr<IMFMediaEngine> m_engine;
 	FrameTexture m_texture;
-	EventSlim m_evtClosed;
 
-	HRESULT createPlaybackTopology( IMFMediaSource* source, IMFPresentationDescriptor *pd, CComPtr<IMFTopology>& topology );
-
-	HRESULT stop() override;
-
-	HRESULT onEvent( MediaEventType eventType, HRESULT hrStatus ) override;
-
-	HRESULT getTexture( CComPtr<ID3D11ShaderResourceView>& srv ) override
-	{
-		return m_texture.getTexture( srv );
-	}
+	HRESULT ensureEngine();
 
 public:
 
 	BEGIN_COM_MAP( Player )
-		COM_INTERFACE_ENTRY( IMFAsyncCallback )
+		COM_INTERFACE_ENTRY( IMFMediaEngineNotify )
 	END_COM_MAP()
 
-	HRESULT start( LPCTSTR pathToVideo );
+
+private:
+
+	HRESULT open( LPCTSTR pathToVideo ) override;
+
+	HRESULT close() override;
+
+	HRESULT getTexture( CComPtr<ID3D11ShaderResourceView>& srv ) override;
+
+	// IMFMediaEngineNotify
+	HRESULT __stdcall EventNotify( DWORD e, DWORD_PTR param1, DWORD param2 ) override;
 };

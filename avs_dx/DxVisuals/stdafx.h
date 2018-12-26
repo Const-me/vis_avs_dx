@@ -29,8 +29,11 @@ using DirectX::SimpleMath::Vector4;
 #include <vector>
 #include <functional>
 
+#include <mfobjects.h>
+
 extern CComPtr<ID3D11Device> device;
 extern CComPtr<ID3D11DeviceContext> context;
+extern CComPtr<IMFDXGIDeviceManager> dxgiDeviceManager;
 
 #include "Utils/logger.h"
 

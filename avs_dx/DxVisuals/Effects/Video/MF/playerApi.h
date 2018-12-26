@@ -1,12 +1,15 @@
 #pragma once
-// The huge amount of code in this folder is required to implement the following dead simple API.
-// No wonder MF ain't particularly popular technology.
 
 __interface iPlayer : IUnknown
 {
-	HRESULT getTexture( CComPtr<ID3D11ShaderResourceView>& srv );
+	// Open a video. Called on the GUI thread.
+	HRESULT open( LPCTSTR pathToVideo );
 
-	HRESULT stop();
+	// Closes a video. Called on the GUI thread.
+	HRESULT close();
+
+	// Get the frame texture. Now, this one is called om the renderer thread where we can do things.
+	HRESULT getTexture( CComPtr<ID3D11ShaderResourceView>& srv );
 };
 
-HRESULT createPlayer( LPCTSTR pathToVideo, CComPtr<iPlayer>& player );
+HRESULT createPlayer( CComPtr<iPlayer>& player );

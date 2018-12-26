@@ -35,13 +35,10 @@ HRESULT VideoEffect::open( const char* selection )
 		return hr;
 	}
 
-	if( m_player )
-	{
-		CHECK( m_player->stop() );
-		m_player = nullptr;
-	}
+	if( !m_player )
+		CHECK( createPlayer( m_player ) );
 
-	CHECK( createPlayer( target, m_player ) );
+	CHECK( m_player->open( target ) );
 	return S_OK;
 }
 
@@ -49,8 +46,7 @@ HRESULT VideoEffect::close()
 {
 	if( !m_player )
 		return S_FALSE;
-	CHECK( m_player->stop() );
-	m_player = nullptr;
+	CHECK( m_player->close() );
 	return S_OK;
 }
 

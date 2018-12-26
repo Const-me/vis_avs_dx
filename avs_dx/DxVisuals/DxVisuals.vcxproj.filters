@@ -73,20 +73,11 @@
     <ClInclude Include="Utils\md4.h" />
     <ClInclude Include="Effects\Video\VideoEffect.h" />
     <ClInclude Include="Effects\Video\interop.h" />
-    <ClInclude Include="Effects\Video\MF\MediaSink.h" />
-    <ClInclude Include="Effects\Video\MF\StreamSink.h" />
-    <ClInclude Include="Effects\Video\MF\mf.h" />
-    <ClInclude Include="Effects\Video\MF\EventGenerator.h" />
-    <ClInclude Include="Effects\Video\MF\iSampleSink.h" />
-    <ClInclude Include="Effects\Video\MF\Player.h" />
-    <ClInclude Include="Effects\Video\MF\FrameTexture.h" />
     <ClInclude Include="Effects\Video\MF\mfStatic.h" />
-    <ClInclude Include="Effects\Video\MF\PropVariant.hpp" />
+    <ClInclude Include="Effects\Video\MF\Player.h" />
+    <ClInclude Include="Effects\Video\MF\mf.h" />
     <ClInclude Include="Effects\Video\MF\playerApi.h" />
-    <ClInclude Include="Effects\Video\MF\EventListener.h" />
-    <ClInclude Include="Effects\Video\MF\EventSlim.h" />
-    <ClInclude Include="Effects\Video\MF\MediaTypeHandler.h" />
-    <ClInclude Include="Effects\Video\MF\magicNumbers.h" />
+    <ClInclude Include="Effects\Video\MF\FrameTexture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -143,18 +134,9 @@
     <ClCompile Include="Utils\md4.cpp" />
     <ClCompile Include="Effects\Video\VideoEffect.cpp" />
     <ClCompile Include="Effects\Video\interop.cpp" />
-    <ClCompile Include="Effects\Video\MF\MediaSink.cpp" />
-    <ClCompile Include="Effects\Video\MF\StreamSink.cpp" />
-    <ClCompile Include="Effects\Video\MF\EventGenerator.cpp" />
+    <ClCompile Include="Effects\Video\MF\mfStatic.cpp" />
     <ClCompile Include="Effects\Video\MF\Player.cpp" />
     <ClCompile Include="Effects\Video\MF\FrameTexture.cpp" />
-    <ClCompile Include="Effects\Video\MF\mfStatic.cpp" />
-    <ClCompile Include="Effects\Video\MF\EventListener.cpp" />
-    <ClCompile Include="Effects\Video\MF\EventSlim.cpp" />
-    <ClCompile Include="Effects\Video\MF\MediaSink.clock.cpp" />
-    <ClCompile Include="Effects\Video\MF\mf.cpp" />
-    <ClCompile Include="Effects\Video\MF\MediaTypeHandler.cpp" />
-    <ClCompile Include="Effects\Video\MF\magicNumbers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

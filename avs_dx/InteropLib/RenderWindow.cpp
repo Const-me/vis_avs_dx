@@ -4,27 +4,24 @@
 #include "interop.h"
 #include "../DxVisuals/Resources/RenderTarget.h"
 #include <dxgi1_3.h>
+#include <mfapi.h>
 
 #pragma comment( lib, "D3D11.lib" )
 CComPtr<ID3D11Device> device;
 CComPtr<ID3D11DeviceContext> context;
+CComPtr<IMFDXGIDeviceManager> dxgiDeviceManager;
 CComAutoCriticalSection renderLock;
 
 constexpr UINT msPresentTimeout = 250;
 
-constexpr uint16_t getWindowsVersion()
-{
-	return 0x0A00;
-}
-
 constexpr UINT buffersCount()
 {
-	return ( getWindowsVersion() >= _WIN32_WINNT_WINBLUE ) ? 2 : 1;
+	return ( IsWindows8Point1OrGreater() ) ? 2 : 1;
 }
 
 constexpr UINT swapChainFlags()
 {
-	return ( getWindowsVersion() >= _WIN32_WINNT_WINBLUE ) ? DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT : 0;
+	return ( IsWindows8Point1OrGreater() ) ? DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT : 0;
 }
 
 int RenderWindow::wmCreate( LPCREATESTRUCT lpCreateStruct )
@@ -40,12 +37,21 @@ void RenderWindow::wmDestroy()
 	destroyDevice();
 }
 
+static HRESULT initVideo()
+{
+	UINT resetToken = 0;
+	CHECK( MFCreateDXGIDeviceManager( &resetToken, &dxgiDeviceManager ) );
+
+	CHECK( dxgiDeviceManager->ResetDevice( device, resetToken ) );
+
+	return S_OK;
+}
+
 HRESULT RenderWindow::createDevice()
 {
+	UINT deviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_VIDEO_SUPPORT;
 #ifdef NDEBUG
-	constexpr UINT deviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
-#else
-	constexpr UINT deviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_DEBUG;
+	deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
 	const D3D_FEATURE_LEVEL fl = D3D_FEATURE_LEVEL_11_0;
@@ -60,20 +66,47 @@ HRESULT RenderWindow::createDevice()
 	scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	scd.Flags = swapChainFlags();
 
-	if( getWindowsVersion() >= _WIN32_WINNT_WIN10 )
+	if( IsWindows10OrGreater() )
 	{
 		scd.BufferCount = 2;
 		scd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	}
-	else if( getWindowsVersion() >= _WIN32_WINNT_WINBLUE )
+	else if( IsWindows8Point1OrGreater() )
 	{
 		scd.BufferCount = 2;
 		scd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 	}
 
-	CHECK( D3D11CreateDeviceAndSwapChain( nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, deviceFlags, &fl, 1, D3D11_SDK_VERSION, &scd, &m_swapChain, &device, nullptr, &context ) );
+	if( IsWindows8OrGreater() )
+	{
+		bool haveVideo = true;
+		if( FAILED( D3D11CreateDeviceAndSwapChain( nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, deviceFlags, &fl, 1, D3D11_SDK_VERSION, &scd, &m_swapChain, &device, nullptr, &context ) ) )
+		{
+			haveVideo = false;
+			deviceFlags &= ~D3D11_CREATE_DEVICE_VIDEO_SUPPORT;
+			CHECK( D3D11CreateDeviceAndSwapChain( nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, deviceFlags, &fl, 1, D3D11_SDK_VERSION, &scd, &m_swapChain, &device, nullptr, &context ) );
+		}
 
-	if( getWindowsVersion() >= _WIN32_WINNT_WINBLUE )
+		if( haveVideo )
+		{
+			if( FAILED( initVideo() ) )
+			{
+				dxgiDeviceManager = nullptr;
+				haveVideo = false;
+			}
+		}
+
+		if( !haveVideo )
+			logWarning( "Your GPU driver doesn't report support for hardware video decoding. Videos will decode on CPU." );
+	}
+	else
+	{
+		deviceFlags &= ~D3D11_CREATE_DEVICE_VIDEO_SUPPORT;
+		CHECK( D3D11CreateDeviceAndSwapChain( nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, deviceFlags, &fl, 1, D3D11_SDK_VERSION, &scd, &m_swapChain, &device, nullptr, &context ) );
+	}
+
+
+	if( IsWindows8Point1OrGreater() )
 	{
 		CComPtr<IDXGISwapChain2> sc2;
 		CHECK( m_swapChain->QueryInterface( IID_PPV_ARGS( &sc2 ) ) );
@@ -96,6 +129,7 @@ void RenderWindow::destroyDevice()
 	StaticResources::destroy();
 	m_rtv = nullptr;
 	m_swapChain = nullptr;
+	dxgiDeviceManager = nullptr;
 	device = nullptr;
 	context = nullptr;
 }
@@ -168,7 +202,7 @@ LRESULT RenderWindow::wmPresent( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	if( false )
 	{
 		// Debug code: just clear the RT
-		const float rgba[4] = { 0,1,0,1 };
+		const float rgba[ 4 ] = { 0,1,0,1 };
 		context->ClearRenderTargetView( m_rtv, rgba );
 		*pResult = m_swapChain->Present( 0, 0 );
 		return 0;

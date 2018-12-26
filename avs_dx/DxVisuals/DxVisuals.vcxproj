@@ -95,29 +95,20 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Effects\Video\MF\EventListener.h" />
     <ClInclude Include="Effects\List\Blender.h" />
-    <ClInclude Include="Effects\Video\MF\iSampleSink.h" />
+    <ClInclude Include="Effects\Video\MF\FrameTexture.h" />
     <ClInclude Include="Effects\Video\MF\mf.h" />
-    <ClInclude Include="Effects\Video\MF\EventGenerator.h" />
-    <ClInclude Include="Effects\Video\MF\PropVariant.hpp" />
-    <ClInclude Include="Effects\Video\MF\EventSlim.h" />
+    <ClInclude Include="Effects\Video\MF\mfStatic.h" />
+    <ClInclude Include="Effects\Video\MF\playerApi.h" />
     <ClInclude Include="Expressions\SymbolTable\SymbolTable.h" />
     <ClInclude Include="Expressions\VariableDecl.hpp" />
     <ClInclude Include="Expressions\SymbolTable\FunctionsTable.h" />
-    <ClInclude Include="Effects\Video\MF\FrameTexture.h" />
     <ClInclude Include="Hlsl\parseId.hpp" />
     <ClInclude Include="Expressions\Tree\Tree.h" />
     <ClInclude Include="Effects\Render\SuperScope\SuperScope.h" />
     <ClInclude Include="Expressions\preprocess.h" />
-    <ClInclude Include="Effects\Video\MF\mfStatic.h" />
     <ClInclude Include="Effects\Video\interop.h" />
-    <ClInclude Include="Effects\Video\MF\MediaSink.h" />
-    <ClInclude Include="Effects\Video\MF\StreamSink.h" />
     <ClInclude Include="Effects\Video\MF\Player.h" />
-    <ClInclude Include="Effects\Video\MF\playerApi.h" />
-    <ClInclude Include="Effects\Video\MF\MediaTypeHandler.h" />
-    <ClInclude Include="Effects\Video\MF\magicNumbers.h" />
     <ClInclude Include="Utils\md4.h" />
     <ClInclude Include="Render\ShaderBase.h" />
     <ClInclude Include="Utils\ByteRange.hpp" />
@@ -183,31 +174,22 @@
     <ClInclude Include="Effects\Video\VideoEffect.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Effects\Video\MF\EventListener.cpp" />
     <ClCompile Include="EffectBase\EffectBase.cpp" />
     <ClCompile Include="Effects\List\Blender.cpp" />
     <ClCompile Include="Effects\List\EffectList.cpp" />
-    <ClCompile Include="Effects\Video\MF\EventGenerator.cpp" />
-    <ClCompile Include="Effects\Video\MF\EventSlim.cpp" />
-    <ClCompile Include="Effects\Video\MF\MediaSink.clock.cpp" />
-    <ClCompile Include="Effects\Video\MF\mf.cpp" />
+    <ClCompile Include="Effects\Video\MF\FrameTexture.cpp" />
+    <ClCompile Include="Effects\Video\MF\mfStatic.cpp" />
+    <ClCompile Include="Effects\Video\MF\Player.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.debug.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.emit.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.types.cpp" />
     <ClCompile Include="Expressions\SymbolTable\FunctionsTable.cpp" />
-    <ClCompile Include="Effects\Video\MF\FrameTexture.cpp" />
     <ClCompile Include="Hlsl\Defines.expand.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.parse.cpp" />
     <ClCompile Include="Effects\Render\SuperScope\SuperScope.cpp" />
     <ClCompile Include="Expressions\preprocess.cpp" />
-    <ClCompile Include="Effects\Video\MF\mfStatic.cpp" />
     <ClCompile Include="Effects\Video\interop.cpp" />
-    <ClCompile Include="Effects\Video\MF\MediaSink.cpp" />
-    <ClCompile Include="Effects\Video\MF\StreamSink.cpp" />
-    <ClCompile Include="Effects\Video\MF\Player.cpp" />
-    <ClCompile Include="Effects\Video\MF\MediaTypeHandler.cpp" />
-    <ClCompile Include="Effects\Video\MF\magicNumbers.cpp" />
     <ClCompile Include="Utils\md4.cpp" />
     <ClCompile Include="Render\ShaderBase.cpp" />
     <ClCompile Include="Utils\resizeHandler.cpp" />

@@ -130,6 +130,14 @@ HRESULT RenderWindow::presentSingle( const RenderTarget& src )
 	return sendMessageTimeout( WM_PRESENT, &src );
 }
 
+struct RenderWindow::sPresentTransition
+{
+	const RenderTarget* rt1;
+	const RenderTarget* rt2;
+	int trans;
+	float sintrans;
+};
+
 HRESULT RenderWindow::presentTransition( const RenderTarget& t1, const RenderTarget& t2, int trans, float sintrans )
 {
 	int flag = 0;

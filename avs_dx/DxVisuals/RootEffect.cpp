@@ -63,9 +63,15 @@ HRESULT RootEffect::buildState()
 	} );
 	CHECK( hr );
 
+	if( shaders.empty() )
+		return S_FALSE;
+
 	// Compile together
 	UINT totalStateSize;
 	CHECK( m_stateShaders.compile( shaders, totalStateSize ) );
+
+	if( 0 == totalStateSize )
+		return S_FALSE;
 
 	// Create state buffer
 	if( totalStateSize != m_state.getSize() )

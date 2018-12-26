@@ -3,7 +3,7 @@
 #ifndef AVS_SHADER
 #define BIND_STARS_POSITIONS t4
 // <macro-resource name="bindStarsPosition" macro="BIND_STARS_POSITIONS" />
-static const float3 starsColor = float3( 0.333f, 0.333f, 1.0f );
+static const float4 starsColor = float4( 0.333f, 0.333f, 1.0f, 1 );
 #endif
 
 StructuredBuffer<StarFormat> stars : register(BIND_STARS_POSITIONS);
@@ -20,6 +20,6 @@ SimpleVertex main( uint id : SV_VertexID )
     SimpleVertex r;
     r.pos = float4( s.position.xy / s.position.z, 0.5, 1 );
     const float c = ( 1.0 - s.position.z ) * s.speed;
-    r.color = float4( starsColor * c, 1 );
+    r.color = starsColor * c;
     return r;
 }

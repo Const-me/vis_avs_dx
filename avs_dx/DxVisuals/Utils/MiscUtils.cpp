@@ -49,14 +49,20 @@ void setMacro( std::vector<std::pair<CStringA, CStringA>> &macros, const CString
 	macros.emplace_back( std::make_pair( key, value ) );
 }
 
-void omBlend()
+void omBlend( eBlend mode )
 {
-	context->OMSetBlendState( StaticResources::blendPremultipliedAlpha, nullptr, 0xffffffff );
-}
-
-void omDontBlend()
-{
-	context->OMSetBlendState( nullptr, nullptr, 0xffffffff );
+	switch( mode )
+	{
+	case eBlend::None:
+		context->OMSetBlendState( nullptr, nullptr, 0xffffffff );
+		break;
+	case eBlend::Premultiplied:
+		context->OMSetBlendState( StaticResources::blendPremultipliedAlpha, nullptr, 0xffffffff );
+		break;
+	case eBlend::Add:
+		context->OMSetBlendState( StaticResources::blendAdditive, nullptr, 0xffffffff );
+		break;
+	}
 }
 
 void drawFullscreenTriangle( bool bindShaders )

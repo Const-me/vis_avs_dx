@@ -14,6 +14,7 @@ namespace StaticResources
 
 	extern CComPtr<ID3D11SamplerState> sampleBilinear;
 	extern CComPtr<ID3D11BlendState> blendPremultipliedAlpha;
+	extern CComPtr<ID3D11BlendState> blendAdditive;
 
 	extern CComPtr<ID3D11ShaderResourceView> blackTexture;
 

@@ -57,11 +57,17 @@ public:
 
 void setMacro( std::vector<std::pair<CStringA, CStringA>> &macros, const CStringA& key, const CStringA& value );
 
-// Set premultiplied alpha blending mode
-void omBlend();
+enum struct eBlend : uint8_t
+{
+	// Disable blending, just write whatever was produced by pixel shader
+	None,
+	// Set premultiplied alpha blending mode
+	Premultiplied,
+	// Additive + premultiplied alpha
+	Add
+};
 
-// Disable blending, just write whatever was produced by pixel shader
-void omDontBlend();
+void omBlend( eBlend mode );
 
 // Draw the full-screen triangle; you must bind the pixel shader before this call. Pass bindShaders=true to bind vertex & geometry shaders, false if already bound.
 void drawFullscreenTriangle( bool bindShaders = true );

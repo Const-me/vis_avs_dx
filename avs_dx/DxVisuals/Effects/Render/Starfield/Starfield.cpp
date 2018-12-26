@@ -46,10 +46,10 @@ StarfieldStructs::StateData::StateData( const AvsState& s )
 
 HRESULT StarfieldStructs::VsData::updateAvs( const AvsState& ass )
 {
-	if( ass.color == m_color )
-		return S_FALSE;
-	starsColor = float3FromColor( m_color = ass.color );
-	return S_OK;
+	float4 rgba = float4FromColor( ass.color, 1 );
+	if( ass.blendavg )
+		rgba *= 0.5f;
+	return updateValue( starsColor, rgba );
 }
 
 HRESULT Starfield::render( bool isBeat, RenderTargets& rt )
@@ -66,7 +66,7 @@ HRESULT Starfield::render( bool isBeat, RenderTargets& rt )
 		nComputeGroups = ( nStars + csThreads - 1 ) / csThreads;
 	}
 
-	omBlend();
+	omBlend( avs->blend ? eBlend::Add : eBlend::Premultiplied );
 	CHECK( rt.writeToLast( false ) );
 	if( !renderer.bindShaders( isBeat ) )
 		return S_FALSE;

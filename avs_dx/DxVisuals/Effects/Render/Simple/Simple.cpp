@@ -177,6 +177,6 @@ void Simple::setStateOffset( UINT off )
 
 HRESULT Simple::render( bool isBeat, RenderTargets& rt )
 {
-	omBlend();
+	omBlend( eBlend::Premultiplied );
 	return m_pImpl->render( isBeat, rt );
 }

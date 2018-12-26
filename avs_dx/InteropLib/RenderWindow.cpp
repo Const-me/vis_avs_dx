@@ -216,7 +216,7 @@ LRESULT RenderWindow::wmPresent( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	setShaders( StaticResources::fullScreenTriangle, nullptr, StaticResources::copyTexture );
 	omSetTarget( m_rtv );
 	pSource->bindView( 127 );
-	omDontBlend();
+	omBlend( eBlend::None );
 	drawFullscreenTriangle( false );
 
 	bindResource<eStage::Pixel>( 127 );

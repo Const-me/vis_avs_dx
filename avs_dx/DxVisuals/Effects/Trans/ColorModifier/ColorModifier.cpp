@@ -30,7 +30,7 @@ ColorModifierStructs::StateData::StateData( AvsState& ass ) :
 
 HRESULT ColorModifier::render( bool isBeat, RenderTargets& rt )
 {
-	omDontBlend();
+	omBlend( eBlend::None );
 	const UINT psReadSlot = renderer.pixel().bindPrevFrame;
 	CHECK( rt.writeToNext( psReadSlot, false ) );
 

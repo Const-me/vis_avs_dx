@@ -50,7 +50,7 @@ HRESULT Blender::blend( RenderTargets& source, RenderTargets& dest, eBlendMode m
 	else
 		bindResource<eStage::Pixel>( bindSource, StaticResources::blackTexture );
 
-	omDontBlend();
+	omBlend( eBlend::None );
 	blendShader.bind( false );
 	drawFullscreenTriangle();
 

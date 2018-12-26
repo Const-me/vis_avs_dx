@@ -17,5 +17,11 @@ inline float3 float3FromColor( int rgb )
 	res.z = (float)( rgb & 0xFF );
 	return res * ( 1.0f / 255.0f );
 }
+// Convert Windows COLORREF into float4 with specified alpha
+inline float4 float4FromColor( int rgb, float alpha )
+{
+	const float3 v = float3FromColor( rgb );
+	return float4( v.x, v.y, v.z, alpha );
+}
 
 using uint4 = std::array<uint32_t, 4>;

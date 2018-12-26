@@ -50,7 +50,7 @@ HRESULT RenderTargets::writeToNext( UINT readPsSlot, bool clearNext )
 
 HRESULT RenderTargets::blendToNext( UINT readPsSlot )
 {
-	omBlend();
+	omBlend( eBlend::Premultiplied );
 	RenderTarget& tRead = m_targets[ m_lastTarget ];
 	if( !tRead )
 		return writeToNext( readPsSlot, true );

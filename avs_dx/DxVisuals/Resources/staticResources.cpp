@@ -28,13 +28,18 @@ namespace StaticResources
 			// https://stackoverflow.com/a/18972920/126995
 			rt.BlendEnable = TRUE;
 			rt.SrcBlend = D3D11_BLEND_SRC_ALPHA;
-			rt.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
 			rt.BlendOp = D3D11_BLEND_OP_ADD;
+			rt.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+
 			rt.SrcBlendAlpha = D3D11_BLEND_INV_DEST_ALPHA;
-			rt.DestBlendAlpha = D3D11_BLEND_ONE;
 			rt.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+			rt.DestBlendAlpha = D3D11_BLEND_ONE;
+
 			rt.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 			CHECK( device->CreateBlendState( &blendDesc, &blendPremultipliedAlpha ) );
+
+			rt.DestBlend = D3D11_BLEND_ONE;
+			CHECK( device->CreateBlendState( &blendDesc, &blendAdditive ) );
 		}
 
 		// Black texture
@@ -70,6 +75,7 @@ namespace StaticResources
 
 		sampleBilinear = nullptr;
 		blendPremultipliedAlpha = nullptr;
+		blendAdditive = nullptr;
 		layoutPos2Tc2 = nullptr;
 		blackTexture = nullptr;
 		sourceData.destroy();
@@ -80,7 +86,10 @@ namespace StaticResources
 	CComPtr<ID3D11PixelShader> pointSprite;
 
 	CComPtr<ID3D11SamplerState> sampleBilinear;
+
 	CComPtr<ID3D11BlendState> blendPremultipliedAlpha;
+	CComPtr<ID3D11BlendState> blendAdditive;
+
 	CComPtr<ID3D11ShaderResourceView> blackTexture;
 	CComPtr<ID3D11InputLayout> layoutPos2Tc2;
 	SourceData sourceData;

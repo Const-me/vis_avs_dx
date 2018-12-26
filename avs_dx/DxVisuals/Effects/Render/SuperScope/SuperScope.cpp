@@ -145,7 +145,7 @@ IMPLEMENT_EFFECT( SuperScope, C_SScopeClass );
 
 HRESULT SuperScope::render( bool isBeat, RenderTargets& rt )
 {
-	omBlend();
+	omBlend( eBlend::Premultiplied );
 	CHECK( rt.writeToLast( false ) );
 	if( !renderer.bindShaders( isBeat ) )
 		return S_FALSE;

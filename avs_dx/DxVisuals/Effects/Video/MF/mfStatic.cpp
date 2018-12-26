@@ -57,7 +57,9 @@ namespace
 
 HRESULT mfStartup()
 {
-	static Startup s_startup;
+	// The documentation doesn't say we must MFSHutdown when a thread quits. However, it's logical thing to do, otherwise the order CoUninitialize -> MFShutdown is probably wrong.
+	// BTW, C++ runtime guarantees correct destruction order for thread_local variables.
+	static thread_local Startup s_startup;
 	return s_startup.startup();
 }
 
@@ -83,7 +85,7 @@ HRESULT coInit()
 
 HRESULT mfEngineFactory( CComPtr<IMFMediaEngineClassFactory>& factory )
 {
-	static CComPtr<IMFMediaEngineClassFactory> res;
+	static thread_local CComPtr<IMFMediaEngineClassFactory> res;
 	if( res )
 	{
 		factory = res;

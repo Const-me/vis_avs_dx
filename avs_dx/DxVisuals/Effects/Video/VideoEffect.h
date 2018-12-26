@@ -34,6 +34,7 @@ public:
 	};
 
 	VideoEffect( AvsState *pState );
+	~VideoEffect();
 
 	const Metadata& metadata() override;
 

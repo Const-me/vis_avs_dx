@@ -22,6 +22,9 @@ HRESULT createPlayer( CComPtr<iPlayer>& player )
 	return S_OK;
 }
 
+Player::~Player()
+{ }
+
 HRESULT Player::open( LPCTSTR pathToVideo )
 {
 	CSLock __lock( m_cs );
@@ -77,8 +80,7 @@ HRESULT Player::render()
 		if( !m_texture )
 			CHECK( m_texture.create() );
 		const MFARGB border = { 0, 0, 0, 0 };
-		const HRESULT hr = m_engine->TransferVideoFrame( m_texture.texture(), nullptr, m_texture.rectangle(), &border );
-		CHECK( hr );
+		CHECK( m_engine->TransferVideoFrame( m_texture.texture(), nullptr, m_texture.rectangle(), &border ) );
 	}
 
 	return m_texture ? S_OK : S_FALSE;
@@ -114,6 +116,16 @@ HRESULT Player::ensureEngine()
 	CHECK( m_engine->SetAutoPlay( TRUE ) );
 
 	return S_OK;
+}
+
+void Player::shutdown()
+{
+	if( m_engine )
+	{
+		m_engine->Shutdown();
+		m_engine = nullptr;
+	}
+	m_texture.destroy();
 }
 
 HRESULT __stdcall Player::EventNotify( DWORD e, DWORD_PTR param1, DWORD param2 )

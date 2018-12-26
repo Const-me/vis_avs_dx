@@ -67,6 +67,15 @@ VideoEffect::VideoEffect( AvsState *pState ) : avs( *pState )
 		avs.persist = 1;
 }
 
+VideoEffect::~VideoEffect()
+{
+	if( m_player )
+	{
+		m_player->shutdown();
+		m_player = nullptr;
+	}
+}
+
 HRESULT VideoEffect::render( bool isBeat, RenderTargets& rt )
 {
 	if( !m_player || !avs.enabled )

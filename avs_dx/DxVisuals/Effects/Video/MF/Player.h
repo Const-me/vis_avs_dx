@@ -23,6 +23,8 @@ public:
 		COM_INTERFACE_ENTRY( IMFMediaEngineNotify )
 	END_COM_MAP()
 
+	~Player();
+
 private:
 
 	HRESULT open( LPCTSTR pathToVideo ) override;
@@ -40,6 +42,8 @@ private:
 	}
 
 	HRESULT render() override;
+
+	void shutdown() override;
 
 	// IMFMediaEngineNotify
 	HRESULT __stdcall EventNotify( DWORD e, DWORD_PTR param1, DWORD param2 ) override;

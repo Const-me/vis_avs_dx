@@ -3,6 +3,7 @@
 #include <Vfw.h>
 #include "MF/playerApi.h"
 #include "../List/Blender.h"
+#include <Utils/FadeOut.h>
 
 class VideoEffect : public EffectBase
 {
@@ -46,5 +47,5 @@ private:
 
 	AvsState& avs;
 	CComPtr<iPlayer> m_player;
-	int persistCount = 0;
+	FadeOut m_fade;
 };

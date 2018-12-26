@@ -87,7 +87,8 @@ HRESULT VideoEffect::render( bool isBeat, RenderTargets& rt )
 		return S_OK;
 	}
 
-	// Blender class would work here but is slower, it compiles everything into the shader, with adjustable mode that would waste too much time re-compiling.
+	// Blender class would work here but is slower, it compiles everything into the shader, with beat-adjustable blending would waste too much time recompiling.
+	// Fortunately, D3D offers enough blending customizations for the OM stage.
 
 	rt.writeToLast( false );
 
@@ -98,16 +99,8 @@ HRESULT VideoEffect::render( bool isBeat, RenderTargets& rt )
 		omBlend( eBlend::Add );
 		break;
 	case eBlendMode::Adjustable:
-		if( isBeat )
-		{
-			persistCount = avs.persist;
-			factor = 1;
-		}
-		else if( persistCount > 0 )
-		{
-			persistCount--;
-			factor = 0.5f + 0.5f * (float)persistCount / (float)avs.persist;
-		}
+		m_fade.update( avs.persist );
+		factor += 0.5f * m_fade.value( isBeat );
 	case eBlendMode::Fifty:
 		omCustomBlend( factor );
 		break;
@@ -117,5 +110,6 @@ HRESULT VideoEffect::render( bool isBeat, RenderTargets& rt )
 	setShaders( StaticResources::fullScreenTriangle, nullptr, StaticResources::copyTexture );
 	bindResource<eStage::Pixel>( 127, m_player->view() );
 	drawFullscreenTriangle( false );
+	bindResource<eStage::Pixel>( 127 );
 	return S_OK;
 }

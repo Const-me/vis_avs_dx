@@ -23,7 +23,6 @@ public:
 		COM_INTERFACE_ENTRY( IMFMediaEngineNotify )
 	END_COM_MAP()
 
-
 private:
 
 	HRESULT open( LPCTSTR pathToVideo ) override;

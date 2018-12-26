@@ -6,6 +6,9 @@
 
 HRESULT createPlayer( CComPtr<iPlayer>& player )
 {
+	// Technically possible to support Win7 by implementing a custom IMFMediaSink and use it with a session and topology, but it's extremely hard to do, and almost impossible to make ot work with real-life video files.
+	// E.g. https://stackoverflow.com/q/52198300/126995 
+	// I've tried it first.
 	if( !IsWindows8OrGreater() )
 	{
 		logError( "Video rendering is only supported on Windows 8.0 or newer" );

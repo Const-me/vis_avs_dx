@@ -24,6 +24,7 @@ namespace
 		{
 			if( started )
 			{
+				logShutdown( "MFShutdown" );
 				MFShutdown();
 				started = false;
 			}
@@ -48,6 +49,7 @@ namespace
 		{
 			if( started )
 			{
+				logShutdown( "CoUninitialize" );
 				CoUninitialize();
 				started = false;
 			}
@@ -57,8 +59,6 @@ namespace
 
 HRESULT mfStartup()
 {
-	// The documentation doesn't say we must MFSHutdown when a thread quits. However, it's logical thing to do, otherwise the order CoUninitialize -> MFShutdown is probably wrong.
-	// BTW, C++ runtime guarantees correct destruction order for thread_local variables.
 	static thread_local Startup s_startup;
 	return s_startup.startup();
 }

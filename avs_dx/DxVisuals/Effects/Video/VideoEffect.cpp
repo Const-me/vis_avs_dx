@@ -69,6 +69,7 @@ VideoEffect::VideoEffect( AvsState *pState ) : avs( *pState )
 
 VideoEffect::~VideoEffect()
 {
+	logShutdown( "~VideoEffect" );
 	if( m_player )
 	{
 		m_player->shutdown();

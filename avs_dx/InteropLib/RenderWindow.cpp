@@ -18,7 +18,7 @@ int RenderWindow::wmCreate( LPCREATESTRUCT lpCreateStruct )
 
 void RenderWindow::wmDestroy()
 {
-	logDebug( "WM_DESTROY" );
+	logShutdown( "RenderWindow::wmDestroy" );
 	destroyDevice();
 }
 

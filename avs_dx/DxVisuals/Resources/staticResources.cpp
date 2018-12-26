@@ -73,6 +73,8 @@ namespace StaticResources
 
 	void destroy()
 	{
+		logShutdown( "StaticResources::destroy" );
+
 		fullScreenTriangle = nullptr;
 		copyTexture = nullptr;
 		pointSprite = nullptr;

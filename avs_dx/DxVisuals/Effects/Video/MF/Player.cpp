@@ -23,7 +23,9 @@ HRESULT createPlayer( CComPtr<iPlayer>& player )
 }
 
 Player::~Player()
-{ }
+{
+	logShutdown( "~Player" );
+}
 
 HRESULT Player::open( LPCTSTR pathToVideo )
 {
@@ -120,6 +122,7 @@ HRESULT Player::ensureEngine()
 
 void Player::shutdown()
 {
+	logShutdown( "Player::shutdown" );
 	if( m_engine )
 	{
 		m_engine->Shutdown();

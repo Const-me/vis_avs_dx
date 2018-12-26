@@ -13,7 +13,6 @@ CComPtr<ID3D11RenderTargetView> renderTargetView;
 
 namespace
 {
-
 	UINT buffersCount()
 	{
 		return ( IsWindows8Point1OrGreater() ) ? 2 : 1;
@@ -115,6 +114,7 @@ HRESULT createDevice( HWND hWndOutput )
 
 void destroyDevice()
 {
+	logShutdown( "destroyDevice" );
 	renderTargetView = nullptr;
 	swapChain = nullptr;
 	dxgiDeviceManager = nullptr;

@@ -83,7 +83,9 @@ int initVideoCombobox( HWND wndDialog, HWND wndComboBox, char *selectedName )
 
 		CStringW w = ff.GetFileName();
 		CStringA a = w.operator LPCTSTR();
-		SendMessageA( wndComboBox, CB_ADDSTRING, 0, (LPARAM)a.operator const char*( ) );
+		const int ind = SendMessageA( wndComboBox, CB_ADDSTRING, 0, (LPARAM)cstr( a ) );
+		if( a == selectedName )
+			cb.SetCurSel( ind );
 
 	} while( ff.FindNextFile() );
 	return res;

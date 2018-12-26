@@ -60,14 +60,17 @@ HRESULT VideoEffect::render( bool isBeat, RenderTargets& rt )
 	if( !m_player )
 		return S_FALSE;
 
-	CComPtr<ID3D11ShaderResourceView> srv;
-	CHECK( m_player->getTexture( srv ) );
+	RenderTarget& target = rt.lastWritten();
+	if( !target )
+		CHECK( target.create() );
+	const HRESULT hr = m_player->render();
+	CHECK( hr );
+	if( hr == S_FALSE )
+	{
+		target.clear();
+		return S_FALSE;
+	}
 
-	CHECK( renderer.bindShaders( isBeat ) );
-
-	iaClearBuffer();
-	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP );
-	context->Draw( 4, 0 );
-
+	context->CopyResource( target.texture(), m_player->texture() );
 	return S_OK;
 }

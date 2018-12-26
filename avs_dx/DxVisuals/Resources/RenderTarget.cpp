@@ -2,19 +2,17 @@
 #include "RenderTarget.h"
 #include "../../InteropLib/interop.h"
 
-constexpr DXGI_FORMAT rtFormat = DXGI_FORMAT_R10G10B10A2_UNORM;
-
 HRESULT RenderTarget::create()
 {
 	const CSize size = getRenderSize();
 
-	CD3D11_TEXTURE2D_DESC texDesc{ rtFormat, (UINT)size.cx, (UINT)size.cy, 1, 0, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET };
+	CD3D11_TEXTURE2D_DESC texDesc{ format, (UINT)size.cx, (UINT)size.cy, 1, 1, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET };
 	CHECK( device->CreateTexture2D( &texDesc, nullptr, &m_tex ) );
 
-	CD3D11_RENDER_TARGET_VIEW_DESC rtvDesc{ D3D11_RTV_DIMENSION_TEXTURE2D, rtFormat };
+	CD3D11_RENDER_TARGET_VIEW_DESC rtvDesc{ D3D11_RTV_DIMENSION_TEXTURE2D, format };
 	CHECK( device->CreateRenderTargetView( m_tex, &rtvDesc, &m_rtv ) );
 
-	CD3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{ D3D11_SRV_DIMENSION_TEXTURE2D, rtFormat };
+	CD3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{ D3D11_SRV_DIMENSION_TEXTURE2D, format };
 	CHECK( device->CreateShaderResourceView( m_tex, &srvDesc, &m_srv ) );
 
 	return S_OK;

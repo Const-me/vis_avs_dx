@@ -9,6 +9,8 @@ class RenderTarget
 
 public:
 
+	static constexpr DXGI_FORMAT format = DXGI_FORMAT_R10G10B10A2_UNORM;
+
 	HRESULT create();
 
 	void destroy();
@@ -34,4 +36,6 @@ public:
 	void copyTo( const RenderTarget& that ) const;
 
 	void swap( RenderTarget& rt );
+
+	ID3D11Texture2D* texture() const { return m_tex; }
 };

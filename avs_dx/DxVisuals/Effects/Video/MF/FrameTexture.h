@@ -1,16 +1,21 @@
 #pragma once
+#include <Utils/resizeHandler.h>
+#include <Resources/RenderTarget.h>
 
-
-class FrameTexture
+class FrameTexture: public ResizeHandler
 {
 	CComPtr<ID3D11Texture2D> m_texture;
 	CComPtr<ID3D11ShaderResourceView> m_srv;
 	CRect m_rect;
 
+	void onRenderSizeChanged() override
+	{
+		destroy();
+	}
+
 public:
 
-	static constexpr DXGI_FORMAT videoFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
-
+	static constexpr DXGI_FORMAT videoFormat = RenderTarget::format;
 
 	operator bool() const { return nullptr != m_srv; }
 
@@ -19,12 +24,10 @@ public:
 		return &m_rect;
 	}
 
-	HRESULT create( const CSize& size );
+	HRESULT create();
 
 	void destroy();
 
-	// Copy last frame to the normal texture, return shader resource view of that.
-	HRESULT getView( CComPtr<ID3D11ShaderResourceView>& srv );
-
 	ID3D11Texture2D* texture() const { return m_texture; }
+	ID3D11ShaderResourceView* view() const { return m_srv; }
 };

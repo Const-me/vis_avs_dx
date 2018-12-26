@@ -35,7 +35,7 @@ HRESULT Player::close()
 	return S_OK;
 }
 
-HRESULT Player::getTexture( CComPtr<ID3D11ShaderResourceView>& srv )
+HRESULT Player::render()
 {
 	bool updated;
 	CComBSTR path;;
@@ -58,31 +58,23 @@ HRESULT Player::getTexture( CComPtr<ID3D11ShaderResourceView>& srv )
 		{
 			if( m_engine )
 				CHECK( m_engine->Pause() );
-			m_texture.destroy();
 		}
 	}
 
 	if( !path )
-	{
-		srv = StaticResources::blackTexture;
 		return S_FALSE;
-	}
 
 	LONGLONG pts;
 	if( m_engine->OnVideoStreamTick( &pts ) == S_OK )
 	{
 		if( !m_texture )
-		{
-			CSize sz;
-			CHECK( m_engine->GetNativeVideoSize( (DWORD*)&sz.cx, (DWORD*)&sz.cy ) );
-			CHECK( m_texture.create( sz ) );
-		}
+			CHECK( m_texture.create() );
 		const MFARGB border = { 0, 0, 0, 0 };
 		const HRESULT hr = m_engine->TransferVideoFrame( m_texture.texture(), nullptr, m_texture.rectangle(), &border );
 		CHECK( hr );
 	}
 
-	return m_texture.getView( srv );
+	return m_texture ? S_OK : S_FALSE;
 }
 
 HRESULT Player::ensureEngine()

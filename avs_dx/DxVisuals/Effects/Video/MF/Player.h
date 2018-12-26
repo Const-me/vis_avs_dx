@@ -30,7 +30,12 @@ private:
 
 	HRESULT close() override;
 
-	HRESULT getTexture( CComPtr<ID3D11ShaderResourceView>& srv ) override;
+	ID3D11Texture2D* texture() const override
+	{
+		return m_texture.texture();
+	}
+
+	HRESULT render() override;
 
 	// IMFMediaEngineNotify
 	HRESULT __stdcall EventNotify( DWORD e, DWORD_PTR param1, DWORD param2 ) override;

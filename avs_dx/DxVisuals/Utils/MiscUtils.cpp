@@ -65,6 +65,12 @@ void omBlend( eBlend mode )
 	}
 }
 
+void omCustomBlend( float f )
+{
+	const float BlendFactor[ 4 ] = { f, f, f, f };
+	context->OMSetBlendState( StaticResources::blendCustom, BlendFactor, 0xffffffff );
+}
+
 void drawFullscreenTriangle( bool bindShaders )
 {
 	if( bindShaders )

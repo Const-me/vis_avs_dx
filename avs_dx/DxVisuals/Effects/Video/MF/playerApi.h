@@ -13,6 +13,8 @@ __interface iPlayer : IUnknown
 
 	// Get the texture with the current video frame.
 	ID3D11Texture2D* texture() const;
+
+	ID3D11ShaderResourceView* view() const;
 };
 
 // Initialize all MF stuff and create an instance of the player.

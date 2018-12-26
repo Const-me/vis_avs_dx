@@ -20,7 +20,7 @@ namespace StaticResources
 			CHECK( device->CreateSamplerState( &samplerDesc, &sampleBilinear ) );
 		}
 
-		// Blend state
+		// Blend states
 		{
 			CD3D11_BLEND_DESC blendDesc{ D3D11_DEFAULT };
 			D3D11_RENDER_TARGET_BLEND_DESC& rt = blendDesc.RenderTarget[ 0 ];
@@ -40,6 +40,10 @@ namespace StaticResources
 
 			rt.DestBlend = D3D11_BLEND_ONE;
 			CHECK( device->CreateBlendState( &blendDesc, &blendAdditive ) );
+
+			rt.SrcBlend = D3D11_BLEND_BLEND_FACTOR;
+			rt.DestBlend = D3D11_BLEND_INV_BLEND_FACTOR;
+			CHECK( device->CreateBlendState( &blendDesc, &blendCustom ) );
 		}
 
 		// Black texture
@@ -74,8 +78,11 @@ namespace StaticResources
 		pointSprite = nullptr;
 
 		sampleBilinear = nullptr;
+
 		blendPremultipliedAlpha = nullptr;
 		blendAdditive = nullptr;
+		blendCustom = nullptr;
+
 		layoutPos2Tc2 = nullptr;
 		blackTexture = nullptr;
 		sourceData.destroy();
@@ -89,6 +96,7 @@ namespace StaticResources
 
 	CComPtr<ID3D11BlendState> blendPremultipliedAlpha;
 	CComPtr<ID3D11BlendState> blendAdditive;
+	CComPtr<ID3D11BlendState> blendCustom;
 
 	CComPtr<ID3D11ShaderResourceView> blackTexture;
 	CComPtr<ID3D11InputLayout> layoutPos2Tc2;

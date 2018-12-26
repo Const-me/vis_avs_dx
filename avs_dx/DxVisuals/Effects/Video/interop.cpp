@@ -26,21 +26,21 @@ namespace
 	// https://stackoverflow.com/q/22986845/126995
 	HRESULT resolveShortcutTarget( HWND wnd, const CString& lnk, CString& target )
 	{
-		// Get a pointer to the IShellLink interface. It is assumed that CoInitialize has already been called. 
+		// Get a pointer to the IShellLink interface. It is assumed that CoInitialize has already been called.
 		CComPtr<IShellLink> psl;
 		CHECK( psl.CoCreateInstance( CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER ) );
 
-		// Get a pointer to the IPersistFile interface. 
+		// Get a pointer to the IPersistFile interface.
 		CComPtr<IPersistFile> ppf;
 		CHECK( psl->QueryInterface( IID_PPV_ARGS( &ppf ) ) );
 
-		// Load the shortcut. 
+		// Load the shortcut.
 		CHECK( ppf->Load( lnk, STGM_READ ) );
 
-		// Resolve the link. 
+		// Resolve the link.
 		CHECK( psl->Resolve( wnd, 0 ) );
 
-		// Get the path to the link target. 
+		// Get the path to the link target.
 		const HRESULT hr = psl->GetPath( target.GetBufferSetLength( MAX_PATH ), MAX_PATH, nullptr, 0 );
 		target.ReleaseBuffer();
 		return hr;

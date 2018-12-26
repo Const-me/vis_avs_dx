@@ -34,6 +34,11 @@ private:
 		return m_texture.texture();
 	}
 
+	ID3D11ShaderResourceView* view() const override
+	{
+		return m_texture.view();
+	}
+
 	HRESULT render() override;
 
 	// IMFMediaEngineNotify

@@ -2,6 +2,7 @@
 #include "../EffectImpl.hpp"
 #include <Vfw.h>
 #include "MF/playerApi.h"
+#include "../List/Blender.h"
 
 class VideoEffect : public EffectBase
 {
@@ -27,9 +28,11 @@ public:
 		unsigned int speed;
 		unsigned int lastspeed;
 		int *old_image, old_image_w, old_image_h;
+
+		eBlendMode blendMode() const;
 	};
 
-	VideoEffect( AvsState *pState ) : avs( *pState ) { }
+	VideoEffect( AvsState *pState );
 
 	const Metadata& metadata() override;
 
@@ -43,4 +46,5 @@ private:
 
 	AvsState& avs;
 	CComPtr<iPlayer> m_player;
+	int persistCount = 0;
 };

@@ -46,6 +46,12 @@ namespace StaticResources
 			CHECK( device->CreateBlendState( &blendDesc, &blendCustom ) );
 		}
 
+		{
+			CD3D11_RASTERIZER_DESC rs{ D3D11_DEFAULT };
+			rs.CullMode = D3D11_CULL_NONE;
+			CHECK( device->CreateRasterizerState( &rs, &rsDisableCulling ) );
+		}
+
 		// Black texture
 		{
 			CD3D11_TEXTURE2D_DESC texDesc{ DXGI_FORMAT_R8G8B8A8_UNORM, 1, 1, 1, 1, D3D11_BIND_SHADER_RESOURCE, D3D11_USAGE_IMMUTABLE };
@@ -85,8 +91,9 @@ namespace StaticResources
 		blendAdditive = nullptr;
 		blendCustom = nullptr;
 
-		layoutPos2Tc2 = nullptr;
 		blackTexture = nullptr;
+		rsDisableCulling = nullptr;
+		layoutPos2Tc2 = nullptr;
 		sourceData.destroy();
 	}
 
@@ -101,6 +108,7 @@ namespace StaticResources
 	CComPtr<ID3D11BlendState> blendCustom;
 
 	CComPtr<ID3D11ShaderResourceView> blackTexture;
+	CComPtr<ID3D11RasterizerState> rsDisableCulling;
 	CComPtr<ID3D11InputLayout> layoutPos2Tc2;
 	SourceData sourceData;
 

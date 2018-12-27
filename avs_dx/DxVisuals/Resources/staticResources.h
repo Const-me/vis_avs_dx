@@ -18,7 +18,7 @@ namespace StaticResources
 	extern CComPtr<ID3D11BlendState> blendCustom;
 
 	extern CComPtr<ID3D11ShaderResourceView> blackTexture;
-
+	extern CComPtr<ID3D11RasterizerState> rsDisableCulling;
 	extern CComPtr<ID3D11InputLayout> layoutPos2Tc2;
 
 	extern SourceData sourceData;

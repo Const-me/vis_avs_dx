@@ -89,8 +89,10 @@ HRESULT DynamicMovement::render( bool isBeat, RenderTargets& rt )
 	const UINT psReadSlot = renderer.pixel().bindPrevFrame;
 	CHECK( rt.writeToNext( psReadSlot, true ) );
 	omBlend( eBlend::None );
+	context->RSSetState( StaticResources::rsDisableCulling );
 	CHECK( m_mesh.draw() );
 
 	bindResource<eStage::Pixel>( psReadSlot );
+	context->RSSetState( nullptr );
 	return S_OK;
 }

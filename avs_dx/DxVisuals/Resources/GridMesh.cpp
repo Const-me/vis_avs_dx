@@ -17,6 +17,9 @@ CSize GridMesh::pickSize( const CSize &screen, int triangle )
 
 	const double heightInv = triInv * ( 1.0 / 0.86602540378 );	// sin ( 60 deg )
 	res.cy = lround( heightInv * screen.cy );
+
+	if( 0 == ( res.cy & 1 ) )
+		res.cy++;
 	return res;
 }
 

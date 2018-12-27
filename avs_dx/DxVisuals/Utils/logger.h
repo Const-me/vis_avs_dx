@@ -52,7 +52,9 @@ inline void logDebug( const char* pszFormat, ... )
 
 #undef LOG_MESSAGE_FORMAT
 
-inline void logShutdown( const char* what )
+/* inline void logShutdown( const char* what )
 {
 	logDebug( "Shutdown\t%i\t%s", GetCurrentThreadId(), what );
-}
+} */
+
+#define logShutdown(...)

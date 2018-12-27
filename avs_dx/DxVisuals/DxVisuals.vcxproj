@@ -97,7 +97,7 @@
   <ItemGroup>
     <ClInclude Include="Effects\Render\Picture\interop.h" />
     <ClInclude Include="Effects\Render\Picture\PictureEffect.h" />
-    <ClInclude Include="Effects\Trans\DMove\GridMesh.hpp" />
+    <ClInclude Include="Effects\Trans\DMove\GridMesh.tesselate.hpp" />
     <ClInclude Include="Effects\Trans\DMove\Sampler.h" />
     <ClInclude Include="Utils\DXTK\Audio.h" />
     <ClInclude Include="Utils\DXTK\CommonStates.h" />

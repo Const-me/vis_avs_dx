@@ -18,8 +18,8 @@ CSize GridMesh::pickSize( const CSize &screen, int triangle )
 	const double heightInv = triInv * ( 1.0 / 0.86602540378 );	// sin ( 60 deg )
 	res.cy = lround( heightInv * screen.cy );
 
-	if( 0 == ( res.cy & 1 ) )
-		res.cy++;
+	if( !m_rectangular )
+		res.cy |= 1;	// Make Y odd so we don't have a center vertex, only a center triangle
 	return res;
 }
 
@@ -145,11 +145,13 @@ namespace
 		return (UINT)( r.size() * sizeof( T ) );
 	}
 }
+#include "GridMesh.tesselate.hpp"
 
-HRESULT GridMesh::create( const CSize& size )
+HRESULT GridMesh::create()
 {
 	destroy();
 
+	const CSize size = m_cells;
 	if( size.cx < 1 || size.cy < 1 )
 		return E_INVALIDARG;
 
@@ -177,6 +179,9 @@ HRESULT GridMesh::create( const CSize& size )
 		}
 		prevRow = thisRow;
 	}
+
+	if( !m_rectangular )
+		tesselateCenter( vb, ib );
 
 	{
 		CD3D11_BUFFER_DESC desc{ sizeofVector( vb ), D3D11_BIND_VERTEX_BUFFER, D3D11_USAGE_IMMUTABLE };
@@ -229,11 +234,11 @@ void GridMesh::destroy()
 
 HRESULT GridMesh::update( bool rectangularCoords )
 {
-	if( m_vb && m_ib )
+	if( m_vb && m_ib && m_rectangular == rectangularCoords )
 		return S_FALSE;
+	m_rectangular = rectangularCoords;
 	const CSize pixels = getRenderSize();
-	const CSize cells = pickSize( pixels, 32 );
-	CHECK( create( cells ) );
-	m_cells = cells;
+	m_cells = pickSize( pixels, 32 );
+	CHECK( create() );
 	return S_OK;
 }

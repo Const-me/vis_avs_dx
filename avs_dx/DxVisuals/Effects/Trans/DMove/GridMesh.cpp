@@ -31,30 +31,36 @@ namespace
 	};
 	using Ind3 = std::array<uint16_t, 3>;
 
-	HRESULT reserveVertexBuffer( const CSize &size, std::vector<sInput> &vb )
+	HRESULT reserveVertexBuffer( const CSize &size, std::vector<sInput> &vb, bool tess )
 	{
 		const size_t vbEven = (size_t)size.cx + 1;
 		const size_t vbOdd = vbEven + 1;
 		const size_t nEven = (size_t)( size.cy + 2 ) / 2;
 		const size_t nOdd = (size_t)( size.cy + 1 ) / 2;
-		const size_t totalVerts = vbEven * nEven + vbOdd * nOdd;
+		size_t totalVerts = vbEven * nEven + vbOdd * nOdd;
+		if( tess )
+			totalVerts += 795;
 		if( totalVerts > 0xFFFF )
 			return E_INVALIDARG;
 		vb.reserve( totalVerts );
 		return S_OK;
 	}
 
-	void reserveIndexBuffer( const CSize &size, std::vector<Ind3> &ib )
+	void reserveIndexBuffer( const CSize &size, std::vector<Ind3> &ib, bool tess )
 	{
 		size_t trisPerStripe = size_t( size.cx );
 		trisPerStripe = trisPerStripe + trisPerStripe + 1;
-		ib.reserve( trisPerStripe  * size.cy );
+
+		size_t totalTris = trisPerStripe * size.cy;
+		if( tess )
+			totalTris += 1590;
+		ib.reserve( totalTris );
 	}
 
-	HRESULT reserveBuffers( const CSize &size, std::vector<sInput> &vb, std::vector<Ind3> &ib )
+	HRESULT reserveBuffers( const CSize &size, std::vector<sInput> &vb, std::vector<Ind3> &ib, bool tesselateCenter )
 	{
-		CHECK( reserveVertexBuffer( size, vb ) );
-		reserveIndexBuffer( size, ib );
+		CHECK( reserveVertexBuffer( size, vb, tesselateCenter ) );
+		reserveIndexBuffer( size, ib, tesselateCenter );
 		return S_OK;
 	}
 
@@ -157,7 +163,7 @@ HRESULT GridMesh::create()
 
 	std::vector<sInput> vb;
 	std::vector<Ind3> ib;
-	CHECK( reserveBuffers( size, vb, ib ) );
+	CHECK( reserveBuffers( size, vb, ib, !m_rectangular ) );
 
 	const GridDim dim{ size };
 	uint16_t prevRow = 0;

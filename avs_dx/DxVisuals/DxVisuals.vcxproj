@@ -139,6 +139,7 @@
     <ClInclude Include="Utils\md4.h" />
     <ClInclude Include="Render\ShaderBase.h" />
     <ClInclude Include="Utils\ByteRange.hpp" />
+    <ClInclude Include="Utils\meshoptimizer\meshoptimizer.h" />
     <ClInclude Include="Utils\resizeHandler.h" />
     <ClInclude Include="Expressions\Builtin\builtinFunctions.h" />
     <ClInclude Include="Expressions\Builtin\includeFunctions.h" />
@@ -226,6 +227,14 @@
     <ClCompile Include="Expressions\preprocess.cpp" />
     <ClCompile Include="Utils\md4.cpp" />
     <ClCompile Include="Render\ShaderBase.cpp" />
+    <ClCompile Include="Utils\meshoptimizer\vcacheoptimizer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Utils\meshoptimizer\vfetchoptimizer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Utils\resizeHandler.cpp" />
     <ClCompile Include="Expressions\Builtin\builtinFunctions.cpp" />
     <ClCompile Include="Expressions\CompiledShader.cpp" />

@@ -1,4 +1,5 @@
 #pragma once
+#include <Utils/meshoptimizer/meshoptimizer.h>
 
 namespace
 {
@@ -421,7 +422,7 @@ namespace
 		CAtlMap<uint16_t, TriList> mapV2T;
 		buildTopology( ib, mapV2T );
 
-		constexpr uint8_t centerLoD = 4;	// Subdivide center triangle edges into 2^4 = 16 segments
+		constexpr uint8_t centerLoD = 4;	// Subdivide center triangle edges into 2^4 = 16 segments. Practically speaking, this inserts 795 extra vertices, and 1590 extra triangles.
 		CAtlMap<uint16_t, uint8_t> vertexLoD;
 		calculateVertexLevels( ib, mapV2T, ib[ ib.size() / 2 ], centerLoD, vertexLoD );
 
@@ -432,5 +433,12 @@ namespace
 		mapV2T.RemoveAll();
 
 		tesselate( vb, ib, triLoD );
+
+		// Optimize the mesh. Not sure how much it helps, but even if by 0.1% it's a good idea: this mesh is only recreated on resize, i.e. 99% of time it's static and uploaded to GPU.
+		const size_t index_count = ib.size() * 3;
+		const size_t vertex_count = vb.size();
+		uint16_t* indices = &ib[ 0 ][ 0 ];
+		meshopt_optimizeVertexCache( indices, indices, index_count, vertex_count );
+		meshopt_optimizeVertexFetch( vb.data(), indices, index_count, vb.data(), vertex_count, sizeof( sInput ) );
 	}
 }

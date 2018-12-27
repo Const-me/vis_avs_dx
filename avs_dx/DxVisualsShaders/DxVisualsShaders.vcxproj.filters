@@ -7,6 +7,7 @@
     <FxCompile Include="FullScreenTriangleVS.hlsl" />
     <FxCompile Include="CopyTexturePS.hlsl" />
     <FxCompile Include="PointSpritePS.hlsl" />
+    <FxCompile Include="FadeFramePS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />

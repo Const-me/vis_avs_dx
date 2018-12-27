@@ -103,4 +103,6 @@ protected:
 	{
 		m_effects.clear();
 	}
+
+	static HRESULT fadeRenderTarget( RenderTargets &rt );
 };

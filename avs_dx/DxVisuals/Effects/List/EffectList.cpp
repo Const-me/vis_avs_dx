@@ -30,10 +30,16 @@ HRESULT EffectList::render( bool isBeat, RenderTargets& rt )
 		return S_FALSE;
 
 	const eBlendMode blendIn = blendin();
-	if( clearfb() && blendIn != eBlendMode::Replace && m_rt.lastWritten() )
+	const bool clearBuffer = clearfb();
+	if( clearBuffer && blendIn != eBlendMode::Replace && m_rt.lastWritten() )
 		m_rt.lastWritten().clear();
 
-	CHECK( m_blendIn.blend( rt, m_rt, blendIn, inblendval() ) );
+	if( !clearBuffer && blendIn == eBlendMode::Ignore )
+	{
+		CHECK( fadeRenderTarget( m_rt ) );
+	}
+	else
+		CHECK( m_blendIn.blend( rt, m_rt, blendIn, inblendval() ) );
 
 	CHECK( EffectListBase::render( isBeat, m_rt ) );
 

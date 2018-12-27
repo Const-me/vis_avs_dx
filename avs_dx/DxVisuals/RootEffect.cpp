@@ -32,8 +32,15 @@ HRESULT RootEffect::renderRoot( bool isBeat, RenderTargets& rt )
 	bindUav( 0 );
 	bindGlobalResource( 2, m_state.srv() );
 
-	if( clearfb() && rt.lastWritten() )
-		rt.lastWritten().clear();
+	const bool clear = clearfb();
+
+	if( rt.lastWritten() )
+	{
+		if( clearfb() )
+			rt.lastWritten().clear();
+		else
+			CHECK( fadeRenderTarget( rt ) );
+	}
 
 	CHECK( render( isBeat, rt ) );
 

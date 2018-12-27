@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "EffectListBase.h"
+#include <Effects/shadersCode.h>
 
 EffectBase* EffectListBase::T_RenderListType::dxEffect() const
 {
@@ -72,4 +73,14 @@ HRESULT EffectListBase::updateParameters( Binder& binder )
 HRESULT EffectListBase::render( bool isBeat, RenderTargets& rt )
 {
 	return apply( [ isBeat, &rt ]( EffectBase &e ) { return e.render( isBeat, rt ); } );
+}
+
+HRESULT EffectListBase::fadeRenderTarget( RenderTargets &rt )
+{
+	setShaders( StaticResources::fullScreenTriangle, nullptr, StaticResources::fadeFramePS );
+	CHECK( rt.writeToNext( 127, false ) );
+	drawFullscreenTriangle( false );
+	bindResource<eStage::Pixel>( 127 );
+
+	return S_OK;
 }

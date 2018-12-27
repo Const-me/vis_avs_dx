@@ -59,10 +59,11 @@ bool Tree::transformDoubleFuncs()
 	return any;
 }
 
-void Tree::getVariablesUsage( std::vector<uint8_t>& usage, bool fragment ) const
+void Tree::getVariablesUsage( std::vector<uint8_t>& usage, uint8_t nExpressionBlock ) const
 {
 	usage.resize( symbols.vars.size(), 0 );
-	const uint8_t shift = fragment ? 2 : 0;
+	assert( nExpressionBlock < 4 );
+	const uint8_t shift = nExpressionBlock * 2;
 
 	const int size = m_nodes.size();
 	for( int i = 0; i < size; i++ )

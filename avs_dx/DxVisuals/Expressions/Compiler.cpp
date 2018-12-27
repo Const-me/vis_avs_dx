@@ -54,13 +54,13 @@ HRESULT Compiler::update( const char* init, const char* frame, const char* beat,
 	// This is only worth doing for sub-expressions that are complex enough, e.g. use sin_d/cos_d, or getspec/getosc calls.
 
 	// Parse and recompile the state expressions
-	for( int i = 0; i < 3; i++ )
+	for( uint8_t i = 0; i < 3; i++ )
 	{
 		CHECK( parseStatements( m_expressions[ i ], m_tree ) );
 		CHECK( m_tree.deduceTypes() );
 		m_tree.transformDoubleFuncs();
 		CHECK( m_tree.emitHlsl( m_hlsl[ i ], m_stateTemplate.hasRandomNumbers ) );
-		m_tree.getVariablesUsage( m_varUsage, false );
+		m_tree.getVariablesUsage( m_varUsage, i );
 	}
 
 	m_symbols.functions.getStateGlobals( m_stateGlobals );
@@ -71,7 +71,7 @@ HRESULT Compiler::update( const char* init, const char* frame, const char* beat,
 	CHECK( m_tree.deduceTypes() );
 	m_tree.transformDoubleFuncs();
 	CHECK( m_tree.emitHlsl( m_hlsl[ 3 ], m_fragmentRng ) );
-	m_tree.getVariablesUsage( m_varUsage, true );
+	m_tree.getVariablesUsage( m_varUsage, 3 );
 	m_fragmentGlobals = m_symbols.functions.getFragmentGlobals();
 
 	CHECK( allocateState() );
@@ -95,7 +95,7 @@ HRESULT Compiler::allocateState()
 
 		if( loc == eVarLocation::stateStatic )
 		{
-			if( usage & 0b1000 )
+			if( usage & 0b10000000 )
 				logWarning( "Incorrect variable use: point/vertex expression writing to %s", cstr( m_symbols.vars.name( i ) ) );
 			continue;
 		}
@@ -106,14 +106,14 @@ HRESULT Compiler::allocateState()
 			switch( loc )
 			{
 			case eVarLocation::macro:
-				if( usage & 0b1010 )
+				if( usage & 0b10101010 )
 					logWarning( "Incorrect variable use: writing to constant %s", cstr( m_symbols.vars.name( i ) ) );
 				break;
 			case eVarLocation::fragmentInput:
-				if( usage & 0b1000 )
+				if( usage & 0b10000000 )
 					logWarning( "Incorrect variable use: writing to input %s", cstr( m_symbols.vars.name( i ) ) );
 			case eVarLocation::fragmentOutput:
-				if( usage & 0b0011 )
+				if( usage & 0b00111111 )
 					logWarning( "Incorrect variable use: %s is only accessible in point/vertex expression", cstr( m_symbols.vars.name( i ) ) );
 				break;
 			}
@@ -123,17 +123,14 @@ HRESULT Compiler::allocateState()
 		if( 0 == usage )
 			continue;
 
-		if( 0 == ( usage & 0b1100 ) )
+		if( 0 == ( usage & 0b00111111 ) )
 		{
-			m_symbols.vars.setLocation( i, eVarLocation::stateLocal );
-			continue;
-		}
-		if( 0 == ( usage & 0b0011 ) )
-		{
+			// Only used in fragment expression. Not a good idea to place in the state, fragment expressions run highly parallel.
 			m_symbols.vars.setLocation( i, eVarLocation::fragmentLocal );
 			continue;
 		}
-		if( usage & 0b1000 )
+
+		if( usage & 0b10000000 )
 		{
 			// This warning means there's data dependency between point/vertex loop iterations.
 			// Very hard to fix in a way that wouldn't ruin the performance: GPUs are massively parallel, and loop with dependencies must run sequentially.
@@ -178,7 +175,7 @@ HRESULT Compiler::buildStateHlsl()
 		code.AppendFormat( "		%s %s = 0;\r\n", hlslName( m_symbols.vars.type( i ) ), cstr( m_symbols.vars.name( i ) ) );
 	}
 
-	const bool stateUsesBeat = ( m_symbols.vars.getBeatMacro() >= 0 ) && ( 0 != ( m_varUsage[ m_symbols.vars.getBeatMacro() ] & 0b0011 ) );
+	const bool stateUsesBeat = ( m_symbols.vars.getBeatMacro() >= 0 ) && ( 0 != ( m_varUsage[ m_symbols.vars.getBeatMacro() ] & 0b00111111 ) );
 	if( stateUsesBeat )
 		code.AppendFormat( "		const uint %s = IS_BEAT;", cstr( proto.getBeatMacro() ) );
 
@@ -230,7 +227,7 @@ HRESULT Compiler::buildFragmentHlsl()
 		code.AppendFormat( "		%s %s;\r\n", hlslName( m_symbols.vars.type( i ) ), cstr( m_symbols.vars.name( i ) ) );
 	}
 
-	m_fragmentBeat = ( m_symbols.vars.getBeatMacro() >= 0 ) && ( 0 != ( m_varUsage[ m_symbols.vars.getBeatMacro() ] & 0b1100 ) );
+	m_fragmentBeat = ( m_symbols.vars.getBeatMacro() >= 0 ) && ( 0 != ( m_varUsage[ m_symbols.vars.getBeatMacro() ] & 0b11000000 ) );
 	if( m_fragmentBeat )
 		code.AppendFormat( "		const uint %s = IS_BEAT;", cstr( proto.getBeatMacro() ) );
 

@@ -22,9 +22,10 @@ struct sOutput
 
 sOutput main( sInput inputVertex )
 {
-    float x = inputVertex.pos.x;
-    float y = inputVertex.pos.y;
-    const float2 centered = scaleToUniform * inputVertex.pos;
+    float2 xy = inputVertex.tc * 2 - float2( 1, 1 );
+    float x = xy.x;
+    float y = xy.y;
+    const float2 centered = scaleToUniform * xy;
     float d = length( centered );
     float r = atan2( centered.y, centered.x ) + ( M_PI / 2 );
 
@@ -38,17 +39,16 @@ SHADER_CODE
 
     sOutput res;
     if( rectangularCoords )
-        res.pos = float4( x, y, 0.5, 1 );
+        res.tc = float2( x, y ) * 0.5 + float2( 0.5, 0.5 );
     else
     {
         r -= ( M_PI / 2 );
         float2 resultVec;
         sincos( r, resultVec.y, resultVec.x );
         resultVec *= d;
-        const float2 antiScale = ( float2( 1, 1 ) / scaleToUniform );
-        resultVec *= antiScale;
-        res.pos = float4( resultVec, 0.5, 1 );
+        const float2 antiScale = ( float2( 0.5, 0.5 ) / scaleToUniform );
+        res.tc = resultVec * antiScale + float2( 0.5, 0.5 );
     }
-    res.tc = inputVertex.tc;
+    res.pos = float4( inputVertex.pos, 0.5, 1 );
     return res;
 }

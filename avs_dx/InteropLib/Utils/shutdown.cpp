@@ -7,6 +7,7 @@ namespace
 	constexpr HRESULT E_TIMEOUT = HRESULT_FROM_WIN32( ERROR_TIMEOUT );
 	constexpr int MSGF_SLEEPMSG = 0x5300;
 
+	// Same as WaitForSingleObject but processes windows messages while it waits.
 	HRESULT msgWaitForSingleObject( HANDLE h, DWORD ms )
 	{
 		// https://blogs.msdn.microsoft.com/oldnewthing/20060126-00/?p=32513/
@@ -60,14 +61,9 @@ namespace
 		};
 
 		eState m_state = eState::None;
-		CHandle m_threadIdle;
+		CHandle m_threadShutDown;
 
 	public:
-
-		Shutdown()
-		{
-			m_threadIdle.Attach( CreateEvent( nullptr, TRUE, FALSE, nullptr ) );
-		}
 
 		bool check()
 		{
@@ -83,9 +79,9 @@ namespace
 				m_state = eState::Running;
 				return false;
 			case eState::WaitingForThread:
-				m_state = eState::WaitingForQuit;
 				onRenderThreadShuttingDown();
-				SetEvent( m_threadIdle );
+				SetEvent( m_threadShutDown );
+				m_state = eState::WaitingForQuit;
 				return true;
 			}
 			__debugbreak();
@@ -102,6 +98,9 @@ namespace
 				case eState::None:
 					return S_FALSE;
 				case eState::Running:
+					m_threadShutDown.Attach( CreateEvent( nullptr, TRUE, FALSE, nullptr ) );
+					if( !m_threadShutDown )
+						return getLastHr();
 					m_state = eState::WaitingForThread;
 					break;
 				default:
@@ -110,7 +109,7 @@ namespace
 				}
 			}
 			logShutdown( "Shutdown::shutdown waiting" );
-			const HRESULT hr = msgWaitForSingleObject( m_threadIdle, 500 );
+			const HRESULT hr = msgWaitForSingleObject( m_threadShutDown, 500 );
 			logShutdown( CStringA{ "Shutdown::shutdown result: " } +formatDxMessageA( hr ) );
 			return hr;
 		}

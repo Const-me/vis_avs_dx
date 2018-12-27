@@ -76,6 +76,7 @@
     <ClInclude Include="enumDisplays.h" />
     <ClInclude Include="device.h" />
     <ClInclude Include="deviceCreation.h" />
+    <ClInclude Include="Utils\shutdown.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -87,6 +88,7 @@
     <ClCompile Include="module.cpp" />
     <ClCompile Include="enumDisplays.cpp" />
     <ClCompile Include="deviceCreation.cpp" />
+    <ClCompile Include="Utils\shutdown.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

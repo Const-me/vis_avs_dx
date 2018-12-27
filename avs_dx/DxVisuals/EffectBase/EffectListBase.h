@@ -14,7 +14,7 @@ public:
 
 		bool hasDxEffect() const
 		{
-			return render->dxEffect.operator bool();
+			return !render->dxEffect.empty();
 		}
 		EffectBase* dxEffect() const;
 	};

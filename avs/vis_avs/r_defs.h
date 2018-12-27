@@ -48,7 +48,7 @@ public:
 	void load_string( RString &s, unsigned char *data, int &pos, int len );
 	void save_string( unsigned char *data, int &pos, RString &text );
 
-	std::unique_ptr<iRootEffect> dxEffect;
+	DxEffectPtr dxEffect;
 };
 
 class C_RBASE2 : public C_RBASE {

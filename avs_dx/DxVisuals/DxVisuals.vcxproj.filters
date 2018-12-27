@@ -79,6 +79,7 @@
     <ClInclude Include="Effects\Video\MF\playerApi.h" />
     <ClInclude Include="Effects\Video\MF\FrameTexture.h" />
     <ClInclude Include="Utils\FadeOut.h" />
+    <ClInclude Include="Utils\effectsRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -139,6 +140,8 @@
     <ClCompile Include="Effects\Video\MF\Player.cpp" />
     <ClCompile Include="Effects\Video\MF\FrameTexture.cpp" />
     <ClCompile Include="Utils\FadeOut.cpp" />
+    <ClCompile Include="Utils\effectsRegistry.cpp" />
+    <ClCompile Include="shutdown.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

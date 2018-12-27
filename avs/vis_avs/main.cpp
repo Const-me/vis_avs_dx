@@ -333,6 +333,8 @@ static int render( struct winampVisModule *this_mod )
 	return 0;
 }
 
+HRESULT shutdownThread();
+
 static void quit( struct winampVisModule *this_mod )
 {
 #define DS(x) 
@@ -340,6 +342,8 @@ static void quit( struct winampVisModule *this_mod )
 	if( g_hThread )
 	{
 		DS( "Waitin for thread to quit\n" );
+		shutdownThread();
+
 		g_ThreadQuit = 1;
 		if( WaitForSingleObject( g_hThread, 10000 ) != WAIT_OBJECT_0 )
 		{

@@ -937,7 +937,8 @@ int C_RenderListClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *f
 		renders = NULL;
 		if( thisfb ) GlobalFree( (HGLOBAL)thisfb );
 		thisfb = 0;
-		dxEffect->clearRenders();
+		if( dxEffect )
+			dxEffect->clearRenders();
 	}
 
 	int C_RenderListClass::insertRenderBefore( T_RenderListType *r, T_RenderListType *before )

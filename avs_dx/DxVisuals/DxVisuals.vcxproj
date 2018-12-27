@@ -95,6 +95,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Utils\effectsRegistry.h" />
     <ClInclude Include="Effects\List\Blender.h" />
     <ClInclude Include="Effects\Video\MF\FrameTexture.h" />
     <ClInclude Include="Effects\Video\MF\mf.h" />
@@ -176,6 +177,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EffectBase\EffectBase.cpp" />
+    <ClCompile Include="shutdown.cpp" />
+    <ClCompile Include="Utils\effectsRegistry.cpp" />
     <ClCompile Include="Effects\List\Blender.cpp" />
     <ClCompile Include="Effects\List\EffectList.cpp" />
     <ClCompile Include="Effects\Video\MF\FrameTexture.cpp" />

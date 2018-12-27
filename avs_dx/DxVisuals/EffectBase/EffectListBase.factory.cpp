@@ -5,7 +5,7 @@
 class C_RenderListClass;
 
 // Class factory is slightly more complex here: creating different classes depending on whether this effect is the root or just a list inside the preset.
-template<> HRESULT createDxEffect<C_RenderListClass>( void* pState, std::unique_ptr<iRootEffect>& dest )
+template<> HRESULT createDxEffect<C_RenderListClass>( void* pState, DxEffectPtr& dest )
 {
 	const EffectListBase::AvsState* pStateBase = ( EffectListBase::AvsState* )pState;
 	if( pStateBase->isroot )

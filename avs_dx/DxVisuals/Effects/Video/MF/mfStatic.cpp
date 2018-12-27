@@ -6,7 +6,7 @@
 
 namespace
 {
-	class Startup
+	class MfStartup
 	{
 		bool started = false;
 
@@ -20,14 +20,21 @@ namespace
 			return S_OK;
 		}
 
-		~Startup()
+		~MfStartup()
+		{
+			shutdown();
+		}
+
+		HRESULT shutdown()
 		{
 			if( started )
 			{
 				logShutdown( "MFShutdown" );
 				MFShutdown();
 				started = false;
+				return S_OK;
 			}
+			return S_FALSE;
 		}
 	};
 
@@ -45,54 +52,53 @@ namespace
 			return S_OK;
 		}
 
-		~CoInit()
+		HRESULT shutdown()
 		{
 			if( started )
 			{
 				logShutdown( "CoUninitialize" );
 				CoUninitialize();
 				started = false;
+				return S_OK;
 			}
+			return S_FALSE;
 		}
 	};
+
+	CoInit g_com;
+	MfStartup g_mf;
+	CComPtr<IMFMediaEngineClassFactory> g_mecf;
 }
 
 HRESULT mfStartup()
 {
-	static thread_local Startup s_startup;
-	return s_startup.startup();
+	return g_mf.startup();
 }
 
 HRESULT coInit()
 {
-	static thread_local CoInit s_coInit;
-	return s_coInit.startup();
+	return g_com.startup();
 }
-
-/* HRESULT mfSourceResolver( CComPtr<IMFSourceResolver>& resolver )
-{
-	static CComPtr<IMFSourceResolver> res;
-	if( res )
-	{
-		resolver = res;
-		return S_FALSE;
-	}
-
-	CHECK( MFCreateSourceResolver( &res ) );
-	resolver = res;
-	return S_OK;
-} */
 
 HRESULT mfEngineFactory( CComPtr<IMFMediaEngineClassFactory>& factory )
 {
-	static thread_local CComPtr<IMFMediaEngineClassFactory> res;
-	if( res )
+	if( g_mecf )
 	{
-		factory = res;
+		factory = g_mecf;
 		return S_FALSE;
 	}
 
-	CHECK( res.CoCreateInstance( CLSID_MFMediaEngineClassFactory, nullptr, CLSCTX_INPROC_SERVER ) );
-	factory = res;
+	CHECK( g_mecf.CoCreateInstance( CLSID_MFMediaEngineClassFactory, nullptr, CLSCTX_INPROC_SERVER ) );
+	factory = g_mecf;
 	return S_OK;
+}
+
+HRESULT mfShutdown()
+{
+	return g_mf.shutdown();
+}
+
+HRESULT comUninitialize()
+{
+	return g_com.shutdown();
 }

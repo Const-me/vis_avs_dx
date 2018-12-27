@@ -3,6 +3,7 @@
 #include "Resources/staticResources.h"
 #include <Utils/resizeHandler.h>
 #include "../InteropLib/interop.h"
+#include "../InteropLib/Utils/shutdown.h"
 
 // The critical section that guards renderers, linked from deep inside AVS.
 extern CRITICAL_SECTION g_render_cs;
@@ -49,6 +50,9 @@ HRESULT Transition::prepare( char visdata[ 2 ][ 2 ][ 576 ], int isBeat )
 
 HRESULT Transition::renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, iRootEffect &e )
 {
+	if( checkShutdown() )
+		return S_FALSE;
+
 	{
 		CSLock __lock( renderLock );
 		CHECK( prepare( visdata, isBeat ) );
@@ -64,6 +68,9 @@ HRESULT Transition::renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, iRo
 
 HRESULT Transition::renderTransition( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, iRootEffect &e1, iRootEffect &e2, int trans, float sintrans ) 
 {
+	if( checkShutdown() )
+		return S_FALSE;
+
 	{
 		CSLock __lock( renderLock );
 		CHECK( prepare( visdata, isBeat ) );

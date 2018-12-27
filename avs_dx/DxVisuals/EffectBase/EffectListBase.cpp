@@ -3,7 +3,7 @@
 
 EffectBase* EffectListBase::T_RenderListType::dxEffect() const
 {
-	if( !render->dxEffect )
+	if( render->dxEffect.empty() )
 		return nullptr;
 	iRootEffect* p = render->dxEffect.get();
 	return static_cast<EffectBase*>( p );

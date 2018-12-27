@@ -10,7 +10,7 @@
 
 // Direct3D
 #include <d3d11.h>
-#include <SimpleMath.h>
+#include "Utils/DXTK/SimpleMath.h"
 using DirectX::SimpleMath::Vector2;
 using DirectX::SimpleMath::Vector3;
 using DirectX::SimpleMath::Vector4;

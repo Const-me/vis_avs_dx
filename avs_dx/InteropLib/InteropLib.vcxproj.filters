@@ -90,7 +90,4 @@
     <ClCompile Include="deviceCreation.cpp" />
     <ClCompile Include="Utils\shutdown.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
 </Project>

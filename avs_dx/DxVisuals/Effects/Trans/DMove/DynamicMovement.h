@@ -3,7 +3,6 @@
 #include <Expressions/CompiledShader.h>
 #include "GridMesh.h"
 #include "Sampler.h"
-#include <Utils/resizeHandler.h>
 using namespace Hlsl::Trans::DMove;
 
 struct DynamicMovementStructs
@@ -61,12 +60,10 @@ struct DynamicMovementStructs
 	using PsData = DMovePS;
 };
 
-class DynamicMovement : public EffectBase1<DynamicMovementStructs>, public ResizeHandler
+class DynamicMovement : public EffectBase1<DynamicMovementStructs>
 {
 	GridMesh m_mesh;
 	Sampler m_sampler;
-
-	void onRenderSizeChanged() override;
 
 	CComPtr<ID3D11SamplerState> m_wrapSampler, m_clampSampler;
 

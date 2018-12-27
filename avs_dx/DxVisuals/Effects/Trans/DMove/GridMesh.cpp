@@ -196,8 +196,10 @@ HRESULT GridMesh::create( const CSize& size )
 	return S_OK;
 }
 
-HRESULT GridMesh::draw() const
+HRESULT GridMesh::draw( bool rectangularCoords )
 {
+	CHECK( update( rectangularCoords ) );
+
 	if( nullptr == m_vb || nullptr == m_ib || nullptr == StaticResources::layoutPos2Tc2 )
 		return E_POINTER;
 
@@ -205,5 +207,33 @@ HRESULT GridMesh::draw() const
 	context->IASetInputLayout( StaticResources::layoutPos2Tc2 );
 	iaSetBuffer( m_vb, sizeof( sInput ), m_ib, DXGI_FORMAT_R16_UINT );
 	context->DrawIndexed( m_indexCount, 0, 0 );
+	return S_OK;
+}
+
+CSize getRenderSize();
+
+void GridMesh::onRenderSizeChanged()
+{
+	const CSize pixels = getRenderSize();
+	const CSize cells = pickSize( pixels, 32 );
+	if( cells == m_cells )
+		return;
+	destroy();
+}
+
+void GridMesh::destroy()
+{
+	m_vb = nullptr;
+	m_ib = nullptr;
+}
+
+HRESULT GridMesh::update( bool rectangularCoords )
+{
+	if( m_vb && m_ib )
+		return S_FALSE;
+	const CSize pixels = getRenderSize();
+	const CSize cells = pickSize( pixels, 32 );
+	CHECK( create( cells ) );
+	m_cells = cells;
 	return S_OK;
 }

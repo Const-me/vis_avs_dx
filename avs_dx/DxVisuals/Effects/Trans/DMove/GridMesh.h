@@ -1,11 +1,15 @@
 #pragma once
+#include <Utils/resizeHandler.h>
 
-class GridMesh
+class GridMesh: public ResizeHandler
 {
 	UINT m_indexCount;
 	CComPtr<ID3D11Buffer> m_vb, m_ib;
+	CSize m_cells;
 
-public:
+	void onRenderSizeChanged() override;
+
+	HRESULT update( bool rectangularCoords );
 
 	// Compute ideal grid size from screen size and triangle size.
 	static CSize pickSize( const CSize &screen, int triangle );
@@ -13,12 +17,9 @@ public:
 	// Generate the grid mesh. Note it uses 16 bit indices so this will fail if the size is too large.
 	HRESULT create( const CSize &size );
 
-	void destroy()
-	{
-		m_vb = m_ib = nullptr;
-	}
+	void destroy();
 
-	operator bool() const { return nullptr != m_vb && nullptr != m_ib; }
+public:
 
-	HRESULT draw() const;
+	HRESULT draw( bool rectangularCoords );
 };

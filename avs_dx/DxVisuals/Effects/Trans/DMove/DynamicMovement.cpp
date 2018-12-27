@@ -68,21 +68,8 @@ DynamicMovement::DynamicMovement( AvsState *pState ) :
 	tBase( pState )
 { }
 
-void DynamicMovement::onRenderSizeChanged()
-{
-	m_mesh.destroy();
-}
-
 HRESULT DynamicMovement::render( bool isBeat, RenderTargets& rt )
 {
-	if( !m_mesh )
-	{
-		const CSize rtSize = getRenderSize();
-		// TODO: use config values
-		const CSize gridSize = GridMesh::pickSize( rtSize, 32 );
-		CHECK( m_mesh.create( gridSize ) );
-	}
-
 	if( !renderer.bindShaders( isBeat ) )
 		return S_FALSE;
 
@@ -94,13 +81,13 @@ HRESULT DynamicMovement::render( bool isBeat, RenderTargets& rt )
 	{
 		CHECK( rt.blendToNext( psReadSlot ) );
 		omCustomBlend( 0.5f );
-		CHECK( m_mesh.draw() );
+		CHECK( m_mesh.draw( avs->rectcoords ) );
 	}
 	else
 	{
 		CHECK( rt.writeToNext( psReadSlot, false ) );
 		omBlend( eBlend::None );
-		CHECK( m_mesh.draw() );
+		CHECK( m_mesh.draw( avs->rectcoords ) );
 	}
 
 	bindResource<eStage::Pixel>( psReadSlot );

@@ -104,6 +104,7 @@
     <ClInclude Include="Utils\DXTK\XboxDDSTextureLoader.h" />
     <ClInclude Include="Effects\Trans\DMove\Sampler.h" />
     <ClInclude Include="Effects\Trans\DMove\GridMesh.h" />
+    <ClInclude Include="Effects\Trans\DMove\GridMesh.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

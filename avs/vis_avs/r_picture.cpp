@@ -32,7 +32,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <commctrl.h>
 #include "resource.h"
 #include "r_defs.h"
-
+#include "../../avs_dx/DxVisuals/Effects/Render/Picture/interop.h"
 
 #ifndef LASER
 
@@ -83,14 +83,19 @@ C_THISCLASS::C_THISCLASS() // set up default configuration
 	strcpy( ascName, "" );
 	hb = 0; ratio = 0; axis_ratio = 0;
 	hBitmapDC = 0; hBitmapDC2 = 0;
+
+	CREATE_DX_EFFECT( enabled );
 }
 C_THISCLASS::~C_THISCLASS()
 {
-	freePicture();
+	pictureClose( dxEffect.get() );
 }
 
 void C_THISCLASS::loadPicture( char *name )
 {
+	pictureOpen( dxEffect.get(), name );
+	return;
+
 	freePicture();
 
 	char longName[ MAX_PATH ];
@@ -106,6 +111,9 @@ void C_THISCLASS::loadPicture( char *name )
 }
 void C_THISCLASS::freePicture()
 {
+	pictureClose( dxEffect.get() );
+	return;
+
 	if( hb )
 	{
 		DeleteObject( hb );
@@ -158,6 +166,8 @@ int  C_THISCLASS::save_config( unsigned char *data ) // write configuration to d
 // visdata is in the format of [spectrum:0,wave:1][channel][band].
 int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
 {
+	__debugbreak();
+	return 0;
 
 	if( !enabled ) return 0;
 
@@ -306,7 +316,8 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 		if( !g_ConfigThis->axis_ratio ) CheckDlgButton( hwndDlg, IDC_X_RATIO, BST_CHECKED );
 		if( g_ConfigThis->axis_ratio ) CheckDlgButton( hwndDlg, IDC_Y_RATIO, BST_CHECKED );
 		EnableWindows( hwndDlg );
-		loadComboBox( GetDlgItem( hwndDlg, OBJ_COMBO ), "*.BMP", g_ConfigThis->ascName );
+		// loadComboBox( GetDlgItem( hwndDlg, OBJ_COMBO ), "*.BMP", g_ConfigThis->ascName );
+		initPictureCombobox( hwndDlg, GetDlgItem( hwndDlg, OBJ_COMBO ), g_ConfigThis->ascName );
 		return 1;
 	case WM_NOTIFY:
 		if( LOWORD( wParam ) == IDC_PERSIST )

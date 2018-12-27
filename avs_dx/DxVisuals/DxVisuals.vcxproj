@@ -95,6 +95,29 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Effects\Render\Picture\interop.h" />
+    <ClInclude Include="Effects\Render\Picture\PictureEffect.h" />
+    <ClInclude Include="Utils\DXTK\Audio.h" />
+    <ClInclude Include="Utils\DXTK\CommonStates.h" />
+    <ClInclude Include="Utils\DXTK\DDSTextureLoader.h" />
+    <ClInclude Include="Utils\DXTK\DirectXHelpers.h" />
+    <ClInclude Include="Utils\DXTK\Effects.h" />
+    <ClInclude Include="Utils\DXTK\GamePad.h" />
+    <ClInclude Include="Utils\DXTK\GeometricPrimitive.h" />
+    <ClInclude Include="Utils\DXTK\GraphicsMemory.h" />
+    <ClInclude Include="Utils\DXTK\Keyboard.h" />
+    <ClInclude Include="Utils\DXTK\Model.h" />
+    <ClInclude Include="Utils\DXTK\Mouse.h" />
+    <ClInclude Include="Utils\DXTK\PostProcess.h" />
+    <ClInclude Include="Utils\DXTK\PrimitiveBatch.h" />
+    <ClInclude Include="Utils\DXTK\ScreenGrab.h" />
+    <ClInclude Include="Utils\DXTK\SimpleMath.h" />
+    <ClInclude Include="Utils\DXTK\SpriteBatch.h" />
+    <ClInclude Include="Utils\DXTK\SpriteFont.h" />
+    <ClInclude Include="Utils\DXTK\VertexTypes.h" />
+    <ClInclude Include="Utils\DXTK\WICTextureLoader.h" />
+    <ClInclude Include="Utils\DXTK\XboxDDSTextureLoader.h" />
+    <ClInclude Include="Utils\findAssets.h" />
     <ClInclude Include="Utils\effectsRegistry.h" />
     <ClInclude Include="Effects\List\Blender.h" />
     <ClInclude Include="Effects\Video\MF\FrameTexture.h" />
@@ -177,6 +200,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EffectBase\EffectBase.cpp" />
+    <ClCompile Include="Effects\Render\Picture\PictureEffect.cpp" />
+    <ClCompile Include="Utils\DXTK\SimpleMath.cpp" />
+    <ClCompile Include="Utils\DXTK\WICTextureLoader.cpp" />
+    <ClCompile Include="Utils\findAssets.cpp" />
     <ClCompile Include="shutdown.cpp" />
     <ClCompile Include="Utils\effectsRegistry.cpp" />
     <ClCompile Include="Effects\List\Blender.cpp" />
@@ -194,7 +221,6 @@
     <ClCompile Include="Expressions\Tree\Tree.parse.cpp" />
     <ClCompile Include="Effects\Render\SuperScope\SuperScope.cpp" />
     <ClCompile Include="Expressions\preprocess.cpp" />
-    <ClCompile Include="Effects\Video\interop.cpp" />
     <ClCompile Include="Utils\md4.cpp" />
     <ClCompile Include="Render\ShaderBase.cpp" />
     <ClCompile Include="Utils\resizeHandler.cpp" />
@@ -236,7 +262,6 @@
     <ClCompile Include="Hlsl\Variable.cpp" />
     <ClCompile Include="Utils\DirectXErrors\DirectXErrors.cpp" />
     <ClCompile Include="Utils\DirectXErrors\formatCString.cpp" />
-    <ClCompile Include="Utils\SimpleMath.cpp" />
     <ClCompile Include="Expressions\SymbolTable\VariablesTable.cpp" />
     <ClCompile Include="Effects\Video\VideoEffect.cpp" />
   </ItemGroup>
@@ -266,7 +291,6 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Expressions/Builtin/includeFunctions.cpp</Outputs>
     </CustomBuild>
     <None Include="Expressions\Builtin\includeFunctions.t4" />
-    <None Include="packages.config" />
     <None Include="Render\EffectRenderer.inl" />
     <None Include="Utils\DirectXErrors\data\d2d.inl" />
     <None Include="Utils\DirectXErrors\data\d3d10-11.inl" />
@@ -280,6 +304,7 @@
     <None Include="Utils\DirectXErrors\data\win32.inl" />
     <None Include="Utils\DirectXErrors\data\xaudio.inl" />
     <None Include="Utils\DirectXErrors\includeData.inl" />
+    <None Include="Utils\DXTK\SimpleMath.inl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Effects\Polyline.fx">
@@ -290,6 +315,10 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Effects\Render\Picture\PicturePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="Expressions\Builtin\random.hlsl">
       <FileType>Document</FileType>
@@ -390,13 +419,5 @@
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\..\packages\directxtk_desktop_2015.2018.11.20.1\build\native\directxtk_desktop_2015.targets" Condition="Exists('..\..\packages\directxtk_desktop_2015.2018.11.20.1\build\native\directxtk_desktop_2015.targets')" />
-  </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\directxtk_desktop_2015.2018.11.20.1\build\native\directxtk_desktop_2015.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\directxtk_desktop_2015.2018.11.20.1\build\native\directxtk_desktop_2015.targets'))" />
-  </Target>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>

@@ -38,34 +38,6 @@ namespace
 		}
 	};
 
-	class CoInit
-	{
-		bool started = false;
-
-	public:
-		HRESULT startup()
-		{
-			if( started )
-				return S_FALSE;
-			CHECK( CoInitializeEx( nullptr, COINIT_MULTITHREADED ) );
-			started = true;
-			return S_OK;
-		}
-
-		HRESULT shutdown()
-		{
-			if( started )
-			{
-				logShutdown( "CoUninitialize" );
-				CoUninitialize();
-				started = false;
-				return S_OK;
-			}
-			return S_FALSE;
-		}
-	};
-
-	CoInit g_com;
 	MfStartup g_mf;
 	CComPtr<IMFMediaEngineClassFactory> g_mecf;
 }
@@ -73,11 +45,6 @@ namespace
 HRESULT mfStartup()
 {
 	return g_mf.startup();
-}
-
-HRESULT coInit()
-{
-	return g_com.startup();
 }
 
 HRESULT mfEngineFactory( CComPtr<IMFMediaEngineClassFactory>& factory )
@@ -96,9 +63,4 @@ HRESULT mfEngineFactory( CComPtr<IMFMediaEngineClassFactory>& factory )
 HRESULT mfShutdown()
 {
 	return g_mf.shutdown();
-}
-
-HRESULT comUninitialize()
-{
-	return g_com.shutdown();
 }

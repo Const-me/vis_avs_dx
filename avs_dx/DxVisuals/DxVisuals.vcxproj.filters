@@ -80,6 +80,29 @@
     <ClInclude Include="Effects\Video\MF\FrameTexture.h" />
     <ClInclude Include="Utils\FadeOut.h" />
     <ClInclude Include="Utils\effectsRegistry.h" />
+    <ClInclude Include="Effects\Render\Picture\interop.h" />
+    <ClInclude Include="Utils\findAssets.h" />
+    <ClInclude Include="Effects\Render\Picture\PictureEffect.h" />
+    <ClInclude Include="Utils\DXTK\Audio.h" />
+    <ClInclude Include="Utils\DXTK\CommonStates.h" />
+    <ClInclude Include="Utils\DXTK\DDSTextureLoader.h" />
+    <ClInclude Include="Utils\DXTK\DirectXHelpers.h" />
+    <ClInclude Include="Utils\DXTK\Effects.h" />
+    <ClInclude Include="Utils\DXTK\GamePad.h" />
+    <ClInclude Include="Utils\DXTK\GeometricPrimitive.h" />
+    <ClInclude Include="Utils\DXTK\GraphicsMemory.h" />
+    <ClInclude Include="Utils\DXTK\Keyboard.h" />
+    <ClInclude Include="Utils\DXTK\Model.h" />
+    <ClInclude Include="Utils\DXTK\Mouse.h" />
+    <ClInclude Include="Utils\DXTK\PostProcess.h" />
+    <ClInclude Include="Utils\DXTK\PrimitiveBatch.h" />
+    <ClInclude Include="Utils\DXTK\ScreenGrab.h" />
+    <ClInclude Include="Utils\DXTK\SimpleMath.h" />
+    <ClInclude Include="Utils\DXTK\SpriteBatch.h" />
+    <ClInclude Include="Utils\DXTK\SpriteFont.h" />
+    <ClInclude Include="Utils\DXTK\VertexTypes.h" />
+    <ClInclude Include="Utils\DXTK\WICTextureLoader.h" />
+    <ClInclude Include="Utils\DXTK\XboxDDSTextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -94,7 +117,6 @@
     <ClCompile Include="Resources\SourceData.cpp" />
     <ClCompile Include="Utils\preciseTickCount.cpp" />
     <ClCompile Include="EffectBase\EffectListBase.cpp" />
-    <ClCompile Include="Utils\SimpleMath.cpp" />
     <ClCompile Include="Resources\EffectsState.cpp" />
     <ClCompile Include="Hlsl\Defines.cpp" />
     <ClCompile Include="Effects\Render\Simple\Simple.cpp" />
@@ -135,13 +157,16 @@
     <ClCompile Include="Render\ShaderBase.cpp" />
     <ClCompile Include="Utils\md4.cpp" />
     <ClCompile Include="Effects\Video\VideoEffect.cpp" />
-    <ClCompile Include="Effects\Video\interop.cpp" />
     <ClCompile Include="Effects\Video\MF\mfStatic.cpp" />
     <ClCompile Include="Effects\Video\MF\Player.cpp" />
     <ClCompile Include="Effects\Video\MF\FrameTexture.cpp" />
     <ClCompile Include="Utils\FadeOut.cpp" />
     <ClCompile Include="Utils\effectsRegistry.cpp" />
     <ClCompile Include="shutdown.cpp" />
+    <ClCompile Include="Utils\findAssets.cpp" />
+    <ClCompile Include="Effects\Render\Picture\PictureEffect.cpp" />
+    <ClCompile Include="Utils\DXTK\WICTextureLoader.cpp" />
+    <ClCompile Include="Utils\DXTK\SimpleMath.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -158,7 +183,6 @@
     <None Include="Utils\DirectXErrors\data\xaudio.inl" />
     <None Include="Effects\FrameGlobalData.fx" />
     <None Include="Effects\IncludeShaders.t4" />
-    <None Include="packages.config" />
     <None Include="Render\EffectRenderer.inl" />
     <None Include="Effects\VisCommon.fx" />
     <None Include="Effects\Render\Starfield\Star.fx" />
@@ -166,6 +190,7 @@
     <None Include="CppBuilder.t4" />
     <None Include="Effects\Polyline.fx" />
     <None Include="Expressions\Builtin\includeFunctions.t4" />
+    <None Include="Utils\DXTK\SimpleMath.inl" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Effects\Render\Simple\SimpleDotsVS.hlsl" />
@@ -189,6 +214,7 @@
     <FxCompile Include="Effects\List\BlenderPS.hlsl" />
     <FxCompile Include="Expressions\Builtin\random.hlsl" />
     <FxCompile Include="Expressions\Builtin\doubleFunctions.hlsl" />
+    <FxCompile Include="Effects\Render\Picture\PicturePS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

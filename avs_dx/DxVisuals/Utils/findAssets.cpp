@@ -1,20 +1,15 @@
 #include "stdafx.h"
-#include "interop.h"
 #include <../InteropLib/Utils/WTL/atlapp.h>
 #include <../InteropLib/Utils/WTL/atlmisc.h>
 #include <../InteropLib/Utils/WTL/atlctrls.h>
 #include <atlpath.h>
-#include "../includeDefs.h"
 #include <shobjidl.h>
 #include <shlguid.h>
+#include "findAssets.h"
+#include "../Effects/includeDefs.h"
 
 namespace
 {
-	bool isVideoFileExtension( const CString& ext )
-	{
-		return ext == L".mp4" || ext == L".mpeg" || ext == L".mkv" || ext == L".avi" || ext == L".wmv";
-	}
-
 	// Get lower-case extension including the dot, e.g. ".mp4"
 	CString getExtension( const CPath &path )
 	{
@@ -45,9 +40,10 @@ namespace
 		target.ReleaseBuffer();
 		return hr;
 	}
+
 }
 
-int initVideoCombobox( HWND wndDialog, HWND wndComboBox, char *selectedName )
+int initAssetsCombobox( HWND wndDialog, HWND wndComboBox, char *selectedName, pfnExtensionFilter extFilter )
 {
 	CComboBox cb{ wndComboBox };
 	cb.ResetContent();
@@ -69,7 +65,7 @@ int initVideoCombobox( HWND wndDialog, HWND wndComboBox, char *selectedName )
 		path.m_strPath = ff.GetFilePath();
 		CString ext = getExtension( path );
 
-		if( !isVideoFileExtension( ext ) )
+		if( !extFilter( ext ) )
 		{
 			if( ext != ".lnk" )
 				continue;
@@ -77,7 +73,7 @@ int initVideoCombobox( HWND wndDialog, HWND wndComboBox, char *selectedName )
 				continue;
 			ext = path.GetExtension();
 			ext.MakeLower();
-			if( !isVideoFileExtension( ext ) )
+			if( !extFilter( ext ) )
 				continue;
 		}
 
@@ -93,13 +89,13 @@ int initVideoCombobox( HWND wndDialog, HWND wndComboBox, char *selectedName )
 
 extern HWND hwnd_WinampParent;
 
-HRESULT getVideoFilePath( const char *selection, CString& result )
+HRESULT getAssetFilePath( const char *selection, pfnExtensionFilter extFilter, CString& result )
 {
 	CPath path{ CString{ g_path } };
 	path.Append( CString{ selection } );
 
 	CString ext = getExtension( path );
-	if( isVideoFileExtension( ext ) )
+	if( extFilter( ext ) )
 	{
 		if( !path.FileExists() )
 			return HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND );
@@ -115,7 +111,7 @@ HRESULT getVideoFilePath( const char *selection, CString& result )
 			return HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND );
 
 		ext = getExtension( path );
-		if( isVideoFileExtension( ext ) )
+		if( extFilter( ext ) )
 			return S_OK;
 	}
 	return E_INVALIDARG;

@@ -82,3 +82,42 @@ void drawFullscreenTriangle( bool bindShaders )
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	context->Draw( 3, 0 );
 }
+
+class CoInit
+{
+	bool started = false;
+
+public:
+	HRESULT startup()
+	{
+		if( started )
+			return S_FALSE;
+		CHECK( CoInitializeEx( nullptr, COINIT_MULTITHREADED ) );
+		started = true;
+		return S_OK;
+	}
+
+	HRESULT shutdown()
+	{
+		if( started )
+		{
+			logShutdown( "CoUninitialize" );
+			CoUninitialize();
+			started = false;
+			return S_OK;
+		}
+		return S_FALSE;
+	}
+};
+
+thread_local CoInit tl_com;
+
+HRESULT coInit()
+{
+	return tl_com.startup();
+}
+
+HRESULT comUninitialize()
+{
+	return tl_com.shutdown();
+}

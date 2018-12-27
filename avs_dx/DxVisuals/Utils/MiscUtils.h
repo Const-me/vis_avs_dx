@@ -74,3 +74,7 @@ void omCustomBlend( float factor );
 void drawFullscreenTriangle( bool bindShaders = true );
 
 inline const char* cstr( const CStringA &str ) { return str; }
+
+// Some effects need COM to render videos or load pictures.
+HRESULT coInit();
+HRESULT comUninitialize();

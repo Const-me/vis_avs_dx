@@ -1,6 +1,22 @@
 #include "stdafx.h"
 #include "VideoEffect.h"
 #include "interop.h"
+#include <Utils/findAssets.h>
+
+static bool isVideoFileExtension( const CString& ext )
+{
+	return ext == L".mp4" || ext == L".mpeg" || ext == L".mkv" || ext == L".avi" || ext == L".wmv";
+}
+
+int initVideoCombobox( HWND wndDialog, HWND wndComboBox, char *selectedName )
+{
+	return initAssetsCombobox( wndDialog, wndComboBox, selectedName, &isVideoFileExtension );
+}
+
+HRESULT getVideoFilePath( const char *selection, CString& result )
+{
+	return getAssetFilePath( selection, &isVideoFileExtension, result );
+}
 
 IMPLEMENT_EFFECT( VideoEffect, C_AVIClass );
 

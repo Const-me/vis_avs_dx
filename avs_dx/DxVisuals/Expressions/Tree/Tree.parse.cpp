@@ -120,17 +120,17 @@ void Tree::pushMacro( const CStringA& expr, ExpressionContext& ec, int begin, in
 {
 	const char* const src = expr.operator const char*( ) + begin;
 	const int length = end - begin;
-	if( 2 == length && 0 == strncmp( src, "PI", 2 ) )
+	if( 2 == length && 0 == _strnicmp( src, "pi", 2 ) )
 	{
 		pushFloatLiteral( "3.141592653589793238", ec );
 		return;
 	}
-	if( 1 == length && src[ 0 ] == 'E' )
+	if( 1 == length && ( src[ 0 ] == 'E' || src[ 0 ] == 'e' ) )
 	{
 		pushFloatLiteral( "2.718281828459045235", ec );
 		return;
 	}
-	if( 3 == length && 0 == strncmp( src, "PHI", 3 ) )
+	if( 3 == length && 0 == _strnicmp( src, "phi", 3 ) )
 	{
 		pushFloatLiteral( "1.618033988749894848", ec );
 		return;

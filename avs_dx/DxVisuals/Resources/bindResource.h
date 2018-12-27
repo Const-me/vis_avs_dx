@@ -73,3 +73,12 @@ inline void bindSampler( UINT slot, ID3D11SamplerState* s = nullptr )
 	context->GSSetSamplers( slot, 1, &s );
 	context->PSSetSamplers( slot, 1, &s );
 }
+
+template<eStage stage>
+inline void bindSampler( UINT slot, ID3D11SamplerState* s = nullptr );
+
+template<>
+inline void bindSampler<eStage::Pixel>( UINT slot, ID3D11SamplerState* s )
+{
+	context->PSSetSamplers( slot, 1, &s );
+}

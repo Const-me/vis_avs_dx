@@ -66,6 +66,8 @@ class DynamicMovement : public EffectBase1<DynamicMovementStructs>, public Resiz
 
 	void onRenderSizeChanged() override;
 
+	CComPtr<ID3D11SamplerState> m_wrapSampler, m_clampSampler;
+
 public:
 	DynamicMovement( AvsState *pState );
 

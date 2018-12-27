@@ -26,3 +26,5 @@ using DirectX::SimpleMath::Vector4;
 #include "../DxVisuals/Expressions/utils.hpp"
 
 using namespace Expressions;
+
+inline const char* cstr( const CStringA &str ) { return str; }

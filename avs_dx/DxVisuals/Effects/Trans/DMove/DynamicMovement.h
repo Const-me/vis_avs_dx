@@ -1,7 +1,8 @@
 #pragma once
 #include <Effects/EffectImpl.hpp>
 #include <Expressions/CompiledShader.h>
-#include <Resources/GridMesh.h>
+#include "GridMesh.h"
+#include "Sampler.h"
 #include <Utils/resizeHandler.h>
 using namespace Hlsl::Trans::DMove;
 
@@ -63,6 +64,7 @@ struct DynamicMovementStructs
 class DynamicMovement : public EffectBase1<DynamicMovementStructs>, public ResizeHandler
 {
 	GridMesh m_mesh;
+	Sampler m_sampler;
 
 	void onRenderSizeChanged() override;
 

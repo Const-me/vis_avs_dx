@@ -86,28 +86,7 @@ HRESULT DynamicMovement::render( bool isBeat, RenderTargets& rt )
 	if( !renderer.bindShaders( isBeat ) )
 		return S_FALSE;
 
-	if( avs->wrap )
-	{
-		if( !m_wrapSampler )
-		{
-			CD3D11_SAMPLER_DESC sd{ D3D11_DEFAULT };
-			sd.Filter = D3D11_FILTER_ANISOTROPIC;
-			sd.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR;
-			sd.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR;
-			CHECK( device->CreateSamplerState( &sd, &m_wrapSampler ) );
-		}
-		bindSampler<eStage::Pixel>( 1, m_wrapSampler );
-	}
-	else
-	{
-		if( !m_clampSampler )
-		{
-			CD3D11_SAMPLER_DESC sd{ D3D11_DEFAULT };
-			sd.Filter = D3D11_FILTER_ANISOTROPIC;
-			CHECK( device->CreateSamplerState( &sd, &m_clampSampler ) );
-		}
-		bindSampler<eStage::Pixel>( 1, m_clampSampler );
-	}
+	CHECK( m_sampler.update( avs->subpixel, avs->wrap ) );
 
 	const UINT psReadSlot = renderer.pixel().bindPrevFrame;
 

@@ -49,7 +49,6 @@
     <ClInclude Include="Hlsl\ShaderBaseStruct.h" />
     <ClInclude Include="Utils\BoolHr.hpp" />
     <ClInclude Include="Expressions\CompiledShader.h" />
-    <ClInclude Include="Resources\GridMesh.h" />
     <ClInclude Include="iRootEffect.h" />
     <ClInclude Include="Transition.h" />
     <ClInclude Include="iTransition.h" />
@@ -103,6 +102,8 @@
     <ClInclude Include="Utils\DXTK\VertexTypes.h" />
     <ClInclude Include="Utils\DXTK\WICTextureLoader.h" />
     <ClInclude Include="Utils\DXTK\XboxDDSTextureLoader.h" />
+    <ClInclude Include="Effects\Trans\DMove\Sampler.h" />
+    <ClInclude Include="Effects\Trans\DMove\GridMesh.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -134,7 +135,6 @@
     <ClCompile Include="Expressions\parse.cpp" />
     <ClCompile Include="Utils\decompressor.cpp" />
     <ClCompile Include="Expressions\CompiledShader.cpp" />
-    <ClCompile Include="Resources\GridMesh.cpp" />
     <ClCompile Include="Transition.cpp" />
     <ClCompile Include="RootEffect.cpp" />
     <ClCompile Include="Hlsl\Defines.expand.cpp" />
@@ -167,6 +167,8 @@
     <ClCompile Include="Effects\Render\Picture\PictureEffect.cpp" />
     <ClCompile Include="Utils\DXTK\WICTextureLoader.cpp" />
     <ClCompile Include="Utils\DXTK\SimpleMath.cpp" />
+    <ClCompile Include="Effects\Trans\DMove\Sampler.cpp" />
+    <ClCompile Include="Effects\Trans\DMove\GridMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "GridMesh.h"
-#include "staticResources.h"
+#include <Resources/staticResources.h>
 
 // Example mesh topology, for 3x2 grid:
 //  x---x---x---x

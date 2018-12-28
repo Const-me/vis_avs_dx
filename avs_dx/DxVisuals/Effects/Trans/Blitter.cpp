@@ -1,12 +1,62 @@
 #include "stdafx.h"
-#include "Blitter.h"
+#include "../EffectImpl.hpp"
+#include <Utils/FadeOut.h>
+#include <Effects/shadersCode.h>
+
+struct BlitterStructs
+{
+	struct AvsState
+	{
+		int scale, scale2, blend, beatch;
+		int fpos;
+		int subpixel;
+	};
+
+	using StateData = EmptyStateData;
+
+	static ByteRange vertexShaderBinary()
+	{
+		return Hlsl::StaticShaders::BlitterVS();
+	}
+	static ByteRange pixelShaderBinary()
+	{
+		return Hlsl::StaticShaders::BlitterPS();
+	}
+};
+
+inline float lerp( float x1, float x2, float x, float y1, float y2 )
+{
+	const float c1 = ( x - x1 ) / ( x2 - x1 );
+	const float c2 = 1.0f - c1;
+	return y1 * c2 + y2 * c1;
+}
+
+inline float getScale( int s )
+{
+	if( s < 32 )
+		return lerp( 32, 0, (float)s, 1, 2 );
+	return lerp( 32, 255, (float)s, 1.0, 0.333f );
+}
+
+class Blitter : public EffectBase1<BlitterStructs>
+{
+	FadeOut m_fade;
+	float m_val = 0;
+	CComPtr<ID3D11Buffer> m_cbuffer;
+	HRESULT updateBuffer( float val );
+
+public:
+	Blitter( AvsState* avs ) : EffectBase1( avs )
+	{
+		m_fade.update( 40 );
+	}
+
+	DECLARE_EFFECT();
+
+	HRESULT render( bool isBeat, RenderTargets& rt ) override;
+};
 
 IMPLEMENT_EFFECT( Blitter, C_BlitClass );
-
-Blitter::Blitter( AvsState* avs ) : EffectBase1( avs )
-{
-	m_fade.update( 40 );
-}
 
 HRESULT Blitter::updateBuffer( float val )
 {
@@ -33,20 +83,6 @@ HRESULT Blitter::updateBuffer( float val )
 	m_val = val;
 
 	return S_OK;
-}
-
-inline float lerp( float x1, float x2, float x, float y1, float y2 )
-{
-	const float c1 = ( x - x1 ) / ( x2 - x1 );
-	const float c2 = 1.0f - c1;
-	return y1 * c2 + y2 * c1;
-}
-
-float Blitter::getScale( int s )
-{
-	if( s < 32 )
-		return lerp( 32, 0, (float)s, 1, 2 );
-	return lerp( 32, 255, (float)s, 1.0, 0.333f );
 }
 
 HRESULT Blitter::render( bool isBeat, RenderTargets& rt )

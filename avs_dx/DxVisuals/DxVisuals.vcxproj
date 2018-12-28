@@ -95,7 +95,6 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Effects\Trans\Blitter\Blitter.h" />
     <ClInclude Include="Effects\Render\Picture\interop.h" />
     <ClInclude Include="Effects\Render\Picture\PictureEffect.h" />
     <ClInclude Include="Effects\Trans\DMove\GridMesh.tesselate.hpp" />
@@ -203,7 +202,7 @@
     <ClInclude Include="Effects\Video\VideoEffect.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Effects\Trans\Blitter\Blitter.cpp" />
+    <ClCompile Include="Effects\Trans\Blitter.cpp" />
     <ClCompile Include="EffectBase\EffectBase.cpp" />
     <ClCompile Include="Effects\Render\Picture\PictureEffect.cpp" />
     <ClCompile Include="Effects\Trans\DMove\Sampler.cpp" />

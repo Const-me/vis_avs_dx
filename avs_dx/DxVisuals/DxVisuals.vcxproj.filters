@@ -106,7 +106,6 @@
     <ClInclude Include="Effects\Trans\DMove\GridMesh.h" />
     <ClInclude Include="Effects\Trans\DMove\GridMesh.tesselate.hpp" />
     <ClInclude Include="Utils\meshoptimizer\meshoptimizer.h" />
-    <ClInclude Include="Effects\Trans\Blitter\Blitter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -174,7 +173,7 @@
     <ClCompile Include="Effects\Trans\DMove\GridMesh.cpp" />
     <ClCompile Include="Utils\meshoptimizer\vcacheoptimizer.cpp" />
     <ClCompile Include="Utils\meshoptimizer\vfetchoptimizer.cpp" />
-    <ClCompile Include="Effects\Trans\Blitter\Blitter.cpp" />
+    <ClCompile Include="Effects\Trans\Blitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

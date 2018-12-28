@@ -15,16 +15,4 @@
     <LocalDebuggerWorkingDirectory>C:\Soft\Winamp</LocalDebuggerWorkingDirectory>
     <LocalDebuggerDebuggerType>NativeOnly</LocalDebuggerDebuggerType>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Laser Release|Win32'">
-    <LocalDebuggerCommand>C:\Soft\Winamp\winamp.exe</LocalDebuggerCommand>
-    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerWorkingDirectory>C:\Soft\Winamp</LocalDebuggerWorkingDirectory>
-    <LocalDebuggerDebuggerType>NativeOnly</LocalDebuggerDebuggerType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoMMX Release|Win32'">
-    <LocalDebuggerCommand>C:\Soft\Winamp\winamp.exe</LocalDebuggerCommand>
-    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerWorkingDirectory>C:\Soft\Winamp</LocalDebuggerWorkingDirectory>
-    <LocalDebuggerDebuggerType>NativeOnly</LocalDebuggerDebuggerType>
-  </PropertyGroup>
 </Project>

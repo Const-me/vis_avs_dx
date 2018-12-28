@@ -28,10 +28,10 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{73652E08-183F-40C1-BD4A-01733C9DA502}.Debug|x86.ActiveCfg = Debug|Win32
 		{73652E08-183F-40C1-BD4A-01733C9DA502}.Debug|x86.Build.0 = Debug|Win32
-		{73652E08-183F-40C1-BD4A-01733C9DA502}.Laser Release|x86.ActiveCfg = Laser Release|Win32
-		{73652E08-183F-40C1-BD4A-01733C9DA502}.Laser Release|x86.Build.0 = Laser Release|Win32
-		{73652E08-183F-40C1-BD4A-01733C9DA502}.NoMMX Release|x86.ActiveCfg = NoMMX Release|Win32
-		{73652E08-183F-40C1-BD4A-01733C9DA502}.NoMMX Release|x86.Build.0 = NoMMX Release|Win32
+		{73652E08-183F-40C1-BD4A-01733C9DA502}.Laser Release|x86.ActiveCfg = Release|Win32
+		{73652E08-183F-40C1-BD4A-01733C9DA502}.Laser Release|x86.Build.0 = Release|Win32
+		{73652E08-183F-40C1-BD4A-01733C9DA502}.NoMMX Release|x86.ActiveCfg = Release|Win32
+		{73652E08-183F-40C1-BD4A-01733C9DA502}.NoMMX Release|x86.Build.0 = Release|Win32
 		{73652E08-183F-40C1-BD4A-01733C9DA502}.Release|x86.ActiveCfg = Release|Win32
 		{73652E08-183F-40C1-BD4A-01733C9DA502}.Release|x86.Build.0 = Release|Win32
 		{ECD3BA77-59D4-47DC-B2EF-C343E675C30A}.Debug|x86.ActiveCfg = Debug|Win32

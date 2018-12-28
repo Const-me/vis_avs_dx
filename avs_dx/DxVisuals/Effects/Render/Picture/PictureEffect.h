@@ -33,7 +33,6 @@ struct PictureStructs
 	using PsData = Hlsl::Render::Picture::PicturePS;
 };
 
-
 class PictureEffect : public EffectBase1<PictureStructs>
 {
 public:

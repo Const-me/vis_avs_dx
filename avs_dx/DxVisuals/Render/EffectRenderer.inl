@@ -7,6 +7,7 @@ namespace
 	{
 		None,
 		Static,
+		Binary,
 		Dynamic
 	};
 
@@ -21,6 +22,10 @@ namespace
 		__if_exists( T::staticFuncName )                            \
 		{                                                           \
 			return eShaderKind::Static;                             \
+		}                                                           \
+		__if_exists( T::staticFuncName##Binary )                    \
+		{                                                           \
+			return eShaderKind::Binary;                             \
 		}                                                           \
 		return eShaderKind::None;                                   \
 	}
@@ -71,4 +76,20 @@ namespace
 	DEFINE_DYNAMIC_SHADER( eStage::Pixel, PsData );
 
 #undef DEFINE_DYNAMIC_SHADER
+
+#define DEFINE_STATIC_SHADER( stage, staticFuncName )               \
+	template<class T>                                               \
+	struct ShaderTypeHelper<T, stage, eShaderKind::Binary>          \
+	{                                                               \
+		using Type = BinaryShader<stage>;                           \
+		static ByteRange ctorArg() { return T::staticFuncName##Binary(); }  \
+	}
+
+	DEFINE_STATIC_SHADER( eStage::Compute, computeShader );
+	DEFINE_STATIC_SHADER( eStage::Vertex, vertexShader );
+	DEFINE_STATIC_SHADER( eStage::Geometry, geometryShader );
+	DEFINE_STATIC_SHADER( eStage::Pixel, pixelShader );
+
+#undef DEFINE_STATIC_SHADER
+
 }

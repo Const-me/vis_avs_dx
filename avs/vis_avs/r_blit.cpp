@@ -53,7 +53,7 @@ protected:
 public:
 	C_THISCLASS();
 	virtual ~C_THISCLASS();
-	virtual int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
+	int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
 	virtual char *get_desc() { return MOD_NAME; }
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent );
 	virtual void load_config( unsigned char *data, int len );
@@ -104,6 +104,8 @@ C_THISCLASS::C_THISCLASS()
 	fpos = scale;
 	beatch = 0;
 	subpixel = 1;
+
+	CREATE_DX_EFFECT( scale );
 }
 
 C_THISCLASS::~C_THISCLASS()
@@ -449,6 +451,8 @@ int C_THISCLASS::blitter_normal( int *framebuffer, int *fbout, int w, int h, int
 
 int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
 {
+	__debugbreak();
+	return 0;
 	if( isBeat & 0x80000000 ) return 0;
 	int f_val;
 	unsigned int *dest = (unsigned int *)fbout;

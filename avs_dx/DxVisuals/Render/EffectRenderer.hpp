@@ -1,5 +1,7 @@
 #pragma once
 #include "Shader.hpp"
+#include <Utils/ByteRange.hpp>
+#include <Resources/createShader.hpp>
 
 template<eStage stage>
 class StaticShader
@@ -18,6 +20,36 @@ public:
 		static_assert( false, "That shader is static, it has no data" );
 		return false;
 	};
+
+	bool bind( bool isBeat ) const
+	{
+		bindShader<stage>( m_shader );
+		return nullptr != m_shader;
+	}
+};
+
+template<eStage stage>
+class BinaryShader
+{
+	const ByteRange m_bytecode;
+	ShaderPtr<stage> m_shader;
+
+public:
+	BinaryShader( ByteRange dxbc ) :
+		m_bytecode( dxbc ) { }
+
+	const bool data()
+	{
+		static_assert( false, "That shader is static, it has no data" );
+		return false;
+	};
+
+	HRESULT compile()
+	{
+		if( m_shader )
+			return S_FALSE;
+		return createShader( m_bytecode, m_shader );
+	}
 
 	bool bind( bool isBeat ) const
 	{
@@ -63,7 +95,9 @@ public:
 	// If this effect has no dynamic shader stages, just return S_FALSE. Otherwise, call updateBindings(), updateAvs() and updateDx() methods on the state object, and combine the results.
 	HRESULT update( Binder& binder, const tAvxState& avs, const tDxState& dx )
 	{
-		return forEachDynStage( [ & ]( auto& p ) { return p.update( binder, avs, dx ); } );
+		BoolHr hr = forEachDynStage( [ & ]( auto& p ) { return p.update( binder, avs, dx ); } );
+		hr.combine( forEachBinStage( [ & ]( auto& p ) { return p.compile(); } ) );
+		return hr;
 	}
 
 	HRESULT compileShaders( const CAtlMap<CStringA, CStringA>& inc, UINT stateOffset )
@@ -141,4 +175,24 @@ private:
 				return hr;
 		return hr;
 	}
+
+	template<class Fn>
+	inline HRESULT forEachBinStage( Fn fn )
+	{
+		BoolHr hr;
+		if constexpr( shaderKinds[ 0 ] == eShaderKind::Binary )
+			if( hr.combine( fn( std::get<0>( m_shaders ) ) ) )
+				return hr;
+		if constexpr( shaderKinds[ 1 ] == eShaderKind::Binary )
+			if( hr.combine( fn( std::get<1>( m_shaders ) ) ) )
+				return hr;
+		if constexpr( shaderKinds[ 2 ] == eShaderKind::Binary )
+			if( hr.combine( fn( std::get<2>( m_shaders ) ) ) )
+				return hr;
+		if constexpr( shaderKinds[ 3 ] == eShaderKind::Binary )
+			if( hr.combine( fn( std::get<3>( m_shaders ) ) ) )
+				return hr;
+		return hr;
+	}
+
 };

@@ -27,9 +27,15 @@ struct BlitterStructs
 class Blitter : public EffectBase1<BlitterStructs>
 {
 	FadeOut m_fade;
+	float m_val = 0;
+	CComPtr<ID3D11Buffer> m_cbuffer;
+
+	HRESULT updateBuffer( float val );
+
+	static float getScale( int s );
 
 public:
-	Blitter( AvsState* avs ) : EffectBase1( avs ) { }
+	Blitter( AvsState* avs );
 
 	DECLARE_EFFECT();
 

@@ -32,12 +32,11 @@ HRESULT ColorModifier::render( bool isBeat, RenderTargets& rt )
 {
 	omBlend( eBlend::None );
 	const UINT psReadSlot = renderer.pixel().bindPrevFrame;
-	CHECK( rt.writeToNext( psReadSlot, false ) );
+	BoundPsResource read;
+	CHECK( rt.writeToNext( psReadSlot, read, false ) );
 
 	if( !renderer.bindShaders( isBeat ) )
 		return S_FALSE;
 	drawFullscreenTriangle( false );
-
-	bindResource<eStage::Pixel>( psReadSlot );
 	return S_OK;
 }

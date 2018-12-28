@@ -11,7 +11,7 @@ public:
 
 	static constexpr DXGI_FORMAT format =
 		DXGI_FORMAT_R10G10B10A2_UNORM;
-		// DXGI_FORMAT_R8G8B8A8_UNORM;
+	// DXGI_FORMAT_R8G8B8A8_UNORM;
 
 	HRESULT create();
 
@@ -32,10 +32,12 @@ public:
 	// Bind the write only render target view of the texture
 	void bindTarget();
 
-	// Bind the read only shader resource view to the specified pixel shader input slot
-	void bindView( UINT slot = 0 ) const;
-
 	void copyTo( const RenderTarget& that ) const;
 
 	ID3D11Texture2D* texture() const { return m_tex; }
+
+	BoundSrv<eStage::Pixel> psView( UINT slot ) const
+	{
+		return std::move( BoundSrv<eStage::Pixel>{ slot, m_srv } );
+	}
 };

@@ -88,7 +88,8 @@ HRESULT Blitter::updateBuffer( float val )
 HRESULT Blitter::render( bool isBeat, RenderTargets& rt )
 {
 	constexpr UINT psSlot = 16;
-	CHECK( rt.blendToNext( psSlot ) );
+	BoundSrv<eStage::Pixel> bound;
+	CHECK( rt.blendToNext( psSlot, bound ) );
 
 	float val = 0;
 	if( avs->beatch )
@@ -97,7 +98,7 @@ HRESULT Blitter::render( bool isBeat, RenderTargets& rt )
 	float zoom = lerp( 0, 1, val, getScale( avs->scale ), getScale( avs->scale2 ) );
 	CHECK( updateBuffer( zoom ) );
 
-	bindConstantBuffer<eStage::Vertex>( 3, m_cbuffer );
+	BIND_VS_CB( 3, m_cbuffer );
 	renderer.bindShaders( false );
 
 	if( avs->blend )
@@ -108,9 +109,6 @@ HRESULT Blitter::render( bool isBeat, RenderTargets& rt )
 	iaClearBuffer();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP );
 	context->Draw( 4, 0 );
-
-	bindConstantBuffer<eStage::Vertex>( 3 );
-	bindResource<eStage::Pixel>( psSlot );
 
 	return S_OK;
 }

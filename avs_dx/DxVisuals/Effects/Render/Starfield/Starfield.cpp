@@ -79,11 +79,9 @@ HRESULT Starfield::render( bool isBeat, RenderTargets& rt )
 
 	// Render the sprites
 	const UINT srvSlot = renderer.vertex().bindStarsPosition;
-	bindResource<eStage::Vertex>( srvSlot, starsBuffer.srv() );
+	BIND_VS_SRV( srvSlot, starsBuffer.srv() );
 	iaClearBuffer();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_POINTLIST );
 	context->Draw( nStars, 0 );
-	bindResource<eStage::Vertex>( srvSlot );
-
 	return S_OK;
 }

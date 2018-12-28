@@ -95,9 +95,7 @@ HRESULT PictureEffect::render( bool isBeat, RenderTargets& rt )
 		return S_FALSE;
 
 	CHECK( rt.writeToLast( false ) );
-
-	bindResource<eStage::Pixel>( 15, m_pic );
-
+	BIND_PS_SRV( 15, m_pic );
 	const auto mode = avs->blendMode();
 
 	float factor = 0.5;
@@ -120,7 +118,5 @@ HRESULT PictureEffect::render( bool isBeat, RenderTargets& rt )
 	}
 
 	drawFullscreenTriangle( false );
-
-	bindResource<eStage::Pixel>( 15 );
 	return S_OK;
 }

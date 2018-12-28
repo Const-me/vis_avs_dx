@@ -36,10 +36,10 @@ void RenderTarget::bindTarget()
 	context->OMSetRenderTargets( 1, &v, nullptr );
 }
 
-void RenderTarget::bindView( UINT slot ) const
+/* void RenderTarget::bindView( UINT slot ) const
 {
 	bindResource<eStage::Pixel>( slot, m_srv );
-}
+} */
 
 void RenderTarget::copyTo( const RenderTarget& that ) const
 {

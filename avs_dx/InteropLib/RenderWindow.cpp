@@ -82,11 +82,11 @@ LRESULT RenderWindow::wmPresent( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 
 	setShaders( StaticResources::fullScreenTriangle, nullptr, StaticResources::copyTexture );
 	omSetTarget( renderTargetView );
-	pSource->bindView( 127 );
-	omBlend( eBlend::None );
-	drawFullscreenTriangle( false );
-
-	bindResource<eStage::Pixel>( 127 );
+	{
+		auto bound = pSource->psView( 127 );
+		omBlend( eBlend::None );
+		drawFullscreenTriangle( false );
+	}
 
 	*pResult = doPresent();;
 	return TRUE;

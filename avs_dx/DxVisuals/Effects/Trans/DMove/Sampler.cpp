@@ -5,7 +5,6 @@ HRESULT Sampler::update( bool bilinear, bool wrap )
 {
 	if( m_sampler && bilinear == m_bilinear && wrap == m_wrap )
 	{
-		bindSampler<eStage::Pixel>( 1, m_sampler );
 		return S_FALSE;
 	}
 
@@ -20,6 +19,5 @@ HRESULT Sampler::update( bool bilinear, bool wrap )
 
 	m_bilinear = bilinear;
 	m_wrap = wrap;
-	bindSampler<eStage::Pixel>( 1, m_sampler );
 	return S_OK;
 }

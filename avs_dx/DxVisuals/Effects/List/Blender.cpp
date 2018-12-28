@@ -43,19 +43,15 @@ HRESULT Blender::blend( RenderTargets& source, RenderTargets& dest, eBlendMode m
 	const UINT bindSource = blendShader.data().source;
 	const UINT bindDest = blendShader.data().dest;
 
-	CHECK( dest.writeToNext( bindDest, false ) );
+	BoundSrv<eStage::Pixel> boundDest;
+	CHECK( dest.writeToNext( bindDest, boundDest, false ) );
 
-	if( src )
-		src.bindView( bindSource );
-	else
-		bindResource<eStage::Pixel>( bindSource, StaticResources::blackTexture );
+	auto boundSource = src ? src.psView( bindSource ) : boundResource<eStage::Pixel>( bindSource, StaticResources::blackTexture );
 
 	omBlend( eBlend::None );
 	blendShader.bind( false );
 	drawFullscreenTriangle();
 
-	bindResource<eStage::Pixel>( bindSource );
-	bindResource<eStage::Pixel>( bindDest );
 	return S_OK;
 }
 

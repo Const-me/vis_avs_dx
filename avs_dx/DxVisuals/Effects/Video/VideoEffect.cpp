@@ -134,8 +134,7 @@ HRESULT VideoEffect::render( bool isBeat, RenderTargets& rt )
 		return E_INVALIDARG;
 	}
 	setShaders( StaticResources::fullScreenTriangle, nullptr, StaticResources::copyTexture );
-	bindResource<eStage::Pixel>( 127, m_player->view() );
+	BIND_PS_SRV( 127, m_player->view() );
 	drawFullscreenTriangle( false );
-	bindResource<eStage::Pixel>( 127 );
 	return S_OK;
 }

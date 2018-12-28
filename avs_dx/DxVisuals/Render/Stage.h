@@ -8,60 +8,86 @@ enum struct eStage : uint8_t
 	Pixel = 3,
 };
 
-namespace
+namespace DxUtils
 {
+	// Abuse C macros + C++ template specialization to implement a poor man's compile time reflection..
 	template<eStage stage>
-	struct ShaderTraits;
+	struct StageBinder;
+
+#define BIND_SHADER( STAGE )    static inline void shader( IShader* shaderPtr ) { context->STAGE##SetShader( shaderPtr, nullptr, 0 ); }
+#define BIND_CONSTANT( STAGE )  static inline void cbuffer( UINT slot, ID3D11Buffer* buffer ) { context->STAGE##SetConstantBuffers( slot, 1, &buffer ); }
+#define BIND_SRV( STAGE )       static inline void srv( UINT slot, ID3D11ShaderResourceView* view ) { context->STAGE##SetShaderResources( slot, 1, &view ); }
+#define BIND_SAMPLER( STAGE )   static inline void sampler( UINT slot, ID3D11SamplerState* sampler ) { context->STAGE##SetSamplers( slot, 1, &sampler ); }
+#define IMPLEMENT_BINDS( STAGE ) BIND_SHADER( STAGE ) BIND_CONSTANT( STAGE ) BIND_SRV( STAGE ) BIND_SAMPLER( STAGE )
 
 	template<>
-	struct ShaderTraits<eStage::Vertex>
+	struct StageBinder<eStage::Vertex>
 	{
 		using IShader = ID3D11VertexShader;
-		static inline void bind( IShader* ptr )
-		{
-			context->VSSetShader( ptr, nullptr, 0 );
-		}
+		IMPLEMENT_BINDS( VS )
 	};
 
 	template<>
-	struct ShaderTraits<eStage::Pixel>
+	struct StageBinder<eStage::Pixel>
 	{
 		using IShader = ID3D11PixelShader;
-		static inline void bind( IShader* ptr )
-		{
-			context->PSSetShader( ptr, nullptr, 0 );
-		}
+		IMPLEMENT_BINDS( PS )
 	};
 
 	template<>
-	struct ShaderTraits<eStage::Geometry>
+	struct StageBinder<eStage::Geometry>
 	{
 		using IShader = ID3D11GeometryShader;
-		static inline void bind( IShader* ptr )
-		{
-			context->GSSetShader( ptr, nullptr, 0 );
-		}
+		IMPLEMENT_BINDS( GS )
 	};
 
 	template<>
-	struct ShaderTraits<eStage::Compute>
+	struct StageBinder<eStage::Compute>
 	{
 		using IShader = ID3D11ComputeShader;
-		static inline void bind( IShader* ptr )
-		{
-			context->CSSetShader( ptr, nullptr, 0 );
-		}
+		IMPLEMENT_BINDS( CS )
 	};
+
+#undef IMPLEMENT_BINDS
+#undef BIND_SAMPLER
+#undef BIND_SRV
+#undef BIND_CONSTANT
+#undef BIND_SHADER
 }
 
 template<eStage stage>
-using IShader = typename ShaderTraits<stage>::IShader;
+using IShader = typename DxUtils::StageBinder<stage>::IShader;
 
 template<eStage stage>
-using ShaderPtr = CComPtr<typename ShaderTraits<stage>::IShader>;
+using ShaderPtr = CComPtr<typename DxUtils::StageBinder<stage>::IShader>;
 
+// Bind a shader
 template<eStage stage>
 inline void bindShader( IShader<stage>* ptr )
 {
-	ShaderTraits<stage>::bind( ptr );
+	DxUtils::StageBinder<stage>::shader( ptr );
+}
+// Bind a constant buffers
+template<eStage stage>
+inline void bindConstantBuffer( UINT slot, ID3D11Buffer* buffer = nullptr )
+{
+	DxUtils::StageBinder<stage>::cbuffer( slot, buffer );
+}
+// Bind a shader resource
+template<eStage stage>
+inline void bindResource( UINT slot, ID3D11ShaderResourceView* srv = nullptr )
+{
+	DxUtils::StageBinder<stage>::srv( slot, srv );
+}
+// Bind a sampler
+template<eStage stage>
+inline void bindSampler( UINT slot, ID3D11SamplerState* sampler = nullptr )
+{
+	DxUtils::StageBinder<stage>::sampler( slot, sampler );
+}
+
+// UAVs are only supported by compute shaders
+inline void bindUav( UINT slot, ID3D11UnorderedAccessView* uav = nullptr )
+{
+	context->CSSetUnorderedAccessViews( slot, 1, &uav, nullptr );
 }

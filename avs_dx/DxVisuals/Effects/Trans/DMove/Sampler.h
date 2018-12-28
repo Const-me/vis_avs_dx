@@ -9,4 +9,6 @@ class Sampler
 public:
 
 	HRESULT update( bool bilinear, bool wrap );
+
+	operator ID3D11SamplerState* const( ) { return m_sampler; }
 };

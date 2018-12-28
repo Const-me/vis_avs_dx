@@ -22,13 +22,13 @@ HRESULT RenderTargets::writeToLast( bool clear )
 	return S_OK;
 }
 
-HRESULT RenderTargets::writeToNext( UINT readPsSlot, bool clearNext )
+HRESULT RenderTargets::writeToNext( UINT readPsSlot, BoundSrv<eStage::Pixel>& bound, bool clearNext )
 {
 	unbindTarget();
 
 	RenderTarget& tRead = m_targets[ m_lastTarget ];
 	if( tRead )
-		tRead.bindView( readPsSlot );
+		bound.swap( tRead.psView( readPsSlot ) );
 	else
 		bindResource<eStage::Pixel>( readPsSlot, StaticResources::blackTexture );
 
@@ -42,12 +42,12 @@ HRESULT RenderTargets::writeToNext( UINT readPsSlot, bool clearNext )
 	return S_OK;
 }
 
-HRESULT RenderTargets::blendToNext( UINT readPsSlot )
+HRESULT RenderTargets::blendToNext( UINT readPsSlot, BoundSrv<eStage::Pixel>& bound )
 {
 	omBlend( eBlend::Premultiplied );
 	RenderTarget& tRead = m_targets[ m_lastTarget ];
 	if( !tRead )
-		return writeToNext( readPsSlot, true );
+		return writeToNext( readPsSlot, bound, true );
 
 	unbindTarget();
 	m_lastTarget ^= 1;
@@ -58,6 +58,6 @@ HRESULT RenderTargets::blendToNext( UINT readPsSlot )
 	tRead.copyTo( tWrite );
 
 	tWrite.bindTarget();
-	tRead.bindView( readPsSlot );
+	bound.swap( tRead.psView( readPsSlot ) );
 	return S_OK;
 }

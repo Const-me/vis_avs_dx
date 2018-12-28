@@ -58,10 +58,12 @@ namespace DxUtils
 		}
 		void swap( BoundResource<stage, TResource> &that )
 		{
+			assert( m_slot == UINT_MAX || that.m_slot == UINT_MAX );
 			std::swap( m_slot, that.m_slot );
 		}
 		void swap( BoundResource<stage, TResource> &&that )
 		{
+			assert( m_slot == UINT_MAX || that.m_slot == UINT_MAX );
 			std::swap( m_slot, that.m_slot );
 		}
 	};

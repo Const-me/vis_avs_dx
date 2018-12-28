@@ -46,7 +46,7 @@ HRESULT Blender::blend( RenderTargets& source, RenderTargets& dest, eBlendMode m
 	BoundSrv<eStage::Pixel> boundDest;
 	CHECK( dest.writeToNext( bindDest, boundDest, false ) );
 
-	auto boundSource = src ? src.psView( bindSource ) : boundResource<eStage::Pixel>( bindSource, StaticResources::blackTexture );
+	auto boundSource = src ? src.psView( bindSource ) : boundResource( bindSource, StaticResources::blackTexture );
 
 	omBlend( eBlend::None );
 	blendShader.bind( false );

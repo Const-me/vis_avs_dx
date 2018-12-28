@@ -3,6 +3,7 @@
 
 namespace
 {
+	// Very similar to std::array but can contain less elements.
 	template<class T, uint8_t size>
 	class DynamicArray
 	{
@@ -43,6 +44,7 @@ namespace
 		};
 	};
 
+	// Some parts of the algorithm need to place data in a hash map with triangle edge being the key. This function makes such keys by sorting indices of the two vertices.
 	inline uint32_t edgeId( uint16_t v1, uint16_t v2 )
 	{
 		if( v1 < v2 )
@@ -50,16 +52,7 @@ namespace
 		return (uint32_t)( v2 ) << 16 | v1;
 	}
 
-	inline uint16_t getOtherVertex( uint32_t e, uint16_t v )
-	{
-		if( ( e & 0xFFFF ) == v )
-			return (uint16_t)( e >> 16 );
-		assert( (uint16_t)( e >> 16 ) == v );
-		return (uint16_t)( e & 0xFFFF );
-	}
-
 	using TriList = DynamicArray<uint16_t, 6>;
-	// using EdgeList = DynamicArray<uint32_t, 6>;
 
 	void buildTopology( const std::vector<Ind3> &ib, CAtlMap<uint16_t, TriList> &mapV2T )
 	{
@@ -76,13 +69,6 @@ namespace
 				else
 					mapV2T.SetAt( v, TriList{ i } );
 			}
-			/*
-			// vertex -> edge map
-			EdgeList& e = mapE2T[ v ];
-			e.addIfNotThere( edgeId( indices[ 0 ], indices[ 1 ] ) );
-			e.addIfNotThere( edgeId( indices[ 0 ], indices[ 2 ] ) );
-			e.addIfNotThere( edgeId( indices[ 1 ], indices[ 2 ] ) );
-			*/
 		}
 	}
 
@@ -94,6 +80,7 @@ namespace
 		return p->m_value;
 	}
 
+	// Calculate per-vertex tessellation factors. The center triangle has all vertices set to the lod parameter, then lod decays to 1, 1 edge at a time.
 	void calculateVertexLevels( const std::vector<Ind3> &ib, const CAtlMap<uint16_t, TriList> &mapV2T, Ind3 centerTri, uint8_t lod, CAtlMap<uint16_t, uint8_t> &vertexLoD )
 	{
 		assert( lod > 0 );
@@ -134,6 +121,7 @@ namespace
 		}
 	}
 
+	// Collect per-vertex tessellation levels into per-triangle ones.
 	using VertsLevels = std::array<uint8_t, 3>;
 	void calculateLevels( const std::vector<Ind3> &ib, const CAtlMap<uint16_t, TriList> &mapV2T, const CAtlMap<uint16_t, uint8_t> &vertexLoD, CAtlMap<uint16_t, VertsLevels> &triangleLoD )
 	{
@@ -165,6 +153,7 @@ namespace
 		}
 	}
 
+	// Split an edge in the middle, insert a new vertex. Or if it was already done, return old vertex ID from the hash map.
 	uint16_t splitEdge( std::vector<sInput> &vb, CAtlMap<uint32_t, uint16_t> &newVerts, uint16_t v1, uint16_t v2 )
 	{
 		const uint32_t e = edgeId( v1, v2 );
@@ -234,9 +223,6 @@ namespace
 		}
 	};
 
-	template<uint8_t iPart>
-	inline void trianglePart( const Ind3& oldIndices, const std::array<uint16_t, 3>& midpoints, const TriContext &tri, Ind3& ind, TriContext &c );
-
 	//      v0
 	//       x
 	//      /0\
@@ -245,45 +231,25 @@ namespace
 	//   x---x---x
 	// v2    e1    v1
 
-	template<>
-	inline void trianglePart<0>( const Ind3& oldIndices, const std::array<uint16_t, 3>& midpoints, const TriContext &tri, Ind3& ind, TriContext &c )
+	// The template argument is vertex index, which, as shown on the above comment, for parts 0-2 also the id of the "next" edge.
+	template<uint8_t iPart>
+	inline void trianglePart( const Ind3& oldIndices, const std::array<uint16_t, 3>& midpoints, const TriContext &tri, Ind3& ind, TriContext &c )
 	{
-		ind[ 0 ] = oldIndices[ 0 ];
-		ind[ 1 ] = midpoints[ 0 ];
-		ind[ 2 ] = midpoints[ 2 ];
+		static_assert( iPart >= 0 && iPart < 3 );
+		constexpr uint8_t prevEdge = ( iPart + 2 ) % 3;
+
+		ind[ 0 ] = oldIndices[ iPart ];
+		ind[ 1 ] = midpoints[ iPart ];
+		ind[ 2 ] = midpoints[ prevEdge ];
 		c = TriContext
 		{
-			tri.edges[ 0 ],
+			tri.edges[ iPart ],
 			tri.minLod,
-			tri.edges[ 2 ],
+			tri.edges[ prevEdge ],
 		};
 	}
-	template<>
-	inline void trianglePart<1>( const Ind3& oldIndices, const std::array<uint16_t, 3>& midpoints, const TriContext &tri, Ind3& ind, TriContext &c )
-	{
-		ind[ 0 ] = oldIndices[ 1 ];
-		ind[ 1 ] = midpoints[ 1 ];
-		ind[ 2 ] = midpoints[ 0 ];
-		c = TriContext
-		{
-			tri.edges[ 1 ],
-			tri.minLod,
-			tri.edges[ 0 ],
-		};
-	}
-	template<>
-	inline void trianglePart<2>( const Ind3& oldIndices, const std::array<uint16_t, 3>& midpoints, const TriContext &tri, Ind3& ind, TriContext &c )
-	{
-		ind[ 0 ] = oldIndices[ 2 ];
-		ind[ 1 ] = midpoints[ 2 ];
-		ind[ 2 ] = midpoints[ 1 ];
-		c = TriContext
-		{
-			tri.edges[ 2 ],
-			tri.minLod,
-			tri.edges[ 1 ],
-		};
-	}
+
+	// Part 3 is the central one, with all 3 vertices being the edge's midpoints.
 	template<>
 	inline void trianglePart<3>( const Ind3& oldIndices, const std::array<uint16_t, 3>& midpoints, const TriContext &tri, Ind3& ind, TriContext &c )
 	{
@@ -306,7 +272,6 @@ namespace
 	void splitTriangleIn4( std::vector<sInput> &vb, std::vector<Ind3> &ib, CAtlMap<uint32_t, uint16_t> &newVertices, uint16_t id, TriContext tri )
 	{
 		const Ind3 indices = ib[ id ];
-		// All edges have non-zero LoD, split the whole triangle in 4 pieces
 		tri.decrement();
 		const Ind3 midpoints =
 		{
@@ -318,9 +283,10 @@ namespace
 		TriContext nt;
 		Ind3 ni;
 		trianglePart<0>( indices, midpoints, tri, ni, nt );
-		ib[ id ] = ni;
+		ib[ id ] = ni;	//< The first new triangle replaces the old one. This is done so we don't have to compact the holes in the IB as a post-processing step.
 		tesselateTriangle( vb, ib, newVertices, id, nt );
 
+		// Other 3 new triangles are appended to the end of the IB.
 		trianglePart<1>( indices, midpoints, tri, ni, nt );
 		id = push( ib, ni );
 		tesselateTriangle( vb, ib, newVertices, id, nt );
@@ -356,6 +322,7 @@ namespace
 
 		if( tri.minLod >= 1 )
 		{
+			// All edges have non-zero LoD, split the whole triangle in 4 pieces
 			splitTriangleIn4( vb, ib, newVertices, id, tri );
 			return;
 		}
@@ -399,7 +366,7 @@ namespace
 			return;
 		}
 
-		// For general tessellation case, need to handle other remaining 3 cases, 0b011, 0b101, 0b110, and split the triangle into 3.
+		// For general tessellation case, need to handle 3 remaining cases, 0b011, 0b101, 0b110, and split the triangle into 3.
 		// However, this particular mesh never has them.
 		__debugbreak();
 	}
@@ -433,6 +400,7 @@ namespace
 		mapV2T.RemoveAll();
 
 		tesselate( vb, ib, triLoD );
+		triLoD.RemoveAll();
 
 		// Optimize the mesh. Not sure how much it helps, but even if by 0.1% it's a good idea: this mesh is only recreated on resize, i.e. 99% of time it's static and uploaded to GPU.
 		const size_t index_count = ib.size() * 3;

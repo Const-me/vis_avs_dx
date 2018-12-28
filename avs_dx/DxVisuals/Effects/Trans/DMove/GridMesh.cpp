@@ -2,7 +2,7 @@
 #include "GridMesh.h"
 #include <Resources/staticResources.h>
 
-// Example mesh topology, for 3x2 grid:
+// Example mesh topology, for 3x2 grid, without center tessellation:
 //  x---x---x---x
 //  |\ / \ / \ /|
 //  x-x---x---x-x
@@ -19,7 +19,7 @@ CSize GridMesh::pickSize( const CSize &screen, int triangle )
 	res.cy = lround( heightInv * screen.cy );
 
 	if( !m_rectangular )
-		res.cy |= 1;	// Make Y odd so we don't have a center vertex, only a center triangle
+		res.cy |= 1;	// Make Y odd so we don't have any vertex exactly in the center, only triangle.
 	return res;
 }
 
@@ -101,13 +101,13 @@ namespace
 		}
 	};
 
-	// Push odd-numbered vertices row i.e. 0-th or 6-th
+	// Push odd-numbered vertices row e.g. 0-th or 6-th
 	void pushEvenRow( const GridDim &dim, std::vector<sInput> &vb, int yInt )
 	{
 		for( int i = 0; i <= dim.cx; i++ )
 			vb.emplace_back( dim.posEven( yInt, i ) );
 	}
-	// Push even-numbered vertices row i.e. 1-st or 3-rd
+	// Push even-numbered vertices row e.g. 1-st or 3-rd
 	void pushOddRow( const GridDim &dim, std::vector<sInput> &vb, int yInt )
 	{
 		for( int i = -1; i <= dim.cx; i++ )
@@ -151,6 +151,7 @@ namespace
 		return (UINT)( r.size() * sizeof( T ) );
 	}
 }
+
 #include "GridMesh.tesselate.hpp"
 
 HRESULT GridMesh::create()

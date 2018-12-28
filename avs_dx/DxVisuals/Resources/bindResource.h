@@ -112,7 +112,7 @@ inline void bindSampler( UINT slot, ID3D11SamplerState* s = nullptr )
 }
 
 template<eStage stage = eStage::Pixel>
-decltype( auto ) boundResource( UINT slot, ID3D11ShaderResourceView* srv )
+BoundSrv<stage> boundResource( UINT slot, ID3D11ShaderResourceView* srv )
 {
 	return std::move( BoundSrv<stage>{ slot, srv } );
 }

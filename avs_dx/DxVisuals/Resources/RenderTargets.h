@@ -3,12 +3,10 @@
 #include <Utils/resizeHandler.h>
 
 // A set of 2 render target textures.
-class RenderTargets: public ResizeHandler
+class RenderTargets
 {
 	std::array<RenderTarget, 2> m_targets;
 	size_t m_lastTarget = 0;
-
-	void onRenderSizeChanged() override;
 
 public:
 
@@ -18,19 +16,27 @@ public:
 			t.destroy();
 	}
 
-	// Bind last written RT for output, optionally clear
+	// Bind last written RT for output, optionally clear. This does not advance to the next target.
 	HRESULT writeToLast( bool clear = false );
 
-	// Bind last written RT for input, next one for output, optionally clear the output.
+	// Bind last written RT for input, advance to the next target, bind next one for output. Optionally clear the output.
 	HRESULT writeToNext( UINT readPsSlot, bool clearNext );
 
-	// Copy last written RT to the next one, bind last written RT for input, next one for output.
+	// Copy last written RT to the next one, advance to the next target, bind last written RT for input, next one for output.
 	HRESULT blendToNext( UINT readPsSlot );
 
 	RenderTarget& lastWritten()
 	{
 		return m_targets[ m_lastTarget ];
 	}
+};
 
-	void swapLast( RenderTarget& dest );
+// Same as above but also automatically destroys itself when rendering window is resized.
+class RenderTargetsAutoDrop: public RenderTargets,
+	public ResizeHandler
+{
+	void onRenderSizeChanged() override
+	{
+		destroy();
+	}
 };

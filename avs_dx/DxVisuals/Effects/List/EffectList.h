@@ -5,7 +5,7 @@
 
 class EffectList : public EffectListBase
 {
-	RenderTargets m_rt;
+	RenderTargetsAutoDrop m_rt;
 	Blender m_blendIn, m_blendOut;
 
 	eBlendMode blendin() const;

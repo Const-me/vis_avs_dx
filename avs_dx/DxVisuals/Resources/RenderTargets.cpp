@@ -3,12 +3,6 @@
 #include "staticResources.h"
 #include <../InteropLib/interop.h>
 
-void RenderTargets::onRenderSizeChanged()
-{
-	for( auto& t : m_targets )
-		t.destroy();
-}
-
 inline void unbindTarget()
 {
 	context->OMSetRenderTargets( 0, nullptr, nullptr );
@@ -66,10 +60,4 @@ HRESULT RenderTargets::blendToNext( UINT readPsSlot )
 	tWrite.bindTarget();
 	tRead.bindView( readPsSlot );
 	return S_OK;
-}
-
-void RenderTargets::swapLast( RenderTarget& dest )
-{
-	RenderTarget& t = m_targets[ m_lastTarget ];
-	t.swap( dest );
 }

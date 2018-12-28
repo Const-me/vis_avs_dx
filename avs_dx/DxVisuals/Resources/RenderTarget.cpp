@@ -46,9 +46,9 @@ void RenderTarget::copyTo( const RenderTarget& that ) const
 	context->CopyResource( that.m_tex, m_tex );
 }
 
-void RenderTarget::swap( RenderTarget& rt )
+/* void RenderTarget::swap( RenderTarget& rt )
 {
 	std::swap( m_tex, rt.m_tex );
 	std::swap( m_rtv, rt.m_rtv );
 	std::swap( m_srv, rt.m_srv );
-}
+} */

@@ -31,19 +31,34 @@ HRESULT EffectList::render( bool isBeat, RenderTargets& rt )
 
 	const eBlendMode blendIn = blendin();
 	const bool clearBuffer = clearfb();
-	if( clearBuffer && blendIn != eBlendMode::Replace && m_rt.lastWritten() )
-		m_rt.lastWritten().clear();
-
-	if( !clearBuffer && blendIn == eBlendMode::Ignore )
+	if( blendIn == eBlendMode::Buffer )
 	{
-		CHECK( fadeRenderTarget( m_rt ) );
+		CHECK( m_blendIn.blend( StaticResources::globalBuffers[ avs->bufferin ], m_rt, eBlendMode::Replace, inblendval() ) );
 	}
 	else
-		CHECK( m_blendIn.blend( rt, m_rt, blendIn, inblendval() ) );
+	{
+		if( clearBuffer && blendIn != eBlendMode::Replace && m_rt.lastWritten() )
+			m_rt.lastWritten().clear();
+
+		if( !clearBuffer && blendIn == eBlendMode::Ignore )
+		{
+			CHECK( fadeRenderTarget( m_rt ) );
+		}
+		else
+			CHECK( m_blendIn.blend( rt, m_rt, blendIn, inblendval() ) );
+	}
 
 	CHECK( EffectListBase::render( isBeat, m_rt ) );
 
-	CHECK( m_blendOut.blend( m_rt, rt, blendout(), outblendval() ) );
+	const eBlendMode blendOut = blendout();
+	if( blendOut == eBlendMode::Buffer )
+	{
+		CHECK( m_blendOut.blend( m_rt, StaticResources::globalBuffers[ avs->bufferout ], eBlendMode::Replace, outblendval() ) );
+	}
+	else
+	{
+		CHECK( m_blendOut.blend( m_rt, rt, blendout(), outblendval() ) );
+	}
 
 	return S_OK;
 }

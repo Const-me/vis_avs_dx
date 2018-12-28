@@ -106,6 +106,7 @@
     <ClInclude Include="Effects\Trans\DMove\GridMesh.h" />
     <ClInclude Include="Effects\Trans\DMove\GridMesh.tesselate.hpp" />
     <ClInclude Include="Utils\meshoptimizer\meshoptimizer.h" />
+    <ClInclude Include="Resources\GlobalBuffers.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -174,6 +175,7 @@
     <ClCompile Include="Utils\meshoptimizer\vcacheoptimizer.cpp" />
     <ClCompile Include="Utils\meshoptimizer\vfetchoptimizer.cpp" />
     <ClCompile Include="Effects\Trans\Blitter.cpp" />
+    <ClCompile Include="Resources\GlobalBuffers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -222,6 +224,7 @@
     <FxCompile Include="Expressions\Builtin\random.hlsl" />
     <FxCompile Include="Expressions\Builtin\doubleFunctions.hlsl" />
     <FxCompile Include="Effects\Render\Picture\PicturePS.hlsl" />
+    <FxCompile Include="Effects\TransitionPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

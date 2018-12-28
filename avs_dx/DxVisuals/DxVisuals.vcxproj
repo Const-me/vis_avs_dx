@@ -99,6 +99,7 @@
     <ClInclude Include="Effects\Render\Picture\PictureEffect.h" />
     <ClInclude Include="Effects\Trans\DMove\GridMesh.tesselate.hpp" />
     <ClInclude Include="Effects\Trans\DMove\Sampler.h" />
+    <ClInclude Include="Resources\GlobalBuffers.h" />
     <ClInclude Include="Utils\DXTK\Audio.h" />
     <ClInclude Include="Utils\DXTK\CommonStates.h" />
     <ClInclude Include="Utils\DXTK\DDSTextureLoader.h" />
@@ -206,6 +207,7 @@
     <ClCompile Include="EffectBase\EffectBase.cpp" />
     <ClCompile Include="Effects\Render\Picture\PictureEffect.cpp" />
     <ClCompile Include="Effects\Trans\DMove\Sampler.cpp" />
+    <ClCompile Include="Resources\GlobalBuffers.cpp" />
     <ClCompile Include="Utils\DXTK\SimpleMath.cpp" />
     <ClCompile Include="Utils\DXTK\WICTextureLoader.cpp" />
     <ClCompile Include="Utils\findAssets.cpp" />
@@ -330,6 +332,10 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Effects\Render\Picture\PicturePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\TransitionPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>

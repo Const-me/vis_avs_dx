@@ -96,7 +96,9 @@ namespace StaticResources
 		blackTexture = nullptr;
 		rsDisableCulling = nullptr;
 		layoutPos2Tc2 = nullptr;
+
 		sourceData.destroy();
+		globalBuffers.destroy();
 	}
 
 	CComPtr<ID3D11VertexShader> fullScreenTriangle;
@@ -113,7 +115,9 @@ namespace StaticResources
 	CComPtr<ID3D11ShaderResourceView> blackTexture;
 	CComPtr<ID3D11RasterizerState> rsDisableCulling;
 	CComPtr<ID3D11InputLayout> layoutPos2Tc2;
+
 	SourceData sourceData;
+	GlobalBuffers globalBuffers;
 
 	HRESULT createLayout( const std::vector<uint8_t>& dxbc )
 	{

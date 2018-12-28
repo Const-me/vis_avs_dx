@@ -1,5 +1,6 @@
 #pragma once
 #include "SourceData.h"
+#include "GlobalBuffers.h"
 
 namespace StaticResources
 {
@@ -23,4 +24,6 @@ namespace StaticResources
 	extern CComPtr<ID3D11InputLayout> layoutPos2Tc2;
 
 	extern SourceData sourceData;
+
+	extern GlobalBuffers globalBuffers;
 };

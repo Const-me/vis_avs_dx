@@ -5,6 +5,7 @@ class Binder;
 class RenderTargets;
 class RootEffect;
 
+// All effects must inherit from this abstract class. Unlike iRootEffect, this one is for consumption in DxVisuals, not just for interop with vis_avs.dll code.
 class EffectBase: public iRootEffect
 {
 public:

@@ -3,6 +3,7 @@
 #include <Utils/ByteRange.hpp>
 #include <Resources/createShader.hpp>
 
+// A statically created shader, usually from a pointer in StaticResources.
 template<eStage stage>
 class StaticShader
 {
@@ -28,6 +29,8 @@ public:
 	}
 };
 
+// A statically compiled but dynamically created shader, with DXBC usually coming from Effects\shadersCode.cpp: some effects don't need dynamic macros.
+// See Effects/Trans/Blitter.cpp for usage example.
 template<eStage stage>
 class BinaryShader
 {
@@ -58,6 +61,7 @@ public:
 	}
 };
 
+// Empty structure when no shader is defined in the effect for particular pipeline stage.
 template<eStage stage>
 struct NoShader
 {
@@ -78,6 +82,7 @@ struct NoShader
 
 #include "EffectRenderer.inl"
 
+// A template class that "assembles" effects from the state + shaders, updates per-stage data, compiles, updates, and binds these shaders.
 template<class FxDef>
 class EffectRenderer
 {
@@ -129,6 +134,7 @@ public:
 		return std::get<3>( m_shaders ).data();
 	}
 
+	// Bind shaders for all 4 stages. If some are not defined in the effect structure, these shaders will be unbound.
 	bool bindShaders( bool isBeat )
 	{
 		bool result = true;
@@ -194,5 +200,4 @@ private:
 				return hr;
 		return hr;
 	}
-
 };

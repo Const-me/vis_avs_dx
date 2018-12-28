@@ -91,5 +91,4 @@ namespace
 	DEFINE_STATIC_SHADER( eStage::Pixel, pixelShader );
 
 #undef DEFINE_STATIC_SHADER
-
 }

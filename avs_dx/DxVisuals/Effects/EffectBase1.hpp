@@ -2,6 +2,8 @@
 #include "../EffectBase/EffectBase.h"
 #include "../Render/EffectRenderer.hpp"
 
+// A base class for effects that implements a few required virtual methods by delegating the work to the EffectRenderer template class.
+// This is optional, if you don't need what it offers you can inherit from EffectBase directly.
 template<class TStruct>
 class EffectBase1 : public TStruct, public EffectBase
 {

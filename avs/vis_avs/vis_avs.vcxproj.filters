@@ -182,30 +182,6 @@
     <ClCompile Include="r_waterbump.cpp">
       <Filter>Source Files\Renders</Filter>
     </ClCompile>
-    <ClCompile Include="avs_eelif.cpp">
-      <Filter>Source Files\EvalLib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ns-eel\megabuf.c">
-      <Filter>Source Files\EvalLib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ns-eel\nseel-caltab.c">
-      <Filter>Source Files\EvalLib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ns-eel\nseel-cfunc.c">
-      <Filter>Source Files\EvalLib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ns-eel\nseel-compiler.c">
-      <Filter>Source Files\EvalLib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ns-eel\nseel-eval.c">
-      <Filter>Source Files\EvalLib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ns-eel\nseel-lextab.c">
-      <Filter>Source Files\EvalLib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ns-eel\nseel-yylex.c">
-      <Filter>Source Files\EvalLib</Filter>
-    </ClCompile>
     <ClCompile Include="linedraw.cpp">
       <Filter>Source Files\Render utils</Filter>
     </ClCompile>

@@ -140,20 +140,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\ns-eel\megabuf.c">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MinSpace</Optimization>
-    </ClCompile>
-    <ClCompile Include="..\ns-eel\nseel-caltab.c" />
-    <ClCompile Include="..\ns-eel\nseel-cfunc.c">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MinSpace</Optimization>
-    </ClCompile>
-    <ClCompile Include="..\ns-eel\nseel-compiler.c" />
-    <ClCompile Include="..\ns-eel\nseel-eval.c" />
-    <ClCompile Include="..\ns-eel\nseel-lextab.c" />
-    <ClCompile Include="..\ns-eel\nseel-yylex.c" />
-    <ClCompile Include="avs_eelif.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MinSpace</Optimization>
-    </ClCompile>
     <ClCompile Include="bpm.cpp" />
     <ClCompile Include="cfgwin.cpp" />
     <ClCompile Include="dllMain.cpp" />

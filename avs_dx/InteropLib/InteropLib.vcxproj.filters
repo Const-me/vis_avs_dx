@@ -89,5 +89,6 @@
     <ClCompile Include="enumDisplays.cpp" />
     <ClCompile Include="deviceCreation.cpp" />
     <ClCompile Include="Utils\shutdown.cpp" />
+    <ClCompile Include="nseel-shims.cpp" />
   </ItemGroup>
 </Project>

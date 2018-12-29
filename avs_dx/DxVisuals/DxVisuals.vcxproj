@@ -209,6 +209,7 @@
     <ClCompile Include="EffectBase\EffectBase.cpp" />
     <ClCompile Include="Effects\Render\Picture\PictureEffect.cpp" />
     <ClCompile Include="Effects\Trans\DMove\Sampler.cpp" />
+    <ClCompile Include="Effects\Trans\Fadeout\Fadeout-fx.cpp" />
     <ClCompile Include="Effects\Trans\Interleave\Interleave.cpp" />
     <ClCompile Include="Effects\Trans\UniqueTone\UniqueTone.cpp" />
     <ClCompile Include="Resources\GlobalBuffers.cpp" />
@@ -227,7 +228,7 @@
     <ClCompile Include="Expressions\Tree\Tree.emit.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.types.cpp" />
     <ClCompile Include="Expressions\SymbolTable\FunctionsTable.cpp" />
-    <ClCompile Include="Utils\FadeOut.cpp" />
+    <ClCompile Include="Utils\FadeOut-utils.cpp" />
     <ClCompile Include="Hlsl\Defines.expand.cpp" />
     <ClCompile Include="Expressions\Tree\Tree.parse.cpp" />
     <ClCompile Include="Effects\Render\SuperScope\SuperScope.cpp" />
@@ -340,6 +341,10 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="Effects\TransitionPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Trans\Fadeout\FadeoutPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>

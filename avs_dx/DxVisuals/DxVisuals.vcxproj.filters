@@ -165,7 +165,6 @@
     <ClCompile Include="Effects\Video\MF\mfStatic.cpp" />
     <ClCompile Include="Effects\Video\MF\Player.cpp" />
     <ClCompile Include="Effects\Video\MF\FrameTexture.cpp" />
-    <ClCompile Include="Utils\FadeOut.cpp" />
     <ClCompile Include="Utils\effectsRegistry.cpp" />
     <ClCompile Include="shutdown.cpp" />
     <ClCompile Include="Utils\findAssets.cpp" />
@@ -180,6 +179,8 @@
     <ClCompile Include="Resources\GlobalBuffers.cpp" />
     <ClCompile Include="Effects\Trans\UniqueTone\UniqueTone.cpp" />
     <ClCompile Include="Effects\Trans\Interleave\Interleave.cpp" />
+    <ClCompile Include="Utils\FadeOut-utils.cpp" />
+    <ClCompile Include="Effects\Trans\Fadeout\Fadeout-fx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -232,6 +233,7 @@
     <FxCompile Include="Effects\Trans\UniqueTone\UniqueTonePS.hlsl" />
     <FxCompile Include="Effects\Trans\Interleave\InterleavePS.hlsl" />
     <FxCompile Include="Effects\Trans\Interleave\InterleaveState.hlsl" />
+    <FxCompile Include="Effects\Trans\Fadeout\FadeoutPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

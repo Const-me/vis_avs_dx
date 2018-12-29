@@ -179,6 +179,7 @@
     <ClCompile Include="Effects\Trans\Blitter.cpp" />
     <ClCompile Include="Resources\GlobalBuffers.cpp" />
     <ClCompile Include="Effects\Trans\UniqueTone\UniqueTone.cpp" />
+    <ClCompile Include="Effects\Trans\Interleave\Interleave.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -229,6 +230,8 @@
     <FxCompile Include="Effects\Render\Picture\PicturePS.hlsl" />
     <FxCompile Include="Effects\TransitionPS.hlsl" />
     <FxCompile Include="Effects\Trans\UniqueTone\UniqueTonePS.hlsl" />
+    <FxCompile Include="Effects\Trans\Interleave\InterleavePS.hlsl" />
+    <FxCompile Include="Effects\Trans\Interleave\InterleaveState.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

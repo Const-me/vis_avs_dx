@@ -27,6 +27,10 @@ inline uint stateUint( int i )
 {
     return effectStates.Load( STATE_OFFSET + i * 4 );
 }
+inline uint2 stateUint2( int i )
+{
+    return effectStates.Load2( STATE_OFFSET + i * 4 );
+}
 inline float stateFloat( int i )
 {
     return asfloat( effectStates.Load( STATE_OFFSET + i * 4 ) );

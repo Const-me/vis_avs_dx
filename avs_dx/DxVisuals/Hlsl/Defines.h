@@ -32,6 +32,8 @@ namespace Hlsl
 		void set( const CStringA &key, const float3& value );
 		// Add macro with value like "float4( 0, 1, 2, 3 )" 
 		void set( const CStringA &key, const float4& value );
+		// Add macro with value like "uint2( 1, 2 )" 
+		void set( const CStringA &key, const uint2& value );
 
 		// Add macro with resource bind register like "t3" or "u2"
 		void setBinding( const CStringA &key, char type, UINT slot );

@@ -209,6 +209,7 @@
     <ClCompile Include="EffectBase\EffectBase.cpp" />
     <ClCompile Include="Effects\Render\Picture\PictureEffect.cpp" />
     <ClCompile Include="Effects\Trans\DMove\Sampler.cpp" />
+    <ClCompile Include="Effects\Trans\Interleave\Interleave.cpp" />
     <ClCompile Include="Effects\Trans\UniqueTone\UniqueTone.cpp" />
     <ClCompile Include="Resources\GlobalBuffers.cpp" />
     <ClCompile Include="Utils\DXTK\SimpleMath.cpp" />
@@ -341,6 +342,14 @@
     <FxCompile Include="Effects\TransitionPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Trans\Interleave\InterleavePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Trans\Interleave\InterleaveState.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
     </FxCompile>
     <FxCompile Include="Effects\Trans\UniqueTone\UniqueTonePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>

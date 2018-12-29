@@ -96,6 +96,13 @@ void Defines::set( const CStringA &key, const float4& value )
 	set( key, str );
 }
 
+void Defines::set( const CStringA &key, const uint2& value )
+{
+	CStringA str;
+	str.Format( "uint2( %i, %i )", value.cx, value.cy );
+	set( key, str );
+}
+
 void Defines::setBinding( const CStringA &key, char type, UINT slot )
 {
 	CStringA value;

@@ -27,8 +27,10 @@ Logger& logger();
 
 class Logger
 {
-	// Background stuff
-	static constexpr uint16_t bufferSize = 128;
+	// Background stuff: accumulate messages in a small buffer, in case user will want to see them in the console.
+	// Ideally, we should accumulate them in a more efficient data structure, maybe a circular buffer.
+	// However, we don't have that many messages per second, this simple solution that uses std::deque is probably good enough for the job.
+	static constexpr uint16_t bufferSize = 64;
 
 	struct Entry
 	{

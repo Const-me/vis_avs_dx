@@ -52,31 +52,22 @@ public:
 	C_THISCLASS();
 	float GET_FLOAT( unsigned char *data, int pos );
 	void PUT_FLOAT( float f, unsigned char *data, int pos );
-	void InitializeStars( void );
-	void CreateStar( int A );
 	virtual ~C_THISCLASS();
-	int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
 	virtual char *get_desc() { return MOD_NAME; }
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent );
 	virtual void load_config( unsigned char *data, int len );
 	virtual int  save_config( unsigned char *data );
 	int enabled;
 	int color;
-	int MaxStars, MaxStars_set;
-	int Xoff;
-	int Yoff;
-	int Zoff;
+	int MaxStars_set;
 	float WarpSpeed;
 	int blend;
 	int blendavg;
-	StarFormat Stars[ 4096 ];
-	int Width, Height;
 	int onbeat;
 	float spdBeat;
 	float incBeat;
 	int durFrames;
 	float CurrentSpeed;
-	int nc;
 };
 
 
@@ -92,20 +83,13 @@ C_THISCLASS::~C_THISCLASS()
 
 C_THISCLASS::C_THISCLASS() // set up default configuration
 {
-	nc = 0;
 	color = 0xFFFFFF;
 	enabled = 1;
-	MaxStars = 350;
 	MaxStars_set = 350;
-	Xoff = 0;
-	Yoff = 0;
-	Zoff = 255;
 	WarpSpeed = 6;
 	CurrentSpeed = 6;
 	blend = 0;
 	blendavg = 0;
-	Width = 0;
-	Height = 0;
 	onbeat = 0;
 	spdBeat = 4;
 	durFrames = 15;
@@ -160,121 +144,7 @@ int  C_THISCLASS::save_config( unsigned char *data ) // write configuration to d
 	return pos;
 }
 
-void C_THISCLASS::InitializeStars( void )
-{
-	int i;
-#ifdef LASER
-	MaxStars = MaxStars_set / 12;
-	if( MaxStars < 10 ) MaxStars = 10;
-#else
-	MaxStars = MulDiv( MaxStars_set, Width*Height, 512 * 384 );
-#endif
-	if( MaxStars > 4095 ) MaxStars = 4095;
-	for( i = 0; i < MaxStars; i++ )
-	{
-		Stars[ i ].X = ( rand() % Width ) - Xoff;
-		Stars[ i ].Y = ( rand() % Height ) - Yoff;
-		Stars[ i ].Z = (float)( rand() % 255 );
-		Stars[ i ].Speed = (float)( rand() % 9 + 1 ) / 10;
-	}
-}
-
-void C_THISCLASS::CreateStar( int A )
-{
-	Stars[ A ].X = ( rand() % Width ) - Xoff;
-	Stars[ A ].Y = ( rand() % Height ) - Yoff;
-	Stars[ A ].Z = (float)Zoff;
-}
-
-static unsigned int __inline BLEND_ADAPT( unsigned int a, unsigned int b, /*float*/int divisor )
-{
-	return ( ( ( ( a >> 4 ) & 0x0F0F0F ) * ( 16 - divisor ) + ( ( ( b >> 4 ) & 0x0F0F0F ) * divisor ) ) );
-}
-
-// render function
-// render should return 0 if it only used framebuffer, or 1 if the new output data is in fbout. this is
-// used when you want to do something that you'd otherwise need to make a copy of the framebuffer.
-// w and h are the width and height of the screen, in pixels.
-// isBeat is 1 if a beat has been detected.
-// visdata is in the format of [spectrum:0,wave:1][channel][band].
-
-int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
-{
-	__debugbreak();
-	return 0;
-
-#ifdef LASER
-	w = h = 1024;
-#endif
-	int i = w * h;
-	int NX, NY;
-	int c;
-
-	if( !enabled ) return 0;
-
-	if( onbeat && isBeat )
-	{
-		CurrentSpeed = spdBeat;
-		incBeat = ( WarpSpeed - CurrentSpeed ) / (float)durFrames;
-		nc = durFrames;
-	}
-
-	if( Width != w || Height != h )
-	{
-		Width = w;
-		Height = h;
-		Xoff = Width / 2;
-		Yoff = Height / 2;
-		InitializeStars();
-	}
-	if( isBeat & 0x80000000 ) return 0;
-
-	for( i = 0; i < MaxStars; i++ )
-	{
-		if( (int)Stars[ i ].Z > 0 )
-		{
-			NX = ( ( Stars[ i ].X << 7 ) / (int)Stars[ i ].Z ) + Xoff;
-			NY = ( ( Stars[ i ].Y << 7 ) / (int)Stars[ i ].Z ) + Yoff;
-			if( ( NX > 0 ) && ( NX < w ) && ( NY > 0 ) && ( NY < h ) )
-			{
-				c = (int)( ( 255 - (int)Stars[ i ].Z )*Stars[ i ].Speed );
-				if( color != 0xFFFFFF ) c = BLEND_ADAPT( ( c | ( c << 8 ) | ( c << 16 ) ), color, c >> 4 ); else c = ( c | ( c << 8 ) | ( c << 16 ) );
-#ifdef LASER
-				LineType l;
-				l.color = c;
-				l.mode = 1;
-				l.x1 = (float)NX / 512.0f - 1.0f;
-				l.y1 = (float)NY / 512.0f - 1.0f;
-				g_laser_linelist->AddLine( &l );
-#else
-				framebuffer[ NY*w + NX ] = blend ? BLEND( framebuffer[ NY*w + NX ], c ) : blendavg ? BLEND_AVG( framebuffer[ NY*w + NX ], c ) : c;
-#endif
-				Stars[ i ].OX = NX;
-				Stars[ i ].OY = NY;
-				Stars[ i ].Z -= Stars[ i ].Speed*CurrentSpeed;
-			}
-			else
-				CreateStar( i );
-		}
-		else
-			CreateStar( i );
-	}
-
-	if( !nc )
-		CurrentSpeed = WarpSpeed;
-	else
-	{
-		CurrentSpeed = max( 0, CurrentSpeed + incBeat );
-		nc--;
-	}
-
-	return 0;
-}
-
-
 // configuration dialog stuff
-
-
 static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 	switch( uMsg )
@@ -318,14 +188,7 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 
 		if( LOWORD( wParam ) == IDC_NUMSTARS )
 		{
-#ifndef LASER
-			int a = g_ConfigThis->MaxStars_set;
-#endif
 			g_ConfigThis->MaxStars_set = SendDlgItemMessage( hwndDlg, IDC_NUMSTARS, TBM_GETPOS, 0, 0 );
-#ifndef LASER
-			if( g_ConfigThis->MaxStars_set > a )
-#endif
-				if( g_ConfigThis->Width && g_ConfigThis->Height ) g_ConfigThis->InitializeStars();
 		}
 		return 0;
 	}
@@ -340,7 +203,7 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 
 			HPEN hPen, hOldPen;
 			HBRUSH hBrush, hOldBrush;
-			LOGBRUSH lb = { BS_SOLID,_color,0 };
+			LOGBRUSH lb = { BS_SOLID,(COLORREF)_color,0 };
 			hPen = (HPEN)CreatePen( PS_SOLID, 0, _color );
 			hBrush = CreateBrushIndirect( &lb );
 			hOldPen = (HPEN)SelectObject( di->hDC, hPen );

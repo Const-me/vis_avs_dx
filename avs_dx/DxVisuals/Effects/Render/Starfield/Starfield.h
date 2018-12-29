@@ -17,21 +17,15 @@ struct StarfieldStructs: public PointSpritesRender
 	{
 		int enabled;
 		int color;
-		int MaxStars, MaxStars_set;
-		int Xoff;
-		int Yoff;
-		int Zoff;
+		int MaxStars_set;
 		float WarpSpeed;
 		int blend;
 		int blendavg;
-		StarFormat Stars[ 4096 ];
-		int Width, Height;
 		int onbeat;
 		float spdBeat;
 		float incBeat;
 		int durFrames;
 		float CurrentSpeed;
-		int nc;
 	};
 
 	struct StateData: public StarfieldState

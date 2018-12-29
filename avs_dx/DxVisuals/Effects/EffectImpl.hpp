@@ -11,6 +11,7 @@ using Hlsl::Defines;
 
 #include "includeDefs.h"
 #include "../InteropLib/effectsFactory.h"
+#include "ShaderUpdatesSimple.hpp"
 
 CSize getRenderSize();
 
@@ -31,7 +32,7 @@ public:
 	}
 };
 
-#define DECLARE_EFFECT()		const Metadata& metadata() override
+#define DECLARE_EFFECT()		const Metadata& metadata() override;
 
 #define IMPLEMENT_EFFECT( DX, NATIVE )                                         \
 class NATIVE;                                                                  \
@@ -41,3 +42,4 @@ template<> HRESULT createDxEffect<NATIVE>( void* pState, DxEffectPtr& dest )   \
 };                                                                             \
 static const EffectBase::Metadata s_metadada{ #DX, false };                    \
 const EffectBase::Metadata& DX::metadata(){ return s_metadada; }
+

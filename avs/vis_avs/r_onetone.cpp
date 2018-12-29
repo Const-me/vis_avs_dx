@@ -45,19 +45,13 @@ protected:
 public:
 	C_THISCLASS();
 	virtual ~C_THISCLASS();
-	virtual int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
 	virtual char *get_desc() { return MOD_NAME; }
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent );
 	virtual void load_config( unsigned char *data, int len );
 	virtual int  save_config( unsigned char *data );
-	void RebuildTable( void );
-	int __inline depthof( int c );
 	int enabled;
 	int invert;
 	int color;
-	unsigned char tabler[ 256 ];
-	unsigned char tableg[ 256 ];
-	unsigned char tableb[ 256 ];
 	int blend, blendavg;
 };
 
@@ -79,7 +73,7 @@ C_THISCLASS::C_THISCLASS() // set up default configuration
 	blend = 0;
 	blendavg = 0;
 	enabled = 1;
-	RebuildTable();
+	CREATE_DX_EFFECT( enabled );
 }
 
 #define GET_INT() (data[pos]|(data[pos+1]<<8)|(data[pos+2]<<16)|(data[pos+3]<<24))
@@ -91,7 +85,6 @@ void C_THISCLASS::load_config( unsigned char *data, int len ) // read configurat
 	if( len - pos >= 4 ) { blend = GET_INT(); pos += 4; }
 	if( len - pos >= 4 ) { blendavg = GET_INT(); pos += 4; }
 	if( len - pos >= 4 ) { invert = GET_INT(); pos += 4; }
-	RebuildTable();
 }
 
 #define PUT_INT(y) data[pos]=(y)&255; data[pos+1]=(y>>8)&255; data[pos+2]=(y>>16)&255; data[pos+3]=(y>>24)&255
@@ -105,69 +98,6 @@ int  C_THISCLASS::save_config( unsigned char *data ) // write configuration to d
 	PUT_INT( invert ); pos += 4;
 	return pos;
 }
-
-int __inline C_THISCLASS::depthof( int c )
-{
-	int r = max( max( ( c & 0xFF ), ( ( c & 0xFF00 ) >> 8 ) ), ( c & 0xFF0000 ) >> 16 );
-	return invert ? 255 - r : r;
-}
-
-void C_THISCLASS::RebuildTable( void )
-{
-	int i;
-	for( i = 0; i < 256; i++ )
-		tableb[ i ] = (unsigned char)( ( i / 255.0 ) * (float)( color & 0xFF ) );
-	for( i = 0; i < 256; i++ )
-		tableg[ i ] = (unsigned char)( ( i / 255.0 ) * (float)( ( color & 0xFF00 ) >> 8 ) );
-	for( i = 0; i < 256; i++ )
-		tabler[ i ] = (unsigned char)( ( i / 255.0 ) * (float)( ( color & 0xFF0000 ) >> 16 ) );
-}
-
-// render function
-// render should return 0 if it only used framebuffer, or 1 if the new output data is in fbout. this is
-// used when you want to do something that you'd otherwise need to make a copy of the framebuffer.
-// w and h are the width and height of the screen, in pixels.
-// isBeat is 1 if a beat has been detected.
-// visdata is in the format of [spectrum:0,wave:1][channel][band].
-
-int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
-{
-	int i = w * h;
-	int *p = framebuffer;
-	int c, d;
-
-	if( !enabled ) return 0;
-	if( isBeat & 0x80000000 ) return 0;
-
-	if( blend )
-	{
-		while( i-- )
-		{
-			d = depthof( *p );
-			c = tableb[ d ] | ( tableg[ d ] << 8 ) | ( tabler[ d ] << 16 );
-			*p++ = BLEND( *p, c );
-		}
-	}
-	else if( blendavg )
-	{
-		while( i-- )
-		{
-			d = depthof( *p );
-			c = tableb[ d ] | ( tableg[ d ] << 8 ) | ( tabler[ d ] << 16 );
-			*p++ = BLEND_AVG( *p, c );
-		}
-	}
-	else
-	{
-		while( i-- )
-		{
-			d = depthof( *p );
-			*p++ = tableb[ d ] | ( tableg[ d ] << 8 ) | ( tabler[ d ] << 16 );
-		}
-	}
-	return 0;
-}
-
 
 // configuration dialog stuff
 
@@ -195,7 +125,7 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 
 			HPEN hPen, hOldPen;
 			HBRUSH hBrush, hOldBrush;
-			LOGBRUSH lb = { BS_SOLID,_color,0 };
+			LOGBRUSH lb = { BS_SOLID, (COLORREF)_color, 0 };
 			hPen = (HPEN)CreatePen( PS_SOLID, 0, _color );
 			hBrush = CreateBrushIndirect( &lb );
 			hOldPen = (HPEN)SelectObject( di->hDC, hPen );
@@ -235,7 +165,6 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 			{
 				*a = ( ( cs.rgbResult >> 16 ) & 0xff ) | ( cs.rgbResult & 0xff00 ) | ( ( cs.rgbResult << 16 ) & 0xff0000 );
 				g_ConfigThis->color = *a;
-				g_ConfigThis->RebuildTable();
 			}
 			InvalidateRect( GetDlgItem( hwndDlg, IDC_DEFCOL ), NULL, TRUE );
 		}
@@ -250,10 +179,7 @@ HWND C_THISCLASS::conf( HINSTANCE hInstance, HWND hwndParent ) // return NULL if
 	return CreateDialog( hInstance, MAKEINTRESOURCE( IDD_CFG_ONETONE ), hwndParent, g_DlgProc );
 }
 
-
-
 // export stuff
-
 C_RBASE *R_Onetone( char *desc ) // creates a new effect object if desc is NULL, otherwise fills in desc with description
 {
 	if( desc ) { strcpy( desc, MOD_NAME ); return NULL; }

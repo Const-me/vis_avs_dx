@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "shutdown.h"
 #include "../../DxVisuals/Utils/effectsRegistry.h"
+#include "../ConsoleLogger.h"
 
 namespace
 {
@@ -111,6 +112,7 @@ namespace
 			logShutdown( "Shutdown::shutdown waiting" );
 			const HRESULT hr = msgWaitForSingleObject( m_threadShutDown, 500 );
 			logShutdown( CStringA{ "Shutdown::shutdown result: " } +formatDxMessageA( hr ) );
+			closeDebugConsole();
 			return hr;
 		}
 	};

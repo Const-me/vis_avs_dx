@@ -35,11 +35,15 @@ class Logger
 		eLogLevel level;
 		CStringA message;
 
-		void print( HANDLE hConsole ) const
+		HRESULT print( HANDLE hConsole ) const
 		{
-			SetConsoleTextAttribute( hConsole, textAttributes( level ) );
-			WriteConsoleA( hConsole, cstr( message ), message.GetLength(), nullptr, nullptr );
-			WriteConsoleA( hConsole, "\r\n", 2, nullptr, nullptr );
+			if( !SetConsoleTextAttribute( hConsole, textAttributes( level ) ) )
+				return getLastHr();
+			if( !WriteConsoleA( hConsole, cstr( message ), message.GetLength(), nullptr, nullptr ) )
+				return getLastHr();
+			if( !WriteConsoleA( hConsole, "\r\n", 2, nullptr, nullptr ) )
+				return getLastHr();
+			return S_OK;
 		}
 	};
 
@@ -53,16 +57,21 @@ class Logger
 	{
 		CSLock __lock( m_cs );
 		m_output.Close();
+		FreeConsole();
 	}
 
-	static LRESULT __stdcall windowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData )
+	static BOOL __stdcall consoleHandlerRoutine( DWORD dwCtrlType )
 	{
-		if( uMsg == WM_DESTROY )
+		switch( dwCtrlType )
 		{
+		case CTRL_CLOSE_EVENT:
+		case CTRL_C_EVENT:
+		case CTRL_BREAK_EVENT:
 			logger().windowClosed();
-			RemoveWindowSubclass( hWnd, &windowProc, 0 );
+			logDebug( "Debug console closed" );
+			return TRUE;
 		}
-		return DefSubclassProc( hWnd, uMsg, wParam, lParam );
+		return TRUE;
 	}
 
 	HRESULT showConsole()
@@ -79,13 +88,25 @@ class Logger
 
 		SetConsoleTitle( L"Winamp AVS DX Debug Console" );
 
-		HWND hWnd = GetConsoleWindow();
-		if( !hWnd )
-			return getLastHr();
-		SetWindowSubclass( hWnd, &windowProc, 0, 0 );
+		SetConsoleCtrlHandler( &consoleHandlerRoutine, TRUE );
+
+		// Disable close command in the sys.menu of the new console, otherwise the whole Winamp process will quit: https://stackoverflow.com/a/12015131/126995
+		HWND hwnd = ::GetConsoleWindow();
+		if( hwnd != nullptr )
+		{
+			HMENU hMenu = ::GetSystemMenu( hwnd, FALSE );
+			if( hMenu != NULL )
+				DeleteMenu( hMenu, SC_CLOSE, MF_BYCOMMAND );
+		}
 
 		for( const auto& e : m_entries )
-			e.print( m_output );
+			CHECK( e.print( m_output ) );
+
+		const CStringA msg = "Press Control+C or Control+Break to close this window\r\n";
+		if( !SetConsoleTextAttribute( m_output, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY ) )
+			return getLastHr();
+		if( !WriteConsoleA( m_output, cstr( msg ), msg.GetLength(), nullptr, nullptr ) )
+			return getLastHr();
 
 		return S_OK;
 	}
@@ -118,6 +139,14 @@ public:
 
 		showConsole();
 	}
+
+	void close()
+	{
+		CSLock __lock( m_cs );
+		if( !m_output )
+			return;
+		windowClosed();
+	}
 };
 
 Logger& logger()
@@ -134,4 +163,9 @@ void logMessage( eLogLevel lvl, const CStringA& msg )
 void showDebugConsole()
 {
 	logger().show();
+}
+
+void closeDebugConsole()
+{
+	logger().close();
 }

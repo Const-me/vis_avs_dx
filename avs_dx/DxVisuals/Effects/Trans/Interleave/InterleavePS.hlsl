@@ -8,7 +8,6 @@ float4 main( float4 screenSpace : SV_Position ) : SV_Target
     const uint2 pos = (uint2) screenSpace.xy;
     const uint2 size = stateUint2( 0 );
 
-	// `size` compiles into a macro, i.e. most of these branches are free.
     if( size.x == 0 && size.y == 0 )
     {
         discard;

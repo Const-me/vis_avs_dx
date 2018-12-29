@@ -77,6 +77,7 @@
     <ClInclude Include="device.h" />
     <ClInclude Include="deviceCreation.h" />
     <ClInclude Include="Utils\shutdown.h" />
+    <ClInclude Include="ConsoleLogger.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

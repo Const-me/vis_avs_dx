@@ -10,7 +10,7 @@ enum struct eStage : uint8_t
 
 namespace DxUtils
 {
-	// Abuse C macros + C++ template specialization to implement a poor man's compile time reflection..
+	// Abuse C macros and C++ template specialization to implement a poor man's compile time reflection..
 	template<eStage stage>
 	struct StageBinder;
 
@@ -55,9 +55,11 @@ namespace DxUtils
 #undef BIND_SHADER
 }
 
+// Raw shader pointer
 template<eStage stage>
 using IShader = typename DxUtils::StageBinder<stage>::IShader;
 
+// Smart pointer with the shader
 template<eStage stage>
 using ShaderPtr = CComPtr<typename DxUtils::StageBinder<stage>::IShader>;
 
@@ -67,7 +69,7 @@ inline void bindShader( IShader<stage>* ptr )
 {
 	DxUtils::StageBinder<stage>::shader( ptr );
 }
-// Bind a constant buffers
+// Bind a constant buffer
 template<eStage stage>
 inline void bindConstantBuffer( UINT slot, ID3D11Buffer* buffer = nullptr )
 {

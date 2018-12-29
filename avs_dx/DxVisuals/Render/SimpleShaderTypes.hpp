@@ -1,4 +1,5 @@
 #pragma once
+#include <Utils/ByteRange.hpp>
 
 // A statically created shader, usually from a pointer in StaticResources.
 template<eStage stage>
@@ -7,9 +8,9 @@ class StaticShader
 	const ShaderPtr<stage> m_shader;
 
 public:
-	StaticShader( IUnknown* pUnk ) : m_shader( ( IShader<stage>* )pUnk )
+	StaticShader( IShader<stage>* pShader ) : m_shader( pShader )
 	{
-		if( nullptr == pUnk )
+		if( nullptr == pShader )
 			logError( "Static shader constructed without the shader" );
 	}
 

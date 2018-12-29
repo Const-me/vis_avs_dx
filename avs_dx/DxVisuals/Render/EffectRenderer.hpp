@@ -1,6 +1,5 @@
 #pragma once
 #include "Shader.hpp"
-#include <Utils/ByteRange.hpp>
 #include <Resources/createShader.hpp>
 #include "SimpleShaderTypes.hpp"
 #include "EffectRenderer.inl"

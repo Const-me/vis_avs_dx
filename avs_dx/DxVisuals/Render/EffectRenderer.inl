@@ -62,7 +62,7 @@ namespace
 	struct ShaderTypeHelper<T, stage, eShaderKind::Static>                  \
 	{                                                                       \
 		using Type = StaticShader<stage>;                                   \
-		static IUnknown* ctorArg() { return T::staticFuncName(); }          \
+		static IShader<stage>* ctorArg() { return T::staticFuncName(); }    \
 	};                                                                      \
 	template<class T>                                                       \
 	struct ShaderTypeHelper<T, stage, eShaderKind::Binary>                  \

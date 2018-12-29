@@ -101,6 +101,7 @@ class Logger
 				DeleteMenu( hMenu, SC_CLOSE, MF_BYCOMMAND );
 		}
 
+		// Print old log entries
 		for( const auto& e : m_entries )
 			CHECK( e.print( m_output ) );
 
@@ -119,10 +120,12 @@ public:
 	{
 		CSLock __lock( m_cs );
 
-		// Add to the local queue
+		// Add to the buffer
 		while( m_entries.size() >= bufferSize )
 			m_entries.pop_front();
 		m_entries.emplace_back( Entry{ lvl, msg } );
+
+		// If the console window is shown, print there, too.
 		if( m_output )
 			m_entries.rbegin()->print( m_output );
 	}

@@ -90,3 +90,8 @@ inline uint getRandomSeed( float2 src )
     const uint2 ui = asuint( src );
     return wang_hash( ui.x ) ^ ( wang_hash( ui.y ) * 31 ) ^ wang_hash( getTickCount );
 }
+
+inline uint getRandomSeed( uint id )
+{
+    return wang_hash( id ) ^ wang_hash( getTickCount );
+}

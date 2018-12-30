@@ -30,7 +30,10 @@ sVertex1 main( uint id : SV_VertexID )
     float green = color.y;
     float blue = color.z;
     float x = 0, y = 0, skip, linesize;
-    
+
+#if NEEDS_RNG
+    uint rng_state = avs_rand_init( getRandomSeed( id ) );
+#endif
     {
 SHADER_CODE
     }

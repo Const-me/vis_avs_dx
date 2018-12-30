@@ -899,6 +899,7 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 
 					EnterCriticalSection( &g_render_cs );
 					g_this->effect_exp.assign( descriptions[ t ].eval_desc );
+					g_this->rectangular = descriptions[ t ].uses_rect;
 					LeaveCriticalSection( &g_render_cs );
 				}
 				else

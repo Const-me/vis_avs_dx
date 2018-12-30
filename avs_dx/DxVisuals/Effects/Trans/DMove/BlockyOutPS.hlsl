@@ -7,17 +7,16 @@
 #define AVS_RENDER_SIZE float2( 1280, 720 )
 static const float outAmount = 1.15f;
 #endif
-Texture2D<float4> texPrevFrame : register( BIND_PREV_FRAME );
+Texture2D<float4> texPrevFrame : register(BIND_PREV_FRAME);
 
 float4 main( float4 screenSpace : SV_Position ) : SV_Target
 {
     uint2 pos = uint2( screenSpace.xy );
     const uint2 halfPos = pos / 2;
-    if( 0 == ( halfPos.x & halfPos.y & 1 ) )
+    if( 1 == ( halfPos.x & halfPos.y & 1 ) )
     {
         float2 f = (float2) pos - ( AVS_RENDER_SIZE * 0.5 );
-        f = f * outAmount + ( AVS_RENDER_SIZE * 0.5 );
-        f = clamp( f, float2( 0, 0 ), AVS_RENDER_SIZE );
+        f = f / outAmount + ( AVS_RENDER_SIZE * 0.5 );
         pos = (uint2) f;
     }
 

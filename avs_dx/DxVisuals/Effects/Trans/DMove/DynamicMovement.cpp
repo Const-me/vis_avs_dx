@@ -38,6 +38,15 @@ HRESULT DynamicMovementStructs::StateData::defines( Hlsl::Defines& def ) const
 	return S_OK;
 }
 
+HRESULT DynamicMovementStructs::VsData::defines( Hlsl::Defines& def ) const
+{
+	CHECK( __super::defines( def ) );
+	const CSize size = getRenderSize();
+	def.set( "w", size.cx );
+	def.set( "h", size.cy );
+	return S_OK;
+}
+
 DynamicMovementStructs::StateData::StateData( AvsState& ass ) :
 	CommonStateData( "DynamicMovement", prototype() )
 { }

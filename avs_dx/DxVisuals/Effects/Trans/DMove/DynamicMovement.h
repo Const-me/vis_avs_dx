@@ -48,6 +48,8 @@ struct DynamicMovementStructs: public MovementStructs
 		{
 			return CommonVsData::updateAvs( avs.rectcoords );
 		}
+
+		HRESULT defines( Hlsl::Defines& def ) const;
 	};
 
 	using PsData = DMovePS;

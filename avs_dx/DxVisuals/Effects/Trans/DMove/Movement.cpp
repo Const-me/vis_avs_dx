@@ -34,6 +34,16 @@ HRESULT StaticMovementStructs::StateData::defines( Hlsl::Defines& def ) const
 	return S_OK;
 }
 
+HRESULT StaticMovementStructs::VsData::defines( Hlsl::Defines& def ) const
+{
+	CHECK( __super::defines( def ) );
+
+	const CSize size = getRenderSize();
+	def.set( "sw", size.cx );
+	def.set( "sh", size.cy );
+	return S_OK;
+}
+
 StaticMovementStructs::StateData::StateData( AvsState& ass ) :
 	CommonStateData( "Movement", prototype() )
 { }

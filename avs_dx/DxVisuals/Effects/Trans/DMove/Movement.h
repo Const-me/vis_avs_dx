@@ -30,6 +30,8 @@ struct StaticMovementStructs: public MovementStructs
 		{
 			return CommonVsData::updateAvs( avs.rectangular );
 		}
+
+		HRESULT defines( Hlsl::Defines& def ) const;
 	};
 };
 

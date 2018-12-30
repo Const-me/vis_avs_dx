@@ -51,12 +51,12 @@ public:
 		m_fade.update( 40 );
 	}
 
-	DECLARE_EFFECT();
+	DECLARE_EFFECT()
 
 	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 };
 
-IMPLEMENT_EFFECT( Blitter, C_BlitClass );
+IMPLEMENT_EFFECT( Blitter, C_BlitClass )
 
 HRESULT Blitter::updateBuffer( float val )
 {

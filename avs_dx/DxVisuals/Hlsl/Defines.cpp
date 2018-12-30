@@ -105,6 +105,9 @@ void Defines::set( const CStringA &key, const uint2& value )
 
 void Defines::setBinding( const CStringA &key, char type, UINT slot )
 {
+	if( slot >= 1024 )
+		__debugbreak();
+
 	CStringA value;
 	value.Format( "%c%i", type, slot );
 	set( key, value );

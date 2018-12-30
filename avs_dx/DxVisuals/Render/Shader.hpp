@@ -25,21 +25,12 @@ public:
 	HRESULT update( Binder& binder, const TAvsState& avs, const TDxEffectState& dx )
 	{
 		BoolHr hr;
-		__if_exists( TSourceData::updateBindings )
-		{
-			if( hr.combine( m_sourceData.updateBindings( binder ) ) )
-				return hr;
-		}
-		__if_exists( TSourceData::updateAvs )
-		{
-			if( hr.combine( m_sourceData.updateAvs( avs ) ) )
-				return hr;
-		}
-		__if_exists( TSourceData::updateDx )
-		{
-			if( hr.combine( m_sourceData.updateDx( dx ) ) )
-				return hr;
-		}
+		if( hr.combine( m_sourceData.updateBindings( binder ) ) )
+			return hr;
+		if( hr.combine( m_sourceData.updateAvs( avs ) ) )
+			return hr;
+		if( hr.combine( m_sourceData.updateDx( dx ) ) )
+			return hr;
 		if( hr.value() )
 			__super::setUpdated();
 		if( !__super::hasShader() )

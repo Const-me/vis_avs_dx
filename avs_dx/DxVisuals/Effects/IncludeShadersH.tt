@@ -100,7 +100,7 @@ class VectorDecl: iConstDecl
 	}
 }
 
-class CodeDecl: iConstDecl
+/* class CodeDecl: iConstDecl
 {
 	public string name { get; private set; }
 	readonly string macro;
@@ -115,7 +115,7 @@ class CodeDecl: iConstDecl
 	{
 		sb.tl( @"def.set( ""{0}"", {1} );", macro, name );
 	}
-}
+} */
 
 class BindingDecl: iConstDecl
 {
@@ -154,7 +154,7 @@ static iConstDecl[] parseConstants( string[] lines )
 	res.AddRange( lines.Where( l => l.Contains( "<macro-resource" ) ).Select( s => new BindingDecl( s ) ) );
 	res.AddRange( lines.Where( l => l.StartsWith( "static const" ) ).Select( s => new ConstDecl( s ) ) );
 	res.AddRange( lines.Where( l => l.Contains( "<macro-vector" ) ).Select( s => new VectorDecl( s ) ) );
-	res.AddRange( lines.Where( l => l.Contains( "<macro-code" ) ).Select( s => new CodeDecl( s ) ) );
+	// res.AddRange( lines.Where( l => l.Contains( "<macro-code" ) ).Select( s => new CodeDecl( s ) ) );
 	return res.ToArray();
 }
 
@@ -192,11 +192,26 @@ static void generateShaderStruct( CppBuilder sb, string sourcePath, int lvl )
 		foreach( var d in decls )
 			sb.tl( d.member() );
 
-		sb.line();
-		sb.tl( "bool operator==( const {0}& that ) const", name );
-		sb.tl( "{" );
-		sb.tl( "	return {0};", string.Join( " && ", decls.Select( d => string.Format( "{0} == that.{0}", d.name ) ) ) );
-		sb.tl( "}" );
+		iConstDecl[] shaderConstantDecls = decls.Where( d => !( d is BindingDecl ) ).ToArray();
+		if( shaderConstantDecls.Length > 0 )
+		{
+			// Write `operator=` that copies data members, but excludes resource binding slots.
+			sb.line();
+			sb.tl( "void operator=( const {0}& that )", name );
+			sb.tl( "{" );
+			sb.incTabs();
+			foreach( var d in shaderConstantDecls )
+				sb.tl( "{0} = that.{0};", d.name );
+			sb.decTabs();
+			sb.tl( "}" );
+			sb.line();
+
+			// Write `operator==` that compares data members, but excludes resource binding slots.
+			sb.tl( "bool operator==( const {0}& that ) const", name );
+			sb.tl( "{" );
+			sb.tl( "	return {0};", string.Join( " && ", shaderConstantDecls.Select( d => string.Format( "{0} == that.{0}", d.name ) ) ) );
+			sb.tl( "}" );
+		}
 
 		BindingDecl[] bindings = decls.OfType<BindingDecl>().ToArray();
 		if( bindings.Length > 0 && null != stage )

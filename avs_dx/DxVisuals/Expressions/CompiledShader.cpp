@@ -45,7 +45,7 @@ void CompiledShaderBase::assembleShader()
 	m_template.hlsl += templatePieces[ 2 ];
 }
 
-HRESULT CompiledShaderBase::updateDx( const Expressions::Compiler& compiler )
+HRESULT CompiledShaderBase::updateCode( const Expressions::Compiler& compiler )
 {
 	if( compiler.fragmentCode() == fragmentCode && compiler.fragmentGlobals() == fragmentGlobals )
 		return S_FALSE;	// The compiler has the same code, nothing to update

@@ -18,14 +18,14 @@ namespace Expressions
 
 		CompiledShaderBase( const ShaderTemplate* origTemplate );
 
-		HRESULT updateDx( const Expressions::Compiler& compiler );
-
 	protected:
 
 		const ShaderTemplate* compiledTemplate() const
 		{
 			return &m_template;
 		}
+
+		HRESULT updateCode( const Expressions::Compiler& compiler );
 
 		void compiledDefines( Hlsl::Defines& def ) const;
 	};
@@ -46,6 +46,11 @@ namespace Expressions
 		{
 			compiledDefines( def );
 			return T::defines( def );
+		}
+
+		HRESULT updateDx( const Expressions::Compiler& compiler )
+		{
+			return updateCode( compiler );
 		}
 	};
 }

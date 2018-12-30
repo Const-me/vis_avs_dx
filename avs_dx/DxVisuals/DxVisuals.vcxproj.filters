@@ -35,7 +35,6 @@
     <ClInclude Include="Resources\createShader.hpp" />
     <ClInclude Include="Render\EffectStateShader.hpp" />
     <ClInclude Include="Resources\bindResource.h" />
-    <ClInclude Include="Effects\Trans\DMove\DynamicMovement.h" />
     <ClInclude Include="Expressions\variableTypes.h" />
     <ClInclude Include="Effects\Render\PointSpritesRender.hpp" />
     <ClInclude Include="Effects\EffectBase1.hpp" />
@@ -102,15 +101,16 @@
     <ClInclude Include="Utils\DXTK\VertexTypes.h" />
     <ClInclude Include="Utils\DXTK\WICTextureLoader.h" />
     <ClInclude Include="Utils\DXTK\XboxDDSTextureLoader.h" />
-    <ClInclude Include="Effects\Trans\DMove\Sampler.h" />
-    <ClInclude Include="Effects\Trans\DMove\GridMesh.h" />
-    <ClInclude Include="Effects\Trans\DMove\GridMesh.tesselate.hpp" />
     <ClInclude Include="Utils\meshoptimizer\meshoptimizer.h" />
     <ClInclude Include="Resources\GlobalBuffers.h" />
     <ClInclude Include="Effects\ShaderUpdatesSimple.hpp" />
     <ClInclude Include="Render\SimpleShaderTypes.hpp" />
-    <ClInclude Include="Effects\Trans\DMove\Movement.h" />
-    <ClInclude Include="Effects\Trans\DMove\MovementCommon.h" />
+    <ClInclude Include="Effects\Trans\Moves\DynamicMovement.h" />
+    <ClInclude Include="Effects\Trans\Moves\GridMesh.h" />
+    <ClInclude Include="Effects\Trans\Moves\GridMesh.tesselate.hpp" />
+    <ClInclude Include="Effects\Trans\Moves\Movement.h" />
+    <ClInclude Include="Effects\Trans\Moves\MovementCommon.h" />
+    <ClInclude Include="Effects\Trans\Moves\Sampler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -134,7 +134,6 @@
     <ClCompile Include="Render\StateShaders.cpp" />
     <ClCompile Include="Hlsl\compile.cpp" />
     <ClCompile Include="Utils\MiscUtils.cpp" />
-    <ClCompile Include="Effects\Trans\DMove\DynamicMovement.cpp" />
     <ClCompile Include="EffectBase\EffectListBase.factory.cpp" />
     <ClCompile Include="Expressions\Compiler.cpp" />
     <ClCompile Include="Expressions\Prototype.cpp" />
@@ -173,8 +172,6 @@
     <ClCompile Include="Effects\Render\Picture\PictureEffect.cpp" />
     <ClCompile Include="Utils\DXTK\WICTextureLoader.cpp" />
     <ClCompile Include="Utils\DXTK\SimpleMath.cpp" />
-    <ClCompile Include="Effects\Trans\DMove\Sampler.cpp" />
-    <ClCompile Include="Effects\Trans\DMove\GridMesh.cpp" />
     <ClCompile Include="Utils\meshoptimizer\vcacheoptimizer.cpp" />
     <ClCompile Include="Utils\meshoptimizer\vfetchoptimizer.cpp" />
     <ClCompile Include="Effects\Trans\Blitter.cpp" />
@@ -183,8 +180,11 @@
     <ClCompile Include="Effects\Trans\Interleave\Interleave.cpp" />
     <ClCompile Include="Utils\FadeOut-utils.cpp" />
     <ClCompile Include="Effects\Trans\Fadeout\Fadeout-fx.cpp" />
-    <ClCompile Include="Effects\Trans\DMove\Movement.cpp" />
-    <ClCompile Include="Effects\Trans\DMove\MovementCommon.cpp" />
+    <ClCompile Include="Effects\Trans\Moves\DynamicMovement.cpp" />
+    <ClCompile Include="Effects\Trans\Moves\GridMesh.cpp" />
+    <ClCompile Include="Effects\Trans\Moves\Movement.cpp" />
+    <ClCompile Include="Effects\Trans\Moves\MovementCommon.cpp" />
+    <ClCompile Include="Effects\Trans\Moves\Sampler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -221,8 +221,6 @@
     <FxCompile Include="Effects\Render\Starfield\StarfieldState.hlsl" />
     <FxCompile Include="Effects\Render\PointSpriteGS.hlsl" />
     <FxCompile Include="Effects\Render\Starfield\StarInitCS.hlsl" />
-    <FxCompile Include="Effects\Trans\DMove\DMovePS.hlsl" />
-    <FxCompile Include="Effects\Trans\DMove\DMoveVS.hlsl" />
     <FxCompile Include="Effects\Render\PolylineGS.hlsl" />
     <FxCompile Include="Effects\Render\PolylinePS.hlsl" />
     <FxCompile Include="Effects\Render\Simple\SimpleLinesVS.hlsl" />
@@ -238,8 +236,10 @@
     <FxCompile Include="Effects\Trans\Interleave\InterleavePS.hlsl" />
     <FxCompile Include="Effects\Trans\Interleave\InterleaveState.hlsl" />
     <FxCompile Include="Effects\Trans\Fadeout\FadeoutPS.hlsl" />
-    <FxCompile Include="Effects\Trans\DMove\FuzzifyPS.hlsl" />
-    <FxCompile Include="Effects\Trans\DMove\BlockyOutPS.hlsl" />
+    <FxCompile Include="Effects\Trans\Moves\BlockyOutPS.hlsl" />
+    <FxCompile Include="Effects\Trans\Moves\DMovePS.hlsl" />
+    <FxCompile Include="Effects\Trans\Moves\DMoveVS.hlsl" />
+    <FxCompile Include="Effects\Trans\Moves\FuzzifyPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

@@ -32,7 +32,7 @@ inline float2 randomInCircle( inout uint rng_state )
 float4 main( float4 screenSpace : SV_Position ) : SV_Target
 {
     const uint2 pos = uint2( screenSpace.xy );
-    uint rng_state = wang_hash( pos.x ) ^ wang_hash( pos.y ) ^ wang_hash( getTickCount );
+    uint rng_state = wang_hash( pos.x ) ^ wang_hash( pos.y );
     float2 loadPos = screenSpace.xy + randomInCircle( rng_state );
     loadPos = clamp( loadPos, float2( 0, 0 ), AVS_RENDER_SIZE );
     return texPrevFrame.Load( int3( int2( loadPos ), 0 ) );

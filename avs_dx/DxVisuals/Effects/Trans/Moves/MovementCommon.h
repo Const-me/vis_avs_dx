@@ -4,7 +4,7 @@
 #include <Expressions/CompiledShader.h>
 #include "GridMesh.h"
 #include "Sampler.h"
-using namespace Hlsl::Trans::DMove;
+using namespace Hlsl::Trans::Moves;
 
 struct MovementStructs
 {

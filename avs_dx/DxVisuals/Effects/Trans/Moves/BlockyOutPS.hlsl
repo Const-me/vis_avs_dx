@@ -16,9 +16,8 @@ float4 main( float4 screenSpace : SV_Position ) : SV_Target
     if( 1 == ( halfPos.x & halfPos.y & 1 ) )
     {
         float2 f = (float2) pos - ( AVS_RENDER_SIZE * 0.5 );
-        f = f / outAmount + ( AVS_RENDER_SIZE * 0.5 );
+        f = f * ( 1.0 / outAmount ) + ( AVS_RENDER_SIZE * 0.5 );
         pos = (uint2) f;
     }
-
     return texPrevFrame.Load( int3( int2( pos ), 0 ) );
 }

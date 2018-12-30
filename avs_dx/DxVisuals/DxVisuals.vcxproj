@@ -98,10 +98,10 @@
     <ClInclude Include="Effects\Render\Picture\interop.h" />
     <ClInclude Include="Effects\Render\Picture\PictureEffect.h" />
     <ClInclude Include="Effects\ShaderUpdatesSimple.hpp" />
-    <ClInclude Include="Effects\Trans\DMove\GridMesh.tesselate.hpp" />
-    <ClInclude Include="Effects\Trans\DMove\Sampler.h" />
-    <ClInclude Include="Effects\Trans\DMove\Movement.h" />
-    <ClInclude Include="Effects\Trans\DMove\MovementCommon.h" />
+    <ClInclude Include="Effects\Trans\Moves\GridMesh.tesselate.hpp" />
+    <ClInclude Include="Effects\Trans\Moves\Sampler.h" />
+    <ClInclude Include="Effects\Trans\Moves\Movement.h" />
+    <ClInclude Include="Effects\Trans\Moves\MovementCommon.h" />
     <ClInclude Include="Render\SimpleShaderTypes.hpp" />
     <ClInclude Include="Resources\GlobalBuffers.h" />
     <ClInclude Include="Utils\DXTK\Audio.h" />
@@ -150,7 +150,7 @@
     <ClInclude Include="Expressions\Builtin\includeFunctions.h" />
     <ClInclude Include="Expressions\CompiledShader.h" />
     <ClInclude Include="iTransition.h" />
-    <ClInclude Include="Effects\Trans\DMove\GridMesh.h" />
+    <ClInclude Include="Effects\Trans\Moves\GridMesh.h" />
     <ClInclude Include="Hlsl\ShaderBaseStruct.h" />
     <ClInclude Include="Transition.h" />
     <ClInclude Include="Utils\decompressor.h" />
@@ -184,7 +184,7 @@
     <ClInclude Include="Effects\Render\Starfield\Starfield.h" />
     <ClInclude Include="Effects\shadersCode.h" />
     <ClInclude Include="Effects\Trans\ColorModifier\ColorModifier.h" />
-    <ClInclude Include="Effects\Trans\DMove\DynamicMovement.h" />
+    <ClInclude Include="Effects\Trans\Moves\DynamicMovement.h" />
     <ClInclude Include="Hlsl\FunctionBuilder.h" />
     <ClInclude Include="Render\Stage.h" />
     <ClInclude Include="Resources\RenderTarget.h" />
@@ -210,12 +210,12 @@
     <ClCompile Include="Effects\Trans\Blitter.cpp" />
     <ClCompile Include="EffectBase\EffectBase.cpp" />
     <ClCompile Include="Effects\Render\Picture\PictureEffect.cpp" />
-    <ClCompile Include="Effects\Trans\DMove\Sampler.cpp" />
+    <ClCompile Include="Effects\Trans\Moves\Sampler.cpp" />
     <ClCompile Include="Effects\Trans\Fadeout\Fadeout-fx.cpp" />
     <ClCompile Include="Effects\Trans\Interleave\Interleave.cpp" />
     <ClCompile Include="Effects\Trans\UniqueTone\UniqueTone.cpp" />
-    <ClCompile Include="Effects\Trans\DMove\Movement.cpp" />
-    <ClCompile Include="Effects\Trans\DMove\MovementCommon.cpp" />
+    <ClCompile Include="Effects\Trans\Moves\Movement.cpp" />
+    <ClCompile Include="Effects\Trans\Moves\MovementCommon.cpp" />
     <ClCompile Include="Resources\GlobalBuffers.cpp" />
     <ClCompile Include="Utils\DXTK\SimpleMath.cpp" />
     <ClCompile Include="Utils\DXTK\WICTextureLoader.cpp" />
@@ -251,7 +251,7 @@
     <ClCompile Include="Expressions\Builtin\builtinFunctions.cpp" />
     <ClCompile Include="Expressions\CompiledShader.cpp" />
     <ClCompile Include="Expressions\Builtin\includeFunctions.cpp" />
-    <ClCompile Include="Effects\Trans\DMove\GridMesh.cpp" />
+    <ClCompile Include="Effects\Trans\Moves\GridMesh.cpp" />
     <ClCompile Include="Transition.cpp" />
     <ClCompile Include="Utils\decompressor.cpp" />
     <ClCompile Include="Expressions\parse.cpp" />
@@ -272,7 +272,7 @@
     <ClCompile Include="Effects\Render\Starfield\Starfield.cpp" />
     <ClCompile Include="Effects\shadersCode.cpp" />
     <ClCompile Include="Effects\Trans\ColorModifier\ColorModifier.cpp" />
-    <ClCompile Include="Effects\Trans\DMove\DynamicMovement.cpp" />
+    <ClCompile Include="Effects\Trans\Moves\DynamicMovement.cpp" />
     <ClCompile Include="Hlsl\FunctionBuilder.cpp" />
     <ClCompile Include="Hlsl\compile.cpp" />
     <ClCompile Include="EffectBase\EffectListBase.cpp" />
@@ -348,11 +348,11 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="Effects\Trans\DMove\BlockyOutPS.hlsl">
+    <FxCompile Include="Effects\Trans\Moves\BlockyOutPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="Effects\Trans\DMove\FuzzifyPS.hlsl">
+    <FxCompile Include="Effects\Trans\Moves\FuzzifyPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
@@ -397,11 +397,11 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
     </FxCompile>
-    <FxCompile Include="Effects\Trans\DMove\DMovePS.hlsl">
+    <FxCompile Include="Effects\Trans\Moves\DMovePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="Effects\Trans\DMove\DMoveVS.hlsl">
+    <FxCompile Include="Effects\Trans\Moves\DMoveVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
     </FxCompile>

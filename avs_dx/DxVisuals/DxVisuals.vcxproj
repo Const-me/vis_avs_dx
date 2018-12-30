@@ -210,6 +210,7 @@
     <ClCompile Include="Effects\Trans\Blitter.cpp" />
     <ClCompile Include="EffectBase\EffectBase.cpp" />
     <ClCompile Include="Effects\Render\Picture\PictureEffect.cpp" />
+    <ClCompile Include="Effects\Trans\Brightness\FastBrightness.cpp" />
     <ClCompile Include="Effects\Trans\Moves\Sampler.cpp" />
     <ClCompile Include="Effects\Trans\Fadeout\Fadeout-fx.cpp" />
     <ClCompile Include="Effects\Trans\Interleave\Interleave.cpp" />
@@ -345,6 +346,10 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="Effects\TransitionPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Trans\Brightness\FastBrightnessPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>

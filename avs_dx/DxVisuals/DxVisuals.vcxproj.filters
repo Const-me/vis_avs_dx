@@ -185,6 +185,7 @@
     <ClCompile Include="Effects\Trans\Moves\Movement.cpp" />
     <ClCompile Include="Effects\Trans\Moves\MovementCommon.cpp" />
     <ClCompile Include="Effects\Trans\Moves\Sampler.cpp" />
+    <ClCompile Include="Effects\Trans\Brightness\FastBrightness.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -240,6 +241,7 @@
     <FxCompile Include="Effects\Trans\Moves\DMovePS.hlsl" />
     <FxCompile Include="Effects\Trans\Moves\DMoveVS.hlsl" />
     <FxCompile Include="Effects\Trans\Moves\FuzzifyPS.hlsl" />
+    <FxCompile Include="Effects\Trans\Brightness\FastBrightnessPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

@@ -1,11 +1,7 @@
 #pragma once
-#include <Effects/EffectImpl.hpp>
-#include <Expressions/CompiledShader.h>
-#include "GridMesh.h"
-#include "Sampler.h"
-using namespace Hlsl::Trans::DMove;
+#include "MovementCommon.h"
 
-struct DynamicMovementStructs
+struct DynamicMovementStructs: public MovementStructs
 {
 	struct AvsState
 	{
@@ -32,45 +28,37 @@ struct DynamicMovementStructs
 		int YRES;
 	};
 
-	struct StateData : public Expressions::Compiler
+	struct StateData : public CommonStateData
 	{
 		StateData( AvsState& ass );
 
 		HRESULT update( AvsState& avs )
 		{
 			BoolHr hr = Compiler::update( avs.effect_exp[ 3 ].get(), avs.effect_exp[ 1 ].get(), avs.effect_exp[ 2 ].get(), avs.effect_exp[ 0 ].get() );
-			hr.combine( updateInputs( avs ) );
+			hr.combine( updateScreenSize() );
 			return hr;
 		}
 
 		HRESULT defines( Hlsl::Defines& def ) const;
-
-	private:
-		CSize screenSize;
-		HRESULT updateInputs( const AvsState& ass );
 	};
 
-	struct VsData : public Expressions::CompiledShader<DMoveVS>
+	struct VsData : public CommonVsData
 	{
-		static HRESULT compiledShader( const std::vector<uint8_t>& dxbc );
-
-		HRESULT updateAvs( const AvsState &avs );
+		HRESULT updateAvs( const AvsState& avs )
+		{
+			return CommonVsData::updateAvs( avs.rectcoords );
+		}
 	};
 
 	using PsData = DMovePS;
 };
 
-class DynamicMovement : public EffectBase1<DynamicMovementStructs>
+class DynamicMovement : public EffectBase1<DynamicMovementStructs>, public MovementFx
 {
-	GridMesh m_mesh;
-	Sampler m_sampler;
-
-	CComPtr<ID3D11SamplerState> m_wrapSampler, m_clampSampler;
-
 public:
 	DynamicMovement( AvsState *pState );
 
-	const Metadata& metadata() override;
+	DECLARE_EFFECT()
 
 	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 };

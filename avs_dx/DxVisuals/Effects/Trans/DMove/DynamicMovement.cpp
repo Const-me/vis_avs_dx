@@ -39,30 +39,8 @@ HRESULT DynamicMovementStructs::StateData::defines( Hlsl::Defines& def ) const
 }
 
 DynamicMovementStructs::StateData::StateData( AvsState& ass ) :
-	Compiler( "DynamicMovement", prototype() )
+	CommonStateData( "DynamicMovement", prototype() )
 { }
-
-HRESULT DynamicMovementStructs::StateData::updateInputs( const AvsState& ass )
-{
-	return updateInput( screenSize, getRenderSize() );
-}
-
-HRESULT DynamicMovementStructs::VsData::compiledShader( const std::vector<uint8_t>& dxbc )
-{
-	return StaticResources::createLayout( dxbc );
-}
-
-HRESULT DynamicMovementStructs::VsData::updateAvs( const AvsState &avs )
-{
-	const CSize rs = getRenderSize();
-	Vector2 diag{ (float)rs.cx, (float)rs.cy };
-	diag.Normalize();
-
-	BoolHr res;
-	res.updateValue( scaleToUniform, diag );
-	res.updateValue( rectangularCoords, 0 != avs.rectcoords );
-	return res;
-}
 
 DynamicMovement::DynamicMovement( AvsState *pState ) :
 	tBase( pState )
@@ -72,22 +50,6 @@ HRESULT DynamicMovement::render( bool isBeat, RenderTargets& rt )
 {
 	if( !renderer.bindShaders( isBeat ) )
 		return S_FALSE;
-
-	CHECK( m_sampler.update( avs->subpixel, avs->wrap ) );
-	BIND_PS_SAMPLER( 1, m_sampler );
-
 	const UINT psReadSlot = renderer.pixel().bindPrevFrame;
-	BoundPsResource psRead;
-	if( avs->blend )
-	{
-		CHECK( rt.blendToNext( psReadSlot, psRead ) );
-		omCustomBlend( 0.5f );
-	}
-	else
-	{
-		CHECK( rt.writeToNext( psReadSlot, psRead, false ) );
-		omBlend( eBlend::None );
-	}
-	CHECK( m_mesh.draw( avs->rectcoords ) );
-	return S_OK;
+	return MovementFx::render( rt, avs->subpixel, avs->wrap, psReadSlot, avs->blend, avs->rectcoords );
 }

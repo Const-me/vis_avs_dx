@@ -39,6 +39,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "avs_eelif.h"
 #include <math.h>
 
+extern CRITICAL_SECTION g_render_cs;
 
 #ifndef LASER
 
@@ -60,7 +61,7 @@ static Description descriptions[] =
 {
   {/* 0,*/ "none", "", 0, 0},
   {/* 1,*/ "slight fuzzify", "", 0, 0},
-  {/* 2,*/ "shift rotate left", "x=x+1/32; // use wrap for this one", 0, 1},
+  {/* 2,*/ "shift rotate left", "x=x+1.0/32; // use wrap for this one", 0, 1},
   {/* 3,*/ "big swirl out", "r = r + (0.1 - (0.2 * d));\r\nd = d * 0.96;", 0, 0},
   {/* 4,*/ "medium swirl", "d = d * (0.99 * (1.0 - sin(r-$PI*0.5) / 32.0));\r\nr = r + (0.03 * sin(d * $PI * 4));", 0, 0},
   {/* 5,*/ "sunburster", "d = d * (0.94 + (cos((r-$PI*0.5) * 32.0) * 0.06));", 0, 0},
@@ -278,6 +279,8 @@ C_THISCLASS::C_THISCLASS()
 	wrap = 0;
 	trans_tab_subpixel = 0;
 	effect_exp_ch = 1;
+
+	CREATE_DX_EFFECT( effect_exp );
 }
 
 C_THISCLASS::~C_THISCLASS()
@@ -837,11 +840,11 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 		if( wParam == 1 )
 		{
 			KillTimer( hwndDlg, 1 );
-			EnterCriticalSection( &g_this->rcs );
+			EnterCriticalSection( &g_render_cs );
 			g_this->effect = 32767;
 			g_this->effect_exp.get_from_dlgitem( hwndDlg, IDC_EDIT1 );
 			g_this->effect_exp_ch = 1;
-			LeaveCriticalSection( &g_this->rcs );
+			LeaveCriticalSection( &g_render_cs );
 		}
 		return 0;
 	case WM_COMMAND:
@@ -873,10 +876,10 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 
 				// always reinit =)
 				{
-					EnterCriticalSection( &g_this->rcs );
+					EnterCriticalSection( &g_render_cs );
 					g_this->effect_exp.get_from_dlgitem( hwndDlg, IDC_EDIT1 );
 					g_this->effect_exp_ch = 1;
-					LeaveCriticalSection( &g_this->rcs );
+					LeaveCriticalSection( &g_render_cs );
 				}
 			}
 			else
@@ -893,6 +896,10 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 					EnableWindow( GetDlgItem( hwndDlg, IDC_CHECK3 ), 1 );
 					EnableWindow( GetDlgItem( hwndDlg, IDC_LABEL1 ), 1 );
 					CheckDlgButton( hwndDlg, IDC_CHECK3, descriptions[ t ].uses_rect ? BST_CHECKED : 0 );
+
+					EnterCriticalSection( &g_render_cs );
+					g_this->effect_exp.assign( descriptions[ t ].eval_desc );
+					LeaveCriticalSection( &g_render_cs );
 				}
 				else
 				{

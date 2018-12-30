@@ -38,12 +38,15 @@ protected:
 	}
 
 private:
+
 	HRESULT buildState( EffectStateShader& ess ) override
 	{
 		ess.shaderTemplate = stateData.shaderTemplate();
 		ess.stateSize = stateData.stateSize();
 		return stateData.defines( ess.values );
 	}
+
+protected:
 
 	HRESULT updateParameters( Binder& binder ) override
 	{

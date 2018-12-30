@@ -109,6 +109,8 @@
     <ClInclude Include="Resources\GlobalBuffers.h" />
     <ClInclude Include="Effects\ShaderUpdatesSimple.hpp" />
     <ClInclude Include="Render\SimpleShaderTypes.hpp" />
+    <ClInclude Include="Effects\Trans\DMove\Movement.h" />
+    <ClInclude Include="Effects\Trans\DMove\MovementCommon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -181,6 +183,8 @@
     <ClCompile Include="Effects\Trans\Interleave\Interleave.cpp" />
     <ClCompile Include="Utils\FadeOut-utils.cpp" />
     <ClCompile Include="Effects\Trans\Fadeout\Fadeout-fx.cpp" />
+    <ClCompile Include="Effects\Trans\DMove\Movement.cpp" />
+    <ClCompile Include="Effects\Trans\DMove\MovementCommon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -234,6 +238,8 @@
     <FxCompile Include="Effects\Trans\Interleave\InterleavePS.hlsl" />
     <FxCompile Include="Effects\Trans\Interleave\InterleaveState.hlsl" />
     <FxCompile Include="Effects\Trans\Fadeout\FadeoutPS.hlsl" />
+    <FxCompile Include="Effects\Trans\DMove\FuzzifyPS.hlsl" />
+    <FxCompile Include="Effects\Trans\DMove\BlockyOutPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

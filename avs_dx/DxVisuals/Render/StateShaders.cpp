@@ -58,6 +58,9 @@ namespace
 		CStringA hlsl = R"fffuuu(
 #include "FrameGlobalData.fx"
 RWByteAddressBuffer effectStates : register(u0);
+Texture2D<float> texVisDataU8 : register(t0);
+Texture2D<float> texVisDataS8 : register(t1);
+SamplerState sampleBilinear : register(s0);
 )fffuuu";
 
 		globals.write( hlsl );

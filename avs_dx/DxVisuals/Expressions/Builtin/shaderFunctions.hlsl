@@ -40,11 +40,14 @@ inline float sigmoid( float x, float constraint )
 // http://www.asawicki.info/news_1516_half-pixel_offset_in_directx_11.html
 
 // returns spectrum data centered at 'band', (0..1), sampled 'width' (0..1) wide.
-// 'channel' can be: 0=center, 1=left, 2=right. return value is (-1..1)
+// 'channel' can be: 0=center, 1=left, 2=right. return value is (0..1)
 inline float getspec( float band, float width, uint channel )
 {
     const float vVals[ 3 ] = { 0.25, 0.125, 0.375 };
     const float v = vVals[ channel ];
+    const float mul = 1.0 / 576.0;
+    if( width < 2.0 * mul )
+        return texVisDataU8.SampleLevel( sampleBilinear, float2( band * mul, v ), 0 );
 
     width *= 0.5;
     float2 rangeFloat = saturate( float2( band - width, band + width ) );
@@ -52,8 +55,8 @@ inline float getspec( float band, float width, uint channel )
     float res = 0;
     for( uint x = rangeInt.x; x < rangeInt.y; x += 2 )
     {
-        float u = (float) x * ( 1.0 / 576.0 );
-        res += texVisDataU8.Sample( sampleBilinear, float2( u, v ) );
+        float u = (float) x * mul;
+        res += texVisDataU8.SampleLevel( sampleBilinear, float2( u, v ), 0 );
     }
     const uint count = ( rangeInt.y - rangeInt.x ) << 1;
     return res / (float) count;
@@ -65,6 +68,9 @@ inline float getosc( float band, float width, uint channel )
 {
     const float vVals[ 3 ] = { 0.75, 0.625, 0.875 };
     const float v = vVals[ channel ];
+    const float mul = 1.0 / 576.0;
+    if( width < 2.0 * mul )
+        return texVisDataS8.SampleLevel( sampleBilinear, float2( band * mul, v ), 0 );
 
     width *= 0.5;
     float2 rangeFloat = saturate( float2( band - width, band + width ) );
@@ -72,7 +78,7 @@ inline float getosc( float band, float width, uint channel )
     float res = 0;
     for( uint x = rangeInt.x; x < rangeInt.y; x += 2 )
     {
-        float u = (float) x * ( 1.0 / 576.0 );
+        float u = (float) x * mul;
         res += texVisDataS8.SampleLevel( sampleBilinear, float2( u, v ), 0 );
     }
     const uint count = ( rangeInt.y - rangeInt.x ) * 2;

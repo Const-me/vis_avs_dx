@@ -102,6 +102,8 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 		else CheckDlgButton( hwndDlg, IDC_RADIO1, BST_CHECKED );
 		if( g_this->roundmode == 0 ) CheckDlgButton( hwndDlg, IDC_ROUNDDOWN, BST_CHECKED );
 		else CheckDlgButton( hwndDlg, IDC_ROUNDUP, BST_CHECKED );
+		ShowWindow( GetDlgItem( hwndDlg, IDC_ROUNDUP ), SW_HIDE );
+		ShowWindow( GetDlgItem( hwndDlg, IDC_ROUNDDOWN ), SW_HIDE );
 		return 1;
 	case WM_COMMAND:
 		if( LOWORD( wParam ) == IDC_RADIO1 )

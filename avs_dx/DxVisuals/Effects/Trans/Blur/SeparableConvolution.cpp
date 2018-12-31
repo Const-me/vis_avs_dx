@@ -96,7 +96,7 @@ HRESULT SeparableConvolution::run( RenderTargets& rt )
 	CHECK( ensureBuffer() );
 	omClearTargets();
 
-	PerfMeasure( "SeparableConvolution::run" );
+	// PerfMeasure( "SeparableConvolution::run" );
 
 	RenderTarget& target = rt.lastWritten();
 	if( !target )

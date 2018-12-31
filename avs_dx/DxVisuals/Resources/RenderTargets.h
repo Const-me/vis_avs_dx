@@ -6,7 +6,7 @@
 class RenderTargets
 {
 	std::array<RenderTarget, 2> m_targets;
-	size_t m_lastTarget = 0;
+	uint8_t m_lastTarget = 0;
 
 public:
 
@@ -28,6 +28,11 @@ public:
 	RenderTarget& lastWritten()
 	{
 		return m_targets[ m_lastTarget ];
+	}
+
+	const uint8_t currentIndex() const
+	{
+		return m_lastTarget;
 	}
 };
 

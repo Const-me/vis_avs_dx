@@ -36,6 +36,8 @@ public:
 
 	ID3D11Texture2D* texture() const { return m_tex; }
 
+	ID3D11ShaderResourceView* srv() const { return m_srv; }
+
 	BoundSrv<eStage::Pixel> psView( UINT slot ) const
 	{
 		return std::move( BoundSrv<eStage::Pixel>{ slot, m_srv } );

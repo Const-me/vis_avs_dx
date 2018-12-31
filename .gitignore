@@ -12,3 +12,4 @@ avs_dx/DxVisuals/Effects/shadersCode.h
 avs_dx/~$Readme.docx
 avs_dx/DxVisuals/Expressions/Builtin/includeFunctions.cpp
 avs/vis_avs/res.aps
+avs_dx/DxVisuals/Effects/Trans/Blur/KernelValues.cpp

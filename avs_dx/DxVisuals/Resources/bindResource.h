@@ -30,6 +30,16 @@ namespace DxUtils
 		}
 		using IResource = ID3D11SamplerState;
 	};
+	struct UavResource
+	{
+		template<eStage stage>
+		static inline void bind( UINT slot, ID3D11UnorderedAccessView* view )
+		{
+			static_assert( stage == eStage::Compute );
+			bindUav( slot, view );
+		}
+		using IResource = ID3D11UnorderedAccessView;
+	};
 
 	// RAII wrapper with bound resource.
 	template<eStage stage, class TResource>
@@ -112,7 +122,14 @@ inline void bindSampler( UINT slot, ID3D11SamplerState* s = nullptr )
 }
 
 template<eStage stage = eStage::Pixel>
-BoundSrv<stage> boundResource( UINT slot, ID3D11ShaderResourceView* srv )
+inline BoundSrv<stage> boundResource( UINT slot, ID3D11ShaderResourceView* srv )
 {
 	return std::move( BoundSrv<stage>{ slot, srv } );
+}
+
+using BoundUav = DxUtils::BoundResource<eStage::Compute, DxUtils::UavResource>;
+
+inline BoundUav boundResource( UINT slot, ID3D11UnorderedAccessView* uav )
+{
+	return std::move( BoundUav{ slot, uav } );
 }

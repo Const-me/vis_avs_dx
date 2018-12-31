@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "preciseTickCount.h"
+#include "PerfMeasure.h"
 #include <mfapi.h>
 #pragma comment( lib, "Mfplat.lib" )
 

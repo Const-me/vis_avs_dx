@@ -95,9 +95,11 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Effects\Trans\Blur\SeparableConvolution.h" />
     <ClInclude Include="Effects\Render\Picture\interop.h" />
     <ClInclude Include="Effects\Render\Picture\PictureEffect.h" />
     <ClInclude Include="Effects\ShaderUpdatesSimple.hpp" />
+    <ClInclude Include="Effects\Trans\Blur\KernelValues.h" />
     <ClInclude Include="Effects\Trans\Moves\GridMesh.tesselate.hpp" />
     <ClInclude Include="Effects\Trans\Moves\Sampler.h" />
     <ClInclude Include="Effects\Trans\Moves\Movement.h" />
@@ -145,6 +147,7 @@
     <ClInclude Include="Render\ShaderBase.h" />
     <ClInclude Include="Utils\ByteRange.hpp" />
     <ClInclude Include="Utils\meshoptimizer\meshoptimizer.h" />
+    <ClInclude Include="Utils\PerfMeasure.h" />
     <ClInclude Include="Utils\resizeHandler.h" />
     <ClInclude Include="Expressions\Builtin\builtinFunctions.h" />
     <ClInclude Include="Expressions\Builtin\includeFunctions.h" />
@@ -205,11 +208,15 @@
     <ClInclude Include="Utils\MiscUtils.h" />
     <ClInclude Include="Expressions\SymbolTable\VariablesTable.h" />
     <ClInclude Include="Effects\Video\VideoEffect.h" />
+    <ClInclude Include="Effects\Trans\Blur\warpSize.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Effects\Trans\Blur\BlurEffect.cpp" />
+    <ClCompile Include="Effects\Trans\Blur\SeparableConvolution.cpp" />
     <ClCompile Include="Effects\Trans\Blitter.cpp" />
     <ClCompile Include="EffectBase\EffectBase.cpp" />
     <ClCompile Include="Effects\Render\Picture\PictureEffect.cpp" />
+    <ClCompile Include="Effects\Trans\Blur\KernelValues.cpp" />
     <ClCompile Include="Effects\Trans\Brightness\Brightness.cpp" />
     <ClCompile Include="Effects\Trans\Brightness\FastBrightness.cpp" />
     <ClCompile Include="Effects\Trans\Moves\Sampler.cpp" />
@@ -290,6 +297,7 @@
     <ClCompile Include="Utils\DirectXErrors\formatCString.cpp" />
     <ClCompile Include="Expressions\SymbolTable\VariablesTable.cpp" />
     <ClCompile Include="Effects\Video\VideoEffect.cpp" />
+    <ClCompile Include="Effects\Trans\Blur\warpSize.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt">
@@ -315,6 +323,13 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Expressions/Builtin/includeFunctions.cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(VSAPPIDDIR)TextTransform.exe" "%(FullPath)" -a !!SOURCE!$(ProjectDir)Expressions/Builtin -out $(ProjectDir)Expressions/Builtin/includeFunctions.cpp</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Expressions/Builtin/includeFunctions.cpp</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="Effects\Trans\Blur\KernelValues.tt">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(VSAPPIDDIR)TextTransform.exe" "%(FullPath)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(VSAPPIDDIR)TextTransform.exe" "%(FullPath)"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Effects\Trans\Blur\KernelValues.cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Effects\Trans\Blur\KernelValues.cpp</Outputs>
     </CustomBuild>
     <None Include="Expressions\Builtin\includeFunctions.t4" />
     <None Include="Render\EffectRenderer.inl" />
@@ -349,6 +364,10 @@
     <FxCompile Include="Effects\TransitionPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Trans\Blur\LinearConvolutionCS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
     </FxCompile>
     <FxCompile Include="Effects\Trans\Brightness\BrightnessPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>

@@ -111,6 +111,10 @@
     <ClInclude Include="Effects\Trans\Moves\Movement.h" />
     <ClInclude Include="Effects\Trans\Moves\MovementCommon.h" />
     <ClInclude Include="Effects\Trans\Moves\Sampler.h" />
+    <ClInclude Include="Effects\Trans\Blur\warpSize.h" />
+    <ClInclude Include="Effects\Trans\Blur\KernelValues.h" />
+    <ClInclude Include="Effects\Trans\Blur\SeparableConvolution.h" />
+    <ClInclude Include="Utils\PerfMeasure.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -187,6 +191,10 @@
     <ClCompile Include="Effects\Trans\Moves\Sampler.cpp" />
     <ClCompile Include="Effects\Trans\Brightness\FastBrightness.cpp" />
     <ClCompile Include="Effects\Trans\Brightness\Brightness.cpp" />
+    <ClCompile Include="Effects\Trans\Blur\warpSize.cpp" />
+    <ClCompile Include="Effects\Trans\Blur\KernelValues.cpp" />
+    <ClCompile Include="Effects\Trans\Blur\SeparableConvolution.cpp" />
+    <ClCompile Include="Effects\Trans\Blur\BlurEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -211,6 +219,7 @@
     <None Include="Effects\Polyline.fx" />
     <None Include="Expressions\Builtin\includeFunctions.t4" />
     <None Include="Utils\DXTK\SimpleMath.inl" />
+    <None Include="Effects\Trans\Blur\KernelValues.tt" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Effects\Render\Simple\SimpleDotsVS.hlsl" />
@@ -244,6 +253,7 @@
     <FxCompile Include="Effects\Trans\Moves\FuzzifyPS.hlsl" />
     <FxCompile Include="Effects\Trans\Brightness\FastBrightnessPS.hlsl" />
     <FxCompile Include="Effects\Trans\Brightness\BrightnessPS.hlsl" />
+    <FxCompile Include="Effects\Trans\Blur\LinearConvolutionCS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

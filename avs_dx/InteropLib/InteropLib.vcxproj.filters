@@ -78,6 +78,7 @@
     <ClInclude Include="deviceCreation.h" />
     <ClInclude Include="Utils\shutdown.h" />
     <ClInclude Include="ConsoleLogger.h" />
+    <ClInclude Include="ProfilerWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -91,5 +92,6 @@
     <ClCompile Include="deviceCreation.cpp" />
     <ClCompile Include="Utils\shutdown.cpp" />
     <ClCompile Include="nseel-shims.cpp" />
+    <ClCompile Include="ProfilerWindow.cpp" />
   </ItemGroup>
 </Project>

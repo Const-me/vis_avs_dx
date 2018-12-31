@@ -44,25 +44,26 @@ Profiler::Profiler()
 {
 	for( auto& q : m_frames )
 		q.create();
-	m_message.Preallocate( 1024 );
+	m_result.reserve( 64 );
 }
 
 void Profiler::frameStart()
 {
-	m_frames[ m_current ].frameStart();
+	m_frame++;
+	m_frames[ m_buffer ].frameStart();
 }
 
 void Profiler::mark( EffectProfiler* fx )
 {
-	m_frames[ m_current ].mark( m_current, fx );
+	m_frames[ m_buffer ].mark( m_buffer, fx );
 }
 
 void Profiler::frameEnd()
 {
-	m_frames[ m_current ].frameEnd();
+	m_frames[ m_buffer ].frameEnd();
 
-	m_current = ( m_current + 1 ) % profilerBuffersCount;
-	m_frames[ m_current ].report( m_message, m_current );
+	m_buffer = ( m_buffer + 1 ) % profilerBuffersCount;
+	m_frames[ m_buffer ].report( m_frame, m_result, m_buffer );
 }
 
 void Profiler::FrameData::frameStart()
@@ -94,11 +95,13 @@ namespace
 	}
 }
 
-HRESULT Profiler::FrameData::report( CStringA &message, uint8_t frame )
+HRESULT Profiler::FrameData::report( uint32_t frame, std::vector<sProfilerEntry> &result, uint8_t buffer )
 {
 	if( !haveMeasures )
 		return S_FALSE;
 	haveMeasures = false;
+	if( !isProfilerOpen() )
+		return S_FALSE;
 
 	while( true )
 	{
@@ -117,30 +120,29 @@ HRESULT Profiler::FrameData::report( CStringA &message, uint8_t frame )
 	if( tsDisjoint.Disjoint )
 		return S_FALSE;
 
-	const double msMul = 1000.0 / tsDisjoint.Frequency;
+	const float msMul = (float)( 1000.0 / tsDisjoint.Frequency );
 	uint64_t tsPrev;
 	CHECK( getTimestamp( begin, tsPrev ) );
 
 	auto printTime = [ &, msMul ]( uint64_t ts, const char* name )
 	{
-		const double ms = ( ts - tsPrev )*msMul;
-		message.AppendFormat( "%s %.4f; ", name, ms );
+		const float ms = (float)( ts - tsPrev ) * msMul;
+		result.emplace_back( sProfilerEntry{ name,ms } );
 		tsPrev = ts;
 	};
 
-	message = "";
+	result.clear();
 	uint64_t tsCurr;
 	for( EffectProfiler* fx : effects )
 	{
-		CHECK( getTimestamp( fx->m_queries[ frame ], tsCurr ) );
+		CHECK( getTimestamp( fx->m_queries[ buffer ], tsCurr ) );
 		printTime( tsCurr, fx->m_name );
 	}
 
 	CHECK( getTimestamp( end, tsCurr ) );
 	printTime( tsCurr, "final" );
 
-	logInfo( "GPU perf: %s", cstr( message ) );
-	return S_OK;
+	return updateProfilerGui( frame, result ) ? S_OK : S_FALSE;
 }
 
 Profiler& gpuProfiler()

@@ -43,6 +43,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "undo.h"
 #include "../../avs_dx/InteropLib/drawDx.h"
 #include "../../avs_dx/InteropLib/ConsoleLogger.h"
+#include "../../avs_dx/InteropLib/ProfilerWindow.h"
 
 #ifdef LASER
 extern "C" {
@@ -1425,6 +1426,9 @@ static BOOL CALLBACK dlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 			// if( !g_debugwnd ) g_debugwnd = CreateDialog( g_hInstance, MAKEINTRESOURCE( IDD_DEBUG ), g_hwnd, debugProc );
 			// ShowWindow( g_debugwnd, SW_SHOW );
 			showDebugConsole();
+			return 0;
+		case IDM_SETTINGS_PROFILER:
+			profilerOpen();
 			return 0;
 		case IDM_ABOUT:
 			DialogBox( g_hInstance, MAKEINTRESOURCE( IDD_DIALOG2 ), hwndDlg, aboutProc );

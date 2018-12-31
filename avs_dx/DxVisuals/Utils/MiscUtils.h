@@ -78,3 +78,10 @@ inline const char* cstr( const CStringA &str ) { return str; }
 // Some effects need COM to render videos or load pictures.
 HRESULT coInit();
 HRESULT comUninitialize();
+
+// Size of the vector's payload in bytes.
+template<class T>
+inline uint32_t sizeofVector( const std::vector<T>& r )
+{
+	return (uint32_t)( r.size() * sizeof( T ) );
+}

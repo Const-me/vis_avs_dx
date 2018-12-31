@@ -1,6 +1,8 @@
 #pragma once
 // http://www.reedbeta.com/blog/gpu-profiling-101/
 
+#include <../InteropLib/ProfilerWindow.h>
+
 constexpr uint8_t profilerBuffersCount = 2;
 
 class EffectBase;
@@ -38,13 +40,14 @@ class Profiler
 		void mark( uint8_t current, EffectProfiler* fx );
 		void frameEnd();
 
-		HRESULT report( CStringA &message, uint8_t frame );
+		HRESULT report( uint32_t frame, std::vector<sProfilerEntry> &result, uint8_t buffer );
 	};
 
 	std::array<FrameData, profilerBuffersCount> m_frames;
-	uint8_t m_current = 0;
+	uint8_t m_buffer = 0;
+	uint32_t m_frame = 0;
 
-	CStringA m_message;
+	std::vector<sProfilerEntry> m_result;
 
 public:
 	Profiler();

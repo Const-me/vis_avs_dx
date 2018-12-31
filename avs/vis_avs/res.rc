@@ -1681,33 +1681,34 @@ END
 // Menu
 //
 
-IDR_MENU1 MENU
+IDR_MENU1 MENUEX
 BEGIN
-    POPUP "&Preset"
+    POPUP "&Preset",                        65535,MFT_STRING,MFS_ENABLED
     BEGIN
-        MENUITEM "Load...",                     IDC_LOAD
-        MENUITEM "&Save...",                    IDC_SAVE
-        MENUITEM SEPARATOR
-        MENUITEM "&New",                        IDC_CLEAR
+        MENUITEM "Load...",                     IDC_LOAD,MFT_STRING,MFS_ENABLED
+        MENUITEM "&Save...",                    IDC_SAVE,MFT_STRING,MFS_ENABLED
+        MENUITEM MFT_SEPARATOR
+        MENUITEM "&New",                        IDC_CLEAR,MFT_STRING,MFS_ENABLED
     END
-    POPUP "&Edit"
+    POPUP "&Edit",                          65535,MFT_STRING,MFS_ENABLED
     BEGIN
-        MENUITEM "&Undo",                       IDM_UNDO
-        MENUITEM "&Redo",                       IDM_REDO
+        MENUITEM "&Undo",                       IDM_UNDO,MFT_STRING,MFS_ENABLED
+        MENUITEM "&Redo",                       IDM_REDO,MFT_STRING,MFS_ENABLED
     END
-    POPUP "&Settings"
+    POPUP "&Settings",                      65535,MFT_STRING,MFS_ENABLED
     BEGIN
-        MENUITEM "&Display",                    IDM_DISPLAY
-        MENUITEM "&Fullscreen",                 IDM_FULLSCREEN
-        MENUITEM "&Presets/Hotkeys",            IDM_PRESETS
-        MENUITEM "&Beat Detection",             IDM_BPM
-        MENUITEM "Transitio&ns",                IDM_TRANSITIONS
-        MENUITEM SEPARATOR
-        MENUITEM "Debug Window...",             IDM_HELP_DEBUGWND
+        MENUITEM "&Display",                    IDM_DISPLAY,MFT_STRING,MFS_ENABLED
+        MENUITEM "&Fullscreen",                 IDM_FULLSCREEN,MFT_STRING,MFS_ENABLED
+        MENUITEM "&Presets/Hotkeys",            IDM_PRESETS,MFT_STRING,MFS_ENABLED
+        MENUITEM "&Beat Detection",             IDM_BPM,MFT_STRING,MFS_ENABLED
+        MENUITEM "Transitio&ns",                IDM_TRANSITIONS,MFT_STRING,MFS_ENABLED
+        MENUITEM MFT_SEPARATOR
+        MENUITEM "Debug Window...",             IDM_HELP_DEBUGWND,MFT_STRING,MFS_ENABLED
+        MENUITEM "GPU Profiler...",             IDM_SETTINGS_PROFILER,MFT_STRING,MFS_ENABLED
     END
-    POPUP "&Help", HELP
+    POPUP "&Help",                          65535,MFT_STRING | MFT_RIGHTJUSTIFY,MFS_ENABLED
     BEGIN
-        MENUITEM "&About...",                   IDM_ABOUT
+        MENUITEM "&About...",                   IDM_ABOUT,MFT_STRING,MFS_ENABLED
     END
 END
 

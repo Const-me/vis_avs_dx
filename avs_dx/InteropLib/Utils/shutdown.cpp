@@ -2,6 +2,7 @@
 #include "shutdown.h"
 #include "../../DxVisuals/Utils/effectsRegistry.h"
 #include "../ConsoleLogger.h"
+#include "../ProfilerWindow.h"
 
 namespace
 {
@@ -113,6 +114,7 @@ namespace
 			const HRESULT hr = msgWaitForSingleObject( m_threadShutDown, 500 );
 			logShutdown( CStringA{ "Shutdown::shutdown result: " } +formatDxMessageA( hr ) );
 			closeDebugConsole();
+			profilerClose();
 			return hr;
 		}
 	};

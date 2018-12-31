@@ -144,12 +144,6 @@ namespace
 		}
 		pt( ib, r1, r2, r1 + 1 );
 	}
-
-	template<class T>
-	inline UINT sizeofVector( const std::vector<T>& r )
-	{
-		return (UINT)( r.size() * sizeof( T ) );
-	}
 }
 
 #include "GridMesh.tesselate.hpp"

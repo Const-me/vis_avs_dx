@@ -93,6 +93,7 @@
     <ClInclude Include="drawDx.h" />
     <ClInclude Include="effectsFactory.h" />
     <ClInclude Include="interop.h" />
+    <ClInclude Include="ProfilerWindow.h" />
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Utils\shutdown.h" />
@@ -126,6 +127,7 @@
     <ClCompile Include="draw.cpp" />
     <ClCompile Include="module.cpp" />
     <ClCompile Include="nseel-shims.cpp" />
+    <ClCompile Include="ProfilerWindow.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

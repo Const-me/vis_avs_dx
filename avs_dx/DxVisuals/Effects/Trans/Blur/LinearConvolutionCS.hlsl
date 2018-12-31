@@ -17,7 +17,7 @@ Texture2D<float4> texSource : register(BIND_SOURCE);
 RWTexture2D<float4> texDest : register(BIND_DEST);
 
 // The code below implements arbitrary-size Gaussian blur with just 2 loads per pass per pixel (2 passes are required for 2D images).
-// This is much faster than what I saw on the Internets, the state of the art appears to be abusing bilinear filter units, or using worse-quality approximations like Kawase's.
+// This is IMO better than what I saw on the Internets, the state of the art appears to be abusing bilinear filter units, or using worse-quality approximations like Kawase's.
 
 groupshared float3 s_cache[ WARP_SIZE * 4 ]; // 1536 bytes of cache, not that much.
 

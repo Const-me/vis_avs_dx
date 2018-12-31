@@ -9,6 +9,9 @@ class RenderTargets
 	uint8_t m_lastTarget = 0;
 
 public:
+	RenderTargets() = default;
+	RenderTargets( const RenderTargets & ) = delete;
+	void operator=( const RenderTargets & ) = delete;
 
 	void destroy()
 	{

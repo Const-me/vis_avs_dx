@@ -195,6 +195,7 @@
     <ClCompile Include="Effects\Trans\Blur\KernelValues.cpp" />
     <ClCompile Include="Effects\Trans\Blur\SeparableConvolution.cpp" />
     <ClCompile Include="Effects\Trans\Blur\BlurEffect.cpp" />
+    <ClCompile Include="Effects\List\BufferSave.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

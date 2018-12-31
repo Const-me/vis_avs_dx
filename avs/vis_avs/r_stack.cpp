@@ -47,7 +47,6 @@ protected:
 public:
 	C_StackClass();
 	virtual ~C_StackClass();
-	virtual int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
 	virtual char *get_desc();
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent );
 	virtual void load_config( unsigned char *data, int len );
@@ -99,140 +98,12 @@ C_THISCLASS::C_THISCLASS()
 	dir = 0;
 	blend = 0;
 	clear = 0;
+
+	CREATE_DX_EFFECT( clear );
 }
 
 C_THISCLASS::~C_THISCLASS()
 {
-}
-
-int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
-{
-	void *thisbufptr;
-	if( isBeat & 0x80000000 ) return 0;
-	if( !( thisbufptr = getGlobalBuffer( w, h, which, dir != 1 ) ) )
-	{
-		return 0;
-	}
-
-	if( clear )
-	{
-		clear = 0;
-		memset( thisbufptr, 0, sizeof( int )*w*h );
-	}
-
-	{
-		int t_dir;
-		t_dir = ( dir < 2 ) ? dir : ( ( dir & 1 ) ^ dir_ch );
-		dir_ch ^= 1;
-		int *fbin = (int*)( t_dir == 0 ? framebuffer : thisbufptr );
-		int *fbout = (int*)( t_dir != 0 ? framebuffer : thisbufptr );
-		if( blend == 1 )
-		{
-			mmx_avgblend_block( fbout, fbin, w*h );
-		}
-		else if( blend == 2 )
-		{
-			mmx_addblend_block( fbout, fbin, w*h );
-		}
-		else if( blend == 3 )
-		{
-			int r = 0;
-			int y = h;
-			int *bf = fbin;
-			while( y-- > 0 )
-			{
-				int *out, *in;
-				int x = w / 2;
-				out = fbout + r;
-				in = bf + r;
-				r ^= 1;
-				while( x-- > 0 )
-				{
-					*out = *in;
-					out += 2;
-					in += 2;
-				}
-				fbout += w;
-				bf += w;
-			}
-		}
-		else if( blend == 4 )
-		{
-			int x = w * h;
-			int *bf = fbin;
-			while( x-- > 0 )
-			{
-				*fbout = BLEND_SUB( *fbout, *bf );
-				fbout++;
-				bf++;
-			}
-		}
-		else if( blend == 5 )
-		{
-			int y = h / 2;
-			while( y-- > 0 )
-			{
-				memcpy( fbout, fbin, w * sizeof( int ) );
-				fbout += w * 2;
-				fbin += w * 2;
-			}
-		}
-		else if( blend == 6 )
-		{
-			int x = w * h;
-			while( x-- > 0 )
-			{
-				*fbout = *fbout ^ *fbin;
-				fbout++;
-				fbin++;
-			}
-		}
-		else if( blend == 7 )
-		{
-			int x = w * h;
-			int *bf = fbin;
-			while( x-- > 0 )
-			{
-				*fbout = BLEND_MAX( *fbout, *bf );
-				fbout++;
-				bf++;
-			}
-		}
-		else if( blend == 8 )
-		{
-			int x = w * h;
-			int *bf = fbin;
-			while( x-- > 0 )
-			{
-				*fbout = BLEND_MIN( *fbout, *bf );
-				fbout++;
-				bf++;
-			}
-		}
-		else if( blend == 9 )
-		{
-			int x = w * h;
-			int *bf = fbin;
-			while( x-- > 0 )
-			{
-				*fbout = BLEND_SUB( *bf, *fbout );
-				fbout++;
-				bf++;
-			}
-		}
-		else if( blend == 10 )
-		{
-			mmx_mulblend_block( fbout, fbin, w*h );
-		}
-		else if( blend == 11 )
-		{
-			mmx_adjblend_block( fbout, fbin, fbout, w*h, adjblend_val );
-		}
-		else memcpy( fbout, fbin, w*h * sizeof( int ) );
-		return 0;
-	}
-
-	return 0;
 }
 
 C_RBASE *R_Stack( char *desc )
@@ -240,7 +111,6 @@ C_RBASE *R_Stack( char *desc )
 	if( desc ) { strcpy( desc, MOD_NAME ); return NULL; }
 	return ( C_RBASE * ) new C_THISCLASS();
 }
-
 
 static C_THISCLASS *g_this;
 
@@ -316,7 +186,6 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 				g_this->which = i;
 		}
 		return 0;
-		return 0;
 	case WM_NOTIFY:
 		if( LOWORD( wParam ) == IDC_BLENDSLIDE )
 			g_this->adjblend_val = SendDlgItemMessage( hwndDlg, IDC_BLENDSLIDE, TBM_GETPOS, 0, 0 );
@@ -324,7 +193,6 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 	}
 	return 0;
 }
-
 
 HWND C_THISCLASS::conf( HINSTANCE hInstance, HWND hwndParent )
 {

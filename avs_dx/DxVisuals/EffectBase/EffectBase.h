@@ -36,6 +36,9 @@ public:
 
 	void setOwner( RootEffect *p ) { m_pRoot = p; }
 
+	// Called by EffectListBase each time after render() returns S_OK. The current implementation does GPU profiling measures, unless disabled by GPU_PROFILE=0 macro.
+	virtual HRESULT completedRendering() { return S_OK; }
+
 protected:
 
 	UINT m_stateOffset;

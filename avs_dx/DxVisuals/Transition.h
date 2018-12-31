@@ -2,6 +2,7 @@
 #include "iTransition.h"
 #include <Utils/resizeHandler.h>
 #include "Resources/RenderTargets.h"
+#include "Effects/EffectProfiler.h"
 
 class Transition:
 	public ResizeHandler,
@@ -16,6 +17,8 @@ class Transition:
 	}
 
 public:
+	Transition();
+
 	~Transition() override;
 
 	HRESULT renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, iRootEffect &e ) override;
@@ -25,4 +28,6 @@ public:
 private:
 
 	HRESULT prepare( char visdata[ 2 ][ 2 ][ 576 ], int isBeat );
+
+	EffectProfiler m_prepared, m_rendered;
 };

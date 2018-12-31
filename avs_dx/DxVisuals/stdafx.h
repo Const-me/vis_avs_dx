@@ -40,3 +40,5 @@ using DirectX::SimpleMath::Vector4;
 #include "Resources/bindResource.h"
 
 using CSLock = CComCritSecLock<CComAutoCriticalSection>;
+
+#define GPU_PROFILE 1

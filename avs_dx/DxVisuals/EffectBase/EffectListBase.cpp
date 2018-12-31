@@ -2,6 +2,11 @@
 #include "EffectListBase.h"
 #include <Effects/shadersCode.h>
 
+EffectListBase::EffectListBase( AvsState* pState ) : 
+	avs( pState ),
+	m_profilerStart( "ListBegin" )
+{ }
+
 EffectBase* EffectListBase::T_RenderListType::dxEffect() const
 {
 	if( render->dxEffect.empty() )
@@ -72,7 +77,15 @@ HRESULT EffectListBase::updateParameters( Binder& binder )
 
 HRESULT EffectListBase::render( bool isBeat, RenderTargets& rt )
 {
-	return apply( [ isBeat, &rt ]( EffectBase &e ) { return e.render( isBeat, rt ); } );
+	m_profilerStart.mark();
+
+	return apply( [ isBeat, &rt ]( EffectBase &e )
+	{
+		const HRESULT hr = e.render( isBeat, rt );
+		if( S_OK == hr )
+			e.completedRendering();
+		return hr;
+	} );
 }
 
 HRESULT EffectListBase::fadeRenderTarget( RenderTargets &rt )

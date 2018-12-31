@@ -50,7 +50,7 @@ public:
 	};
 
 	AvsState* const avs;
-	EffectListBase( AvsState* pState ) : avs( pState ) { }
+	EffectListBase( AvsState* pState );
 
 	HRESULT updateParameters( Binder& binder ) override;
 
@@ -59,8 +59,9 @@ public:
 	std::vector<EffectBase*> m_effects;
 
 private:
-	template<class tFunc>
+	EffectProfiler m_profilerStart;
 
+	template<class tFunc>
 	HRESULT apply( tFunc fn )
 	{
 		BoolHr hr;

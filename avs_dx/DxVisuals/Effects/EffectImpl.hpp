@@ -12,6 +12,7 @@ using Hlsl::Defines;
 #include "includeDefs.h"
 #include "../InteropLib/effectsFactory.h"
 #include "ShaderUpdatesSimple.hpp"
+#include "EffectProfiler.h"
 
 CSize getRenderSize();
 
@@ -19,7 +20,9 @@ template<class TEffect>
 class EffectImpl : public TEffect
 {
 public:
-	EffectImpl( void* pNative ) : TEffect( ( typename TEffect::AvsState* )( pNative ) ) { }
+	EffectImpl( void* pNative ) : TEffect( ( typename TEffect::AvsState* )( pNative ) ),
+		m_profiler( this )
+	{ }
 
 	~EffectImpl() override
 	{ }
@@ -29,6 +32,16 @@ public:
 		using tImpl = EffectImpl<TEffect>;
 		res.create<tImpl>( pState );
 		return S_OK;
+	}
+
+private:
+
+	EffectProfiler m_profiler;
+
+	HRESULT completedRendering() override
+	{
+		m_profiler.mark();
+		return __super::completedRendering();
 	}
 };
 

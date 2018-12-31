@@ -24,10 +24,10 @@ HRESULT Blender::blend( RenderTargets& source, RenderTargets& dest, eBlendMode m
 		if( src )
 		{
 			src.copyTo( dst );
-			return S_FALSE;
+			return S_OK;
 		}
 		dst.clear();
-		return S_FALSE;
+		return S_OK;
 	}
 
 	if( (uint8_t)mode > (uint8_t)eBlendMode::Minimum )

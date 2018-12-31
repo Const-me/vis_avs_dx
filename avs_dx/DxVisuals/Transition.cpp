@@ -29,6 +29,11 @@ void createTransition( std::unique_ptr<iTransition>& up )
 	up = std::make_unique<Transition>();
 }
 
+Transition::Transition() :
+	m_prepared( "prepare" ),
+	m_rendered( "render" )
+{ }
+
 Transition::~Transition()
 { }
 
@@ -45,6 +50,8 @@ HRESULT Transition::prepare( char visdata[ 2 ][ 2 ][ 576 ], int isBeat )
 		g_renderSizeString.Format( "float2( %i, %i )", currentSize.cx, currentSize.cy );
 		callResizeHandlers();
 	}
+
+	m_prepared.mark();
 	return S_OK;
 }
 
@@ -53,6 +60,10 @@ HRESULT Transition::renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, iRo
 	if( checkShutdown() )
 		return S_FALSE;
 
+#if GPU_PROFILE
+	gpuProfiler().frameStart();
+#endif
+
 	{
 		CSLock __lock( renderLock );
 		CHECK( prepare( visdata, isBeat ) );
@@ -60,8 +71,14 @@ HRESULT Transition::renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, iRo
 		CHECK( e.renderRoot( 0 != isBeat, m_targets1 ) );
 	}
 
+	m_rendered.mark();
+
 	UnlockExternCs _unlock{ g_render_cs };
 	CHECK( presentSingle( m_targets1.lastWritten() ) );
+
+#if GPU_PROFILE
+	gpuProfiler().frameEnd();
+#endif
 
 	return S_OK;
 }
@@ -70,6 +87,10 @@ HRESULT Transition::renderTransition( char visdata[ 2 ][ 2 ][ 576 ], int isBeat,
 {
 	if( checkShutdown() )
 		return S_FALSE;
+
+#if GPU_PROFILE
+	gpuProfiler().frameStart();
+#endif
 
 	{
 		CSLock __lock( renderLock );
@@ -81,8 +102,14 @@ HRESULT Transition::renderTransition( char visdata[ 2 ][ 2 ][ 576 ], int isBeat,
 		CHECK( e2.renderRoot( beat, m_targets2 ) );
 	}
 
+	m_rendered.mark();
+
 	UnlockExternCs _unlock{ g_render_cs };
 	CHECK( presentTransition( m_targets1.lastWritten(), m_targets2.lastWritten(), trans, sintrans ) );
+
+#if GPU_PROFILE
+	gpuProfiler().frameEnd();
+#endif
 	
 	return S_OK;
 }

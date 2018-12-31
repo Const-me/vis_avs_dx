@@ -95,6 +95,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Effects\EffectProfiler.h" />
     <ClInclude Include="Effects\Trans\Blur\SeparableConvolution.h" />
     <ClInclude Include="Effects\Render\Picture\interop.h" />
     <ClInclude Include="Effects\Render\Picture\PictureEffect.h" />
@@ -104,6 +105,7 @@
     <ClInclude Include="Effects\Trans\Moves\Sampler.h" />
     <ClInclude Include="Effects\Trans\Moves\Movement.h" />
     <ClInclude Include="Effects\Trans\Moves\MovementCommon.h" />
+    <ClInclude Include="Render\Profiler.h" />
     <ClInclude Include="Render\SimpleShaderTypes.hpp" />
     <ClInclude Include="Resources\GlobalBuffers.h" />
     <ClInclude Include="Utils\DXTK\Audio.h" />
@@ -226,6 +228,7 @@
     <ClCompile Include="Effects\Trans\UniqueTone\UniqueTone.cpp" />
     <ClCompile Include="Effects\Trans\Moves\Movement.cpp" />
     <ClCompile Include="Effects\Trans\Moves\MovementCommon.cpp" />
+    <ClCompile Include="Render\Profiler.cpp" />
     <ClCompile Include="Resources\GlobalBuffers.cpp" />
     <ClCompile Include="Utils\DXTK\SimpleMath.cpp" />
     <ClCompile Include="Utils\DXTK\WICTextureLoader.cpp" />

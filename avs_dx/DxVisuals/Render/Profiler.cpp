@@ -50,12 +50,13 @@ Profiler::Profiler()
 void Profiler::frameStart()
 {
 	m_frame++;
+	m_level = 0;
 	m_frames[ m_buffer ].frameStart();
 }
 
 void Profiler::mark( EffectProfiler* fx )
 {
-	m_frames[ m_buffer ].mark( m_buffer, fx );
+	m_frames[ m_buffer ].mark( m_buffer, m_level, fx );
 }
 
 void Profiler::frameEnd()
@@ -74,11 +75,11 @@ void Profiler::FrameData::frameStart()
 	effects.clear();
 }
 
-void Profiler::FrameData::mark( uint8_t current, EffectProfiler* fx )
+void Profiler::FrameData::mark( uint8_t current, uint32_t level, EffectProfiler* fx )
 {
 	ID3D11Query* q = fx->m_queries[ current ];
 	context->End( q );
-	effects.push_back( fx );
+	effects.emplace_back( sEntry{ fx, level } );
 }
 
 void Profiler::FrameData::frameEnd()
@@ -124,23 +125,23 @@ HRESULT Profiler::FrameData::report( uint32_t frame, std::vector<sProfilerEntry>
 	uint64_t tsPrev;
 	CHECK( getTimestamp( begin, tsPrev ) );
 
-	auto printTime = [ &, msMul ]( uint64_t ts, const char* name )
+	auto printTime = [ &, msMul ]( uint64_t ts, uint32_t level, const char* name )
 	{
 		const float ms = (float)( ts - tsPrev ) * msMul;
-		result.emplace_back( sProfilerEntry{ name,ms } );
+		result.emplace_back( sProfilerEntry{ level, name, ms } );
 		tsPrev = ts;
 	};
 
 	result.clear();
 	uint64_t tsCurr;
-	for( EffectProfiler* fx : effects )
+	for( auto e : effects )
 	{
-		CHECK( getTimestamp( fx->m_queries[ buffer ], tsCurr ) );
-		printTime( tsCurr, fx->m_name );
+		CHECK( getTimestamp( e.pfx->m_queries[ buffer ], tsCurr ) );
+		printTime( tsCurr, e.level, e.pfx->m_name );
 	}
 
 	CHECK( getTimestamp( end, tsCurr ) );
-	printTime( tsCurr, "final" );
+	printTime( tsCurr, 0, "present" );
 
 	return updateProfilerGui( frame, result ) ? S_OK : S_FALSE;
 }

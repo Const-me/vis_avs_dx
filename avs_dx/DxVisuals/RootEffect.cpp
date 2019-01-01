@@ -7,6 +7,7 @@
 
 HRESULT RootEffect::renderRoot( bool isBeat, RenderTargets& rt )
 {
+	ProfilerLevel plvl;
 	// Collect the effects in the local list
 	const bool listChanged = updateList( this );
 	const BoolHr stateChanged = shouldRebuildState();

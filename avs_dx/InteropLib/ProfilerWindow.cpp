@@ -80,8 +80,20 @@ void ProfilerWindow::wmGetMinMaxInfo( LPMINMAXINFO lpMMI )
 
 static ProfilerWindow g_profiler;
 
+bool isProfilerEnabled()
+{
+#if GPU_PROFILE
+	return true;
+#else
+	return false;
+#endif
+}
+
 bool isProfilerOpen()
 {
+#if !GPU_PROFILE
+	return false;
+#endif
 	return g_profiler.IsWindow();
 }
 
@@ -104,22 +116,43 @@ void ProfilerWindow::update( uint32_t frame, std::vector<sProfilerEntry>& entrie
 	g_profiler.PostMessage( WM_UPDATE_DATA );
 }
 
+inline void addSpaces( CString &s, bool append, int n )
+{
+	if( n <= 0 )
+	{
+		if( !append )
+			s = L"";
+		return;
+	}
+
+	// https://stackoverflow.com/a/9448093/126995
+	if( append )
+		s.AppendFormat( L"%*s", n, L"" );
+	else
+		s.Format( L"%*s", n, L"" );
+}
+
 LRESULT ProfilerWindow::wmUpdate( UINT, WPARAM, LPARAM, BOOL )
 {
 	if( !IsWindow() )
 		return 0;
 
+	constexpr int indentSpaces = 2;
+	constexpr int minNameLength = 16;
+
 	CSLock __lock( m_cs );
 	m_items.ResetContent();
 	CStringW str;
 	str.Preallocate( 64 );
-	constexpr int minLength = 16;
 	for( auto e : m_entries )
 	{
-		str.Format( L"%S", e.measure );
+		// Indent according to level
+		const int indent = e.level * indentSpaces;
+		addSpaces( str, false, indent );
 
-		while( str.GetLength() < minLength )
-			str += L' ';
+		str.AppendFormat( L"%S", e.measure );
+
+		addSpaces( str, true, indent + minNameLength - str.GetLength() );
 
 		if( e.milliseconds < 0 || e.milliseconds>1000 )
 			str += L"n/a";
@@ -136,6 +169,10 @@ LRESULT ProfilerWindow::wmUpdate( UINT, WPARAM, LPARAM, BOOL )
 
 void profilerOpen()
 {
+#if !GPU_PROFILE
+	return;
+#endif
+
 	if( isProfilerOpen() )
 	{
 		g_profiler.ShowWindow( SW_RESTORE );
@@ -147,6 +184,10 @@ void profilerOpen()
 
 void profilerClose()
 {
+#if !GPU_PROFILE
+	return;
+#endif
+
 	if( !isProfilerOpen() )
 		return;
 	g_profiler.DestroyWindow();

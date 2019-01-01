@@ -30,14 +30,20 @@ class Profiler
 		CComPtr<ID3D11Query> begin;
 		CComPtr<ID3D11Query> end;
 		bool haveMeasures = false;
-		std::vector<EffectProfiler*> effects;
+
+		struct sEntry
+		{
+			EffectProfiler* pfx;
+			uint32_t level;
+		};
+		std::vector<sEntry> effects;
 
 	public:
 
 		HRESULT create();
 
 		void frameStart();
-		void mark( uint8_t current, EffectProfiler* fx );
+		void mark( uint8_t current, uint32_t level, EffectProfiler* fx );
 		void frameEnd();
 
 		HRESULT report( uint32_t frame, std::vector<sProfilerEntry> &result, uint8_t buffer );
@@ -46,8 +52,21 @@ class Profiler
 	std::array<FrameData, profilerBuffersCount> m_frames;
 	uint8_t m_buffer = 0;
 	uint32_t m_frame = 0;
+	uint32_t m_level = 0;
 
 	std::vector<sProfilerEntry> m_result;
+
+	void levelInc()
+	{
+		m_level++;
+	}
+	void levelDec()
+	{
+		assert( m_level > 0 );
+		m_level--;
+	}
+
+	friend struct ProfilerLevel;
 
 public:
 	Profiler();
@@ -58,3 +77,15 @@ public:
 };
 
 Profiler& gpuProfiler();
+
+struct ProfilerLevel
+{
+	ProfilerLevel()
+	{
+		gpuProfiler().levelInc();
+	}
+	~ProfilerLevel()
+	{
+		gpuProfiler().levelDec();
+	}
+};

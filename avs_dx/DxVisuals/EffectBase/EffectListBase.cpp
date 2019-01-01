@@ -78,14 +78,21 @@ HRESULT EffectListBase::updateParameters( Binder& binder )
 HRESULT EffectListBase::render( bool isBeat, RenderTargets& rt )
 {
 	m_profilerStart.mark();
-
-	return apply( [ isBeat, &rt ]( EffectBase &e )
+	
+	HRESULT hr = E_UNEXPECTED;
 	{
-		const HRESULT hr = e.render( isBeat, rt );
-		if( S_OK == hr )
-			e.completedRendering();
-		return hr;
-	} );
+		ProfilerLevel plvl;
+		hr = apply( [ isBeat, &rt ]( EffectBase &e )
+		{
+			const HRESULT hr = e.render( isBeat, rt );
+			if( S_OK == hr )
+				e.completedRendering();
+			return hr;
+		} );
+	}
+
+	completedRendering();
+	return hr;
 }
 
 HRESULT EffectListBase::fadeRenderTarget( RenderTargets &rt )

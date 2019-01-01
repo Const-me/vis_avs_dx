@@ -1024,6 +1024,7 @@ static BOOL CALLBACK dlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 	case WM_INITMENU:
 		EnableMenuItem( (HMENU)wParam, IDM_UNDO, MF_BYCOMMAND | ( C_UndoStack::can_undo() ? MF_ENABLED : MF_GRAYED ) );
 		EnableMenuItem( (HMENU)wParam, IDM_REDO, MF_BYCOMMAND | ( C_UndoStack::can_redo() ? MF_ENABLED : MF_GRAYED ) );
+		EnableMenuItem( (HMENU)wParam, IDM_SETTINGS_PROFILER, MF_BYCOMMAND | ( isProfilerEnabled() ? MF_ENABLED : MF_GRAYED ) );
 		return 0;
 	case WM_INITMENUPOPUP:
 		if( !HIWORD( lParam ) && presetTreeMenu && !GetMenuItemCount( (HMENU)wParam ) )

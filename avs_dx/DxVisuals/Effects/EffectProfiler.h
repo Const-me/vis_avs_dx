@@ -11,4 +11,7 @@ struct DisabledEffectProfiler
 };
 
 using EffectProfiler = DisabledEffectProfiler;
+
+struct ProfilerLevel { };
+
 #endif

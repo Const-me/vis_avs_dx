@@ -2,7 +2,7 @@
 #include "shutdown.h"
 #include "../../DxVisuals/Utils/effectsRegistry.h"
 #include "../ConsoleLogger.h"
-#include "../ProfilerWindow.h"
+#include "../profilerApi.h"
 
 namespace
 {

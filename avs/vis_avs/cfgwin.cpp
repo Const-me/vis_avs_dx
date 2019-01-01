@@ -43,7 +43,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "undo.h"
 #include "../../avs_dx/InteropLib/drawDx.h"
 #include "../../avs_dx/InteropLib/ConsoleLogger.h"
-#include "../../avs_dx/InteropLib/ProfilerWindow.h"
+#include "../../avs_dx/InteropLib/profilerApi.h"
 
 #ifdef LASER
 extern "C" {

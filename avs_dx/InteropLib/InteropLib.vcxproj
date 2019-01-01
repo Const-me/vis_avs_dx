@@ -45,9 +45,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -93,7 +95,9 @@
     <ClInclude Include="drawDx.h" />
     <ClInclude Include="effectsFactory.h" />
     <ClInclude Include="interop.h" />
-    <ClInclude Include="ProfilerWindow.h" />
+    <ClInclude Include="Profiler\ProfilerAverages.h" />
+    <ClInclude Include="profilerApi.h" />
+    <ClInclude Include="Profiler\ProfilerWindow.h" />
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Utils\shutdown.h" />
@@ -127,7 +131,8 @@
     <ClCompile Include="draw.cpp" />
     <ClCompile Include="module.cpp" />
     <ClCompile Include="nseel-shims.cpp" />
-    <ClCompile Include="ProfilerWindow.cpp" />
+    <ClCompile Include="Profiler\ProfilerAverages.cpp" />
+    <ClCompile Include="Profiler\ProfilerWindow.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

@@ -46,4 +46,16 @@ public:
 	{
 		return m_count;
 	}
+
+	T& operator[]( uint8_t i )
+	{
+		assert( i < m_count );
+		return m_data[ i ];
+	}
+
+	T operator[]( uint8_t i ) const
+	{
+		assert( i < m_count );
+		return m_data[ i ];
+	}
 };

@@ -78,7 +78,9 @@
     <ClInclude Include="deviceCreation.h" />
     <ClInclude Include="Utils\shutdown.h" />
     <ClInclude Include="ConsoleLogger.h" />
-    <ClInclude Include="ProfilerWindow.h" />
+    <ClInclude Include="Profiler\ProfilerAverages.h" />
+    <ClInclude Include="Profiler\ProfilerWindow.h" />
+    <ClInclude Include="profilerApi.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -92,6 +94,7 @@
     <ClCompile Include="deviceCreation.cpp" />
     <ClCompile Include="Utils\shutdown.cpp" />
     <ClCompile Include="nseel-shims.cpp" />
-    <ClCompile Include="ProfilerWindow.cpp" />
+    <ClCompile Include="Profiler\ProfilerWindow.cpp" />
+    <ClCompile Include="Profiler\ProfilerAverages.cpp" />
   </ItemGroup>
 </Project>

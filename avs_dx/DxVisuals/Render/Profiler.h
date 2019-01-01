@@ -1,7 +1,7 @@
 #pragma once
 // http://www.reedbeta.com/blog/gpu-profiling-101/
 
-#include <../InteropLib/ProfilerWindow.h>
+#include <../InteropLib/profilerApi.h>
 
 constexpr uint8_t profilerBuffersCount = 2;
 

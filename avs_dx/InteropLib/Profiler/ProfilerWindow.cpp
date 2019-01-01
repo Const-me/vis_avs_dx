@@ -1,44 +1,8 @@
 #include "stdafx.h"
 #include "ProfilerWindow.h"
-#include "Utils/WTL/atlctrls.h"
 
 static const CPoint minSize{ 320, 320 };
-static const CSize defaultSize{ 480, 480 };
-
-class ProfilerWindow : public CWindowImpl<ProfilerWindow, CWindow, CFrameWinTraits>
-{
-	static constexpr UINT WM_UPDATE_DATA = WM_USER + 1337;
-
-public:
-	DECLARE_WND_CLASS( L"AVS DX Profiler" );
-
-	BEGIN_MSG_MAP_EX( ProfilerWindow )
-		MSG_WM_CREATE( wmCreate )
-		// MSG_WM_DESTROY( wmDestroy )
-		MSG_WM_SIZE( wmSize )
-		MSG_WM_GETMINMAXINFO( wmGetMinMaxInfo )
-		MESSAGE_HANDLER( WM_UPDATE_DATA, wmUpdate )
-
-		END_MSG_MAP()
-
-	void update( uint32_t frame, std::vector<sProfilerEntry>& entries );
-
-	HRESULT create();
-
-private:
-	int wmCreate( LPCREATESTRUCT lpCreateStruct );
-	// void wmDestroy();
-	void wmSize( UINT nType, CSize size );
-	void wmGetMinMaxInfo( LPMINMAXINFO lpMMI );
-	LRESULT wmUpdate( UINT, WPARAM, LPARAM, BOOL );
-
-	CComAutoCriticalSection m_cs;
-	uint32_t m_frame;
-	std::vector<sProfilerEntry> m_entries;
-
-	CListBox m_items;
-	CFont m_font;
-};
+static const CSize defaultSize{ 520, 480 };
 
 HRESULT ProfilerWindow::create()
 {
@@ -50,26 +14,17 @@ HRESULT ProfilerWindow::create()
 	CRect rcWindow{ rcDesktop.BottomRight() - defaultSize, defaultSize };
 	if( !__super::Create( nullptr, &rcWindow, L"GPU Profiler", style ) )
 		return getLastHr();
+	m_text.Preallocate( 1024 );
 	return S_OK;
 }
 
 int ProfilerWindow::wmCreate( LPCREATESTRUCT lpCreateStruct )
 {
-	constexpr DWORD style = LBS_HASSTRINGS | LBS_NOSEL | WS_VSCROLL | WS_VISIBLE | WS_CHILD;
-	m_items.Create( m_hWnd, nullptr, nullptr, style );
-
 	LOGFONT font = {};
 	font.lfWeight = FW_REGULAR;
 	wcscpy_s( font.lfFaceName, L"Consolas" );
 	m_font.CreateFontIndirect( &font );
-	m_items.SetFont( m_font );
 	return TRUE;
-}
-
-void ProfilerWindow::wmSize( UINT nType, CSize size )
-{
-	CRect rc{ CPoint{ 0, 0 }, size };
-	m_items.MoveWindow( rc );
 }
 
 void ProfilerWindow::wmGetMinMaxInfo( LPMINMAXINFO lpMMI )
@@ -138,33 +93,95 @@ LRESULT ProfilerWindow::wmUpdate( UINT, WPARAM, LPARAM, BOOL )
 		return 0;
 
 	constexpr int indentSpaces = 2;
-	constexpr int minNameLength = 16;
+	constexpr int locAverage = 24;
+	constexpr int locCurrent = 36;
 
 	CSLock __lock( m_cs );
-	m_items.ResetContent();
+
+	const bool updated = m_averages.update( m_entries );
+
+	m_text = L"";
 	CStringW str;
 	str.Preallocate( 64 );
-	for( auto e : m_entries )
+	for( size_t i = 0; i < m_entries.size(); i++ )
 	{
+		const sProfilerEntry& e = m_entries[ i ];
 		// Indent according to level
 		const int indent = e.level * indentSpaces;
 		addSpaces( str, false, indent );
 
 		str.AppendFormat( L"%S", e.measure );
 
-		addSpaces( str, true, indent + minNameLength - str.GetLength() );
+		addSpaces( str, true, locAverage - str.GetLength() );
 
-		if( e.milliseconds < 0 || e.milliseconds>1000 )
-			str += L"n/a";
-		else
-			str.AppendFormat( L"%.5f", e.milliseconds );
+		str.AppendFormat( L"%.5f", m_averages[ i ] );
 
-		m_items.AddString( str );
+		addSpaces( str, true, locCurrent - str.GetLength() );
+
+		str.AppendFormat( L"%.5f", e.milliseconds );
+
+		m_text += str;
+		addSpaces( m_text, true, 6 );
+		if( i + 1 != m_entries.size() )
+			m_text += L"\r\n";
 	}
+	InvalidateRect( nullptr, updated );
 
 	str.Format( L"GPU Profiler: frame %i", m_frame );
 	SetWindowText( str );
 	return 0;
+}
+
+void ProfilerWindow::wmDestroy()
+{
+	if( m_prevBitmap )
+	{
+		m_memDc.SelectFont( m_prevFont );
+		m_memDc.SelectBitmap( m_prevBitmap.Detach() );
+		m_memBmp.DeleteObject();
+		m_memDc.DeleteDC();
+	}
+}
+
+void ProfilerWindow::wmSize( UINT nType, CSize size )
+{
+	switch( nType )
+	{
+	case SIZE_MAXIMIZED:
+	case SIZE_RESTORED:
+		break;
+	default:
+		return;
+	}
+
+	m_clientRect = CRect{ CPoint{ 0, 0 }, size };
+
+	wmDestroy();
+
+	CDC dc = GetDC();
+	m_memDc.CreateCompatibleDC( dc );
+	m_memBmp.CreateCompatibleBitmap( dc, size.cx, size.cy );
+	m_prevBitmap = m_memDc.SelectBitmap( m_memBmp );
+	m_prevFont = m_memDc.SelectFont( m_font );
+}
+
+void ProfilerWindow::wmPaint( HDC )
+{
+	// Double buffering to eliminate flicker: https://msdn.microsoft.com/en-us/library/ms969905.aspx
+	if( !m_backgroundBrush )
+		m_backgroundBrush.Attach( CreateSolidBrush( GetSysColor( COLOR_WINDOW ) ) );
+	m_memDc.FillRect( m_clientRect, m_backgroundBrush );
+
+	m_memDc.SetBkMode( TRANSPARENT );
+	m_memDc.SetTextColor( GetSysColor( COLOR_WINDOWTEXT ) );
+	constexpr UINT fmt = DT_LEFT | DT_TOP;
+	m_memDc.DrawText( m_text, m_text.GetLength(), m_clientRect, fmt );
+
+	PAINTSTRUCT ps;
+	CDCHandle dc = BeginPaint( &ps );
+	dc.BitBlt( 0, 0, m_clientRect.Width(), m_clientRect.Height(), m_memDc, 0, 0, SRCCOPY );
+	EndPaint( &ps );
+	ValidateRect( nullptr );
 }
 
 void profilerOpen()

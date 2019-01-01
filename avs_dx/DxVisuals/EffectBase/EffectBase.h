@@ -52,3 +52,6 @@ private:
 
 	RootEffect *m_pRoot = nullptr;
 };
+
+static constexpr HRESULT S_CLEAR_BEAT = 2;
+static constexpr HRESULT S_SET_BEAT = 3;

@@ -200,6 +200,7 @@
     <ClCompile Include="Effects\Trans\Blur\BlurEffect.cpp" />
     <ClCompile Include="Effects\List\BufferSave.cpp" />
     <ClCompile Include="Render\Profiler.cpp" />
+    <ClCompile Include="Effects\Misc\CustomBPM.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -224,6 +225,7 @@
     <None Include="Effects\Polyline.fx" />
     <None Include="Expressions\Builtin\includeFunctions.t4" />
     <None Include="Utils\DXTK\SimpleMath.inl" />
+    <None Include="Effects\Trans\Blur\LinearConvolution.txt" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Effects\Render\Simple\SimpleDotsVS.hlsl" />
@@ -264,8 +266,5 @@
     <CustomBuild Include="Effects\IncludeShadersH.tt" />
     <CustomBuild Include="Expressions\Builtin\includeFunctions.tt" />
     <CustomBuild Include="Effects\Trans\Blur\KernelValues.tt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Effects\Trans\Blur\LinearConvolution.txt" />
   </ItemGroup>
 </Project>

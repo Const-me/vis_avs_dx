@@ -82,11 +82,21 @@ HRESULT EffectListBase::render( bool isBeat, RenderTargets& rt )
 	HRESULT hr = E_UNEXPECTED;
 	{
 		ProfilerLevel plvl;
-		hr = apply( [ isBeat, &rt ]( EffectBase &e )
+		hr = apply( [ &isBeat, &rt ]( EffectBase &e )
 		{
 			const HRESULT hr = e.render( isBeat, rt );
-			if( S_OK == hr )
+			switch( hr )
+			{
+			case S_OK:
 				e.completedRendering();
+				return S_OK;
+			case S_CLEAR_BEAT:
+				isBeat = false;
+				return S_FALSE;
+			case S_SET_BEAT:
+				isBeat = true;
+				return S_FALSE;
+			}
 			return hr;
 		} );
 	}

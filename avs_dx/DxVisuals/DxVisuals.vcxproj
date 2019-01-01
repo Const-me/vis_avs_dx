@@ -215,6 +215,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Effects\List\BufferSave.cpp" />
+    <ClCompile Include="Effects\Misc\CustomBPM.cpp" />
     <ClCompile Include="Effects\Trans\Blur\BlurEffect.cpp" />
     <ClCompile Include="Effects\Trans\Blur\SeparableConvolution.cpp" />
     <ClCompile Include="Effects\Trans\Blitter.cpp" />

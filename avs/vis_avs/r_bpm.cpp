@@ -42,12 +42,14 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define SET_BEAT		0x10000000
 #define CLR_BEAT		0x20000000
 
+using fnCustomBpm = int( *)( void* pThis, bool isBeat );
+
 class C_THISCLASS : public C_RBASE {
 protected:
 public:
 	C_THISCLASS();
 	virtual ~C_THISCLASS();
-	virtual int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
+	int render( bool isBeat );
 	virtual char *get_desc() { return MOD_NAME; }
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent );
 	virtual void load_config( unsigned char *data, int len );
@@ -63,6 +65,8 @@ public:
 	int oldInSlide, oldOutSlide;		// Used by timer to detect changes in sliders
 	int skipfirst;
 	int count;
+	void* pThis;
+	fnCustomBpm pfnProcess;
 };
 
 static C_THISCLASS *g_ConfigThis; // global configuration dialog pointer 
@@ -73,6 +77,11 @@ C_THISCLASS::~C_THISCLASS()
 }
 
 // configuration read/write
+
+static int ProcessCustomBpm( void* pThis, bool isBeat )
+{
+	return ( (C_THISCLASS*)( pThis ) )->render( isBeat );
+}
 
 C_THISCLASS::C_THISCLASS() // set up default configuration
 {
@@ -89,6 +98,10 @@ C_THISCLASS::C_THISCLASS() // set up default configuration
 	skipCount = 0;
 	skip = 0;
 	invert = 0;
+
+	pThis = this;
+	pfnProcess = &ProcessCustomBpm;
+	CREATE_DX_EFFECT( pThis );
 }
 
 #define GET_INT() (data[pos]|(data[pos+1]<<8)|(data[pos+2]<<16)|(data[pos+3]<<24))
@@ -118,25 +131,17 @@ int  C_THISCLASS::save_config( unsigned char *data ) // write configuration to d
 	return pos;
 }
 
-
-
 void C_THISCLASS::SliderStep( int Ctl, int *slide )
 {
 	*slide += Ctl == IDC_IN ? inInc : outInc;
 	if( !*slide || *slide == 8 ) ( Ctl == IDC_IN ? inInc : outInc ) *= -1;
 }
 
-// render function
-// render should return 0 if it only used framebuffer, or 1 if the new output data is in fbout. this is
-// used when you want to do something that you'd otherwise need to make a copy of the framebuffer.
-// w and h are the width and height of the screen, in pixels.
-// isBeat is 1 if a beat has been detected.
-// visdata is in the format of [spectrum:0,wave:1][channel][band].
+uint32_t getPreciseTickCount();
 
-int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
+int C_THISCLASS::render( bool isBeat )
 {
 	if( !enabled ) return 0;
-	if( isBeat & 0x80000000 ) return 0;
 
 	if( isBeat ) // Show the beat received from AVS
 	{
@@ -149,7 +154,7 @@ int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebu
 
 	if( arbitrary )
 	{
-		DWORD TCNow = GetTickCount();
+		DWORD TCNow = getPreciseTickCount();
 		if( TCNow > arbLastTC + arbVal )
 		{
 			arbLastTC = TCNow;
@@ -267,7 +272,6 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 	}
 	return 0;
 }
-
 
 HWND C_THISCLASS::conf( HINSTANCE hInstance, HWND hwndParent ) // return NULL if no config dialog possible
 {

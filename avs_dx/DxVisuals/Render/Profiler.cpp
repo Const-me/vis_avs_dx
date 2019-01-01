@@ -44,7 +44,6 @@ Profiler::Profiler()
 {
 	for( auto& q : m_frames )
 		q.create();
-	m_result.reserve( 64 );
 }
 
 void Profiler::frameStart()
@@ -125,10 +124,10 @@ HRESULT Profiler::FrameData::report( uint32_t frame, std::vector<sProfilerEntry>
 	uint64_t tsPrev;
 	CHECK( getTimestamp( begin, tsPrev ) );
 
-	auto printTime = [ &, msMul ]( uint64_t ts, uint32_t level, const char* name )
+	auto produceEntry = [ &result, &tsPrev, msMul ]( uint64_t ts, const void* pEffect, uint32_t level, const char* name )
 	{
 		const float ms = (float)( ts - tsPrev ) * msMul;
-		result.emplace_back( sProfilerEntry{ level, name, ms } );
+		result.emplace_back( sProfilerEntry{ pEffect, level, name, ms } );
 		tsPrev = ts;
 	};
 
@@ -137,11 +136,11 @@ HRESULT Profiler::FrameData::report( uint32_t frame, std::vector<sProfilerEntry>
 	for( auto e : effects )
 	{
 		CHECK( getTimestamp( e.pfx->m_queries[ buffer ], tsCurr ) );
-		printTime( tsCurr, e.level, e.pfx->m_name );
+		produceEntry( tsCurr, e.pfx, e.level, e.pfx->m_name );
 	}
 
 	CHECK( getTimestamp( end, tsCurr ) );
-	printTime( tsCurr, 0, "present" );
+	produceEntry( tsCurr, &gpuProfiler(), 0, "present" );
 
 	return updateProfilerGui( frame, result ) ? S_OK : S_FALSE;
 }

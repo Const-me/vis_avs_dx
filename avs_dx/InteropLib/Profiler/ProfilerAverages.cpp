@@ -28,7 +28,7 @@ bool ProfilerAverages::update( const std::vector<sProfilerEntry>& entries )
 		}
 	}
 
-	m_drop.clear();
+	m_drop.clear();	// std::vector never frees memory unless destructed, which is exactly what we need here
 	for( POSITION pos = m_map.GetStartPosition(); pos;)
 	{
 		auto p = m_map.GetNext( pos );
@@ -40,6 +40,7 @@ bool ProfilerAverages::update( const std::vector<sProfilerEntry>& entries )
 	}
 	for( auto p : m_drop )
 		m_map.RemoveAtPos( p );
+
 	return updated;
 }
 

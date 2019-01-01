@@ -2,13 +2,14 @@
 #include "../profilerApi.h"
 #include <../DxVisuals/Utils/DynamicArray.hpp>
 
+// Aggregates profiler data across frames, and computes rolling average of the measures.
 class ProfilerAverages
 {
 	static constexpr uint8_t framesCount = 64;
 
 	struct sEntry
 	{
-		// The unit is microseconds. Using integers because floats would eventually screw up the fast algorithm of calculating the rolling average.
+		// The unit is microsecond. Using integers here because floats would eventually screw up the fast algorithm of calculating the rolling average due to precision issues.
 		DynamicArray<uint32_t, framesCount> data;
 		uint32_t total;
 		uint8_t next;
@@ -21,7 +22,7 @@ class ProfilerAverages
 
 	float createEntry( const void* key, float current );
 
-	std::vector<POSITION> m_drop; // Placing it here instead of a local variable to avoid dynamic allocations
+	std::vector<POSITION> m_drop; // Placing it here instead of a local variable to avoid dynamic allocations in runtime
 
 	std::vector<float> m_result;
 

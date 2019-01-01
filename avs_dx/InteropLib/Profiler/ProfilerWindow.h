@@ -37,13 +37,15 @@ private:
 	std::vector<sProfilerEntry> m_entries;
 	ProfilerAverages m_averages;
 
-	CRect m_clientRect;
 	CString m_text;
+
 	CFont m_font;
+	CBrush m_backgroundBrush;
+
+	CRect m_clientRect, m_textRect;
 
 	CDC m_memDc;
 	CBitmap m_memBmp;
 	CBitmapHandle m_prevBitmap;
 	CFontHandle m_prevFont;
-	CBrush m_backgroundBrush;
 };

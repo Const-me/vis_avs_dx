@@ -2,7 +2,7 @@
 #include "ProfilerWindow.h"
 
 static const CPoint minSize{ 320, 320 };
-static const CSize defaultSize{ 520, 480 };
+static const CSize defaultSize{ 540, 480 };
 
 HRESULT ProfilerWindow::create()
 {
@@ -20,10 +20,17 @@ HRESULT ProfilerWindow::create()
 
 int ProfilerWindow::wmCreate( LPCREATESTRUCT lpCreateStruct )
 {
-	LOGFONT font = {};
-	font.lfWeight = FW_REGULAR;
-	wcscpy_s( font.lfFaceName, L"Consolas" );
-	m_font.CreateFontIndirect( &font );
+	if( !m_font )
+	{
+		LOGFONT font = {};
+		font.lfWeight = FW_REGULAR;
+		wcscpy_s( font.lfFaceName, L"Consolas" );
+		m_font.CreateFontIndirect( &font );
+	}
+
+	if( !m_backgroundBrush )
+		m_backgroundBrush.CreateSolidBrush( GetSysColor( COLOR_WINDOW ) );
+
 	return TRUE;
 }
 
@@ -98,7 +105,7 @@ LRESULT ProfilerWindow::wmUpdate( UINT, WPARAM, LPARAM, BOOL )
 
 	CSLock __lock( m_cs );
 
-	const bool updated = m_averages.update( m_entries );
+	m_averages.update( m_entries );
 
 	m_text = L"";
 	CStringW str;
@@ -121,11 +128,10 @@ LRESULT ProfilerWindow::wmUpdate( UINT, WPARAM, LPARAM, BOOL )
 		str.AppendFormat( L"%.5f", e.milliseconds );
 
 		m_text += str;
-		addSpaces( m_text, true, 6 );
 		if( i + 1 != m_entries.size() )
 			m_text += L"\r\n";
 	}
-	InvalidateRect( nullptr, updated );
+	InvalidateRect( nullptr, false );
 
 	str.Format( L"GPU Profiler: frame %i", m_frame );
 	SetWindowText( str );
@@ -155,6 +161,9 @@ void ProfilerWindow::wmSize( UINT nType, CSize size )
 	}
 
 	m_clientRect = CRect{ CPoint{ 0, 0 }, size };
+	m_textRect = m_clientRect;
+	m_textRect.left += 16;
+	m_textRect.top += 4;
 
 	wmDestroy();
 
@@ -163,19 +172,18 @@ void ProfilerWindow::wmSize( UINT nType, CSize size )
 	m_memBmp.CreateCompatibleBitmap( dc, size.cx, size.cy );
 	m_prevBitmap = m_memDc.SelectBitmap( m_memBmp );
 	m_prevFont = m_memDc.SelectFont( m_font );
+
+	m_memDc.SetBkMode( TRANSPARENT );
+	m_memDc.SetTextColor( GetSysColor( COLOR_WINDOWTEXT ) );
 }
 
 void ProfilerWindow::wmPaint( HDC )
 {
 	// Double buffering to eliminate flicker: https://msdn.microsoft.com/en-us/library/ms969905.aspx
-	if( !m_backgroundBrush )
-		m_backgroundBrush.Attach( CreateSolidBrush( GetSysColor( COLOR_WINDOW ) ) );
 	m_memDc.FillRect( m_clientRect, m_backgroundBrush );
 
-	m_memDc.SetBkMode( TRANSPARENT );
-	m_memDc.SetTextColor( GetSysColor( COLOR_WINDOWTEXT ) );
 	constexpr UINT fmt = DT_LEFT | DT_TOP;
-	m_memDc.DrawText( m_text, m_text.GetLength(), m_clientRect, fmt );
+	m_memDc.DrawText( m_text, m_text.GetLength(), m_textRect, fmt );
 
 	PAINTSTRUCT ps;
 	CDCHandle dc = BeginPaint( &ps );

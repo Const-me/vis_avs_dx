@@ -18,6 +18,7 @@ class EffectProfiler
 public:
 	EffectProfiler( const char* name );
 	EffectProfiler( EffectBase* fx );
+	~EffectProfiler();
 
 	void mark();
 };
@@ -47,6 +48,8 @@ class Profiler
 		void frameEnd();
 
 		HRESULT report( uint32_t frame, std::vector<sProfilerEntry> &result, uint8_t buffer );
+
+		void removeEffect( EffectProfiler* pfx );
 	};
 
 	std::array<FrameData, profilerBuffersCount> m_frames;
@@ -74,6 +77,8 @@ public:
 	void frameStart();
 	void mark( EffectProfiler* fx );
 	void frameEnd();
+
+	void removeEffect( EffectProfiler* pfx );
 };
 
 Profiler& gpuProfiler();

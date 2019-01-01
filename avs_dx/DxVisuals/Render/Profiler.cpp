@@ -22,6 +22,14 @@ EffectProfiler::EffectProfiler( EffectBase* fx ) :
 	create();
 }
 
+extern CComAutoCriticalSection renderLock;
+
+EffectProfiler::~EffectProfiler()
+{
+	CSLock __lock( renderLock );
+	gpuProfiler().removeEffect( this );
+}
+
 void EffectProfiler::mark()
 {
 	gpuProfiler().mark( this );
@@ -143,6 +151,28 @@ HRESULT Profiler::FrameData::report( uint32_t frame, std::vector<sProfilerEntry>
 	produceEntry( tsCurr, &gpuProfiler(), 0, "present" );
 
 	return updateProfilerGui( frame, result ) ? S_OK : S_FALSE;
+}
+
+void Profiler::removeEffect( EffectProfiler* pfx )
+{
+	for( auto& f : m_frames )
+		f.removeEffect( pfx );
+}
+
+void Profiler::FrameData::removeEffect( EffectProfiler* pfx )
+{
+	std::vector<sEntry> result;
+	result.reserve( effects.size() );
+	bool found = false;
+	for( auto e : effects )
+	{
+		if( e.pfx == pfx )
+			found = true;
+		else
+			result.push_back( e );
+	}
+	if( found )
+		effects.swap( result );
 }
 
 Profiler& gpuProfiler()

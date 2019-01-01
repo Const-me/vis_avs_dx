@@ -142,7 +142,7 @@ void ProfilerWindow::wmDestroy()
 {
 	if( m_prevBitmap )
 	{
-		m_memDc.SelectFont( m_prevFont );
+		m_memDc.SelectFont( m_prevFont.Detach() );
 		m_memDc.SelectBitmap( m_prevBitmap.Detach() );
 		m_memBmp.DeleteObject();
 		m_memDc.DeleteDC();

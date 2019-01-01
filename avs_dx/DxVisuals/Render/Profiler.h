@@ -53,6 +53,7 @@ class Profiler
 	};
 
 	std::array<FrameData, profilerBuffersCount> m_frames;
+	bool m_running = false;
 	uint8_t m_buffer = 0;
 	uint32_t m_frame = 0;
 	uint32_t m_level = 0;

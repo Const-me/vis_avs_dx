@@ -56,18 +56,26 @@ Profiler::Profiler()
 
 void Profiler::frameStart()
 {
+	m_running = isProfilerOpen();
 	m_frame++;
+	if( !m_running )
+		return;
 	m_level = 0;
 	m_frames[ m_buffer ].frameStart();
 }
 
 void Profiler::mark( EffectProfiler* fx )
 {
+	if( !m_running )
+		return;
 	m_frames[ m_buffer ].mark( m_buffer, m_level, fx );
 }
 
 void Profiler::frameEnd()
 {
+	if( !m_running )
+		return;
+
 	m_frames[ m_buffer ].frameEnd();
 
 	m_buffer = ( m_buffer + 1 ) % profilerBuffersCount;
@@ -124,7 +132,7 @@ HRESULT Profiler::FrameData::report( uint32_t frame, std::vector<sProfilerEntry>
 	}
 
 	D3D11_QUERY_DATA_TIMESTAMP_DISJOINT tsDisjoint;
-	context->GetData( disjoint, &tsDisjoint, sizeof( tsDisjoint ), 0 );
+	CHECK( context->GetData( disjoint, &tsDisjoint, sizeof( tsDisjoint ), 0 ) );
 	if( tsDisjoint.Disjoint )
 		return S_FALSE;
 
@@ -161,6 +169,7 @@ void Profiler::removeEffect( EffectProfiler* pfx )
 
 void Profiler::FrameData::removeEffect( EffectProfiler* pfx )
 {
+	// This happens very rarely, i.e. dynamic memory is fine.
 	std::vector<sEntry> result;
 	result.reserve( effects.size() );
 	bool found = false;

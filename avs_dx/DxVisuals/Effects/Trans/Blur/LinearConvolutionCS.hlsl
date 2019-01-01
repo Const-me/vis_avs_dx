@@ -69,12 +69,8 @@ void main( uint3 groupIndex : SV_GroupID, uint3 localThread : SV_GroupThreadID, 
     }
     else
     {
-        if( tid < ( kernelRadius - 1 ) )
-            return;
-        if( tid > ( groupSize - kernelRadius ) )
-            return;
         const uint dest = writesPerGroup * groupIndex.x + tid;
-        if( dest >= size.x )
+        if( tid < ( kernelRadius - 1 ) || tid > ( groupSize - kernelRadius ) || dest >= size.x )
             return;
 
         float3 res = 0;

@@ -6,6 +6,7 @@ class RenderTarget
 	CComPtr<ID3D11Texture2D> m_tex;
 	CComPtr<ID3D11RenderTargetView> m_rtv;
 	CComPtr<ID3D11ShaderResourceView> m_srv;
+	CComPtr<ID3D11UnorderedAccessView> m_uav;
 
 public:
 
@@ -42,4 +43,9 @@ public:
 	{
 		return std::move( BoundSrv<eStage::Pixel>{ slot, m_srv } );
 	}
+
+	// UAVs are only required by some effects and aren't created automatically. This method creates them.
+	HRESULT createUav();
+
+	ID3D11UnorderedAccessView* uav() const { return m_uav; }
 };

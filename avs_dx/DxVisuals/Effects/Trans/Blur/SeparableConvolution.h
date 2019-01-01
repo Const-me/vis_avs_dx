@@ -13,10 +13,6 @@ class SeparableConvolution: public ResizeHandler
 	CComPtr<ID3D11UnorderedAccessView> m_uav;
 	CComPtr<ID3D11ShaderResourceView> m_srv;
 
-	// We don't want to copy these screen-sized textures more than we absolutely need. That's why constructing the UAV directly in top of the output.
-	// Because RenderTargets flips between 2 textures, we need up to 2 views for them.
-	std::array<CComPtr<ID3D11UnorderedAccessView>, 2> m_outputViews;
-
 	void onRenderSizeChanged() override
 	{
 		destroy();

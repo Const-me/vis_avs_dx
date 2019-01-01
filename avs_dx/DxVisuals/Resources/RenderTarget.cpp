@@ -23,6 +23,7 @@ void RenderTarget::destroy()
 	m_rtv = nullptr;
 	m_srv = nullptr;
 	m_tex = nullptr;
+	m_uav = nullptr;
 }
 
 void RenderTarget::clear( const Vector4& color )
@@ -52,3 +53,15 @@ void RenderTarget::copyTo( const RenderTarget& that ) const
 	std::swap( m_rtv, rt.m_rtv );
 	std::swap( m_srv, rt.m_srv );
 } */
+
+HRESULT RenderTarget::createUav()
+{
+	if( m_uav )
+		return S_FALSE;
+	if( !m_tex )
+		return OLE_E_BLANK;	// Uninitialized object
+
+	CD3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc{ D3D11_UAV_DIMENSION_TEXTURE2D, format };
+	CHECK( device->CreateUnorderedAccessView( m_tex, &uavDesc, &m_uav ) );
+	return S_OK;
+}

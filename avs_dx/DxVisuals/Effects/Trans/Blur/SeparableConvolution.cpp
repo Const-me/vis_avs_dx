@@ -8,8 +8,6 @@ void SeparableConvolution::destroy()
 {
 	m_uav = nullptr;
 	m_srv = nullptr;
-	for( auto& v : m_outputViews )
-		v = nullptr;
 }
 
 CSize getRenderSize();
@@ -114,19 +112,14 @@ HRESULT SeparableConvolution::run( RenderTargets& rt )
 	
 	// Second blur pas, along Y: read from m_srv, write to one of the m_outputViews
 	{
-		const uint8_t indOutput = rt.currentIndex();
-		if( nullptr == m_outputViews[ indOutput ] )
-		{
-			CD3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc{ D3D11_UAV_DIMENSION_TEXTURE2D, RenderTarget::format };
-			CHECK( device->CreateUnorderedAccessView( target.texture(), &uavDesc, &m_outputViews[ indOutput ] ) );
-		}
-
 		if( !m_shaders[ 1 ].bind( false ) )
 			return S_FALSE;
 
+		CHECK( rt.lastWritten().createUav() );
+
 		const auto& cs = m_shaders[ 1 ].data();
 		auto boundSrv = boundResource<eStage::Compute>( cs.bindSource, m_srv );
-		auto boundUav = boundResource( cs.bindDest, m_outputViews[ indOutput ] );
+		auto boundUav = boundResource( cs.bindDest, rt.lastWritten().uav() );
 		cs.dispatch();
 	}
 

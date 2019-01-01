@@ -128,6 +128,7 @@
     <ClInclude Include="Utils\DXTK\VertexTypes.h" />
     <ClInclude Include="Utils\DXTK\WICTextureLoader.h" />
     <ClInclude Include="Utils\DXTK\XboxDDSTextureLoader.h" />
+    <ClInclude Include="Utils\DynamicArray.hpp" />
     <ClInclude Include="Utils\findAssets.h" />
     <ClInclude Include="Utils\effectsRegistry.h" />
     <ClInclude Include="Effects\List\Blender.h" />

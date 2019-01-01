@@ -117,6 +117,7 @@
     <ClInclude Include="Utils\PerfMeasure.h" />
     <ClInclude Include="Render\Profiler.h" />
     <ClInclude Include="Effects\EffectProfiler.h" />
+    <ClInclude Include="Utils\DynamicArray.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

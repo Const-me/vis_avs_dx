@@ -1,6 +1,20 @@
 #include "stdafx.h"
 #include "Profiler.h"
 #include "../EffectBase/EffectBase.h"
+#include <Utils/PerfMeasure.h>
+
+constexpr bool busyWaiting = false;
+
+inline void waitForData()
+{
+	if( busyWaiting )
+	{
+		for( int i = 0; i < 1024; i++ )
+			_mm_pause();
+	}
+	else
+		Sleep( 1 );
+}
 
 HRESULT EffectProfiler::create()
 {
@@ -107,7 +121,14 @@ namespace
 {
 	inline HRESULT getTimestamp( ID3D11Query* q, uint64_t& res )
 	{
-		return context->GetData( q, &res, sizeof( uint64_t ), 0 );
+		while( true )
+		{
+			const HRESULT hr = context->GetData( q, &res, sizeof( uint64_t ), 0 );
+			CHECK( hr );
+			if( S_OK == hr )
+				return S_OK;
+			waitForData();
+		}
 	}
 }
 
@@ -119,16 +140,14 @@ HRESULT Profiler::FrameData::report( uint32_t frame, std::vector<sProfilerEntry>
 	if( !isProfilerOpen() )
 		return S_FALSE;
 
+	// PerfMeasure cpuPerf( "Profiler::FrameData::report" );
 	while( true )
 	{
 		const HRESULT hr = context->GetData( disjoint, nullptr, 0, 0 );
 		CHECK( hr );
-		if( hr == S_FALSE )
-		{
-			Sleep( 1 );
-			continue;
-		}
-		break;
+		if( hr == S_OK )
+			break;
+		waitForData();
 	}
 
 	D3D11_QUERY_DATA_TIMESTAMP_DISJOINT tsDisjoint;

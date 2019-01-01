@@ -63,7 +63,7 @@ public:
 	}
 
 	template<class T>
-	inline HRESULT updateValue( T& currentValue, const T& newValue )
+	HRESULT updateValue( T& currentValue, const T& newValue )
 	{
 		if( currentValue == newValue )
 			return m_hr;

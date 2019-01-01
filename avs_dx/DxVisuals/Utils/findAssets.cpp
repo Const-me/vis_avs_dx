@@ -40,7 +40,6 @@ namespace
 		target.ReleaseBuffer();
 		return hr;
 	}
-
 }
 
 int initAssetsCombobox( HWND wndDialog, HWND wndComboBox, char *selectedName, pfnExtensionFilter extFilter )

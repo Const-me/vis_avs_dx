@@ -48,9 +48,13 @@ HRESULT SeparableConvolution::PassShaderData::updateAvs( const ShaderParams& par
 	if( res.failed() || !res.value() )
 		return res;
 
-	const uint32_t threads = WARP_SIZE * 2;
-	m_groups.cx = ( params.inputSize.cx + threads - 1 ) / threads;
 	m_groups.cy = params.inputSize.cy;
+
+	const uint32_t groupSize = WARP_SIZE * warpsPerGroup;
+	const uint32_t kernelRadius = m_pKernel->radius;
+	const uint32_t writesPerGroup = groupSize + 2 - kernelRadius - kernelRadius;
+	const uint32_t x = params.inputSize.cx - params.pKernel->radius + 1;
+	m_groups.cx = ( x + writesPerGroup - 1 ) / writesPerGroup;
 	return S_OK;
 }
 

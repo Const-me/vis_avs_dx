@@ -265,4 +265,7 @@
     <CustomBuild Include="Expressions\Builtin\includeFunctions.tt" />
     <CustomBuild Include="Effects\Trans\Blur\KernelValues.tt" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Effects\Trans\Blur\LinearConvolution.txt" />
+  </ItemGroup>
 </Project>

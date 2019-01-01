@@ -1,0 +1,17 @@
+groupSize = WARP_SIZE * warpsPerGroup = 8
+kernelRadius = 3, so we have 2 pixels outside.
+writesPerGroup = 4
+
+    01234567890123456789
+Thread group 0:
+R   ========          [ 0 .. 8 ]
+W   ======            [ 0 .. 6 ]
+Thread group 1:
+R       ========      [ 4 .. 12 ]
+W         ====        [ 6 .. 10 ]
+Thread group 2:
+R           ========  [ 8 .. 16 ]
+W             ====    [ 10 .. 14 ]
+Thread group 3:
+R               ========  [ 12 .. 20 ]
+W                 ====    [ 14 .. 18 ]

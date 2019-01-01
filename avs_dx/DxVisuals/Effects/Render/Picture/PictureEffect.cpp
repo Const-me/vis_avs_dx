@@ -61,6 +61,9 @@ eBlendMode PictureStructs::AvsState::blendMode() const
 
 HRESULT PictureEffect::render( bool isBeat, RenderTargets& rt )
 {
+	if( !avs->enabled )
+		return S_FALSE;
+
 	bool updated;
 	bool havePicture;
 	CString path;

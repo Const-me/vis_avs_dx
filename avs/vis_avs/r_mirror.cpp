@@ -86,6 +86,8 @@ C_THISCLASS::C_THISCLASS() // set up default configuration
 	smooth = 0;
 	slower = 4;
 	mode = HORIZONTAL1;
+
+	CREATE_DX_EFFECT( enabled );
 }
 
 

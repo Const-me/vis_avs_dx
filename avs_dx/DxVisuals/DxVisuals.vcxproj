@@ -149,6 +149,7 @@
     <ClInclude Include="Expressions\preprocess.h" />
     <ClInclude Include="Effects\Video\interop.h" />
     <ClInclude Include="Effects\Video\MF\Player.h" />
+    <ClInclude Include="Utils\LinearTransition.hpp" />
     <ClInclude Include="Utils\md4.h" />
     <ClInclude Include="Render\ShaderBase.h" />
     <ClInclude Include="Utils\ByteRange.hpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="Effects\Trans\Blur\warpSize.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Effects\Trans\Mirror\Mirror.cpp" />
     <ClCompile Include="Effects\Trans\Moves\DynamicDistance.cpp" />
     <ClCompile Include="Effects\Misc\OnBeatClear.cpp" />
     <ClCompile Include="Effects\Trans\ColorClip\ColorClip.cpp" />
@@ -417,6 +419,10 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="Effects\Trans\Invert\InvertPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Trans\Mirror\MirrorPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>

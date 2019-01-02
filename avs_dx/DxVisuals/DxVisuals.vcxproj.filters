@@ -121,6 +121,7 @@
     <ClInclude Include="Resources\dynamicCBuffer.h" />
     <ClInclude Include="Effects\Trans\ColorFade\ColorFade.h" />
     <ClInclude Include="Effects\Trans\Moves\DynamicDistance.h" />
+    <ClInclude Include="Utils\LinearTransition.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -214,6 +215,7 @@
     <ClCompile Include="Effects\Trans\Multiplier\Multiplier.cpp" />
     <ClCompile Include="Effects\Misc\OnBeatClear.cpp" />
     <ClCompile Include="Effects\Trans\Moves\DynamicDistance.cpp" />
+    <ClCompile Include="Effects\Trans\Mirror\Mirror.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -281,6 +283,7 @@
     <FxCompile Include="Effects\Trans\Invert\InvertPS.hlsl" />
     <FxCompile Include="Effects\Trans\Multiplier\MultiplierPS.hlsl" />
     <FxCompile Include="Effects\Trans\Moves\DynamicDistanceVS.hlsl" />
+    <FxCompile Include="Effects\Trans\Mirror\MirrorPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

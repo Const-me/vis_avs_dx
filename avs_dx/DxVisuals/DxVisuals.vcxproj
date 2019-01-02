@@ -215,6 +215,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Effects\List\BufferSave.cpp" />
+    <ClCompile Include="Effects\Misc\ClearScreen.cpp" />
     <ClCompile Include="Effects\Misc\CustomBPM.cpp" />
     <ClCompile Include="Effects\Trans\Blur\BlurEffect.cpp" />
     <ClCompile Include="Effects\Trans\Blur\SeparableConvolution.cpp" />
@@ -363,6 +364,10 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Effects\Misc\ClearScreenPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="Effects\Render\Picture\PicturePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>

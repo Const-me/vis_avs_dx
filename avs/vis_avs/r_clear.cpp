@@ -44,7 +44,6 @@ protected:
 public:
 	C_THISCLASS();
 	virtual ~C_THISCLASS();
-	virtual int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
 	virtual char *get_desc() { return MOD_NAME; }
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent );
 	virtual void load_config( unsigned char *data, int len );
@@ -75,6 +74,8 @@ C_THISCLASS::C_THISCLASS() // set up default configuration
 	blend = 0;
 	blendavg = 0;
 	enabled = 1;
+
+	CREATE_DX_EFFECT( enabled );
 }
 
 #define GET_INT() (data[pos]|(data[pos+1]<<8)|(data[pos+2]<<16)|(data[pos+3]<<24))
@@ -100,35 +101,7 @@ int  C_THISCLASS::save_config( unsigned char *data ) // write configuration to d
 	return pos;
 }
 
-// render function
-// render should return 0 if it only used framebuffer, or 1 if the new output data is in fbout. this is
-// used when you want to do something that you'd otherwise need to make a copy of the framebuffer.
-// w and h are the width and height of the screen, in pixels.
-// isBeat is 1 if a beat has been detected.
-// visdata is in the format of [spectrum:0,wave:1][channel][band].
-
-int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
-{
-	int i = w * h;
-	int *p = framebuffer;
-
-	if( !enabled ) return 0;
-	if( onlyfirst && fcounter ) return 0;
-	if( isBeat & 0x80000000 ) return 0;
-
-	fcounter++;
-
-	if( blend == 2 ) while( i-- ) BLEND_LINE( p++, color );
-	else if( blend ) while( i-- ) *p++ = BLEND( *p, color );
-	else if( blendavg ) while( i-- ) *p++ = BLEND_AVG( *p, color );
-	else while( i-- ) *p++ = color;
-	return 0;
-}
-
-
 // configuration dialog stuff
-
-
 static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 	switch( uMsg )

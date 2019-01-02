@@ -37,7 +37,7 @@ protected:
 		return E_FAIL;
 	}
 
-private:
+protected:
 
 	HRESULT buildState( EffectStateShader& ess ) override
 	{

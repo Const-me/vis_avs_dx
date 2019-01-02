@@ -202,6 +202,7 @@
     <ClCompile Include="Render\Profiler.cpp" />
     <ClCompile Include="Effects\Misc\CustomBPM.cpp" />
     <ClCompile Include="Effects\Trans\ChannelShift\ChannelShift.cpp" />
+    <ClCompile Include="Effects\Misc\ClearScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -262,6 +263,7 @@
     <FxCompile Include="Effects\Trans\Brightness\BrightnessPS.hlsl" />
     <FxCompile Include="Effects\Trans\Blur\LinearConvolutionCS.hlsl" />
     <FxCompile Include="Effects\Trans\ChannelShift\ChannelShiftPS.hlsl" />
+    <FxCompile Include="Effects\Misc\ClearScreenPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

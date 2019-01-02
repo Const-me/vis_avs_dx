@@ -120,6 +120,7 @@
     <ClInclude Include="Utils\DynamicArray.hpp" />
     <ClInclude Include="Resources\dynamicCBuffer.h" />
     <ClInclude Include="Effects\Trans\ColorFade\ColorFade.h" />
+    <ClInclude Include="Effects\Trans\Moves\DynamicDistance.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -212,6 +213,7 @@
     <ClCompile Include="Effects\Trans\Invert\Invert.cpp" />
     <ClCompile Include="Effects\Trans\Multiplier\Multiplier.cpp" />
     <ClCompile Include="Effects\Misc\OnBeatClear.cpp" />
+    <ClCompile Include="Effects\Trans\Moves\DynamicDistance.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -278,6 +280,7 @@
     <FxCompile Include="Effects\Trans\ColorClip\ColorClipPS.hlsl" />
     <FxCompile Include="Effects\Trans\Invert\InvertPS.hlsl" />
     <FxCompile Include="Effects\Trans\Multiplier\MultiplierPS.hlsl" />
+    <FxCompile Include="Effects\Trans\Moves\DynamicDistanceVS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

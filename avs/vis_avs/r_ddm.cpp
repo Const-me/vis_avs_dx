@@ -189,8 +189,6 @@ int  C_THISCLASS::save_config( unsigned char *data )
 	return pos;
 }
 
-
-
 C_THISCLASS::C_THISCLASS()
 {
 	AVS_EEL_INITINST();
@@ -210,6 +208,8 @@ C_THISCLASS::C_THISCLASS()
 	subpixel = 0;
 
 	var_b = 0;
+
+	CREATE_DX_EFFECT( effect_exp[ 0 ] );
 }
 
 C_THISCLASS::~C_THISCLASS()
@@ -228,7 +228,6 @@ C_THISCLASS::~C_THISCLASS()
 	m_wmul = 0;
 	DeleteCriticalSection( &rcs );
 }
-
 
 int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
 {
@@ -411,7 +410,6 @@ C_RBASE *R_DDM( char *desc )
 	if( desc ) { strcpy( desc, MOD_NAME ); return NULL; }
 	return ( C_RBASE * ) new C_THISCLASS();
 }
-
 
 static C_THISCLASS *g_this;
 static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )

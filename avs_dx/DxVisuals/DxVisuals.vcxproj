@@ -95,6 +95,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Effects\Trans\Moves\DynamicDistance.h" />
     <ClInclude Include="Effects\Trans\ColorFade\ColorFade.h" />
     <ClInclude Include="Resources\dynamicCBuffer.h" />
     <ClInclude Include="Effects\EffectProfiler.h" />
@@ -216,6 +217,7 @@
     <ClInclude Include="Effects\Trans\Blur\warpSize.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Effects\Trans\Moves\DynamicDistance.cpp" />
     <ClCompile Include="Effects\Misc\OnBeatClear.cpp" />
     <ClCompile Include="Effects\Trans\ColorClip\ColorClip.cpp" />
     <ClCompile Include="Effects\Trans\ColorReduction\ColorReduction.cpp" />
@@ -421,6 +423,10 @@
     <FxCompile Include="Effects\Trans\Moves\BlockyOutPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Trans\Moves\DynamicDistanceVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Effects\Trans\Moves\FuzzifyPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>

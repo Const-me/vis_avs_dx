@@ -45,7 +45,6 @@ protected:
 public:
 	C_THISCLASS();
 	virtual ~C_THISCLASS();
-	virtual int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
 	virtual char *get_desc() { return MOD_NAME; }
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent );
 	virtual void load_config( unsigned char *data, int len );
@@ -76,68 +75,18 @@ int  C_THISCLASS::save_config( unsigned char *data )
 	return pos;
 }
 
-
-
-
 C_THISCLASS::C_THISCLASS()
 {
 	enabled = 1;
 	color_clip = RGB( 32, 32, 32 );
 	color_clip_out = RGB( 32, 32, 32 );
 	color_dist = 10;
+
+	CREATE_DX_EFFECT( enabled );
 }
 
 C_THISCLASS::~C_THISCLASS()
 {
-}
-
-int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
-{
-	if( !enabled ) return 0;
-	if( isBeat & 0x80000000 ) return 0;
-
-	int *f = framebuffer;
-	int fs_r, fs_g, fs_b;
-	int x = w * h;
-	int l = color_dist * 2;
-
-
-	l = l * l;
-
-	fs_b = ( color_clip & 0xff0000 );
-	fs_g = ( color_clip & 0xff00 );
-	fs_r = ( color_clip & 0xff );
-
-	if( enabled == 1 ) while( x-- )
-	{
-		int a = f[ 0 ];
-		if( ( a & 0xff ) <= fs_r && ( a & 0xff00 ) <= fs_g && ( a & 0xff0000 ) <= fs_b )
-			f[ 0 ] = ( a & 0xff000000 ) | color_clip_out;
-		f++;
-	}
-	else if( enabled == 2 ) while( x-- )
-	{
-		int a = f[ 0 ];
-		if( ( a & 0xff ) >= fs_r && ( a & 0xff00 ) >= fs_g && ( a & 0xff0000 ) >= fs_b )
-			f[ 0 ] = ( a & 0xff000000 ) | color_clip_out;
-		f++;
-	}
-	else
-	{
-		fs_b >>= 16;
-		fs_g >>= 8;
-		while( x-- )
-		{
-			int a = f[ 0 ];
-			int r = a & 255;
-			int g = ( a >> 8 ) & 255;
-			int b = ( a >> 16 ) & 255;
-			r -= fs_r; g -= fs_g; b -= fs_b;
-			if( r*r + g * g + b * b <= l ) f[ 0 ] = ( a & 0xff000000 ) | color_clip_out;
-			f++;
-		}
-	}
-	return 0;
 }
 
 C_RBASE *R_ContrastEnhance( char *desc )
@@ -145,7 +94,6 @@ C_RBASE *R_ContrastEnhance( char *desc )
 	if( desc ) { strcpy( desc, MOD_NAME ); return NULL; }
 	return ( C_RBASE * ) new C_THISCLASS();
 }
-
 
 static C_THISCLASS *g_this;
 

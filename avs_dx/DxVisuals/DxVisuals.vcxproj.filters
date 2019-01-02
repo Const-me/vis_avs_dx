@@ -208,6 +208,7 @@
     <ClCompile Include="Effects\Trans\ColorFade\ColorFade.cpp" />
     <ClCompile Include="Resources\dynamicCBuffer.cpp" />
     <ClCompile Include="Effects\Trans\ColorReduction\ColorReduction.cpp" />
+    <ClCompile Include="Effects\Trans\ColorClip\ColorClip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -271,6 +272,7 @@
     <FxCompile Include="Effects\Misc\ClearScreenPS.hlsl" />
     <FxCompile Include="Effects\Trans\ColorFade\ColorFadePS.hlsl" />
     <FxCompile Include="Effects\Trans\ColorReduction\ColorReductionPS.hlsl" />
+    <FxCompile Include="Effects\Trans\ColorClip\ColorClipPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

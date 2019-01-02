@@ -43,7 +43,6 @@ protected:
 public:
 	C_THISCLASS();
 	virtual ~C_THISCLASS();
-	virtual int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
 	virtual char *get_desc() { return MOD_NAME; }
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent );
 	virtual void load_config( unsigned char *data, int len );
@@ -81,86 +80,12 @@ C_THISCLASS::C_THISCLASS()
 	df = 0;
 	color = RGB( 255, 255, 255 );
 	blend = 0;
+
+	CREATE_DX_EFFECT( nf );
 }
 
 C_THISCLASS::~C_THISCLASS()
 {
-}
-
-int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
-{
-	int p = 0;
-	char *t = (char *)&visdata[ 1 ][ 0 ][ 0 ];
-	int np = 0;
-	if( isBeat & 0x80000000 ) return 0;
-
-	if( isBeat )
-	{
-		if( nf && ++cf >= nf )
-		{
-			cf = df = 0;
-			int i = w * h;
-			int c = color;
-			if( !blend ) __asm
-			{
-				mov ecx, i
-				mov edi, framebuffer
-				mov eax, c
-				rep stosd
-			}
-			else
-			{
-#ifdef NO_MMX
-				while( i-- )
-				{
-					*framebuffer = BLEND_AVG( *framebuffer, color );
-					framebuffer++;
-				}
-#else
-				{
-					int icolor[ 2 ] = { this->color,this->color };
-					int vc[ 2 ] = { ~( ( 1 << 7 ) | ( 1 << 15 ) | ( 1 << 23 ) ),~( ( 1 << 7 ) | ( 1 << 15 ) | ( 1 << 23 ) ) };
-					i /= 4;
-					__asm
-					{
-						movq mm6, vc
-						movq mm7, icolor
-						psrlq mm7, 1
-						pand mm7, mm6
-						mov edx, i
-						mov edi, framebuffer
-						_l1 :
-						movq mm0, [ edi ]
-
-							movq mm1, [ edi + 8 ]
-							psrlq mm0, 1
-
-							pand mm0, mm6
-							psrlq mm1, 1
-
-							paddb mm0, mm7
-							pand mm1, mm6
-
-							movq[ edi ], mm0
-							paddb mm1, mm7
-
-							movq[ edi + 8 ], mm1
-							add edi, 16
-							dec edx
-							jnz _l1
-							emms
-					}
-				}
-#endif
-			}
-		}
-	}
-	else if( ++df >= nf )
-	{
-		df = 0;
-		//	memset(framebuffer,0,w*h*4);
-	}
-	return 0;
 }
 
 C_RBASE *R_NFClear( char *desc )

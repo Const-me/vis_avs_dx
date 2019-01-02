@@ -52,7 +52,6 @@ protected:
 public:
 	C_THISCLASS();
 	virtual ~C_THISCLASS();
-	virtual int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent );
 	virtual char *get_desc();
 	virtual void load_config( unsigned char *data, int len );
@@ -106,6 +105,7 @@ C_THISCLASS::C_THISCLASS()
 	memset( &config, 0, sizeof( apeconfig ) );
 	config.mode = IDC_RBG;
 	config.onbeat = 1;
+	CREATE_DX_EFFECT( config.mode );
 }
 
 // virtual destructor
@@ -113,221 +113,11 @@ C_THISCLASS::~C_THISCLASS()
 {
 }
 
-
-int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
-{
-	if( isBeat & 0x80000000 ) return 0;
-
-	int c;
-	int modes[] = { IDC_RGB, IDC_RBG, IDC_GBR, IDC_GRB, IDC_BRG, IDC_BGR };
-
-	if( isBeat && config.onbeat ) {
-		config.mode = modes[ rand() % 6 ];
-	}
-
-	c = w * h;
-
-	switch( config.mode ) {
-	default:
-	case IDC_RGB:
-		return 0;
-	case IDC_RBG:
-		__asm {
-			mov ebx, framebuffer;
-			mov ecx, c;
-		lp1:
-			sub ecx, 4;
-
-			mov eax, dword ptr[ ebx + ecx * 4 ];
-			xchg ah, al;
-			mov[ ebx + ecx * 4 ], eax;
-
-			mov eax, dword ptr[ ebx + ecx * 4 + 4 ];
-			xchg ah, al;
-			mov[ ebx + ecx * 4 + 4 ], eax;
-
-			mov eax, dword ptr[ ebx + ecx * 4 + 8 ];
-			xchg ah, al;
-			mov[ ebx + ecx * 4 + 8 ], eax;
-
-			mov eax, dword ptr[ ebx + ecx * 4 + 12 ];
-			xchg ah, al;
-			mov[ ebx + ecx * 4 + 12 ], eax;
-
-			test ecx, ecx;
-			jnz lp1;
-		}
-		break;
-
-	case IDC_BRG:
-		__asm {
-			mov ebx, framebuffer;
-			mov ecx, c;
-		lp2:
-			sub ecx, 4;
-
-			mov eax, dword ptr[ ebx + ecx * 4 ];
-			mov dl, al;
-			shr eax, 8;
-			bswap eax;
-			mov ah, dl;
-			bswap eax;
-			mov[ ebx + ecx * 4 ], eax;
-
-			mov eax, dword ptr[ ebx + ecx * 4 + 4 ];
-			mov dl, al;
-			shr eax, 8;
-			bswap eax;
-			mov ah, dl;
-			bswap eax;
-			mov[ ebx + ecx * 4 + 4 ], eax;
-
-			mov eax, dword ptr[ ebx + ecx * 4 + 8 ];
-			mov dl, al;
-			shr eax, 8;
-			bswap eax;
-			mov ah, dl;
-			bswap eax;
-			mov[ ebx + ecx * 4 + 8 ], eax;
-
-			mov eax, dword ptr[ ebx + ecx * 4 + 12 ];
-			mov dl, al;
-			shr eax, 8;
-			bswap eax;
-			mov ah, dl;
-			bswap eax;
-			mov[ ebx + ecx * 4 + 12 ], eax;
-
-			test ecx, ecx;
-			jnz lp2;
-		}
-		break;
-
-	case IDC_BGR:
-		__asm {
-			mov ebx, framebuffer;
-			mov ecx, c;
-		lp3:
-			sub ecx, 4;
-
-			mov eax, dword ptr[ ebx + ecx * 4 ];
-			bswap eax;
-			shr eax, 8;
-			mov[ ebx + ecx * 4 ], eax;
-
-			mov eax, dword ptr[ ebx + ecx * 4 + 4 ];
-			bswap eax;
-			shr eax, 8;
-			mov[ ebx + ecx * 4 + 4 ], eax;
-
-			mov eax, dword ptr[ ebx + ecx * 4 + 8 ];
-			bswap eax;
-			shr eax, 8;
-			mov[ ebx + ecx * 4 + 8 ], eax;
-
-			mov eax, dword ptr[ ebx + ecx * 4 + 12 ];
-			bswap eax;
-			shr eax, 8;
-			mov[ ebx + ecx * 4 + 12 ], eax;
-
-			test ecx, ecx;
-			jnz lp3;
-		}
-		break;
-
-	case IDC_GBR:
-		__asm {
-			mov ebx, framebuffer;
-			mov ecx, c;
-		lp4:
-			sub ecx, 4;
-
-			mov eax, dword ptr[ ebx + ecx * 4 ];
-			mov edx, eax;
-			bswap edx;
-			shl eax, 8;
-			mov al, dh;
-			mov[ ebx + ecx * 4 ], eax;
-
-			mov eax, dword ptr[ ebx + ecx * 4 + 4 ];
-			mov edx, eax;
-			bswap edx;
-			shl eax, 8;
-			mov al, dh;
-			mov[ ebx + ecx * 4 + 4 ], eax;
-
-			mov eax, dword ptr[ ebx + ecx * 4 + 8 ];
-			mov edx, eax;
-			bswap edx;
-			shl eax, 8;
-			mov al, dh;
-			mov[ ebx + ecx * 4 + 8 ], eax;
-
-			mov eax, dword ptr[ ebx + ecx * 4 + 12 ];
-			mov edx, eax;
-			bswap edx;
-			shl eax, 8;
-			mov al, dh;
-			mov[ ebx + ecx * 4 + 12 ], eax;
-
-			test ecx, ecx;
-			jnz lp4;
-		}
-		break;
-
-	case IDC_GRB:
-		__asm {
-			mov ebx, framebuffer;
-			mov ecx, c;
-		lp5:
-			sub ecx, 4;
-
-			mov eax, dword ptr[ ebx + ecx * 4 ];
-			shl eax, 8;
-			bswap eax;
-			xchg ah, al;
-			bswap eax;
-			shr eax, 8;
-			mov[ ebx + ecx * 4 ], eax;
-
-			mov eax, dword ptr[ ebx + ecx * 4 + 4 ];
-			shl eax, 8;
-			bswap eax;
-			xchg ah, al;
-			bswap eax;
-			shr eax, 8;
-			mov[ ebx + ecx * 4 + 4 ], eax;
-
-			mov eax, dword ptr[ ebx + ecx * 4 + 8 ];
-			shl eax, 8;
-			bswap eax;
-			xchg ah, al;
-			bswap eax;
-			shr eax, 8;
-			mov[ ebx + ecx * 4 + 8 ], eax;
-
-			mov eax, dword ptr[ ebx + ecx * 4 + 12 ];
-			shl eax, 8;
-			bswap eax;
-			xchg ah, al;
-			bswap eax;
-			shr eax, 8;
-			mov[ ebx + ecx * 4 + 12 ], eax;
-
-			test ecx, ecx;
-			jnz lp5;
-		}
-		break;
-	}
-	return 0;
-}
-
 HWND C_THISCLASS::conf( HINSTANCE hInstance, HWND hwndParent )
 {
 	g_ConfigThis = this;
 	return CreateDialog( hInstance, MAKEINTRESOURCE( IDD_CFG_CHANSHIFT ), hwndParent, (DLGPROC)g_DlgProc );
 }
-
 
 char *C_THISCLASS::get_desc( void )
 {

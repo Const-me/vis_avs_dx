@@ -7,16 +7,6 @@ struct DynamicDistanceStructs : public MovementStructs
 	{
 		RString effect_exp[ 4 ];
 		int blend;
-		int m_wt;
-		int m_lastw, m_lasth;
-		int *m_wmul;
-		int *m_tab;
-		int AVS_EEL_CONTEXTNAME;
-		double *var_d, *var_b;
-		double max_d;
-		int inited;
-		int codehandle[ 4 ];
-		int need_recompile;
 		int subpixel;
 	};
 

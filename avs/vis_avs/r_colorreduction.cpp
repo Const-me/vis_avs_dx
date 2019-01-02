@@ -50,7 +50,6 @@ protected:
 public:
 	C_THISCLASS();
 	virtual ~C_THISCLASS();
-	virtual int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent );
 	virtual char *get_desc();
 	virtual void load_config( unsigned char *data, int len );
@@ -116,48 +115,18 @@ C_THISCLASS::C_THISCLASS()
 {
 	memset( &config, 0, sizeof( apeconfig ) );
 	config.levels = 7;
+	CREATE_DX_EFFECT( config.levels );
 }
 
 // virtual destructor
 C_THISCLASS::~C_THISCLASS()
-{
-}
-
-
-int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
-{
-	if( isBeat & 0x80000000 ) return 0;
-
-	int a, b, c;
-	a = 8 - config.levels;
-	b = 0xFF;
-	while( a-- ) b = ( b << 1 ) & 0xFF;
-	b |= ( b << 16 ) | ( b << 8 );
-	c = w * h;
-	__asm {
-		mov ebx, framebuffer;
-		mov ecx, c;
-		mov edx, b;
-	lp:
-		sub ecx, 4;
-		test ecx, ecx;
-		jz end;
-		and dword ptr[ ebx + ecx * 4 ], edx;
-		and dword ptr[ ebx + ecx * 4 + 4 ], edx;
-		and dword ptr[ ebx + ecx * 4 + 8 ], edx;
-		and dword ptr[ ebx + ecx * 4 + 12 ], edx;
-		jmp lp;
-	end:
-	}
-	return 0;
-}
+{ }
 
 HWND C_THISCLASS::conf( HINSTANCE hInstance, HWND hwndParent )
 {
 	g_ConfigThis = this;
 	return CreateDialog( hInstance, MAKEINTRESOURCE( IDD_CFG_COLORREDUCTION ), hwndParent, (DLGPROC)g_DlgProc );
 }
-
 
 char *C_THISCLASS::get_desc( void )
 {
@@ -171,7 +140,6 @@ void C_THISCLASS::load_config( unsigned char *data, int len )
 	else
 		memset( &this->config, 0, sizeof( apeconfig ) );
 }
-
 
 int  C_THISCLASS::save_config( unsigned char *data )
 {
@@ -187,6 +155,4 @@ C_RBASE *R_ColorReduction( char *desc )
 	}
 	return ( C_RBASE * ) new C_THISCLASS();
 }
-
-
 #endif

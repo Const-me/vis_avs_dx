@@ -216,6 +216,7 @@
     <ClInclude Include="Effects\Trans\Blur\warpSize.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Effects\Trans\ColorReduction\ColorReduction.cpp" />
     <ClCompile Include="Resources\dynamicCBuffer.cpp" />
     <ClCompile Include="Effects\List\BufferSave.cpp" />
     <ClCompile Include="Effects\Misc\ClearScreen.cpp" />
@@ -400,6 +401,10 @@
     <FxCompile Include="Effects\Trans\ColorFade\ColorFadePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Trans\ColorReduction\ColorReductionPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="Effects\Trans\Moves\BlockyOutPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>

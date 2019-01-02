@@ -118,6 +118,8 @@
     <ClInclude Include="Render\Profiler.h" />
     <ClInclude Include="Effects\EffectProfiler.h" />
     <ClInclude Include="Utils\DynamicArray.hpp" />
+    <ClInclude Include="Resources\dynamicCBuffer.h" />
+    <ClInclude Include="Effects\Trans\ColorFade\ColorFade.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -203,6 +205,8 @@
     <ClCompile Include="Effects\Misc\CustomBPM.cpp" />
     <ClCompile Include="Effects\Trans\ChannelShift\ChannelShift.cpp" />
     <ClCompile Include="Effects\Misc\ClearScreen.cpp" />
+    <ClCompile Include="Effects\Trans\ColorFade\ColorFade.cpp" />
+    <ClCompile Include="Resources\dynamicCBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -264,6 +268,7 @@
     <FxCompile Include="Effects\Trans\Blur\LinearConvolutionCS.hlsl" />
     <FxCompile Include="Effects\Trans\ChannelShift\ChannelShiftPS.hlsl" />
     <FxCompile Include="Effects\Misc\ClearScreenPS.hlsl" />
+    <FxCompile Include="Effects\Trans\ColorFade\ColorFadePS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

@@ -210,6 +210,7 @@
     <ClCompile Include="Effects\Trans\ColorReduction\ColorReduction.cpp" />
     <ClCompile Include="Effects\Trans\ColorClip\ColorClip.cpp" />
     <ClCompile Include="Effects\Trans\Invert\Invert.cpp" />
+    <ClCompile Include="Effects\Trans\Multiplier\Multiplier.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -275,6 +276,7 @@
     <FxCompile Include="Effects\Trans\ColorReduction\ColorReductionPS.hlsl" />
     <FxCompile Include="Effects\Trans\ColorClip\ColorClipPS.hlsl" />
     <FxCompile Include="Effects\Trans\Invert\InvertPS.hlsl" />
+    <FxCompile Include="Effects\Trans\Multiplier\MultiplierPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

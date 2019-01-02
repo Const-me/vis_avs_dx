@@ -58,7 +58,6 @@ protected:
 public:
 	C_THISCLASS();
 	virtual ~C_THISCLASS();
-	virtual int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent );
 	virtual char *get_desc();
 	virtual void load_config( unsigned char *data, int len );
@@ -156,181 +155,18 @@ C_THISCLASS::C_THISCLASS()
 {
 	memset( &config, 0, sizeof( apeconfig ) );
 	config.ml = MD_X2;
+	CREATE_DX_EFFECT( config.ml );
 }
 
 // virtual destructor
 C_THISCLASS::~C_THISCLASS()
-{
-}
-
-
-int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
-{
-	if( isBeat & 0x80000000 ) return 0;
-
-	int b, c;
-	__int64 mask;
-
-	c = w * h;
-	switch( config.ml ) {
-	case MD_XI:
-		__asm {
-			mov ebx, framebuffer;
-			mov ecx, c;
-			mov	edx, b;
-		lp0:
-			xor eax, eax;
-			dec ecx;
-			test ecx, ecx;
-			jz end;
-			mov eax, dword ptr[ ebx + ecx * 4 ];
-			test eax, eax;
-			jz sk0;
-			mov eax, 0xFFFFFF;
-		sk0:
-			mov[ ebx + ecx * 4 ], eax;
-			jmp lp0;
-		}
-		break;
-	case MD_XS:
-		__asm {
-			mov ebx, framebuffer;
-			mov ecx, c;
-			mov	edx, b;
-		lp9:
-			xor eax, eax;
-			dec ecx;
-			test ecx, ecx;
-			jz end;
-			mov eax, dword ptr[ ebx + ecx * 4 ];
-			cmp eax, 0xFFFFFF;
-			je sk9;
-			mov eax, 0x000000;
-		sk9:
-			mov[ ebx + ecx * 4 ], eax;
-			jmp lp9;
-		}
-		break;
-	case MD_X8:
-		c = w * h / 2;
-		__asm {
-			mov ebx, framebuffer;
-			mov ecx, c;
-		lp1:
-			movq mm0, [ ebx ];
-			paddusb mm0, mm0;
-			paddusb mm0, mm0;
-			paddusb mm0, mm0;
-			movq[ ebx ], mm0;
-			add ebx, 8;
-			dec ecx;
-			test ecx, ecx;
-			jz end;
-			jmp lp1;
-		}
-		break;
-	case MD_X4:
-		c = w * h / 2;
-		__asm {
-			mov ebx, framebuffer;
-			mov ecx, c;
-		lp2:
-			movq mm0, [ ebx ];
-			paddusb mm0, mm0;
-			paddusb mm0, mm0;
-			movq[ ebx ], mm0;
-			add ebx, 8;
-			dec ecx;
-			test ecx, ecx;
-			jz end;
-			jmp lp2;
-		}
-		break;
-	case MD_X2:
-		c = w * h / 2;
-		__asm {
-			mov ebx, framebuffer;
-			mov ecx, c;
-		lp3:
-			movq mm0, [ ebx ];
-			paddusb mm0, mm0;
-			movq[ ebx ], mm0;
-			add ebx, 8;
-			dec ecx;
-			test ecx, ecx;
-			jz end;
-			jmp lp3;
-		}
-		break;
-	case MD_X05:
-		c = w * h / 2;
-		mask = 0x7F7F7F7F7F7F7F7F;
-		__asm {
-			mov ebx, framebuffer;
-			mov ecx, c;
-			movq mm1, mask;
-		lp4:
-			movq mm0, [ ebx ];
-			psrlq mm0, 1;
-			pand mm0, mm1;
-			movq[ ebx ], mm0;
-			add ebx, 8;
-			dec ecx;
-			test ecx, ecx;
-			jz end;
-			jmp lp4;
-		}
-		break;
-	case MD_X025:
-		c = w * h / 2;
-		mask = 0x3F3F3F3F3F3F3F3F;
-		__asm {
-			mov ebx, framebuffer;
-			mov ecx, c;
-			movq mm1, mask;
-		lp5:
-			movq mm0, [ ebx ];
-			psrlq mm0, 2;
-			pand mm0, mm1;
-			movq[ ebx ], mm0;
-			add ebx, 8;
-			dec ecx;
-			test ecx, ecx;
-			jz end;
-			jmp lp5;
-		}
-		break;
-	case MD_X0125:
-		c = w * h / 2;
-		mask = 0x1F1F1F1F1F1F1F1F;
-		__asm {
-			mov ebx, framebuffer;
-			mov ecx, c;
-			movq mm1, mask;
-		lp6:
-			movq mm0, [ ebx ];
-			psrlq mm0, 3;
-			pand mm0, mm1;
-			movq[ ebx ], mm0;
-			add ebx, 8;
-			dec ecx;
-			test ecx, ecx;
-			jz end;
-			jmp lp6;
-		}
-		break;
-	}
-end:
-	__asm emms;
-	return 0;
-}
+{ }
 
 HWND C_THISCLASS::conf( HINSTANCE hInstance, HWND hwndParent )
 {
 	g_ConfigThis = this;
 	return CreateDialog( hInstance, MAKEINTRESOURCE( IDD_CFG_MULT ), hwndParent, (DLGPROC)g_DlgProc );
 }
-
 
 char *C_THISCLASS::get_desc( void )
 {
@@ -344,7 +180,6 @@ void C_THISCLASS::load_config( unsigned char *data, int len )
 	else
 		memset( &this->config, 0, sizeof( apeconfig ) );
 }
-
 
 int  C_THISCLASS::save_config( unsigned char *data )
 {
@@ -360,5 +195,4 @@ C_RBASE *R_Multiplier( char *desc )
 	}
 	return ( C_RBASE * ) new C_THISCLASS();
 }
-
 #endif

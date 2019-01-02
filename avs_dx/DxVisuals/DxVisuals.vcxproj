@@ -219,6 +219,7 @@
     <ClCompile Include="Effects\Trans\ColorClip\ColorClip.cpp" />
     <ClCompile Include="Effects\Trans\ColorReduction\ColorReduction.cpp" />
     <ClCompile Include="Effects\Trans\Invert\Invert.cpp" />
+    <ClCompile Include="Effects\Trans\Multiplier\Multiplier.cpp" />
     <ClCompile Include="Resources\dynamicCBuffer.cpp" />
     <ClCompile Include="Effects\List\BufferSave.cpp" />
     <ClCompile Include="Effects\Misc\ClearScreen.cpp" />
@@ -435,6 +436,10 @@
     <FxCompile Include="Effects\Trans\Interleave\InterleaveState.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Trans\Multiplier\MultiplierPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="Effects\Trans\UniqueTone\UniqueTonePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>

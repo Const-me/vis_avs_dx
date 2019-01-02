@@ -23,10 +23,7 @@ struct ColorFadeStructs
 		return StaticResources::fullScreenTriangle;
 	}
 
-	struct PsData : public Hlsl::Trans::ColorFade::ColorFadePS
-	{
-
-	};
+	using PsData = Hlsl::Trans::ColorFade::ColorFadePS;
 };
 
 class ColorFade : public EffectBase1<ColorFadeStructs>

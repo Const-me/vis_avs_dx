@@ -6,6 +6,7 @@
 
 struct MirrorStructs
 {
+	// The content of constant buffer that's passed to the PS.
 	struct MirrorCb
 	{
 		float2 amounts;
@@ -67,7 +68,7 @@ HRESULT Mirror::render( bool isBeat, RenderTargets& rt )
 
 	MirrorCb cb = update( isBeat );
 	CHECK( updateCBuffer( m_cb, &cb, sizeof( cb ) ) );
-	bindConstantBuffer<eStage::Pixel>( renderer.pixel().bindConstBuffer, m_cb );
+	bindConstantBuffer<eStage::Pixel>( renderer.pixel().bindConstBuffer, m_cb );	//< Don't unbind. The Binder class allocates unique slots to effects, so in runtime the buffer remains bound to that slot but that doesn't break other effects.
 
 	BoundSrv<eStage::Pixel> bound;
 	CHECK( rt.writeToNext( renderer.pixel().bindPrevFrame, bound, false ) );

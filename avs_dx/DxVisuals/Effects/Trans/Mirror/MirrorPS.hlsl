@@ -26,7 +26,7 @@ inline float3 read( float2 pos )
 
 inline float3 mirrorSimple( float2 pos )
 {
-    const int2 thisSegment = sign( pos - 0.1 ); // { -1,-1 } for the top-left quadrant of the image
+    const int2 thisSegment = sign( pos ); // { -1,-1 } for the top-left quadrant of the image
     const int2 amountSigns = sign( amounts );
     pos = ( thisSegment == amountSigns ) ? -pos : pos; // Apparently, HLSL has vector `operator?`: the `==` returns bool2 here.
     return read( pos );
@@ -39,7 +39,7 @@ inline float lengthSquared( float2 v )
 
 inline float3 mirrorWithTransitions( float2 pos )
 {
-    const int2 thisSegment = sign( pos - 0.1 ); // { -1,-1 } for the top-left quadrant of the image
+    const int2 thisSegment = sign( pos ); // { -1,-1 } for the top-left quadrant of the image
 
     const float2 a1 = floor( amounts );
     const float2 a2 = ceil( amounts );
@@ -76,7 +76,7 @@ inline float3 mirrorWithTransitions( float2 pos )
         };
 
         const float2 c1 = amounts - a1;
-        const float2 c2 = a1 + 1 - amounts;
+        const float2 c2 = 1 - c1;
         res = pixels[ 0 ] * c2.x * c2.y + pixels[ 1 ] * c1.x * c2.y +
 			pixels[ 2 ] * c2.x * c1.y + pixels[ 3 ] * c1.x * c1.y;
     }

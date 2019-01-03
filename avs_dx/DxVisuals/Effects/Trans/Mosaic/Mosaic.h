@@ -40,6 +40,11 @@ class Mosaic : public EffectBase1<MosaicStructs>
 {
 	MosaicTexture m_texture;
 	CComPtr<ID3D11Buffer> m_cb;
+#ifdef DEBUG
+	CComPtr<ID3D11SamplerState> m_sampler;	// To make debug layer shut up about missing sampler
+#endif
+
+	HRESULT renderDisabled( RenderTargets& rt );
 
 public:
 	Mosaic( AvsState* avs ) : EffectBase1( avs )

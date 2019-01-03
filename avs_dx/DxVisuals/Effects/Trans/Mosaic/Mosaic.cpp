@@ -31,7 +31,8 @@ MosaicStructs::MosaicCb MosaicStructs::AvsState::update( bool isBeat )
 
 	const float screenSizeScalar = std::max( screenSize.x, screenSize.y );
 
-	const float cells = lerp( 1, 99, (float)thisQuality, 1, screenSizeScalar / 2 );
+	const float cellsLog = lerp( 1, 99, (float)thisQuality, -log2f( screenSizeScalar ), -0.5 );
+	const float cells = screenSizeScalar * exp2f( cellsLog );
 	const float cellsX = roundf( cells * screenSize.x / screenSizeScalar );
 	const float cellsY = roundf( cells * screenSize.y / screenSizeScalar );
 
@@ -40,44 +41,65 @@ MosaicStructs::MosaicCb MosaicStructs::AvsState::update( bool isBeat )
 	return MosaicCb{ float2{ cellsX, cellsY }, lod };
 }
 
+HRESULT Mosaic::renderDisabled( RenderTargets& rt )
+{
+	setShaders( StaticResources::fullScreenTriangle, nullptr, StaticResources::copyTexture );
+
+	BoundSrv<eStage::Pixel> bound;
+	if( avs->blend )
+		omBlend( eBlend::Add );
+	else if( avs->blendavg )
+		omCustomBlend();
+	else
+		return S_FALSE;
+
+	CHECK( rt.blendToNext( 127, bound ) );
+
+	drawFullscreenTriangle( false );
+	return S_OK;
+}
+
 HRESULT Mosaic::render( bool isBeat, RenderTargets& rt )
 {
 	if( !avs->enabled || !rt.lastWritten() )
 		return S_FALSE;
+
+
+
+	auto cb = avs->update( isBeat );
+	if( cb.LOD <= 0 )
+		return renderDisabled( rt );
 
 	CHECK( m_texture.update( rt.lastWritten() ) );
 
 	if( !renderer.bindShaders( isBeat ) )
 		return S_FALSE;
 
-	auto cb = avs->update( isBeat );
-	if( cb.LOD <= 0 )
+	bindResource<eStage::Pixel>( renderer.pixel().bindPrevFrame, m_texture.srv() );
+	CHECK( updateCBuffer( m_cb, &cb, sizeof( cb ) ) );
+	bindConstantBuffer<eStage::Pixel>( renderer.pixel().bindConstBuffer, m_cb );
+
+#ifdef DEBUG
+	if( !m_sampler )
 	{
-		bindShader<eStage::Pixel>( StaticResources::copyTexture );
+		CD3D11_SAMPLER_DESC sd{ D3D11_DEFAULT };
+		CHECK( device->CreateSamplerState( &sd, &m_sampler ) );
+		bindSampler<eStage::Pixel>( renderer.pixel().bindSampler, m_sampler );
 	}
-	else
-	{
-		CHECK( updateCBuffer( m_cb, &cb, sizeof( cb ) ) );
-		bindConstantBuffer<eStage::Pixel>( renderer.pixel().bindConstBuffer, m_cb );
-		bindSampler<eStage::Pixel>( renderer.pixel().bindSampler );	// <Default sampler state is what we need here
-	}
+#else
+	// Default sampler state is what we need here
+	bindSampler<eStage::Pixel>( renderer.pixel().bindSampler );
+#endif
 
 	BoundSrv<eStage::Pixel> bound;
 	if( avs->blend )
-	{
-		CHECK( rt.blendToNext( renderer.pixel().bindPrevFrame, bound ) );
 		omBlend( eBlend::Add );
-	}
 	else if( avs->blendavg )
-	{
-		CHECK( rt.blendToNext( renderer.pixel().bindPrevFrame, bound ) );
 		omCustomBlend();
-	}
 	else
-	{
-		CHECK( rt.writeToNext( renderer.pixel().bindPrevFrame, bound, false ) );
 		omBlend( eBlend::None );
-	}
+
+	CHECK( rt.writeToLast() );
 
 	drawFullscreenTriangle( false );
 	return S_OK;

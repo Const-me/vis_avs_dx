@@ -100,22 +100,24 @@ class VectorDecl: iConstDecl
 	}
 }
 
-/* class CodeDecl: iConstDecl
+class ArrayDecl: iConstDecl
 {
 	public string name { get; private set; }
-	readonly string macro;
-	public CodeDecl( string str )
+	readonly string tp, size, vals;
+	public ArrayDecl( string str )
 	{
-		var node = XDocument.Parse( str.Substring( str.IndexOf( "<macro-code" ) ) ).Root;
+		var node = XDocument.Parse( str.Substring( str.IndexOf( "<macro-array" ) ) ).Root;
+		tp = node.Attribute( "type" ).Value;
 		name = node.Attribute( "name" ).Value;
-		macro = node.Attribute( "macro" ).Value;
+		size = node.Attribute( "size" ).Value;
+		vals = node.Attribute( "values" ).Value;
 	}
-	public string member() { return $"CStringA {name};"; }
+	public string member() { return $"std::array<{tp}, {size}> {name};"; }
 	public void defines( CppBuilder sb )
 	{
-		sb.tl( @"def.set( ""{0}"", {1} );", macro, name );
+		sb.tl( @"def.set( ""{0}"", {1} );", vals, name );
 	}
-} */
+}
 
 class BindingDecl: iConstDecl
 {
@@ -155,7 +157,7 @@ static iConstDecl[] parseConstants( string[] lines )
 	res.AddRange( lines.Where( l => l.Contains( "<macro-resource" ) ).Select( s => new BindingDecl( s ) ) );
 	res.AddRange( lines.Where( l => l.StartsWith( "static const" ) ).Select( s => new ConstDecl( s ) ) );
 	res.AddRange( lines.Where( l => l.Contains( "<macro-vector" ) ).Select( s => new VectorDecl( s ) ) );
-	// res.AddRange( lines.Where( l => l.Contains( "<macro-code" ) ).Select( s => new CodeDecl( s ) ) );
+	res.AddRange( lines.Where( l => l.Contains( "<macro-array" ) ).Select( s => new ArrayDecl( s ) ) );
 	return res.ToArray();
 }
 

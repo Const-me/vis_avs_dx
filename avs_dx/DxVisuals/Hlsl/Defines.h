@@ -25,6 +25,20 @@ namespace Hlsl
 
 		// Add macro with value like "0x11, 0x22, 0x33"
 		void set( const CStringA &key, const std::vector<int>& vec );
+
+		template<size_t size>
+		void set( const CStringA &key, const std::array<float3, size>& arr )
+		{
+			CStringA str;
+			str.Preallocate( 128 );
+			for( const float3& value : arr )
+			{
+				if( str.GetLength() > 0 )
+					str += ", ";
+				str.AppendFormat( "float3( %g, %g, %g )", value.x, value.y, value.z );
+			}
+			set( key, str );
+		}
 		
 		// Add macro with value like "float2( 0, 1 )" 
 		void set( const CStringA &key, const float2& value );

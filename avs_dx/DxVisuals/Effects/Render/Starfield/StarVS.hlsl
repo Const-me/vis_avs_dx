@@ -2,7 +2,7 @@
 #include "Star.fx"
 #ifndef AVS_SHADER
 #define BIND_STARS_POSITIONS t4
-// <macro-resource name="bindStarsPosition" macro="BIND_STARS_POSITIONS" />
+// <macro-resource name="bindParticles" macro="BIND_STARS_POSITIONS" />
 static const float4 starsColor = float4( 0.333f, 0.333f, 1.0f, 1 );
 #endif
 

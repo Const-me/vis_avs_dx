@@ -2,7 +2,7 @@
 #include "Star.fx"
 #ifndef AVS_SHADER
 #define BIND_STARS_POSITIONS u4
-// <macro-resource name="bindStarsPosition" macro="BIND_STARS_POSITIONS" type="uav" />
+// <macro-resource name="bindParticles" macro="BIND_STARS_POSITIONS" type="uav" />
 #endif
 RWStructuredBuffer<StarFormat> stars : register(BIND_STARS_POSITIONS);
 

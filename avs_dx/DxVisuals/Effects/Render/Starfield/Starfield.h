@@ -1,6 +1,6 @@
 #pragma once
 #include "../../EffectImpl.hpp"
-#include "../PointSpritesRender.hpp"
+#include "../ParticleSystem.hpp"
 using namespace Hlsl::Render::Starfield;
 
 struct StarfieldStructs: public PointSpritesRender
@@ -37,6 +37,8 @@ struct StarfieldStructs: public PointSpritesRender
 
 	using CsData = StarCS;
 
+	using InitCsData = StarInitCS;
+
 	class VsData : public StarVS
 	{
 		int m_color = -1;
@@ -47,15 +49,14 @@ struct StarfieldStructs: public PointSpritesRender
 	static const CAtlMap<CStringA, CStringA>& effectIncludes() { return includes(); }
 };
 
-class Starfield : public EffectBase1<StarfieldStructs>
+class Starfield : public FacticleFx<StarfieldStructs>
 {
-	StructureBuffer starsBuffer;
 	int prevStars = 0;
-	UINT nStars, nComputeGroups;
+	UINT nStars;
 
 public:
 
-	Starfield( AvsState *pState ) : tBase( pState ) { }
+	Starfield( AvsState *pState );
 
 	const Metadata& metadata() override;
 

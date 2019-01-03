@@ -125,6 +125,7 @@
     <ClInclude Include="Effects\Render\MovingParticle\MovingParticle.h" />
     <ClInclude Include="Effects\Trans\Mipmaps\MipMaps.h" />
     <ClInclude Include="Effects\Trans\Mipmaps\Mosaic.h" />
+    <ClInclude Include="Effects\Render\ParticleSystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

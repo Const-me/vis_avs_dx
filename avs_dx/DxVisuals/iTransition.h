@@ -13,4 +13,6 @@ public:
 	virtual HRESULT renderTransition( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, iRootEffect &e1, iRootEffect &e2, int trans, float sintrans ) = 0;
 };
 
-extern void createTransition( std::unique_ptr<iTransition>& up );
+bool createTransitionInstance();
+
+iTransition* getTransition();

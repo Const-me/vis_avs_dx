@@ -47,7 +47,6 @@ protected:
 	char last_file[ MAX_PATH ];
 	int last_which;
 	int _dotransitionflag;
-	std::unique_ptr<iTransition> dxTransition;
 
 public:
 

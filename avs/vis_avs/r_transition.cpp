@@ -70,7 +70,7 @@ C_RenderTransitionClass::C_RenderTransitionClass()
 	start_time = 0;
 	_dotransitionflag = 0;
 	initThread = 0;
-	createTransition( dxTransition );
+	createTransitionInstance();
 }
 
 C_RenderTransitionClass::~C_RenderTransitionClass()
@@ -243,7 +243,7 @@ int C_RenderTransitionClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, 
 			g_render_effects2->freeBuffers();
 		}
 		// return g_render_effects->render( visdata, isBeat, framebuffer, fbout, w, h );
-		dxTransition->renderSingle( visdata, isBeat, *g_render_effects->dxEffect );
+		getTransition()->renderSingle( visdata, isBeat, *g_render_effects->dxEffect );
 		return 0;
 	}
 
@@ -296,9 +296,9 @@ int C_RenderTransitionClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, 
 	// now sintrans does a smooth curve from 0 to 1
 
 	if( curtrans & 0x8000 )
-		dxTransition->renderTransition( visdata, isBeat, *g_render_effects->dxEffect, *g_render_effects2->dxEffect, curtrans & 0x7fff, sintrans );
+		getTransition()->renderTransition( visdata, isBeat, *g_render_effects->dxEffect, *g_render_effects2->dxEffect, curtrans & 0x7fff, sintrans );
 	else
-		dxTransition->renderSingle( visdata, isBeat, *g_render_effects->dxEffect );
+		getTransition()->renderSingle( visdata, isBeat, *g_render_effects->dxEffect );
 
 	/* switch( curtrans & 0x7fff )
 	{

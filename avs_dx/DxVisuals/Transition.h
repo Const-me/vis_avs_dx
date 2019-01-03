@@ -31,3 +31,7 @@ private:
 
 	EffectProfiler m_prepared, m_rendered;
 };
+
+Transition* getTransitionInstance();
+
+bool destroyTransitionInstance();

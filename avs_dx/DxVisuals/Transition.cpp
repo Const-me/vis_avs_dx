@@ -35,7 +35,9 @@ Transition::Transition() :
 { }
 
 Transition::~Transition()
-{ }
+{
+	logShutdown( "~Transition" );
+}
 
 HRESULT Transition::prepare( char visdata[ 2 ][ 2 ][ 576 ], int isBeat )
 {
@@ -112,4 +114,35 @@ HRESULT Transition::renderTransition( char visdata[ 2 ][ 2 ][ 576 ], int isBeat,
 #endif
 	
 	return S_OK;
+}
+
+namespace
+{
+	std::unique_ptr<Transition> g_transition;
+}
+Transition* getTransitionInstance()
+{
+	return g_transition.get();
+}
+
+iTransition* getTransition()
+{
+	assert( g_transition );
+	return g_transition.get();
+}
+
+bool createTransitionInstance()
+{
+	if( g_transition )
+		return false;
+	g_transition = std::make_unique<Transition>();
+	return true;
+}
+
+bool destroyTransitionInstance()
+{
+	if( !g_transition )
+		return false;
+	g_transition.reset();
+	return true;
 }

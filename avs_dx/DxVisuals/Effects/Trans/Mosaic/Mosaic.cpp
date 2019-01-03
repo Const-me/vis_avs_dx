@@ -49,7 +49,6 @@ HRESULT Mosaic::renderDisabled( RenderTargets& rt )
 {
 	setShaders( StaticResources::fullScreenTriangle, nullptr, StaticResources::copyTexture );
 
-	BoundSrv<eStage::Pixel> bound;
 	if( avs->blend )
 		omBlend( eBlend::Add );
 	else if( avs->blendavg )
@@ -57,6 +56,7 @@ HRESULT Mosaic::renderDisabled( RenderTargets& rt )
 	else
 		return S_FALSE;
 
+	BoundSrv<eStage::Pixel> bound;
 	CHECK( rt.blendToNext( 127, bound ) );
 
 	drawFullscreenTriangle( false );

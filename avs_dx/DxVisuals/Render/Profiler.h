@@ -42,6 +42,7 @@ class Profiler
 	public:
 
 		HRESULT create();
+		void destroy();
 
 		void frameStart();
 		void mark( uint8_t current, uint32_t level, EffectProfiler* fx );
@@ -80,6 +81,8 @@ public:
 	void frameEnd();
 
 	void removeEffect( EffectProfiler* pfx );
+
+	void shutdown();
 };
 
 Profiler& gpuProfiler();

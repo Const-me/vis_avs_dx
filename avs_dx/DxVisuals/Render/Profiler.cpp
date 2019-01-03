@@ -62,10 +62,23 @@ HRESULT Profiler::FrameData::create()
 	return S_OK;
 }
 
+void Profiler::FrameData::destroy()
+{
+	disjoint = begin = end = nullptr;
+	haveMeasures = false;
+	effects.clear();
+}
+
 Profiler::Profiler()
 {
 	for( auto& q : m_frames )
 		q.create();
+}
+
+void Profiler::shutdown()
+{
+	for( auto& q : m_frames )
+		q.destroy();
 }
 
 void Profiler::frameStart()

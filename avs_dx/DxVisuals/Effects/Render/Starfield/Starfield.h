@@ -5,14 +5,6 @@ using namespace Hlsl::Render::Starfield;
 
 struct StarfieldStructs: public PointSpritesRender
 {
-	struct StarFormat
-	{
-		int X, Y;
-		float Z;
-		float Speed;
-		int OX, OY;
-	};
-
 	struct AvsState
 	{
 		int enabled;

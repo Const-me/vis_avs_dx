@@ -62,7 +62,7 @@ HRESULT MipMapsRenderer::bindMipmaps( UINT prevFrameSlot, UINT samplerSlot )
 	{
 		CD3D11_SAMPLER_DESC sd{ D3D11_DEFAULT };
 		CHECK( device->CreateSamplerState( &sd, &m_sampler ) );
-		bindSampler<eStage::Pixel>( bindSampler, m_sampler );
+		bindSampler<eStage::Pixel>( samplerSlot, m_sampler );
 	}
 #else
 	// Default sampler state is what we need here

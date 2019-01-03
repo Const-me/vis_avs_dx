@@ -181,7 +181,7 @@ static void generateShaderStruct( CppBuilder sb, string sourcePath, int lvl )
 	string stage = stageString( sourcePath );
 
 	string baseClass = "";
-	if( null !=stage )
+	if( null != stage )
 		baseClass = $": public ShaderBaseStruct<eStage::{stage}>";
 	sb.tl( "struct {0}{1}", name, baseClass );
 	sb.tl( "{" );

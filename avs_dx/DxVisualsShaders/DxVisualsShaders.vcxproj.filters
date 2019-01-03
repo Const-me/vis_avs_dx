@@ -10,6 +10,7 @@
     <FxCompile Include="FadeFramePS.hlsl" />
     <FxCompile Include="Effects\BlitterVS.hlsl" />
     <FxCompile Include="Effects\BlitterPS.hlsl" />
+    <FxCompile Include="MovingParticlePS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />

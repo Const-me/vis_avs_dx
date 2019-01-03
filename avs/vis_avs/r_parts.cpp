@@ -45,12 +45,10 @@ protected:
 public:
 	C_THISCLASS();
 	virtual ~C_THISCLASS();
-	virtual int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
 	virtual char *get_desc() { return MOD_NAME; }
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent );
 	virtual void load_config( unsigned char *data, int len );
 	virtual int  save_config( unsigned char *data );
-
 
 	int enabled;
 	int colors;
@@ -58,7 +56,6 @@ public:
 	int blend;
 
 	int s_pos;
-
 
 	double c[ 2 ];
 	double v[ 2 ];
@@ -105,99 +102,12 @@ C_THISCLASS::C_THISCLASS()
 
 	p[ 0 ] = -0.6;
 	p[ 1 ] = 0.3;
+
+	CREATE_DX_EFFECT( enabled );
 }
 
 C_THISCLASS::~C_THISCLASS()
 {
-}
-
-int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
-{
-	if( !( enabled & 1 ) ) return 0;
-	if( isBeat & 0x80000000 ) return 0;
-	int xp, yp;
-	int ss = min( h / 2, ( w * 3 ) / 8 );
-	int oc6 = colors;
-
-	if( isBeat )
-	{
-		c[ 0 ] = ( ( rand() % 33 ) - 16 ) / 48.0f;
-		c[ 1 ] = ( ( rand() % 33 ) - 16 ) / 48.0f;
-	}
-
-
-	v[ 0 ] -= 0.004*( p[ 0 ] - c[ 0 ] );
-	v[ 1 ] -= 0.004*( p[ 1 ] - c[ 1 ] );
-
-	p[ 0 ] += v[ 0 ];
-	p[ 1 ] += v[ 1 ];
-
-	v[ 0 ] *= 0.991;
-	v[ 1 ] *= 0.991;
-
-	xp = (int)( p[ 0 ] * ( ss )*( maxdist / 32.0 ) ) + w / 2;
-	yp = (int)( p[ 1 ] * ( ss )*( maxdist / 32.0 ) ) + h / 2;
-	if( isBeat && enabled & 2 )
-		s_pos = size2;
-	int sz = s_pos;
-	s_pos = ( s_pos + size ) / 2;
-	if( sz <= 1 )
-	{
-		framebuffer += xp + (yp)*w;
-		if( xp >= 0 && yp >= 0 && xp < w && yp < h )
-		{
-			if( blend == 0 )
-				framebuffer[ 0 ] = colors;
-			else if( blend == 2 )
-				framebuffer[ 0 ] = BLEND_AVG( framebuffer[ 0 ], colors );
-			else if( blend == 3 )
-				BLEND_LINE( framebuffer, colors );
-			else
-				framebuffer[ 0 ] = BLEND( framebuffer[ 0 ], colors );
-		}
-		return 0;
-	}
-	if( sz > 128 ) sz = 128;
-	{
-		int y;
-		double md = sz * sz*0.25;
-		yp -= sz / 2;
-		for( y = 0; y < sz; y++ )
-		{
-			if( yp + y >= 0 && yp + y < h )
-			{
-				double yd = ( y - sz * 0.5 );
-				double l = sqrt( md - yd * yd );
-				int xs = (int)( l + 0.99 );
-				int x;
-				if( xs < 1 ) xs = 1;
-				int xe = xp + xs;
-				if( xe > w ) xe = w;
-				int xst = xp - xs;
-				if( xst < 0 ) xst = 0;
-				int *f = &framebuffer[ xst + ( yp + y )*w ];
-				if( blend == 0 ) for( x = xst; x < xe; x++ ) *f++ = colors;
-				else if( blend == 2 )
-					for( x = xst; x < xe; x++ )
-					{
-						*f = BLEND_AVG( *f, colors );
-						f++;
-					}
-				else if( blend == 3 )
-					for( x = xst; x < xe; x++ )
-					{
-						BLEND_LINE( f++, colors );
-					}
-				else
-					for( x = xst; x < xe; x++ )
-					{
-						*f = BLEND( *f, colors );
-						f++;
-					}
-			}
-		}
-	}
-	return 0;
 }
 
 C_RBASE *R_Parts( char *desc )
@@ -205,7 +115,6 @@ C_RBASE *R_Parts( char *desc )
 	if( desc ) { strcpy( desc, MOD_NAME ); return NULL; }
 	return ( C_RBASE * ) new C_THISCLASS();
 }
-
 
 static C_THISCLASS *g_this;
 
@@ -296,7 +205,6 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 	}
 	return 0;
 }
-
 
 HWND C_THISCLASS::conf( HINSTANCE hInstance, HWND hwndParent )
 {

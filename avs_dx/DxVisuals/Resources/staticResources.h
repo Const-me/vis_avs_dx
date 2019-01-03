@@ -7,8 +7,6 @@ namespace StaticResources
 	HRESULT create();
 	void destroy();
 
-	HRESULT createLayout( const std::vector<uint8_t>& dxbc );
-
 	extern CComPtr<ID3D11VertexShader> fullScreenTriangle;
 	extern CComPtr<ID3D11PixelShader> copyTexture;
 	extern CComPtr<ID3D11PixelShader> pointSprite;
@@ -21,9 +19,15 @@ namespace StaticResources
 
 	extern CComPtr<ID3D11ShaderResourceView> blackTexture;
 	extern CComPtr<ID3D11RasterizerState> rsDisableCulling;
+	// This particular input layout is used by too many effects, all move effects use them. That's why created here.
+	HRESULT createLayout( const std::vector<uint8_t>& dxbc );
 	extern CComPtr<ID3D11InputLayout> layoutPos2Tc2;
 
 	extern SourceData sourceData;
 
 	extern GlobalBuffers globalBuffers;
+
+	// The rest of the layouts are created on demand and go to a hash map.
+	HRESULT cacheInputLayout( const void* key, const D3D11_INPUT_ELEMENT_DESC *desc, UINT count, const std::vector<uint8_t>& dxbc );
+	HRESULT bindCachedInputLayout( const void* key );
 };

@@ -27,6 +27,7 @@ inline void setShaders( ID3D11VertexShader* vs, ID3D11GeometryShader* gs, ID3D11
 	context->PSSetShader( ps, nullptr, 0 );
 }
 
+void iaSetVertexBuffer( ID3D11Buffer* vb, UINT vbStride );
 void iaSetBuffer( ID3D11Buffer* vb, UINT vbStride, ID3D11Buffer* ib, DXGI_FORMAT ibFormat = DXGI_FORMAT_R16_UINT );
 
 void iaClearBuffer();

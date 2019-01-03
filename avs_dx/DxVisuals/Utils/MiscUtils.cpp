@@ -2,10 +2,15 @@
 #include "MiscUtils.h"
 #include "../Resources/staticResources.h"
 
-void iaSetBuffer( ID3D11Buffer* vb, UINT vbStride, ID3D11Buffer* ib, DXGI_FORMAT ibFormat )
+void iaSetVertexBuffer( ID3D11Buffer* vb, UINT vbStride )
 {
 	UINT off = 0;
 	context->IASetVertexBuffers( 0, 1, &vb, &vbStride, &off );
+}
+
+void iaSetBuffer( ID3D11Buffer* vb, UINT vbStride, ID3D11Buffer* ib, DXGI_FORMAT ibFormat )
+{
+	iaSetVertexBuffer( vb, vbStride );
 	context->IASetIndexBuffer( ib, ibFormat, 0 );
 }
 

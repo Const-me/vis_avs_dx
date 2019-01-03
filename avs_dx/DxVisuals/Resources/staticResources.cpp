@@ -5,6 +5,8 @@
 
 namespace StaticResources
 {
+	static CAtlMap<const void*, CComPtr<ID3D11InputLayout>> s_layoutsCache;
+
 	HRESULT create()
 	{
 		// Static shaders
@@ -96,6 +98,7 @@ namespace StaticResources
 		blackTexture = nullptr;
 		rsDisableCulling = nullptr;
 		layoutPos2Tc2 = nullptr;
+		s_layoutsCache.RemoveAll();
 
 		sourceData.destroy();
 		globalBuffers.destroy();
@@ -130,6 +133,27 @@ namespace StaticResources
 			{ "TEXCOORD",    0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
 		CHECK( device->CreateInputLayout( iaDesc, 2, dxbc.data(), dxbc.size(), &layoutPos2Tc2 ) );
+		return S_OK;
+	}
+
+	HRESULT cacheInputLayout( const void* key, const D3D11_INPUT_ELEMENT_DESC *desc, UINT count, const std::vector<uint8_t>& dxbc )
+	{
+		if( nullptr != s_layoutsCache.Lookup( key ) )
+			return S_FALSE;
+
+		CComPtr<ID3D11InputLayout> layout;
+		CHECK( device->CreateInputLayout( desc, count, dxbc.data(), dxbc.size(), &layout ) );
+
+		s_layoutsCache[ key ] = layout;
+		return S_OK;
+	}
+
+	HRESULT bindCachedInputLayout( const void* key )
+	{
+		auto p = s_layoutsCache.Lookup( key );
+		if( nullptr == p )
+			return OLE_E_BLANK;
+		context->IASetInputLayout( p->m_value );
 		return S_OK;
 	}
 };

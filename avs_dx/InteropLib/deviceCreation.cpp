@@ -132,7 +132,7 @@ void destroyDevice()
 #ifdef DEBUG
 	if( deviceDebug )
 	{
-		__debugbreak();
+		// __debugbreak();
 		deviceDebug->ReportLiveDeviceObjects( D3D11_RLDO_SUMMARY );
 		deviceDebug = nullptr;
 	}

@@ -95,6 +95,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Effects\Render\MovingParticle\MovingParticle.h" />
     <ClInclude Include="Effects\Trans\Mosaic\Mosaic.h" />
     <ClInclude Include="Effects\Trans\Moves\DynamicDistance.h" />
     <ClInclude Include="Effects\Trans\ColorFade\ColorFade.h" />
@@ -220,6 +221,7 @@
     <ClInclude Include="Effects\Trans\Blur\warpSize.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Effects\Render\MovingParticle\MovingParticle.cpp" />
     <ClCompile Include="Effects\Trans\Mirror\Mirror.cpp" />
     <ClCompile Include="Effects\Trans\Mosaic\Mosaic.cpp" />
     <ClCompile Include="Effects\Trans\Moves\DynamicDistance.cpp" />
@@ -385,6 +387,14 @@
     <FxCompile Include="Effects\Misc\ClearScreenPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Render\MovingParticle\MovingParticleGS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Render\MovingParticle\MovingParticleVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Effects\Render\Picture\PicturePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>

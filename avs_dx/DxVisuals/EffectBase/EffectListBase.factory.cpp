@@ -15,12 +15,15 @@ template<> HRESULT createDxEffect<C_RenderListClass>( void* pState, DxEffectPtr&
 };
 
 // Similarly, need to implement two copies of metadata() method.
+
+const char* const EffectImpl<RootEffect>::s_effectName = "RootEffect";
 static const EffectBase::Metadata s_root{ "RootEffect", true };
 const EffectBase::Metadata& RootEffect::metadata()
 {
 	return s_root;
 }
 
+const char* const EffectImpl<EffectList>::s_effectName = "EffectList";
 static const EffectBase::Metadata s_list{ "EffectList", true };
 const EffectBase::Metadata& EffectList::metadata()
 {

@@ -20,12 +20,16 @@ template<class TEffect>
 class EffectImpl : public TEffect
 {
 public:
+	static const char* const s_effectName;
+
 	EffectImpl( void* pNative ) : TEffect( ( typename TEffect::AvsState* )( pNative ) ),
 		m_profiler( this )
 	{ }
 
 	~EffectImpl() override
-	{ }
+	{
+		logShutdown( s_effectName );
+	}
 
 	static inline HRESULT create( void* pState, DxEffectPtr& res )
 	{
@@ -53,6 +57,6 @@ template<> HRESULT createDxEffect<NATIVE>( void* pState, DxEffectPtr& dest )   \
 {                                                                              \
 	return EffectImpl<DX>::create( pState, dest );                             \
 };                                                                             \
-static const EffectBase::Metadata s_metadada{ #DX, false };                    \
+const char* const EffectImpl<DX>::s_effectName = #DX;                          \
+static const EffectBase::Metadata s_metadada{ EffectImpl<DX>::s_effectName, false };  \
 const EffectBase::Metadata& DX::metadata(){ return s_metadada; }
-

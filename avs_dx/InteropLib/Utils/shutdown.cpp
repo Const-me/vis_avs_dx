@@ -113,8 +113,8 @@ namespace
 			logShutdown( "Shutdown::shutdown waiting" );
 			const HRESULT hr = msgWaitForSingleObject( m_threadShutDown, 500 );
 			logShutdown( CStringA{ "Shutdown::shutdown result: " } +formatDxMessageA( hr ) );
-			closeDebugConsole();
 			profilerClose();
+			closeDebugConsole();
 			return hr;
 		}
 	};

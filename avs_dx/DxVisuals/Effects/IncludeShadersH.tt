@@ -143,6 +143,7 @@ class BindingDecl: iConstDecl
 			case "srv": return 't';
 			case "uav": return 'u';
 			case "cbuffer": return 'b';
+			case "sampler": return 's';
 		}
 		throw new ArgumentException( "Unsupported type attribute {0} in <macro-resource> element", t );
 	}

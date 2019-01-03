@@ -18,6 +18,9 @@ Binder::Binder()
 
 		// ByteAddressBuffer effectStates : register(t2);
 		s.srv++;
+
+		// SamplerState sampleBilinear : register(s0);
+		s.sampler++;
 	}
 
 	// RWByteAddressBuffer effectStates : register(u0);
@@ -52,6 +55,8 @@ bool Binder::reserveInputSlot( UINT& result, eStage pipelineStage, char resource
 		return inc( s.uav, result, D3D11_PS_CS_UAV_REGISTER_COUNT );
 	case 'b':
 		return inc( s.cbuffer, result, D3D11_COMMONSHADER_CONSTANT_BUFFER_HW_SLOT_COUNT );
+	case 's':
+		return inc( s.sampler, result, D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT );
 	}
 	__debugbreak();
 	return 0;

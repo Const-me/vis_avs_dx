@@ -5,7 +5,7 @@ class Binder
 {
 	struct Slots
 	{
-		UINT srv, uav, cbuffer;
+		UINT srv, uav, cbuffer, sampler;
 	};
 	std::array<Slots, 4> m_data;
 

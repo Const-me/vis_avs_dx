@@ -118,12 +118,12 @@
     <ClInclude Include="Render\Profiler.h" />
     <ClInclude Include="Effects\EffectProfiler.h" />
     <ClInclude Include="Utils\DynamicArray.hpp" />
-    <ClInclude Include="Resources\dynamicCBuffer.h" />
     <ClInclude Include="Effects\Trans\ColorFade\ColorFade.h" />
     <ClInclude Include="Effects\Trans\Moves\DynamicDistance.h" />
     <ClInclude Include="Utils\LinearTransition.hpp" />
     <ClInclude Include="Effects\Trans\Mosaic\Mosaic.h" />
     <ClInclude Include="Effects\Trans\Mosaic\MosaicTexture.h" />
+    <ClInclude Include="Resources\dynamicBuffers.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -210,7 +210,6 @@
     <ClCompile Include="Effects\Trans\ChannelShift\ChannelShift.cpp" />
     <ClCompile Include="Effects\Misc\ClearScreen.cpp" />
     <ClCompile Include="Effects\Trans\ColorFade\ColorFade.cpp" />
-    <ClCompile Include="Resources\dynamicCBuffer.cpp" />
     <ClCompile Include="Effects\Trans\ColorReduction\ColorReduction.cpp" />
     <ClCompile Include="Effects\Trans\ColorClip\ColorClip.cpp" />
     <ClCompile Include="Effects\Trans\Invert\Invert.cpp" />
@@ -220,6 +219,7 @@
     <ClCompile Include="Effects\Trans\Mirror\Mirror.cpp" />
     <ClCompile Include="Effects\Trans\Mosaic\Mosaic.cpp" />
     <ClCompile Include="Effects\Trans\Mosaic\MosaicTexture.cpp" />
+    <ClCompile Include="Resources\dynamicBuffers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

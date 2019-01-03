@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "../../EffectImpl.hpp"
-#include <Resources/dynamicCBuffer.h>
+#include <Resources/dynamicBuffers.h>
 #include <Utils/LinearTransition.hpp>
 
 struct MirrorStructs

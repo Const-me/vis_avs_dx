@@ -1,6 +1,6 @@
 #pragma once
 #include "../../EffectImpl.hpp"
-#include <Resources/dynamicCBuffer.h>
+#include <Resources/dynamicBuffers.h>
 
 struct ColorFadeStructs
 {

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "dynamicCBuffer.h"
+#include "dynamicBuffers.h"
 
 HRESULT updateCBuffer( CComPtr<ID3D11Buffer> &ptr, const void* pData, size_t cb )
 {

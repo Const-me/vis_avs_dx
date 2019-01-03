@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Mosaic.h"
-#include <Resources/dynamicCBuffer.h>
+#include <Resources/dynamicBuffers.h>
 
 IMPLEMENT_EFFECT( Mosaic, C_MosaicClass )
 

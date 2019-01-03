@@ -58,8 +58,12 @@ class Logger
 	void windowClosed()
 	{
 		CSLock __lock( m_cs );
+		if( FreeConsole() )
+		{
+			// Apparently, FreeConsole already closes that handle: https://stackoverflow.com/q/12676312/126995
+			m_output.Detach();
+		}
 		m_output.Close();
-		FreeConsole();
 	}
 
 	static BOOL __stdcall consoleHandlerRoutine( DWORD dwCtrlType )

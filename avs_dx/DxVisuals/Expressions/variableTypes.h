@@ -24,4 +24,9 @@ inline float4 float4FromColor( int rgb, float alpha )
 	return float4( v.x, v.y, v.z, alpha );
 }
 
+inline float2 floatSize( const CSize& size )
+{
+	return float2{ (float)size.cx, (float)size.cy };
+}
+
 using uint4 = std::array<uint32_t, 4>;

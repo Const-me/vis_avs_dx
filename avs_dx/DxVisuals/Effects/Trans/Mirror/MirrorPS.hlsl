@@ -1,4 +1,3 @@
-#include "VisCommon.fx"
 #ifndef AVS_SHADER
 #define AVS_RENDER_SIZE float2( 1280, 720 )
 #define BIND_PREV_FRAME t1

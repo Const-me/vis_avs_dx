@@ -24,13 +24,6 @@ struct BlitterStructs
 	}
 };
 
-inline float lerp( float x1, float x2, float x, float y1, float y2 )
-{
-	const float c1 = ( x - x1 ) / ( x2 - x1 );
-	const float c2 = 1.0f - c1;
-	return y1 * c2 + y2 * c1;
-}
-
 inline float getScale( int s )
 {
 	if( s < 32 )

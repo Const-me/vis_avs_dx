@@ -15,6 +15,7 @@ public:
 	// DXGI_FORMAT_R8G8B8A8_UNORM;
 
 	HRESULT create();
+	HRESULT create( const CSize& size, bool unorderedAccess );
 
 	void destroy();
 

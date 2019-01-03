@@ -2,11 +2,11 @@
 #include "RenderTarget.h"
 #include "../../InteropLib/interop.h"
 
-HRESULT RenderTarget::create()
+HRESULT RenderTarget::create( const CSize& size, bool unorderedAccess )
 {
-	const CSize size = getRenderSize();
-
-	CD3D11_TEXTURE2D_DESC texDesc{ format, (UINT)size.cx, (UINT)size.cy, 1, 1, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET | D3D11_BIND_UNORDERED_ACCESS };
+	CD3D11_TEXTURE2D_DESC texDesc{ format, (UINT)size.cx, (UINT)size.cy, 1, 1, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET };
+	if( unorderedAccess )
+		texDesc.BindFlags |= D3D11_BIND_UNORDERED_ACCESS;
 	CHECK( device->CreateTexture2D( &texDesc, nullptr, &m_tex ) );
 
 	CD3D11_RENDER_TARGET_VIEW_DESC rtvDesc{ D3D11_RTV_DIMENSION_TEXTURE2D, format };
@@ -16,6 +16,12 @@ HRESULT RenderTarget::create()
 	CHECK( device->CreateShaderResourceView( m_tex, &srvDesc, &m_srv ) );
 
 	return S_OK;
+}
+
+HRESULT RenderTarget::create()
+{
+	const CSize size = getRenderSize();
+	return create( size, true );
 }
 
 void RenderTarget::destroy()

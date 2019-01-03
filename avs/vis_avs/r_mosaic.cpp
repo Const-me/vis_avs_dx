@@ -85,6 +85,8 @@ C_THISCLASS::C_THISCLASS() // set up default configuration
 	onbeat = 0;
 	durFrames = 15;
 	nF = 0;
+
+	CREATE_DX_EFFECT( enabled );
 }
 
 #define GET_INT() (data[pos]|(data[pos+1]<<8)|(data[pos+2]<<16)|(data[pos+3]<<24))

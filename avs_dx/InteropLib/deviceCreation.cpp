@@ -10,6 +10,9 @@ CComPtr<ID3D11DeviceContext> context;
 CComPtr<IMFDXGIDeviceManager> dxgiDeviceManager;
 CComPtr<IDXGISwapChain> swapChain;
 CComPtr<ID3D11RenderTargetView> renderTargetView;
+#ifdef DEBUG
+CComPtr<ID3D11Debug> deviceDebug;
+#endif
 
 namespace
 {
@@ -96,6 +99,10 @@ HRESULT createDevice( HWND hWndOutput )
 		CHECK( D3D11CreateDeviceAndSwapChain( nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, deviceFlags, &fl, 1, D3D11_SDK_VERSION, &scd, &swapChain, &device, nullptr, &context ) );
 	}
 
+#ifdef DEBUG
+	CHECK( device->QueryInterface( IID_PPV_ARGS( &deviceDebug ) ) );
+#endif
+
 	if( IsWindows8Point1OrGreater() )
 	{
 		CComPtr<IDXGISwapChain2> sc2;
@@ -121,6 +128,16 @@ void destroyDevice()
 
 	dxgiDeviceManager = nullptr;
 	context = nullptr;
+
+#ifdef DEBUG
+	if( deviceDebug )
+	{
+		__debugbreak();
+		deviceDebug->ReportLiveDeviceObjects( D3D11_RLDO_SUMMARY );
+		deviceDebug = nullptr;
+	}
+#endif
+
 	device = nullptr;
 }
 

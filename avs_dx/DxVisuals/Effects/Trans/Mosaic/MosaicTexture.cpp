@@ -40,6 +40,5 @@ HRESULT MosaicTexture::update( const RenderTarget& src )
 
 	context->CopySubresourceRegion( m_texture, 0, 0, 0, 0, src.texture(), 0, nullptr );
 	context->GenerateMips( m_srv );
-
 	return S_OK;
 }

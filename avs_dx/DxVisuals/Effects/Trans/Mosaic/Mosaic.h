@@ -1,6 +1,7 @@
 #pragma once
 #include "../../EffectImpl.hpp"
 #include "MosaicTexture.h"
+#include "../../EffectProfiler.h"
 
 struct MosaicStructs
 {
@@ -43,12 +44,13 @@ class Mosaic : public EffectBase1<MosaicStructs>
 #ifdef DEBUG
 	CComPtr<ID3D11SamplerState> m_sampler;	// To make debug layer shut up about missing sampler
 #endif
+	EffectProfiler m_profileMipmaps;
 
 	HRESULT renderDisabled( RenderTargets& rt );
 
 public:
-	Mosaic( AvsState* avs ) : EffectBase1( avs )
-	{ }
+
+	Mosaic( AvsState* avs );
 
 	DECLARE_EFFECT()
 

@@ -41,6 +41,10 @@ MosaicStructs::MosaicCb MosaicStructs::AvsState::update( bool isBeat )
 	return MosaicCb{ float2{ cellsX, cellsY }, lod };
 }
 
+Mosaic::Mosaic( AvsState* avs ) : EffectBase1( avs ),
+	m_profileMipmaps( "MosaicMipmaps" )
+{ }
+
 HRESULT Mosaic::renderDisabled( RenderTargets& rt )
 {
 	setShaders( StaticResources::fullScreenTriangle, nullptr, StaticResources::copyTexture );
@@ -64,13 +68,12 @@ HRESULT Mosaic::render( bool isBeat, RenderTargets& rt )
 	if( !avs->enabled || !rt.lastWritten() )
 		return S_FALSE;
 
-
-
 	auto cb = avs->update( isBeat );
 	if( cb.LOD <= 0 )
 		return renderDisabled( rt );
 
 	CHECK( m_texture.update( rt.lastWritten() ) );
+	m_profileMipmaps.mark();
 
 	if( !renderer.bindShaders( isBeat ) )
 		return S_FALSE;

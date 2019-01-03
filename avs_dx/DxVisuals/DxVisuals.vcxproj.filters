@@ -121,10 +121,10 @@
     <ClInclude Include="Effects\Trans\ColorFade\ColorFade.h" />
     <ClInclude Include="Effects\Trans\Moves\DynamicDistance.h" />
     <ClInclude Include="Utils\LinearTransition.hpp" />
-    <ClInclude Include="Effects\Trans\Mosaic\Mosaic.h" />
-    <ClInclude Include="Effects\Trans\Mosaic\MosaicTexture.h" />
     <ClInclude Include="Resources\dynamicBuffers.h" />
     <ClInclude Include="Effects\Render\MovingParticle\MovingParticle.h" />
+    <ClInclude Include="Effects\Trans\Mipmaps\MipMaps.h" />
+    <ClInclude Include="Effects\Trans\Mipmaps\Mosaic.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -218,10 +218,10 @@
     <ClCompile Include="Effects\Misc\OnBeatClear.cpp" />
     <ClCompile Include="Effects\Trans\Moves\DynamicDistance.cpp" />
     <ClCompile Include="Effects\Trans\Mirror\Mirror.cpp" />
-    <ClCompile Include="Effects\Trans\Mosaic\Mosaic.cpp" />
-    <ClCompile Include="Effects\Trans\Mosaic\MosaicTexture.cpp" />
     <ClCompile Include="Resources\dynamicBuffers.cpp" />
     <ClCompile Include="Effects\Render\MovingParticle\MovingParticle.cpp" />
+    <ClCompile Include="Effects\Trans\Mipmaps\MipMaps.cpp" />
+    <ClCompile Include="Effects\Trans\Mipmaps\Mosaic.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -290,9 +290,9 @@
     <FxCompile Include="Effects\Trans\Multiplier\MultiplierPS.hlsl" />
     <FxCompile Include="Effects\Trans\Moves\DynamicDistanceVS.hlsl" />
     <FxCompile Include="Effects\Trans\Mirror\MirrorPS.hlsl" />
-    <FxCompile Include="Effects\Trans\Mosaic\MosaicPS.hlsl" />
     <FxCompile Include="Effects\Render\MovingParticle\MovingParticleGS.hlsl" />
     <FxCompile Include="Effects\Render\MovingParticle\MovingParticleVS.hlsl" />
+    <FxCompile Include="Effects\Trans\Mipmaps\MosaicPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

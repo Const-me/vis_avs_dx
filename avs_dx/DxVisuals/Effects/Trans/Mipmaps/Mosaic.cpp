@@ -41,8 +41,7 @@ MosaicStructs::MosaicCb MosaicStructs::AvsState::update( bool isBeat )
 	return MosaicCb{ float2{ cellsX, cellsY }, lod };
 }
 
-Mosaic::Mosaic( AvsState* avs ) : EffectBase1( avs ),
-	m_profileMipmaps( "MosaicMipmaps" )
+Mosaic::Mosaic( AvsState* avs ) : EffectBase1( avs ), MipMapsRenderer( "MosaicMipmaps" )
 { }
 
 HRESULT Mosaic::renderDisabled( RenderTargets& rt )
@@ -72,27 +71,15 @@ HRESULT Mosaic::render( bool isBeat, RenderTargets& rt )
 	if( cb.LOD <= 0 )
 		return renderDisabled( rt );
 
-	CHECK( m_texture.update( rt.lastWritten() ) );
-	m_profileMipmaps.mark();
+	CHECK( updateMipmaps( rt.lastWritten() ) );
 
 	if( !renderer.bindShaders( isBeat ) )
 		return S_FALSE;
 
-	bindResource<eStage::Pixel>( renderer.pixel().bindPrevFrame, m_texture.srv() );
 	CHECK( updateCBuffer( m_cb, &cb, sizeof( cb ) ) );
 	bindConstantBuffer<eStage::Pixel>( renderer.pixel().bindConstBuffer, m_cb );
 
-#ifdef DEBUG
-	if( !m_sampler )
-	{
-		CD3D11_SAMPLER_DESC sd{ D3D11_DEFAULT };
-		CHECK( device->CreateSamplerState( &sd, &m_sampler ) );
-		bindSampler<eStage::Pixel>( renderer.pixel().bindSampler, m_sampler );
-	}
-#else
-	// Default sampler state is what we need here
-	bindSampler<eStage::Pixel>( renderer.pixel().bindSampler );
-#endif
+	CHECK( bindMipmaps( renderer.pixel().bindPrevFrame, renderer.pixel().bindSampler ) );
 
 	BoundSrv<eStage::Pixel> bound;
 	if( avs->blend )

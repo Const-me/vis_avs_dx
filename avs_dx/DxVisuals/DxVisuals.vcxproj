@@ -96,10 +96,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Effects\Render\MovingParticle\MovingParticle.h" />
-    <ClInclude Include="Effects\Trans\Mosaic\Mosaic.h" />
+    <ClInclude Include="Effects\Trans\Mipmaps\MipMaps.h" />
+    <ClInclude Include="Effects\Trans\Mipmaps\Mosaic.h" />
     <ClInclude Include="Effects\Trans\Moves\DynamicDistance.h" />
     <ClInclude Include="Effects\Trans\ColorFade\ColorFade.h" />
-    <ClInclude Include="Effects\Trans\Mosaic\MosaicTexture.h" />
     <ClInclude Include="Resources\dynamicBuffers.h" />
     <ClInclude Include="Effects\EffectProfiler.h" />
     <ClInclude Include="Effects\Trans\Blur\SeparableConvolution.h" />
@@ -222,15 +222,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Effects\Render\MovingParticle\MovingParticle.cpp" />
+    <ClCompile Include="Effects\Trans\Mipmaps\MipMaps.cpp" />
+    <ClCompile Include="Effects\Trans\Mipmaps\Mosaic.cpp" />
     <ClCompile Include="Effects\Trans\Mirror\Mirror.cpp" />
-    <ClCompile Include="Effects\Trans\Mosaic\Mosaic.cpp" />
     <ClCompile Include="Effects\Trans\Moves\DynamicDistance.cpp" />
     <ClCompile Include="Effects\Misc\OnBeatClear.cpp" />
     <ClCompile Include="Effects\Trans\ColorClip\ColorClip.cpp" />
     <ClCompile Include="Effects\Trans\ColorReduction\ColorReduction.cpp" />
     <ClCompile Include="Effects\Trans\Invert\Invert.cpp" />
     <ClCompile Include="Effects\Trans\Multiplier\Multiplier.cpp" />
-    <ClCompile Include="Effects\Trans\Mosaic\MosaicTexture.cpp" />
     <ClCompile Include="Resources\dynamicBuffers.cpp" />
     <ClCompile Include="Effects\List\BufferSave.cpp" />
     <ClCompile Include="Effects\Misc\ClearScreen.cpp" />
@@ -436,11 +436,11 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="Effects\Trans\Mirror\MirrorPS.hlsl">
+    <FxCompile Include="Effects\Trans\Mipmaps\MosaicPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="Effects\Trans\Mosaic\MosaicPS.hlsl">
+    <FxCompile Include="Effects\Trans\Mirror\MirrorPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>

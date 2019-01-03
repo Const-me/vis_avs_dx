@@ -1,19 +1,19 @@
 #include "stdafx.h"
-#include "MosaicTexture.h"
+#include "MipMaps.h"
 #include <../InteropLib/interop.h>
 
-void MosaicTexture::destroy()
+void MipMaps::destroy()
 {
 	m_texture = nullptr;
 	m_srv = nullptr;
 }
 
-void MosaicTexture::onRenderSizeChanged()
+void MipMaps::onRenderSizeChanged()
 {
 	destroy();
 }
 
-HRESULT MosaicTexture::createTextures()
+HRESULT MipMaps::createTextures()
 {
 	if( m_srv )
 		return S_FALSE;
@@ -34,11 +34,39 @@ HRESULT MosaicTexture::createTextures()
 	return S_OK;
 }
 
-HRESULT MosaicTexture::update( const RenderTarget& src )
+HRESULT MipMaps::update( const RenderTarget& src )
 {
 	CHECK( createTextures() );
 
 	context->CopySubresourceRegion( m_texture, 0, 0, 0, 0, src.texture(), 0, nullptr );
 	context->GenerateMips( m_srv );
+	return S_OK;
+}
+
+MipMapsRenderer::MipMapsRenderer( const char* profileName ) :
+	m_profileMipmaps( profileName ) { }
+
+HRESULT MipMapsRenderer::updateMipmaps( RenderTarget& src )
+{
+	CHECK( m_mipMaps.update( src ) );
+	m_profileMipmaps.mark();
+	return S_OK;
+}
+
+HRESULT MipMapsRenderer::bindMipmaps( UINT prevFrameSlot, UINT samplerSlot )
+{
+	bindResource<eStage::Pixel>( prevFrameSlot, m_mipMaps.srv() );
+
+#ifdef DEBUG
+	if( !m_sampler )
+	{
+		CD3D11_SAMPLER_DESC sd{ D3D11_DEFAULT };
+		CHECK( device->CreateSamplerState( &sd, &m_sampler ) );
+		bindSampler<eStage::Pixel>( bindSampler, m_sampler );
+	}
+#else
+	// Default sampler state is what we need here
+	bindSampler<eStage::Pixel>( samplerSlot );
+#endif
 	return S_OK;
 }

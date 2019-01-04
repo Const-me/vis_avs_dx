@@ -89,6 +89,14 @@ namespace Expressions
 				fn( v );
 		}
 
+		template<class TFunc>
+		void enumMacros( TFunc fn ) const
+		{
+			for( const auto& v : m_vars )
+				if( v.loc == eVarLocation::macro )
+					fn( v );
+		}
+
 		const CStringA& getBeatMacro() const
 		{
 			return m_beatMacro;

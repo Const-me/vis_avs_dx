@@ -29,8 +29,8 @@ namespace
 
 HRESULT StaticMovementStructs::StateData::defines( Hlsl::Defines& def ) const
 {
-	def.set( "sw", screenSize.cx );
-	def.set( "sh", screenSize.cy );
+	setExpressionMacro( def, "sw", screenSize.cx );
+	setExpressionMacro( def, "sh", screenSize.cy );
 	return S_OK;
 }
 
@@ -39,8 +39,8 @@ HRESULT StaticMovementStructs::VsData::defines( Hlsl::Defines& def ) const
 	CHECK( __super::defines( def ) );
 
 	const CSize size = getRenderSize();
-	def.set( "sw", size.cx );
-	def.set( "sh", size.cy );
+	setExpressionMacro( def, "sw", size.cx );
+	setExpressionMacro( def, "sh", size.cy );
 	return S_OK;
 }
 

@@ -4,6 +4,13 @@
 #include "utils.hpp"
 #include "parse.h"
 
+CStringA Expressions::expressionMacroName( const char* name )
+{
+	CStringA res;
+	res.Format( "MACRO_%s", name );
+	return res;
+}
+
 using namespace Expressions;
 
 Compiler::Compiler( const char* effectName, const Prototype& effectPrototype, UINT stateOffset ) :
@@ -153,10 +160,21 @@ void Compiler::allocateState()
 	}
 }
 
+void Compiler::appendMacros( CStringA& hlsl ) const
+{
+	proto.enumMacros( [ & ]( const VariableDecl& decl )
+	{
+		if( decl.name == proto.getBeatMacro() )
+			return;
+		hlsl.AppendFormat( "		%s %s = %s;\r\n", hlslName( decl.vt ), cstr( decl.name ), cstr( expressionMacroName( decl.name ) ) );
+	} );
+}
+
 void Compiler::buildStateHlsl()
 {
 	CStringA &code = m_stateTemplate.hlslMain;
 	code = "	{\r\n";
+
 	const int size = (int)m_varUsage.size();
 	for( int i = 0; i < size; i++ )
 	{
@@ -175,7 +193,9 @@ void Compiler::buildStateHlsl()
 
 	const bool stateUsesBeat = ( m_symbols.vars.getBeatMacro() >= 0 ) && ( 0 != ( m_varUsage[ m_symbols.vars.getBeatMacro() ] & 0b00111111 ) );
 	if( stateUsesBeat )
-		code.AppendFormat( "		const uint %s = IS_BEAT;", cstr( proto.getBeatMacro() ) );
+		code.AppendFormat( "		uint %s = IS_BEAT;", cstr( proto.getBeatMacro() ) );
+
+	appendMacros( code );
 
 	code += "#if INIT_STATE\r\n";
 	code += proto.initState();
@@ -225,7 +245,8 @@ void Compiler::buildFragmentHlsl()
 
 	m_fragmentBeat = ( m_symbols.vars.getBeatMacro() >= 0 ) && ( 0 != ( m_varUsage[ m_symbols.vars.getBeatMacro() ] & 0b11000000 ) );
 	if( m_fragmentBeat )
-		code.AppendFormat( "		const uint %s = IS_BEAT;", cstr( proto.getBeatMacro() ) );
+		code.AppendFormat( "		uint %s = IS_BEAT;", cstr( proto.getBeatMacro() ) );
+	appendMacros( code );
 
 	code += m_dynStateLoad;
 

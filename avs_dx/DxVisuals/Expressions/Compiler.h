@@ -63,8 +63,17 @@ namespace Expressions
 		std::vector<CStringA> m_stateGlobals;
 		StateShaderTemplate m_stateTemplate;
 
+		void appendMacros( CStringA& hlsl ) const;
 		void allocateState();
 		void buildStateHlsl();
 		void buildFragmentHlsl();
 	};
+
+	CStringA expressionMacroName( const char* name );
+
+	template<class T>
+	inline void setExpressionMacro( Hlsl::Defines& def, const char* name, T value )
+	{
+		def.set( expressionMacroName( name ), value );
+	}
 }

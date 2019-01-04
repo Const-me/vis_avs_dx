@@ -33,8 +33,8 @@ namespace
 
 HRESULT DynamicMovementStructs::StateData::defines( Hlsl::Defines& def ) const
 {
-	def.set( "w", screenSize.cx );
-	def.set( "h", screenSize.cy );
+	setExpressionMacro( def, "w", screenSize.cx );
+	setExpressionMacro( def, "h", screenSize.cx );
 	return S_OK;
 }
 
@@ -42,8 +42,8 @@ HRESULT DynamicMovementStructs::VsData::defines( Hlsl::Defines& def ) const
 {
 	CHECK( __super::defines( def ) );
 	const CSize size = getRenderSize();
-	def.set( "w", size.cx );
-	def.set( "h", size.cy );
+	setExpressionMacro( def, "w", size.cx );
+	setExpressionMacro( def, "h", size.cx );
 	return S_OK;
 }
 

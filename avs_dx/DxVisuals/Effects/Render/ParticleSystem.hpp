@@ -6,7 +6,7 @@
 class ParticleSystemBase
 {
 	// Compute shader threads per group. Both compute shaders must have [numthreads( csThreads, 1, 1 )]
-	static constexpr UINT csThreads = 256;
+	const UINT csThreads;
 
 	const UINT particleByteWidth;
 	UINT m_particles, m_groups;
@@ -17,8 +17,10 @@ public:
 	const UINT particlesCapacity;
 	StructureBuffer m_buffer;
 
-	ParticleSystemBase( UINT cb, UINT n, const CAtlMap<CStringA, CStringA>& inc, const char* updateProfilerName ) :
-		particleByteWidth( cb ), particlesCapacity( n ),
+	ParticleSystemBase( UINT threads, UINT cb, UINT n, const CAtlMap<CStringA, CStringA>& inc, const char* updateProfilerName ) :
+		csThreads( threads ),
+		particleByteWidth( cb ),
+		particlesCapacity( n ),
 		m_profiler( updateProfilerName )
 	{ }
 
@@ -68,7 +70,7 @@ protected:
 
 	FacticleFx( typename TStruct::AvsState *pState, UINT cb, UINT n, const char* updateProfilerName ) :
 		EffectBase1<TStruct>( pState ),
-		ParticleSystemBase( cb, n, TStruct::effectIncludes(), updateProfilerName )
+		ParticleSystemBase( TStruct::computeThreadsPerGroup, cb, n, TStruct::effectIncludes(), updateProfilerName )
 	{ }
 
 	HRESULT updateParameters( Binder& binder ) override
@@ -80,12 +82,12 @@ protected:
 			if( hrInit.succeeded() && hrInit.value() )
 				hrInit.combine( m_initShader.compile( TStruct::effectIncludes(), EffectBase::stateOffset() ) );
 			hr.combine( hrInit );
-
 		}
 
 		if( m_needReinit && hr.succeeded() && m_initShader.hasShader() )
 		{
 			m_needReinit = false;
+			hr.combine( ensureBuffer() );
 			m_initShader.bind( false );
 			auto bound = boundResource( m_initShader.data().bindParticles, m_buffer.uav() );
 			dispatch( particlesCapacity );

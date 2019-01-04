@@ -50,7 +50,6 @@ typedef struct {
 	int c;
 } FountainPoint;
 
-
 class C_THISCLASS : public C_RBASE {
 protected:
 	float r;
@@ -140,6 +139,8 @@ C_THISCLASS::C_THISCLASS()
 
 	angle = -20;
 	rotvel = 16;
+
+	CREATE_DX_EFFECT( rotvel );
 }
 
 C_THISCLASS::~C_THISCLASS()

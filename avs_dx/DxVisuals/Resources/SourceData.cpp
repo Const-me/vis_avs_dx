@@ -5,6 +5,8 @@
 #pragma comment( lib, "Evr.lib" )
 #include "../Utils/preciseTickCount.h"
 
+static const double s_qpcMul = 1.0f / queryPerformanceFrequency();
+
 HRESULT SourceData::create()
 {
 	static_assert( sizeof( sConstantBuffer ) % 16 == 0 );
@@ -20,6 +22,8 @@ HRESULT SourceData::create()
 
 	CD3D11_BUFFER_DESC bufferDesc{ sizeof( sConstantBuffer ), D3D11_BIND_CONSTANT_BUFFER, D3D11_USAGE_DYNAMIC, D3D11_CPU_ACCESS_WRITE };
 	CHECK( device->CreateBuffer( &bufferDesc, nullptr, &m_cbuffer ) );
+
+	m_prevQpc = queryPerformanceCounter();
 
 	return S_OK;
 }
@@ -47,12 +51,19 @@ HRESULT SourceData::update( char visdata[ 2 ][ 2 ][ bands ], int isBeat )
 	{
 		CHECK( context->Map( m_cbuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped ) );
 		sConstantBuffer* dest = (sConstantBuffer*)mapped.pData;
-		dest->isBeat = isBeat;
-		dest->currentFrame = m_currentFrame;
-		dest->getTickCount = getPreciseTickCount();
-		context->Unmap( m_cbuffer, 0 );
 
+		dest->isBeat = isBeat;
+
+		dest->currentFrame = m_currentFrame;
 		m_currentFrame++;
+
+		dest->getTickCount = getPreciseTickCount();
+
+		const uint64_t qpcNow = queryPerformanceCounter();
+		dest->deltaTime = (float)( ( qpcNow - m_prevQpc ) * s_qpcMul );
+		m_prevQpc = qpcNow;
+
+		context->Unmap( m_cbuffer, 0 );
 	}
 
 	return S_OK;

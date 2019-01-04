@@ -126,6 +126,7 @@
     <ClInclude Include="Effects\Trans\Mipmaps\MipMaps.h" />
     <ClInclude Include="Effects\Trans\Mipmaps\Mosaic.h" />
     <ClInclude Include="Effects\Render\ParticleSystem.hpp" />
+    <ClInclude Include="Effects\Render\DotFountain\DotFountain.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -223,6 +224,7 @@
     <ClCompile Include="Effects\Render\MovingParticle\MovingParticle.cpp" />
     <ClCompile Include="Effects\Trans\Mipmaps\MipMaps.cpp" />
     <ClCompile Include="Effects\Trans\Mipmaps\Mosaic.cpp" />
+    <ClCompile Include="Effects\Render\DotFountain\DotFountain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -294,6 +296,10 @@
     <FxCompile Include="Effects\Render\MovingParticle\MovingParticleGS.hlsl" />
     <FxCompile Include="Effects\Render\MovingParticle\MovingParticleVS.hlsl" />
     <FxCompile Include="Effects\Trans\Mipmaps\MosaicPS.hlsl" />
+    <FxCompile Include="Effects\Render\DotFountain\DotFountain.fx" />
+    <FxCompile Include="Effects\Render\DotFountain\FountainInitCS.hlsl" />
+    <FxCompile Include="Effects\Render\DotFountain\FountainCS.hlsl" />
+    <FxCompile Include="Effects\Render\DotFountain\FountainVS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

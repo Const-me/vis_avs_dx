@@ -37,6 +37,23 @@ void RenderTarget::clear( const Vector4& color )
 	context->ClearRenderTargetView( m_rtv, &color.x );
 }
 
+void RenderTarget::clear()
+{
+/* #ifdef DEBUG
+	clear( Vector4{ 1, 1, 1, 1 } * 0.25f );
+#else
+	clear( Vector4::Zero );
+#endif */
+	clear( Vector4::Zero );
+}
+
+void RenderTarget::clear( const Vector3& color )
+{
+	Vector4 v4 = color.operator DirectX::XMVECTOR();
+	v4.w = 1;
+	clear( v4 );
+}
+
 void RenderTarget::bindTarget()
 {
 	ID3D11RenderTargetView* v = m_rtv;

@@ -25,18 +25,8 @@ public:
 	}
 
 	void clear( const Vector4& color );
-
-	void clear( const Vector3& color )
-	{
-		Vector4 v4 = color.operator DirectX::XMVECTOR();
-		v4.w = 1;
-		clear( v4 );
-	}
-
-	void clear()
-	{
-		clear( Vector4::Zero );
-	}
+	void clear( const Vector3& color );
+	void clear();
 
 	// Bind the write only render target view of the texture
 	void bindTarget();

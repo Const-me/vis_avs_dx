@@ -18,11 +18,13 @@ class SourceData
 		uint32_t currentFrame;
 		// Time in milliseconds since last boot
 		uint32_t getTickCount;
-		uint32_t zzUnused;
+		// Time in seconds since last frame
+		float deltaTime;
 	};
 
 	CComPtr<ID3D11Buffer> m_cbuffer;
 
+	uint64_t m_prevQpc;
 	uint32_t m_currentFrame = 0;
 
 public:

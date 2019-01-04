@@ -8,4 +8,7 @@ cbuffer FrameGlobalData : register(b0)
 
 	// Time in milliseconds since last boot
     uint getTickCount : packoffset(c0.z);
+
+	// Time in seconds since last frame
+    float deltaTime : packoffset(c0.w);
 }

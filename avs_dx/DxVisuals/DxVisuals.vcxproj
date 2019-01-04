@@ -95,6 +95,8 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Effects\Render\DotFountain\DotFountain.cpp" />
+    <ClInclude Include="Effects\Render\DotFountain\DotFountain.h" />
     <ClInclude Include="Effects\Render\MovingParticle\MovingParticle.h" />
     <ClInclude Include="Effects\Render\ParticleSystem.hpp" />
     <ClInclude Include="Effects\Trans\Mipmaps\MipMaps.h" />
@@ -388,6 +390,21 @@
     <FxCompile Include="Effects\Misc\ClearScreenPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <None Include="Effects\Render\DotFountain\Fountain.fx">
+      <FileType>Document</FileType>
+    </None>
+    <FxCompile Include="Effects\Render\DotFountain\FountainCS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Render\DotFountain\FountainInitCS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Render\DotFountain\FountainVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Effects\Render\MovingParticle\MovingParticleGS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>

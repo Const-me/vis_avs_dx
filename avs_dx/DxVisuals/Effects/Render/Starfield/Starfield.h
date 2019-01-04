@@ -39,6 +39,8 @@ struct StarfieldStructs: public PointSpritesRender
 	};
 
 	static const CAtlMap<CStringA, CStringA>& effectIncludes() { return includes(); }
+
+	static constexpr UINT computeThreadsPerGroup = 256;
 };
 
 class Starfield : public FacticleFx<StarfieldStructs>

@@ -4,6 +4,5 @@ float4 main( float2 tc : TEXCOORD0, float4 color : COLOR0 ) : SV_Target
     // return color;
 
     const float len2 = dot( tc, tc );
-	// fsolve(exp(x)=1/64,x);
-    return color * exp( -4.158883083 * len2 );
+    return color * exp( -4 * len2 );
 }

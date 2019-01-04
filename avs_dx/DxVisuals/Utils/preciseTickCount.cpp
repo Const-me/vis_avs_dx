@@ -6,20 +6,6 @@
 
 namespace
 {
-	inline uint64_t queryPerformanceCounter()
-	{
-		uint64_t res;
-		QueryPerformanceCounter( (LARGE_INTEGER*)&res );
-		return res;
-	}
-
-	inline uint64_t queryPerformanceFrequency()
-	{
-		uint64_t res;
-		QueryPerformanceFrequency( (LARGE_INTEGER*)&res );
-		return res;
-	}
-
 	// BTW, the only reason for this code is Win7 support: on Win8+ there's GetSystemTimePreciseAsFileTime API for that.
 	class PreciseTickCount
 	{

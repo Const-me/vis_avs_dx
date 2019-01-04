@@ -86,14 +86,16 @@ LRESULT RenderWindow::wmPresent( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	if( !renderTargetView )
 	{
 		logWarning( "Present is called while there's no render target" );
-		*pResult = S_FALSE;
+		const float rgba[ 4 ] = { 0, 0, 0, 0 };
+		context->ClearRenderTargetView( renderTargetView, rgba );
+		*pResult = swapChain->Present( 0, 0 );
 		return 0;
 	}
 
 	if( false )
 	{
 		// Debug code: just clear the RT
-		const float rgba[ 4 ] = { 0,1,0,1 };
+		const float rgba[ 4 ] = { 0, 1, 0, 1 };
 		context->ClearRenderTargetView( renderTargetView, rgba );
 		*pResult = swapChain->Present( 0, 0 );
 		return 0;
@@ -138,11 +140,6 @@ HRESULT RenderWindow::sendMessageTimeout( UINT wm, const void* wParam )
 
 HRESULT RenderWindow::presentSingle( const RenderTarget& src )
 {
-	if( !src )
-	{
-		logError( "RenderWindow::presentSingle: the source is empty" );
-		return E_INVALIDARG;
-	}
 	return sendMessageTimeout( WM_PRESENT, &src );
 }
 
@@ -162,8 +159,6 @@ HRESULT RenderWindow::presentTransition( const RenderTarget& t1, const RenderTar
 	switch( flag )
 	{
 	case 0:
-		logError( "RenderWindow::presentTransition: both sources are empty" );
-		return E_INVALIDARG;
 	case 1:
 		logWarning( "RenderWindow::presentTransition: the second source is empty" );
 		return presentSingle( t1 );

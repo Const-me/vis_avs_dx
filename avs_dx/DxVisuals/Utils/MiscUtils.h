@@ -7,10 +7,10 @@ constexpr bool dbgBreakOnErrors = false;
 #ifdef NDEBUG
 #define CHECK( hr ) { const HRESULT __hr = ( hr ); if( FAILED( __hr ) ) { logError( __hr, #hr ); return __hr; } }
 #else
-#define CHECK( hr ) { const HRESULT __hr = ( hr ); if( FAILED( __hr ) ) { if( dbgBreakOnErrors )__debugbreak(); logError( __hr, #hr ); return __hr; } }
+#define CHECK( hr ) { const HRESULT __hr = ( hr ); if( FAILED( __hr ) ) { if( dbgBreakOnErrors ) __debugbreak(); logError( __hr, #hr ); return __hr; } }
 #endif
 // Same as CHECK() but doesn't log errors
-#define SILENT_CHECK( hr ) { const HRESULT __hr = ( hr ); if( FAILED( __hr ) ) return __hr; }
+#define SILENT_CHECK( hr ) { const HRESULT __hr = ( hr ); if( FAILED( __hr ) ) { if( dbgBreakOnErrors ) __debugbreak(); return __hr; } }
 
 inline void omSetTarget( ID3D11RenderTargetView* rtv )
 {

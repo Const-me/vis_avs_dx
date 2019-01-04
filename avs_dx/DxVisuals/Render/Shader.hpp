@@ -16,10 +16,6 @@ public:
 
 	Shader() = default;
 	Shader( bool unused ) { }
-	~Shader()
-	{
-		unsubscribeHandler( this );
-	}
 
 	template<class TAvsState, class TDxEffectState>
 	HRESULT update( Binder& binder, const TAvsState& avs, const TDxEffectState& dx )

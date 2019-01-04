@@ -54,13 +54,13 @@ HRESULT Expressions::parseStatements( const CStringA& nseel, Expressions::Tree& 
 		}
 		// Found the semicolon.
 		if( !error )
-			CHECK( parseStatement( nseel, tree, begin, equals, i ) );
+			SILENT_CHECK( parseStatement( nseel, tree, begin, equals, i ) );
 		error = false;
 		equals = -1;
 		begin = i + 1;
 	}
 	if( !error )
-		CHECK( parseStatement( nseel, tree, begin, equals, end ) );
+		SILENT_CHECK( parseStatement( nseel, tree, begin, equals, end ) );
 
 	return S_OK;
 }

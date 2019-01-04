@@ -63,8 +63,8 @@ namespace Expressions
 		std::vector<CStringA> m_stateGlobals;
 		StateShaderTemplate m_stateTemplate;
 
-		HRESULT allocateState();
-		HRESULT buildStateHlsl();
-		HRESULT buildFragmentHlsl();
+		void allocateState();
+		void buildStateHlsl();
+		void buildFragmentHlsl();
 	};
 }

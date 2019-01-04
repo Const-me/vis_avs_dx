@@ -56,10 +56,10 @@ HRESULT Compiler::update( const char* init, const char* frame, const char* beat,
 	// Parse and recompile the state expressions
 	for( uint8_t i = 0; i < 3; i++ )
 	{
-		CHECK( parseStatements( m_expressions[ i ], m_tree ) );
-		CHECK( m_tree.deduceTypes() );
+		SILENT_CHECK( parseStatements( m_expressions[ i ], m_tree ) );
+		SILENT_CHECK( m_tree.deduceTypes() );
 		m_tree.transformDoubleFuncs();
-		CHECK( m_tree.emitHlsl( m_hlsl[ i ], m_stateTemplate.hasRandomNumbers ) );
+		SILENT_CHECK( m_tree.emitHlsl( m_hlsl[ i ], m_stateTemplate.hasRandomNumbers ) );
 		m_tree.getVariablesUsage( m_varUsage, i );
 	}
 
@@ -67,20 +67,20 @@ HRESULT Compiler::update( const char* init, const char* frame, const char* beat,
 	m_symbols.functions.clear();
 
 	// Parse and recompile the fragment expression
-	CHECK( parseStatements( m_expressions[ 3 ], m_tree ) );
-	CHECK( m_tree.deduceTypes() );
+	SILENT_CHECK( parseStatements( m_expressions[ 3 ], m_tree ) );
+	SILENT_CHECK( m_tree.deduceTypes() );
 	m_tree.transformDoubleFuncs();
-	CHECK( m_tree.emitHlsl( m_hlsl[ 3 ], m_fragmentRng ) );
+	SILENT_CHECK( m_tree.emitHlsl( m_hlsl[ 3 ], m_fragmentRng ) );
 	m_tree.getVariablesUsage( m_varUsage, 3 );
 	m_fragmentGlobals = m_symbols.functions.getFragmentGlobals();
 
-	CHECK( allocateState() );
-	CHECK( buildStateHlsl() );
-	CHECK( buildFragmentHlsl() );
+	allocateState();
+	buildStateHlsl();
+	buildFragmentHlsl();
 	return S_OK;
 }
 
-HRESULT Compiler::allocateState()
+void Compiler::allocateState()
 {
 	const int size = (int)m_varUsage.size();
 
@@ -151,11 +151,9 @@ HRESULT Compiler::allocateState()
 		const CStringA store = stateStore( vt, stateOffset + m_stateOffset, name );
 		m_dynStateStore.AppendFormat( "		%s;\r\n", cstr( store ) );
 	}
-
-	return S_OK;
 }
 
-HRESULT Compiler::buildStateHlsl()
+void Compiler::buildStateHlsl()
 {
 	CStringA &code = m_stateTemplate.hlslMain;
 	code = "	{\r\n";
@@ -202,11 +200,9 @@ HRESULT Compiler::buildStateHlsl()
 	code += proto.stateStore( m_stateOffset );
 	code += m_dynStateStore;
 	code += "	}\r\n";
-
-	return S_OK;
 }
 
-HRESULT Compiler::buildFragmentHlsl()
+void Compiler::buildFragmentHlsl()
 {
 	CStringA &code = m_hlslFragment;
 	code = proto.stateLoad( m_stateOffset );
@@ -234,8 +230,6 @@ HRESULT Compiler::buildFragmentHlsl()
 	code += m_dynStateLoad;
 
 	code += m_hlsl[ 3 ];
-
-	return S_OK;
 }
 
 int Compiler::getIndirectArgOffset( int index ) const

@@ -427,7 +427,6 @@ void Wnd_GoFullScreen( HWND hwnd )
 	}
 }
 
-int g_config_smp_mt = 2, g_config_smp = 0;
 static char *INI_FILE;
 
 static LRESULT CALLBACK WndProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
@@ -474,9 +473,6 @@ int Wnd_Init( struct winampVisModule *this_mod )
 		extern int g_laser_nomessage, g_laser_zones;
 		g_laser_nomessage = GetPrivateProfileInt( AVS_SECTION, "laser_nomessage", 0, INI_FILE );
 		g_laser_zones = GetPrivateProfileInt( AVS_SECTION, "laser_zones", 1, INI_FILE );
-#else
-		g_config_smp = GetPrivateProfileInt( AVS_SECTION, "smp", 0, INI_FILE );
-		g_config_smp_mt = GetPrivateProfileInt( AVS_SECTION, "smp_mt", 2, INI_FILE );
 #endif
 		need_redock = GetPrivateProfileInt( AVS_SECTION, "cfg_docked", 0, INI_FILE );
 		cfg_cfgwnd_x = GetPrivateProfileInt( AVS_SECTION, "cfg_cfgwnd_x", cfg_cfgwnd_x, INI_FILE );
@@ -632,15 +628,6 @@ void Wnd_Quit( void )
 	g_hwnd = NULL;
 	UnregisterClass( "avswnd", g_mod->hDllInstance );
 	{
-#ifdef LASER
-		extern int g_laser_zones, g_laser_nomessage;
-		wsprintf( str, "%d", g_laser_zones );
-		WriteInt( "laser_zones", g_laser_zones );
-		WriteInt( "laser_nomessage", g_laser_nomessage );
-#else
-		WriteInt( "smp", g_config_smp );
-		WriteInt( "smp_mt", g_config_smp_mt );
-#endif
 #ifdef WA2_EMBED
 		WriteInt( "wx", myWindowState.r.left );
 		WriteInt( "wy", myWindowState.r.top );

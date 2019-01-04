@@ -45,7 +45,6 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 char *C_RenderListClass::get_desc() { if( isroot ) return "Main"; return "Effect list"; }
 
 int g_config_seh = 1;
-extern int g_config_smp_mt, g_config_smp;
 
 static char extsigstr[] = "AVS 2.8+ Effect List Config";
 
@@ -353,1043 +352,521 @@ static int __inline depthof( int c, int i )
 	return i ? 255 - r : r;
 }
 
-int C_RenderListClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
+int C_RenderListClass::getNumRenders( void )
 {
-	__debugbreak();
-	return 0;
-
-	int is_preinit = ( isBeat & 0x80000000 );
-
-	if( isBeat && beat_render )
-		fake_enabled = beat_render_frames;
-
-	int use_enabled = enabled();
-	int use_inblendval = inblendval;
-	int use_outblendval = outblendval;
-	int use_clear = clearfb();
-
-	if( !isroot && use_code )
-	{
-		if( need_recompile )
-		{
-			EnterCriticalSection( &rcs );
-
-			if( !var_beat || g_reset_vars_on_recompile )
-			{
-				clearVars();
-				var_beat = registerVar( "beat" );
-				var_alphain = registerVar( "alphain" );
-				var_alphaout = registerVar( "alphaout" );
-				var_enabled = registerVar( "enabled" );
-				var_clear = registerVar( "clear" );
-				var_w = registerVar( "w" );
-				var_h = registerVar( "h" );
-				inited = 0;
-			}
-
-			need_recompile = 0;
-			int x;
-			for( x = 0; x < 2; x++ )
-			{
-				freeCode( codehandle[ x ] );
-				codehandle[ x ] = compileCode( effect_exp[ x ].get() );
-			}
-
-			LeaveCriticalSection( &rcs );
-		}
-
-		*var_beat = ( ( isBeat & 1 ) && !is_preinit ) ? 1.0 : 0.0;
-		*var_enabled = use_enabled ? 1.0 : 0.0;
-		*var_w = (double)w;
-		*var_h = (double)h;
-		*var_clear = use_clear ? 1.0 : 0.0;
-		*var_alphain = use_inblendval / 255.0;
-		*var_alphaout = use_outblendval / 255.0;
-		if( codehandle[ 0 ] && !inited ) { executeCode( codehandle[ 0 ], visdata ); inited = 1; }
-		executeCode( codehandle[ 1 ], visdata );
-
-		if( !is_preinit )
-		{
-			isBeat = *var_beat > 0.1 || *var_beat < -0.1;
-		}
-		use_inblendval = (int)( *var_alphain * 255.0 );
-		if( use_inblendval < 0 ) use_inblendval = 0;
-		else if( use_inblendval > 255 ) use_inblendval = 255;
-		use_outblendval = (int)( *var_alphaout * 255.0 );
-		if( use_outblendval < 0 ) use_outblendval = 0;
-		else if( use_outblendval > 255 ) use_outblendval = 255;
-
-		use_enabled = *var_enabled > 0.1 || *var_enabled < -0.1;
-		use_clear = *var_clear > 0.1 || *var_clear < -0.1;
-
-		// code execute
-	}
-
-#ifndef LASER
-	// root/replaceinout special cases
-	if( isroot || ( use_enabled && blendin() == 1 && blendout() == 1 ) )
-#endif
-	{
-		int s = 0, x;
-#ifndef LASER
-		int line_blend_mode_save = g_line_blend_mode;
-		if( thisfb ) GlobalFree( (HGLOBAL)thisfb );
-		thisfb = NULL;
-		if( use_clear && ( isroot || blendin() != 1 ) )
-			memset( framebuffer, 0, w*h * sizeof( int ) );
-		if( !is_preinit )
-		{
-			g_line_blend_mode = 0;
-			set_n_Context();
-		}
-#else
-		if( isroot || use_enabled )
-		{
-			void LineListSwap( C_LineListBase *item1, C_LineListBase *item2 );
-			if( !isroot )
-			{
-				line_save->ClearLineList();
-				LineListSwap( line_save, g_laser_linelist );
-			}
-#endif
-			for( x = 0; x < num_renders; x++ )
-			{
-				int t = 0;
-				int smp_max_threads;
-				C_RBASE2 *rb2;
-
-				if( renders[ x ].has_rbase2 && ( smp_max_threads = g_config_smp ? g_config_smp_mt : 0 ) > 1 && ( ( rb2 = (C_RBASE2*)renders[ x ].render )->smp_getflags() & 1 ) )
-				{
-					if( smp_max_threads > MAX_SMP_THREADS ) smp_max_threads = MAX_SMP_THREADS;
-
-					int nt = smp_max_threads;
-					nt = rb2->smp_begin( nt, visdata, isBeat, s ? fbout : framebuffer, s ? framebuffer : fbout, w, h );
-					if( !is_preinit && nt > 0 )
-					{
-						if( nt > smp_max_threads )nt = smp_max_threads;
-
-						// launch threads
-						smp_Render( nt, rb2, visdata, isBeat, s ? fbout : framebuffer, s ? framebuffer : fbout, w, h );
-
-
-						t = rb2->smp_finish( visdata, isBeat, s ? fbout : framebuffer, s ? framebuffer : fbout, w, h );
-					}
-
-				}
-				else
-				{
-					if( g_config_seh && renders[ x ].effect_index != LIST_ID )
-					{
-						__try
-						{
-							t = renders[ x ].render->render( visdata, isBeat, s ? fbout : framebuffer, s ? framebuffer : fbout, w, h );
-						}
-						__except( EXCEPTION_EXECUTE_HANDLER )
-						{
-							t = 0;
-						}
-					}
-					else
-					{
-						t = renders[ x ].render->render( visdata, isBeat, s ? fbout : framebuffer, s ? framebuffer : fbout, w, h );
-					}
-				}
-
-				if( t & 1 ) s ^= 1;
-				if( !is_preinit )
-				{
-					if( t & 0x10000000 ) isBeat = 1;
-					if( t & 0x20000000 ) isBeat = 0;
-				}
-			}
-#ifdef LASER
-			if( !isroot )
-			{
-				LineListSwap( line_save, g_laser_linelist );
-				int us = g_laser_linelist->GetUsedLines();
-				int n = g_laser_linelist->GetMaxLines() - us;
-				if( line_save->GetUsedLines() < n ) n = line_save->GetUsedLines();
-				g_laser_linelist->SetLines( line_save->GetLineList(), us, n );
-				g_laser_linelist->SetUsedLines( us + n );
-			}
-		}
-#else
-			if( !is_preinit )
-			{
-				g_line_blend_mode = line_blend_mode_save;
-				unset_n_Context();
-			}
-#endif
-			fake_enabled--;
-			return s;
-	}
-
-#ifndef LASER
-		// check to see if we're enabled
-		if( !use_enabled )
-		{
-			if( thisfb ) GlobalFree( (HGLOBAL)thisfb );
-			thisfb = NULL;
-			return 0;
-		}
-
-		fake_enabled--;
-
-
-		// handle resize
-		if( l_w != w || l_h != h || !thisfb )
-		{
-			extern int config_reuseonresize;
-			int do_resize = config_reuseonresize && !!thisfb && l_w && l_h && !use_clear;
-
-			int *newfb = (int*)GlobalAlloc( do_resize ? GMEM_FIXED : GPTR, w*h * sizeof( int ) );
-			if( newfb && do_resize )
-			{
-				int x, y;
-				int dxpos = ( l_w << 16 ) / w;
-				int ypos = 0;
-				int dypos = ( l_h << 16 ) / h;
-				int *out = newfb;
-				for( y = 0; y < h; y++ )
-				{
-					int *p = thisfb + l_w * ( ypos >> 16 );
-					int xpos = 0;
-					for( x = 0; x < w; x++ )
-					{
-						*out++ = p[ xpos >> 16 ];
-						xpos += dxpos;
-					}
-					ypos += dypos;
-				}
-			}
-			l_w = w;
-			l_h = h;
-			if( thisfb ) GlobalFree( (HGLOBAL)thisfb );
-			thisfb = newfb;
-		}
-		// handle clear mode
-		if( use_clear ) memset( thisfb, 0, w*h * sizeof( int ) );
-
-
-		// blend parent framebuffer into current, if necessary
-
-		if( !is_preinit )
-		{
-			int x = w * h;
-			int *tfb = framebuffer;
-			int *o = thisfb;
-			set_n_Context();
-			int use_blendin = blendin();
-			if( use_blendin == 10 && use_inblendval >= 255 )
-				use_blendin = 1;
-
-			switch( use_blendin )
-			{
-			case 1:
-				memcpy( o, tfb, w*h * sizeof( int ) );
-				break;
-			case 2:
-				mmx_avgblend_block( o, tfb, x );
-				break;
-			case 3:
-				while( x-- )
-				{
-					*o = BLEND_MAX( *o, *tfb++ );
-					o++;
-				}
-				break;
-			case 4:
-				mmx_addblend_block( o, tfb, x );
-				break;
-			case 5:
-				while( x-- )
-				{
-					*o = BLEND_SUB( *o, *tfb++ );
-					o++;
-				}
-				break;
-			case 6:
-				while( x-- )
-				{
-					*o = BLEND_SUB( *tfb++, *o );
-					o++;
-				}
-				break;
-			case 7:
-			{
-				int y = h / 2;
-				while( y-- > 0 )
-				{
-					memcpy( o, tfb, w * sizeof( int ) );
-					tfb += w * 2;
-					o += w * 2;
-				}
-			}
-			break;
-			case 8:
-			{
-				int r = 0;
-				int y = h;
-				while( y-- > 0 )
-				{
-					int *out, *in;
-					int x = w / 2;
-					out = o + r;
-					in = tfb + r;
-					r ^= 1;
-					while( x-- > 0 )
-					{
-						*out = *in;
-						out += 2;
-						in += 2;
-					}
-					o += w;
-					tfb += w;
-				}
-			}
-			break;
-			case 9:
-				while( x-- )
-				{
-					*o = *o^*tfb++;
-					o++;
-				}
-				break;
-			case 10:
-				mmx_adjblend_block( o, tfb, o, x, use_inblendval );
-				break;
-			case 11:
-				mmx_mulblend_block( o, tfb, x );
-				break;
-			case 13:
-				while( x-- )
-				{
-					*o = BLEND_MIN( *o, *tfb++ );
-					o++;
-				}
-				break;
-			case 12:
-			{
-				int *buf = (int*)getGlobalBuffer( w, h, bufferin, 0 );
-				if( !buf ) break;
-				while( x-- )
-				{
-					*o = BLEND_ADJ( *tfb++, *o, depthof( *buf, ininvert ) );
-					o++;
-					buf++;
-				}
-			}
-#ifndef NO_MMX
-			__asm emms;
-#endif
-			break;
-			default:
-				break;
-			}
-			unset_n_Context();
-		}
-
-		int s = 0;
-		int x;
-		int line_blend_mode_save = g_line_blend_mode;
-		if( !is_preinit ) g_line_blend_mode = 0;
-
-		for( x = 0; x < num_renders; x++ )
-		{
-			int t = 0;
-
-			int smp_max_threads;
-			C_RBASE2 *rb2;
-
-			if( renders[ x ].has_rbase2 && ( smp_max_threads = g_config_smp ? g_config_smp_mt : 0 ) > 1 && ( ( rb2 = (C_RBASE2*)renders[ x ].render )->smp_getflags() & 1 ) )
-			{
-				if( smp_max_threads > MAX_SMP_THREADS ) smp_max_threads = MAX_SMP_THREADS;
-
-				int nt = smp_max_threads;
-				nt = rb2->smp_begin( nt, visdata, isBeat, s ? fbout : framebuffer, s ? framebuffer : fbout, w, h );
-				if( !is_preinit && nt > 0 )
-				{
-					if( nt > smp_max_threads )nt = smp_max_threads;
-
-					// launch threads
-					smp_Render( nt, rb2, visdata, isBeat, s ? fbout : thisfb, s ? thisfb : fbout, w, h );
-
-					t = rb2->smp_finish( visdata, isBeat, s ? fbout : framebuffer, s ? framebuffer : fbout, w, h );
-				}
-
-			}
-			else if( g_config_seh && renders[ x ].effect_index != LIST_ID )
-			{
-				__try
-				{
-					t = renders[ x ].render->render( visdata, isBeat, s ? fbout : thisfb, s ? thisfb : fbout, w, h );
-				}
-				__except( EXCEPTION_EXECUTE_HANDLER )
-				{
-					t = 0;
-				}
-			}
-			else
-			{
-				t = renders[ x ].render->render( visdata, isBeat, s ? fbout : thisfb, s ? thisfb : fbout, w, h );
-			}
-
-
-			if( t & 1 ) s ^= 1;
-			if( !is_preinit )
-			{
-				if( t & 0x10000000 ) isBeat = 1;
-				if( t & 0x20000000 ) isBeat = 0;
-			}
-		}
-		if( !is_preinit ) g_line_blend_mode = line_blend_mode_save;
-
-		// if s==1 at this point, data we want is in fbout.
-
-		if( !is_preinit )
-		{
-			if( s ) memcpy( thisfb, fbout, w*h * sizeof( int ) );
-
-			int *tfb = s ? fbout : thisfb;
-			int *o = framebuffer;
-			x = w * h;
-			set_n_Context();
-
-			int use_blendout = blendout();
-			if( use_blendout == 10 && use_outblendval >= 255 )
-				use_blendout = 1;
-			switch( use_blendout )
-			{
-			case 1:
-				if( s )
-				{
-					unset_n_Context();
-					return 1;
-				}
-				memcpy( o, tfb, x * sizeof( int ) );
-				break;
-			case 2:
-				mmx_avgblend_block( o, tfb, x );
-				break;
-			case 3:
-				while( x-- )
-				{
-					*o = BLEND_MAX( *o, *tfb++ );
-					o++;
-				}
-				break;
-			case 4:
-				mmx_addblend_block( o, tfb, x );
-				break;
-			case 5:
-				while( x-- )
-				{
-					*o = BLEND_SUB( *o, *tfb++ );
-					o++;
-				}
-				break;
-			case 6:
-				while( x-- )
-				{
-					*o = BLEND_SUB( *tfb++, *o );
-					o++;
-				}
-				break;
-			case 7:
-			{
-				int y = h / 2;
-				while( y-- > 0 )
-				{
-					memcpy( o, tfb, w * sizeof( int ) );
-					tfb += w * 2;
-					o += w * 2;
-				}
-			}
-			break;
-			case 8:
-			{
-				int r = 0;
-				int y = h;
-				while( y-- > 0 )
-				{
-					int *out, *in;
-					int x = w / 2;
-					out = o + r;
-					in = tfb + r;
-					r ^= 1;
-					while( x-- > 0 )
-					{
-						*out = *in;
-						out += 2;
-						in += 2;
-					}
-					o += w;
-					tfb += w;
-				}
-			}
-			break;
-			case 9:
-				while( x-- )
-				{
-					*o = *o^*tfb++;
-					o++;
-				}
-				break;
-			case 10:
-				mmx_adjblend_block( o, tfb, o, x, use_outblendval );
-				break;
-			case 11:
-				mmx_mulblend_block( o, tfb, x );
-				break;
-			case 13:
-				while( x-- )
-				{
-					*o = BLEND_MIN( *o, *tfb++ );
-					o++;
-				}
-				break;
-			case 12:
-			{
-				int *buf = (int*)getGlobalBuffer( w, h, bufferout, 0 );
-				if( !buf ) break;
-				while( x-- )
-				{
-					*o = BLEND_ADJ( *tfb++, *o, depthof( *buf, outinvert ) );
-					o++;
-					buf++;
-				}
-#ifndef NO_MMX
-				__asm emms;
-#endif
-			}
-			break;
-			default:
-				break;
-			}
-			unset_n_Context();
-		}
-		return 0;
-#endif // !LASER
+	return num_renders;
 }
 
-	int C_RenderListClass::getNumRenders( void )
-	{
-		return num_renders;
-	}
+C_RenderListClass::T_RenderListType *C_RenderListClass::getRender( int index )
+{
+	if( index >= 0 && index < num_renders ) return &renders[ index ];
+	return NULL;
+}
 
-	C_RenderListClass::T_RenderListType *C_RenderListClass::getRender( int index )
-	{
-		if( index >= 0 && index < num_renders ) return &renders[ index ];
-		return NULL;
-	}
+int C_RenderListClass::findRender( T_RenderListType *r )
+{
+	int idx;
+	if( !r ) return -1;
+	for( idx = 0; idx < num_renders&&renders[ idx ].render != r->render; idx++ );
+	if( idx < num_renders ) return idx;
+	return -1;
+}
 
-	int C_RenderListClass::findRender( T_RenderListType *r )
-	{
-		int idx;
-		if( !r ) return -1;
-		for( idx = 0; idx < num_renders&&renders[ idx ].render != r->render; idx++ );
-		if( idx < num_renders ) return idx;
-		return -1;
-	}
+int C_RenderListClass::removeRenderFrom( T_RenderListType *r, int del )
+{
+	int idx;
+	if( !r ) return 1;
+	for( idx = 0; idx < num_renders&&renders[ idx ].render != r->render; idx++ );
+	return removeRender( idx, del );
+}
 
-	int C_RenderListClass::removeRenderFrom( T_RenderListType *r, int del )
+int C_RenderListClass::removeRender( int index, int del )
+{
+	if( index >= 0 && index < num_renders )
 	{
-		int idx;
-		if( !r ) return 1;
-		for( idx = 0; idx < num_renders&&renders[ idx ].render != r->render; idx++ );
-		return removeRender( idx, del );
-	}
-
-	int C_RenderListClass::removeRender( int index, int del )
-	{
-		if( index >= 0 && index < num_renders )
+		if( del&&renders[ index ].render ) delete renders[ index ].render;
+		num_renders--;
+		while( index < num_renders )
 		{
-			if( del&&renders[ index ].render ) delete renders[ index ].render;
-			num_renders--;
-			while( index < num_renders )
-			{
-				renders[ index ] = renders[ index + 1 ];
-				index++;
-			}
-			if( !num_renders )
-			{
-				num_renders_alloc = 0;
-				if( renders ) GlobalFree( (HGLOBAL)renders );
-				renders = NULL;
-			}
-			return 0;
+			renders[ index ] = renders[ index + 1 ];
+			index++;
 		}
-		return 1;
+		if( !num_renders )
+		{
+			num_renders_alloc = 0;
+			if( renders ) GlobalFree( (HGLOBAL)renders );
+			renders = NULL;
+		}
+		return 0;
 	}
-	void C_RenderListClass::clearRenders( void )
+	return 1;
+}
+void C_RenderListClass::clearRenders( void )
+{
+	int x;
+	if( renders )
 	{
-		int x;
+		for( x = 0; x < num_renders; x++ )
+		{
+			delete renders[ x ].render;
+		}
+		GlobalFree( (HGLOBAL)renders );
+	}
+	num_renders = 0;
+	num_renders_alloc = 0;
+	renders = NULL;
+	if( thisfb ) GlobalFree( (HGLOBAL)thisfb );
+	thisfb = 0;
+	if( dxEffect )
+		dxEffect->clearRenders();
+}
+
+int C_RenderListClass::insertRenderBefore( T_RenderListType *r, T_RenderListType *before )
+{
+	int idx;
+	if( !before ) idx = num_renders;
+	else for( idx = 0; idx < num_renders&&renders[ idx ].render != before->render; idx++ );
+	return insertRender( r, idx );
+}
+
+int C_RenderListClass::insertRender( T_RenderListType *r, int index ) // index=-1 for add
+{
+	if( num_renders + 1 >= num_renders_alloc || !renders )
+	{
+		num_renders_alloc = num_renders + 16;
+		T_RenderListType *newr = (T_RenderListType *)GlobalAlloc( GPTR, num_renders_alloc * sizeof( T_RenderListType ) );
+		if( !newr ) return -1;
+		if( num_renders&&renders )
+		{
+			memcpy( newr, renders, num_renders * sizeof( T_RenderListType ) );
+		}
 		if( renders )
 		{
-			for( x = 0; x < num_renders; x++ )
-			{
-				delete renders[ x ].render;
-			}
 			GlobalFree( (HGLOBAL)renders );
 		}
-		num_renders = 0;
-		num_renders_alloc = 0;
-		renders = NULL;
-		if( thisfb ) GlobalFree( (HGLOBAL)thisfb );
-		thisfb = 0;
-		if( dxEffect )
-			dxEffect->clearRenders();
+		renders = newr;
 	}
 
-	int C_RenderListClass::insertRenderBefore( T_RenderListType *r, T_RenderListType *before )
+	if( index < 0 || index >= num_renders )
 	{
-		int idx;
-		if( !before ) idx = num_renders;
-		else for( idx = 0; idx < num_renders&&renders[ idx ].render != before->render; idx++ );
-		return insertRender( r, idx );
+		renders[ num_renders ] = *r;
+		return num_renders++;
 	}
-
-	int C_RenderListClass::insertRender( T_RenderListType *r, int index ) // index=-1 for add
+	int x;
+	for( x = num_renders++; x > index; x-- )
 	{
-		if( num_renders + 1 >= num_renders_alloc || !renders )
-		{
-			num_renders_alloc = num_renders + 16;
-			T_RenderListType *newr = (T_RenderListType *)GlobalAlloc( GPTR, num_renders_alloc * sizeof( T_RenderListType ) );
-			if( !newr ) return -1;
-			if( num_renders&&renders )
-			{
-				memcpy( newr, renders, num_renders * sizeof( T_RenderListType ) );
-			}
-			if( renders )
-			{
-				GlobalFree( (HGLOBAL)renders );
-			}
-			renders = newr;
-		}
-
-		if( index < 0 || index >= num_renders )
-		{
-			renders[ num_renders ] = *r;
-			return num_renders++;
-		}
-		int x;
-		for( x = num_renders++; x > index; x-- )
-		{
-			renders[ x ] = renders[ x - 1 ];
-		}
-		renders[ x ] = *r;
-
-		return x;
+		renders[ x ] = renders[ x - 1 ];
 	}
+	renders[ x ] = *r;
 
-	void C_RenderListClass::FillBufferCombo( HWND dlg, int ctl )
+	return x;
+}
+
+void C_RenderListClass::FillBufferCombo( HWND dlg, int ctl )
+{
+	int i = 0;
+	char txt[ 64 ];
+	for( i = 0; i < NBUF; i++ )
 	{
-		int i = 0;
-		char txt[ 64 ];
-		for( i = 0; i < NBUF; i++ )
-		{
-			wsprintf( txt, "Buffer %d", i + 1 );
-			SendDlgItemMessage( dlg, ctl, CB_ADDSTRING, 0, (int)txt );
-		}
+		wsprintf( txt, "Buffer %d", i + 1 );
+		SendDlgItemMessage( dlg, ctl, CB_ADDSTRING, 0, (int)txt );
 	}
+}
 
+static C_RenderListClass *g_this;
+static const char *blendmodes[] =
+{
+  "Ignore",
+  "Replace",
+  "50/50",
+  "Maximum",
+  "Additive",
+  "Subtractive 1",
+  "Subtractive 2",
+  "Every other line",
+  "Every other pixel",
+  "XOR",
+	"Adjustable",
+  "Multiply",
+	"Buffer",
+  "Minimum",
+};
 
-	static C_RenderListClass *g_this;
-	static const char *blendmodes[] =
+BOOL CALLBACK C_RenderListClass::g_DlgProcRoot( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
+{
+	switch( uMsg )
 	{
-	  "Ignore",
-	  "Replace",
-	  "50/50",
-	  "Maximum",
-	  "Additive",
-	  "Subtractive 1",
-	  "Subtractive 2",
-	  "Every other line",
-	  "Every other pixel",
-	  "XOR",
-		"Adjustable",
-	  "Multiply",
-		"Buffer",
-	  "Minimum",
-	};
-
-
-
-	BOOL CALLBACK C_RenderListClass::g_DlgProcRoot( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
-	{
-		switch( uMsg )
-		{
-		case WM_INITDIALOG:
+	case WM_INITDIALOG:
 #ifdef LASER
-			ShowWindow( GetDlgItem( hwndDlg, IDC_CHECK1 ), SW_HIDE );
+		ShowWindow( GetDlgItem( hwndDlg, IDC_CHECK1 ), SW_HIDE );
 #endif
-			{
+		{
 #ifndef LASER
-				if( g_this->clearfb() ) CheckDlgButton( hwndDlg, IDC_CHECK1, BST_CHECKED );
+			if( g_this->clearfb() ) CheckDlgButton( hwndDlg, IDC_CHECK1, BST_CHECKED );
 #endif
-			}
-			return 1;
-		case WM_COMMAND:
-			switch( LOWORD( wParam ) )
-			{
-			case IDC_CHECK1:
-				g_this->set_clearfb( IsDlgButtonChecked( hwndDlg, IDC_CHECK1 ) );
-				break;
-			}
+		}
+		return 1;
+	case WM_COMMAND:
+		switch( LOWORD( wParam ) )
+		{
+		case IDC_CHECK1:
+			g_this->set_clearfb( IsDlgButtonChecked( hwndDlg, IDC_CHECK1 ) );
 			break;
 		}
-		return 0;
+		break;
 	}
+	return 0;
+}
 
 
-	BOOL CALLBACK C_RenderListClass::g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
+BOOL CALLBACK C_RenderListClass::g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
+{
+	switch( uMsg )
 	{
-		switch( uMsg )
-		{
-		case WM_INITDIALOG:
+	case WM_INITDIALOG:
 #ifdef LASER
-			ShowWindow( GetDlgItem( hwndDlg, IDC_CHECK1 ), SW_HIDE );
-			ShowWindow( GetDlgItem( hwndDlg, IDC_INSLIDE ), SW_HIDE );
-			ShowWindow( GetDlgItem( hwndDlg, IDC_OUTSLIDE ), SW_HIDE );
-			ShowWindow( GetDlgItem( hwndDlg, IDC_CBBUF1 ), SW_HIDE );
-			ShowWindow( GetDlgItem( hwndDlg, IDC_CBBUF2 ), SW_HIDE );
-			ShowWindow( GetDlgItem( hwndDlg, IDC_INVERT1 ), SW_HIDE );
-			ShowWindow( GetDlgItem( hwndDlg, IDC_INVERT2 ), SW_HIDE );
-			ShowWindow( GetDlgItem( hwndDlg, IDC_COMBO1 ), SW_HIDE );
-			ShowWindow( GetDlgItem( hwndDlg, IDC_COMBO2 ), SW_HIDE );
-			ShowWindow( GetDlgItem( hwndDlg, IDC_FR1 ), SW_HIDE );
-			ShowWindow( GetDlgItem( hwndDlg, IDC_FR2 ), SW_HIDE );
+		ShowWindow( GetDlgItem( hwndDlg, IDC_CHECK1 ), SW_HIDE );
+		ShowWindow( GetDlgItem( hwndDlg, IDC_INSLIDE ), SW_HIDE );
+		ShowWindow( GetDlgItem( hwndDlg, IDC_OUTSLIDE ), SW_HIDE );
+		ShowWindow( GetDlgItem( hwndDlg, IDC_CBBUF1 ), SW_HIDE );
+		ShowWindow( GetDlgItem( hwndDlg, IDC_CBBUF2 ), SW_HIDE );
+		ShowWindow( GetDlgItem( hwndDlg, IDC_INVERT1 ), SW_HIDE );
+		ShowWindow( GetDlgItem( hwndDlg, IDC_INVERT2 ), SW_HIDE );
+		ShowWindow( GetDlgItem( hwndDlg, IDC_COMBO1 ), SW_HIDE );
+		ShowWindow( GetDlgItem( hwndDlg, IDC_COMBO2 ), SW_HIDE );
+		ShowWindow( GetDlgItem( hwndDlg, IDC_FR1 ), SW_HIDE );
+		ShowWindow( GetDlgItem( hwndDlg, IDC_FR2 ), SW_HIDE );
 #endif
-			{
+		{
 #ifndef LASER
+			{
+				int x;
+				for( x = 0; x < sizeof( blendmodes ) / sizeof( blendmodes[ 0 ] ); x++ )
 				{
-					int x;
-					for( x = 0; x < sizeof( blendmodes ) / sizeof( blendmodes[ 0 ] ); x++ )
-					{
-						SendDlgItemMessage( hwndDlg, IDC_COMBO1, CB_ADDSTRING, 0, (LPARAM)blendmodes[ x ] );
-						SendDlgItemMessage( hwndDlg, IDC_COMBO2, CB_ADDSTRING, 0, (LPARAM)blendmodes[ x ] );
-					}
-					SendDlgItemMessage( hwndDlg, IDC_COMBO1, CB_SETCURSEL, (WPARAM)g_this->blendout(), 0 );
-					SendDlgItemMessage( hwndDlg, IDC_COMBO2, CB_SETCURSEL, (WPARAM)g_this->blendin(), 0 );
-					ShowWindow( GetDlgItem( hwndDlg, IDC_INSLIDE ), ( g_this->blendin() == 10 ) ? SW_NORMAL : SW_HIDE );
-					ShowWindow( GetDlgItem( hwndDlg, IDC_OUTSLIDE ), ( g_this->blendout() == 10 ) ? SW_NORMAL : SW_HIDE );
-					SendDlgItemMessage( hwndDlg, IDC_INSLIDE, TBM_SETRANGE, TRUE, MAKELONG( 0, 255 ) );
-					SendDlgItemMessage( hwndDlg, IDC_INSLIDE, TBM_SETPOS, TRUE, (int)( g_this->inblendval ) );
-					SendDlgItemMessage( hwndDlg, IDC_OUTSLIDE, TBM_SETRANGE, TRUE, MAKELONG( 0, 255 ) );
-					SendDlgItemMessage( hwndDlg, IDC_OUTSLIDE, TBM_SETPOS, TRUE, (int)( g_this->outblendval ) );
-					ShowWindow( GetDlgItem( hwndDlg, IDC_CBBUF1 ), ( g_this->blendin() == 12 ) ? SW_NORMAL : SW_HIDE );
+					SendDlgItemMessage( hwndDlg, IDC_COMBO1, CB_ADDSTRING, 0, (LPARAM)blendmodes[ x ] );
+					SendDlgItemMessage( hwndDlg, IDC_COMBO2, CB_ADDSTRING, 0, (LPARAM)blendmodes[ x ] );
+				}
+				SendDlgItemMessage( hwndDlg, IDC_COMBO1, CB_SETCURSEL, (WPARAM)g_this->blendout(), 0 );
+				SendDlgItemMessage( hwndDlg, IDC_COMBO2, CB_SETCURSEL, (WPARAM)g_this->blendin(), 0 );
+				ShowWindow( GetDlgItem( hwndDlg, IDC_INSLIDE ), ( g_this->blendin() == 10 ) ? SW_NORMAL : SW_HIDE );
+				ShowWindow( GetDlgItem( hwndDlg, IDC_OUTSLIDE ), ( g_this->blendout() == 10 ) ? SW_NORMAL : SW_HIDE );
+				SendDlgItemMessage( hwndDlg, IDC_INSLIDE, TBM_SETRANGE, TRUE, MAKELONG( 0, 255 ) );
+				SendDlgItemMessage( hwndDlg, IDC_INSLIDE, TBM_SETPOS, TRUE, (int)( g_this->inblendval ) );
+				SendDlgItemMessage( hwndDlg, IDC_OUTSLIDE, TBM_SETRANGE, TRUE, MAKELONG( 0, 255 ) );
+				SendDlgItemMessage( hwndDlg, IDC_OUTSLIDE, TBM_SETPOS, TRUE, (int)( g_this->outblendval ) );
+				ShowWindow( GetDlgItem( hwndDlg, IDC_CBBUF1 ), ( g_this->blendin() == 12 ) ? SW_NORMAL : SW_HIDE );
+				ShowWindow( GetDlgItem( hwndDlg, IDC_CBBUF2 ), ( g_this->blendout() == 12 ) ? SW_NORMAL : SW_HIDE );
+				ShowWindow( GetDlgItem( hwndDlg, IDC_INVERT1 ), ( g_this->blendin() == 12 ) ? SW_NORMAL : SW_HIDE );
+				ShowWindow( GetDlgItem( hwndDlg, IDC_INVERT2 ), ( g_this->blendout() == 12 ) ? SW_NORMAL : SW_HIDE );
+				g_this->FillBufferCombo( hwndDlg, IDC_CBBUF1 );
+				g_this->FillBufferCombo( hwndDlg, IDC_CBBUF2 );
+				SendDlgItemMessage( hwndDlg, IDC_CBBUF1, CB_SETCURSEL, (WPARAM)g_this->bufferin, 0 );
+				SendDlgItemMessage( hwndDlg, IDC_CBBUF2, CB_SETCURSEL, (WPARAM)g_this->bufferout, 0 );
+				if( g_this->ininvert ) CheckDlgButton( hwndDlg, IDC_INVERT1, BST_CHECKED );
+				if( g_this->outinvert ) CheckDlgButton( hwndDlg, IDC_INVERT2, BST_CHECKED );
+			}
+			if( g_this->clearfb() ) CheckDlgButton( hwndDlg, IDC_CHECK1, BST_CHECKED );
+#endif
+			g_this->isstart = 1;
+			SetDlgItemText( hwndDlg, IDC_EDIT4, g_this->effect_exp[ 0 ].get() );
+			SetDlgItemText( hwndDlg, IDC_EDIT5, g_this->effect_exp[ 1 ].get() );
+			g_this->isstart = 0;
+
+
+			if( ( ( g_this->mode & 2 ) ^ 2 ) )
+				CheckDlgButton( hwndDlg, IDC_CHECK2, BST_CHECKED );
+			if( g_this->beat_render ) CheckDlgButton( hwndDlg, IDC_CHECK3, BST_CHECKED );
+			else EnableWindow( GetDlgItem( hwndDlg, IDC_EDIT1 ), FALSE );
+			if( g_this->use_code ) CheckDlgButton( hwndDlg, IDC_CHECK4, BST_CHECKED );
+			char buf[ 999 ];
+			wsprintf( buf, "%d", g_this->beat_render_frames );
+			SetDlgItemText( hwndDlg, IDC_EDIT1, buf );
+		}
+		return 1;
+	case WM_COMMAND:
+		switch( LOWORD( wParam ) )
+		{
+		case IDC_EDIT4:
+		case IDC_EDIT5:
+			if( !g_this->isstart && HIWORD( wParam ) == EN_CHANGE )
+			{
+				EnterCriticalSection( &g_this->rcs );
+				g_this->effect_exp[ 0 ].get_from_dlgitem( hwndDlg, IDC_EDIT4 );
+				g_this->effect_exp[ 1 ].get_from_dlgitem( hwndDlg, IDC_EDIT5 );
+				g_this->need_recompile = 1;
+				if( LOWORD( wParam ) == IDC_EDIT4 ) g_this->inited = 0;
+				LeaveCriticalSection( &g_this->rcs );
+			}
+			break;
+		case IDC_COMBO1:
+			if( HIWORD( wParam ) == CBN_SELCHANGE )
+			{
+				int r = SendDlgItemMessage( hwndDlg, IDC_COMBO1, CB_GETCURSEL, 0, 0 );
+				if( r != CB_ERR )
+				{
+					g_this->set_blendout( r );
+					ShowWindow( GetDlgItem( hwndDlg, IDC_OUTSLIDE ), ( r == 10 ) ? SW_NORMAL : SW_HIDE );
 					ShowWindow( GetDlgItem( hwndDlg, IDC_CBBUF2 ), ( g_this->blendout() == 12 ) ? SW_NORMAL : SW_HIDE );
-					ShowWindow( GetDlgItem( hwndDlg, IDC_INVERT1 ), ( g_this->blendin() == 12 ) ? SW_NORMAL : SW_HIDE );
 					ShowWindow( GetDlgItem( hwndDlg, IDC_INVERT2 ), ( g_this->blendout() == 12 ) ? SW_NORMAL : SW_HIDE );
-					g_this->FillBufferCombo( hwndDlg, IDC_CBBUF1 );
-					g_this->FillBufferCombo( hwndDlg, IDC_CBBUF2 );
-					SendDlgItemMessage( hwndDlg, IDC_CBBUF1, CB_SETCURSEL, (WPARAM)g_this->bufferin, 0 );
-					SendDlgItemMessage( hwndDlg, IDC_CBBUF2, CB_SETCURSEL, (WPARAM)g_this->bufferout, 0 );
-					if( g_this->ininvert ) CheckDlgButton( hwndDlg, IDC_INVERT1, BST_CHECKED );
-					if( g_this->outinvert ) CheckDlgButton( hwndDlg, IDC_INVERT2, BST_CHECKED );
 				}
-				if( g_this->clearfb() ) CheckDlgButton( hwndDlg, IDC_CHECK1, BST_CHECKED );
-#endif
-				g_this->isstart = 1;
-				SetDlgItemText( hwndDlg, IDC_EDIT4, g_this->effect_exp[ 0 ].get() );
-				SetDlgItemText( hwndDlg, IDC_EDIT5, g_this->effect_exp[ 1 ].get() );
-				g_this->isstart = 0;
-
-
-				if( ( ( g_this->mode & 2 ) ^ 2 ) )
-					CheckDlgButton( hwndDlg, IDC_CHECK2, BST_CHECKED );
-				if( g_this->beat_render ) CheckDlgButton( hwndDlg, IDC_CHECK3, BST_CHECKED );
-				else EnableWindow( GetDlgItem( hwndDlg, IDC_EDIT1 ), FALSE );
-				if( g_this->use_code ) CheckDlgButton( hwndDlg, IDC_CHECK4, BST_CHECKED );
-				char buf[ 999 ];
-				wsprintf( buf, "%d", g_this->beat_render_frames );
-				SetDlgItemText( hwndDlg, IDC_EDIT1, buf );
 			}
-			return 1;
-		case WM_COMMAND:
-			switch( LOWORD( wParam ) )
+			break;
+		case IDC_COMBO2:
+			if( HIWORD( wParam ) == CBN_SELCHANGE )
 			{
-			case IDC_EDIT4:
-			case IDC_EDIT5:
-				if( !g_this->isstart && HIWORD( wParam ) == EN_CHANGE )
+				int r = SendDlgItemMessage( hwndDlg, IDC_COMBO2, CB_GETCURSEL, 0, 0 );
+				if( r != CB_ERR )
 				{
-					EnterCriticalSection( &g_this->rcs );
-					g_this->effect_exp[ 0 ].get_from_dlgitem( hwndDlg, IDC_EDIT4 );
-					g_this->effect_exp[ 1 ].get_from_dlgitem( hwndDlg, IDC_EDIT5 );
-					g_this->need_recompile = 1;
-					if( LOWORD( wParam ) == IDC_EDIT4 ) g_this->inited = 0;
-					LeaveCriticalSection( &g_this->rcs );
+					g_this->set_blendin( r );
+					ShowWindow( GetDlgItem( hwndDlg, IDC_INSLIDE ), ( r == 10 ) ? SW_NORMAL : SW_HIDE );
+					ShowWindow( GetDlgItem( hwndDlg, IDC_CBBUF1 ), ( g_this->blendin() == 12 ) ? SW_NORMAL : SW_HIDE );
+					ShowWindow( GetDlgItem( hwndDlg, IDC_INVERT1 ), ( g_this->blendin() == 12 ) ? SW_NORMAL : SW_HIDE );
 				}
-				break;
-			case IDC_COMBO1:
-				if( HIWORD( wParam ) == CBN_SELCHANGE )
-				{
-					int r = SendDlgItemMessage( hwndDlg, IDC_COMBO1, CB_GETCURSEL, 0, 0 );
-					if( r != CB_ERR )
-					{
-						g_this->set_blendout( r );
-						ShowWindow( GetDlgItem( hwndDlg, IDC_OUTSLIDE ), ( r == 10 ) ? SW_NORMAL : SW_HIDE );
-						ShowWindow( GetDlgItem( hwndDlg, IDC_CBBUF2 ), ( g_this->blendout() == 12 ) ? SW_NORMAL : SW_HIDE );
-						ShowWindow( GetDlgItem( hwndDlg, IDC_INVERT2 ), ( g_this->blendout() == 12 ) ? SW_NORMAL : SW_HIDE );
-					}
-				}
-				break;
-			case IDC_COMBO2:
-				if( HIWORD( wParam ) == CBN_SELCHANGE )
-				{
-					int r = SendDlgItemMessage( hwndDlg, IDC_COMBO2, CB_GETCURSEL, 0, 0 );
-					if( r != CB_ERR )
-					{
-						g_this->set_blendin( r );
-						ShowWindow( GetDlgItem( hwndDlg, IDC_INSLIDE ), ( r == 10 ) ? SW_NORMAL : SW_HIDE );
-						ShowWindow( GetDlgItem( hwndDlg, IDC_CBBUF1 ), ( g_this->blendin() == 12 ) ? SW_NORMAL : SW_HIDE );
-						ShowWindow( GetDlgItem( hwndDlg, IDC_INVERT1 ), ( g_this->blendin() == 12 ) ? SW_NORMAL : SW_HIDE );
-					}
-				}
-				break;
-			case IDC_CBBUF1:
-				if( HIWORD( wParam ) == CBN_SELCHANGE )
-					g_this->bufferin = SendDlgItemMessage( hwndDlg, IDC_CBBUF1, CB_GETCURSEL, 0, 0 );
-				break;
-			case IDC_CBBUF2:
-				if( HIWORD( wParam ) == CBN_SELCHANGE )
-					g_this->bufferout = SendDlgItemMessage( hwndDlg, IDC_CBBUF2, CB_GETCURSEL, 0, 0 );
-				break;
-			case IDC_CHECK1:
-				g_this->set_clearfb( IsDlgButtonChecked( hwndDlg, IDC_CHECK1 ) );
-				break;
-			case IDC_CHECK2:
-				g_this->set_enabled( IsDlgButtonChecked( hwndDlg, IDC_CHECK2 ) );
-				break;
-			case IDC_INVERT1:
-				g_this->ininvert = IsDlgButtonChecked( hwndDlg, IDC_INVERT1 );
-				break;
-			case IDC_INVERT2:
-				g_this->outinvert = IsDlgButtonChecked( hwndDlg, IDC_INVERT2 );
-				break;
-			case IDC_CHECK3:
-				g_this->beat_render = IsDlgButtonChecked( hwndDlg, IDC_CHECK3 );
-				EnableWindow( GetDlgItem( hwndDlg, IDC_EDIT1 ), g_this->beat_render );
-				break;
-			case IDC_CHECK4:
-				g_this->use_code = !!IsDlgButtonChecked( hwndDlg, IDC_CHECK4 );
-				break;
-			case IDC_EDIT1:
-				if( HIWORD( wParam ) == EN_CHANGE ) {
-					char buf[ 999 ] = "1";
-					GetDlgItemText( hwndDlg, IDC_EDIT1, buf, 999 );
-					buf[ 998 ] = 0;
-					g_this->beat_render_frames = atoi( buf );
-				}
-				break;
-			case IDC_BUTTON2:
-			{
-				char *text = "Effect List\0"
-					"Read/write 'enabled' to get/set whether the effect list is enabled for this frame\r\n"
-					"Read/write 'beat' to get/set whether there is currently a beat\r\n"
-					"Read/write 'clear' to get/set whether to clear the framebuffer\r\n"
-					"If the input blend is set to adjustable, 'alphain' can be set from 0.0-1.0\r\n"
-					"If the output blend is set to adjustable, 'alphaout' can be set from 0.0-1.0\r\n"
-					"'w' and 'h' are set with the current width and height of the frame\r\n"
-					;
-
-				compilerfunctionlist( hwndDlg, text );
 			}
 			break;
+		case IDC_CBBUF1:
+			if( HIWORD( wParam ) == CBN_SELCHANGE )
+				g_this->bufferin = SendDlgItemMessage( hwndDlg, IDC_CBBUF1, CB_GETCURSEL, 0, 0 );
+			break;
+		case IDC_CBBUF2:
+			if( HIWORD( wParam ) == CBN_SELCHANGE )
+				g_this->bufferout = SendDlgItemMessage( hwndDlg, IDC_CBBUF2, CB_GETCURSEL, 0, 0 );
+			break;
+		case IDC_CHECK1:
+			g_this->set_clearfb( IsDlgButtonChecked( hwndDlg, IDC_CHECK1 ) );
+			break;
+		case IDC_CHECK2:
+			g_this->set_enabled( IsDlgButtonChecked( hwndDlg, IDC_CHECK2 ) );
+			break;
+		case IDC_INVERT1:
+			g_this->ininvert = IsDlgButtonChecked( hwndDlg, IDC_INVERT1 );
+			break;
+		case IDC_INVERT2:
+			g_this->outinvert = IsDlgButtonChecked( hwndDlg, IDC_INVERT2 );
+			break;
+		case IDC_CHECK3:
+			g_this->beat_render = IsDlgButtonChecked( hwndDlg, IDC_CHECK3 );
+			EnableWindow( GetDlgItem( hwndDlg, IDC_EDIT1 ), g_this->beat_render );
+			break;
+		case IDC_CHECK4:
+			g_this->use_code = !!IsDlgButtonChecked( hwndDlg, IDC_CHECK4 );
+			break;
+		case IDC_EDIT1:
+			if( HIWORD( wParam ) == EN_CHANGE ) {
+				char buf[ 999 ] = "1";
+				GetDlgItemText( hwndDlg, IDC_EDIT1, buf, 999 );
+				buf[ 998 ] = 0;
+				g_this->beat_render_frames = atoi( buf );
 			}
 			break;
-		case WM_NOTIFY:
-			if( LOWORD( wParam ) == IDC_INSLIDE )
-				g_this->inblendval = SendDlgItemMessage( hwndDlg, IDC_INSLIDE, TBM_GETPOS, 0, 0 );
-			if( LOWORD( wParam ) == IDC_OUTSLIDE )
-				g_this->outblendval = SendDlgItemMessage( hwndDlg, IDC_OUTSLIDE, TBM_GETPOS, 0, 0 );
-			break;
-		}
-		return 0;
-	}
-
-
-	HWND C_RenderListClass::conf( HINSTANCE hInstance, HWND hwndParent )
-	{
-		g_this = this;
-		return CreateDialog( hInstance, MAKEINTRESOURCE( isroot ? IDD_CFG_LISTROOT : IDD_CFG_LIST ), hwndParent, isroot ? g_DlgProcRoot : g_DlgProc );
-		//  return NULL;
-	}
-
-	char C_RenderListClass::sig_str[] = "Nullsoft AVS Preset 0.2\x1a";
-
-	int C_RenderListClass::__SavePreset( char *filename )
-	{
-		EnterCriticalSection( &g_render_cs );
-		unsigned char *data = (unsigned char *)GlobalAlloc( GPTR, 1124 * 1024 );
-		int success = -1;
-		if( data )
+		case IDC_BUTTON2:
 		{
-			int pos = 0;
-			memcpy( data + pos, sig_str, strlen( sig_str ) ); pos += strlen( sig_str );
-			pos += save_config_ex( data + pos, 1 );
-			if( pos < 1024 * 1024 )
-			{
-				HANDLE fp = CreateFile( filename, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
-				if( fp != INVALID_HANDLE_VALUE )
-				{
-					DWORD dw;
-					success = 0;
-					WriteFile( fp, data, pos, &dw, NULL );
-					CloseHandle( fp );
-				}
-				else success = 2;
-			}
-			else success = 1;
-			GlobalFree( (HGLOBAL)data );
-		}
-		LeaveCriticalSection( &g_render_cs );
-		return success;
-	}
+			char *text = "Effect List\0"
+				"Read/write 'enabled' to get/set whether the effect list is enabled for this frame\r\n"
+				"Read/write 'beat' to get/set whether there is currently a beat\r\n"
+				"Read/write 'clear' to get/set whether to clear the framebuffer\r\n"
+				"If the input blend is set to adjustable, 'alphain' can be set from 0.0-1.0\r\n"
+				"If the output blend is set to adjustable, 'alphaout' can be set from 0.0-1.0\r\n"
+				"'w' and 'h' are set with the current width and height of the frame\r\n"
+				;
 
-	int C_RenderListClass::__LoadPreset( char *filename, int clear )
+			compilerfunctionlist( hwndDlg, text );
+		}
+		break;
+		}
+		break;
+	case WM_NOTIFY:
+		if( LOWORD( wParam ) == IDC_INSLIDE )
+			g_this->inblendval = SendDlgItemMessage( hwndDlg, IDC_INSLIDE, TBM_GETPOS, 0, 0 );
+		if( LOWORD( wParam ) == IDC_OUTSLIDE )
+			g_this->outblendval = SendDlgItemMessage( hwndDlg, IDC_OUTSLIDE, TBM_GETPOS, 0, 0 );
+		break;
+	}
+	return 0;
+}
+
+
+HWND C_RenderListClass::conf( HINSTANCE hInstance, HWND hwndParent )
+{
+	g_this = this;
+	return CreateDialog( hInstance, MAKEINTRESOURCE( isroot ? IDD_CFG_LISTROOT : IDD_CFG_LIST ), hwndParent, isroot ? g_DlgProcRoot : g_DlgProc );
+	//  return NULL;
+}
+
+char C_RenderListClass::sig_str[] = "Nullsoft AVS Preset 0.2\x1a";
+
+int C_RenderListClass::__SavePreset( char *filename )
+{
+	EnterCriticalSection( &g_render_cs );
+	unsigned char *data = (unsigned char *)GlobalAlloc( GPTR, 1124 * 1024 );
+	int success = -1;
+	if( data )
 	{
-		EnterCriticalSection( &g_render_cs );
-		unsigned char *data = (unsigned char *)GlobalAlloc( GPTR, 1024 * 1024 );
-		int success = 1;
-		if( clear ) clearRenders();
-		if( data )
+		int pos = 0;
+		memcpy( data + pos, sig_str, strlen( sig_str ) ); pos += strlen( sig_str );
+		pos += save_config_ex( data + pos, 1 );
+		if( pos < 1024 * 1024 )
 		{
-			//  OutputDebugString(filename);
-			HANDLE fp = CreateFile( filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+			HANDLE fp = CreateFile( filename, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
 			if( fp != INVALID_HANDLE_VALUE )
 			{
-				DWORD len = GetFileSize( fp, NULL );
-				if( len == 0xffffffff ) len = 0;
-				if( !ReadFile( fp, data, min( len, 1024 * 1024 ), &len, NULL ) ) len = 0;
+				DWORD dw;
+				success = 0;
+				WriteFile( fp, data, pos, &dw, NULL );
 				CloseHandle( fp );
-				if( len > strlen( sig_str ) + 2 && !memcmp( data, sig_str, strlen( sig_str ) - 2 ) &&
-					data[ strlen( sig_str ) - 2 ] >= '1' &&
-					data[ strlen( sig_str ) - 2 ] <= '2' &&
-					data[ strlen( sig_str ) - 1 ] == '\x1a' )
-				{
-					load_config( data + strlen( sig_str ), len - strlen( sig_str ) );
-					success = 0;
-				}
-				else
-				{
-					//     if (len<=strlen(sig_str)+2) MessageBox(NULL,"Error laoding preset: len",filename,MB_OK);
-				  //       else MessageBox(NULL,"Error laoding preset: signature",filename,MB_OK);
-				}
 			}
-			//  else MessageBox(NULL,"Error laoding preset: fopen",filename,MB_OK);
-			GlobalFree( (HGLOBAL)data );
+			else success = 2;
 		}
-		//  else MessageBox(NULL,"Error laoding preset: MALLOC",filename,MB_OK);
-		LeaveCriticalSection( &g_render_cs );
-		return success;
+		else success = 1;
+		GlobalFree( (HGLOBAL)data );
 	}
+	LeaveCriticalSection( &g_render_cs );
+	return success;
+}
 
-	int C_RenderListClass::__SavePresetToUndo( C_UndoItem &item )
+int C_RenderListClass::__LoadPreset( char *filename, int clear )
+{
+	EnterCriticalSection( &g_render_cs );
+	unsigned char *data = (unsigned char *)GlobalAlloc( GPTR, 1024 * 1024 );
+	int success = 1;
+	if( clear ) clearRenders();
+	if( data )
 	{
-		EnterCriticalSection( &g_render_cs );
-		unsigned char *data = (unsigned char *)GlobalAlloc( GPTR, 1124 * 1024 );
-		int success = -1;
-		if( data )
+		//  OutputDebugString(filename);
+		HANDLE fp = CreateFile( filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+		if( fp != INVALID_HANDLE_VALUE )
 		{
-			// Do whatever the file saving stuff did
-			int pos = 0;
-			memcpy( data + pos, sig_str, strlen( sig_str ) ); pos += strlen( sig_str );
-			pos += save_config_ex( data + pos, 1 );
-
-			// And then set the data into the undo object.
-			if( pos < 1024 * 1024 )
+			DWORD len = GetFileSize( fp, NULL );
+			if( len == 0xffffffff ) len = 0;
+			if( !ReadFile( fp, data, min( len, 1024 * 1024 ), &len, NULL ) ) len = 0;
+			CloseHandle( fp );
+			if( len > strlen( sig_str ) + 2 && !memcmp( data, sig_str, strlen( sig_str ) - 2 ) &&
+				data[ strlen( sig_str ) - 2 ] >= '1' &&
+				data[ strlen( sig_str ) - 2 ] <= '2' &&
+				data[ strlen( sig_str ) - 1 ] == '\x1a' )
 			{
-				item.set( data, pos, true ); // all undo items start dirty.
-			}
-
-			else success = 1;
-			GlobalFree( (HGLOBAL)data );
-		}
-		LeaveCriticalSection( &g_render_cs );
-		return success;
-	}
-
-	int C_RenderListClass::__LoadPresetFromUndo( C_UndoItem &item, int clear )
-	{
-		EnterCriticalSection( &g_render_cs );
-		unsigned char *data = (unsigned char *)GlobalAlloc( GPTR, 1024 * 1024 );
-		int success = 1;
-		if( clear ) clearRenders();
-		if( data )
-		{
-			if( item.size() < 1024 * 1024 )
-			{
-				// Get the data from the undo object.
-				DWORD len = item.size();
-				if( len == 0xffffffff ) len = 0;
-				memcpy( data, item.get(), item.size() );
-
-				// And then do whatever the file loading stuff did.
-				if( !memcmp( data, sig_str, strlen( sig_str ) - 2 ) &&
-					data[ strlen( sig_str ) - 2 ] >= '1' &&
-					data[ strlen( sig_str ) - 2 ] <= '2' &&
-					data[ strlen( sig_str ) - 1 ] == '\x1a' )
-				{
-					load_config( data + strlen( sig_str ), len - strlen( sig_str ) );
-					success = 0;
-				}
-			}
-			GlobalFree( (HGLOBAL)data );
-		}
-		LeaveCriticalSection( &g_render_cs );
-		return success;
-	}
-
-
-
-
-	/// smp fun
-
-	void C_RenderListClass::smp_Render( int minthreads, C_RBASE2 *render, char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
-	{
-		int x;
-		smp_parms.nthreads = minthreads;
-		if( !smp_parms.hQuitHandle ) smp_parms.hQuitHandle = CreateEvent( NULL, TRUE, FALSE, NULL );
-
-		smp_parms.vis_data_ptr = visdata;
-		smp_parms.isBeat = isBeat;
-		smp_parms.framebuffer = framebuffer;
-		smp_parms.fbout = fbout;
-		smp_parms.w = w;
-		smp_parms.h = h;
-		smp_parms.render = render;
-		for( x = 0; x < minthreads; x++ )
-		{
-			if( x >= smp_parms.threadTop )
-			{
-				DWORD id;
-				smp_parms.hThreadSignalsStart[ x ] = CreateEvent( NULL, FALSE, TRUE, NULL );
-				smp_parms.hThreadSignalsDone[ x ] = CreateEvent( NULL, FALSE, FALSE, NULL );
-
-				smp_parms.hThreads[ x ] = CreateThread( NULL, 0, smp_threadProc, (LPVOID)( x ), 0, &id );
-				smp_parms.threadTop = x + 1;
+				load_config( data + strlen( sig_str ), len - strlen( sig_str ) );
+				success = 0;
 			}
 			else
-				SetEvent( smp_parms.hThreadSignalsStart[ x ] );
+			{
+				//     if (len<=strlen(sig_str)+2) MessageBox(NULL,"Error laoding preset: len",filename,MB_OK);
+			  //       else MessageBox(NULL,"Error laoding preset: signature",filename,MB_OK);
+			}
 		}
-		WaitForMultipleObjects( smp_parms.nthreads, smp_parms.hThreadSignalsDone, TRUE, INFINITE );
+		//  else MessageBox(NULL,"Error laoding preset: fopen",filename,MB_OK);
+		GlobalFree( (HGLOBAL)data );
 	}
+	//  else MessageBox(NULL,"Error laoding preset: MALLOC",filename,MB_OK);
+	LeaveCriticalSection( &g_render_cs );
+	return success;
+}
 
-	DWORD WINAPI C_RenderListClass::smp_threadProc( LPVOID parm )
+int C_RenderListClass::__SavePresetToUndo( C_UndoItem &item )
+{
+	EnterCriticalSection( &g_render_cs );
+	unsigned char *data = (unsigned char *)GlobalAlloc( GPTR, 1124 * 1024 );
+	int success = -1;
+	if( data )
 	{
-		int which = (int)parm;
-		HANDLE hdls[ 2 ] = { smp_parms.hThreadSignalsStart[ which ],smp_parms.hQuitHandle };
-		for( ;;)
+		// Do whatever the file saving stuff did
+		int pos = 0;
+		memcpy( data + pos, sig_str, strlen( sig_str ) ); pos += strlen( sig_str );
+		pos += save_config_ex( data + pos, 1 );
+
+		// And then set the data into the undo object.
+		if( pos < 1024 * 1024 )
 		{
-			if( WaitForMultipleObjects( 2, hdls, FALSE, INFINITE ) == WAIT_OBJECT_0 + 1 ) return 0;
-
-			smp_parms.render->smp_render( which, smp_parms.nthreads,
-				*( char( *)[ 2 ][ 2 ][ 576 ] )smp_parms.vis_data_ptr,
-
-				smp_parms.isBeat, smp_parms.framebuffer, smp_parms.fbout, smp_parms.w, smp_parms.h );
-			SetEvent( smp_parms.hThreadSignalsDone[ which ] );
+			item.set( data, pos, true ); // all undo items start dirty.
 		}
-	}
 
-	C_RenderListClass::_s_smp_parms C_RenderListClass::smp_parms;
+		else success = 1;
+		GlobalFree( (HGLOBAL)data );
+	}
+	LeaveCriticalSection( &g_render_cs );
+	return success;
+}
+
+int C_RenderListClass::__LoadPresetFromUndo( C_UndoItem &item, int clear )
+{
+	EnterCriticalSection( &g_render_cs );
+	unsigned char *data = (unsigned char *)GlobalAlloc( GPTR, 1024 * 1024 );
+	int success = 1;
+	if( clear ) clearRenders();
+	if( data )
+	{
+		if( item.size() < 1024 * 1024 )
+		{
+			// Get the data from the undo object.
+			DWORD len = item.size();
+			if( len == 0xffffffff ) len = 0;
+			memcpy( data, item.get(), item.size() );
+
+			// And then do whatever the file loading stuff did.
+			if( !memcmp( data, sig_str, strlen( sig_str ) - 2 ) &&
+				data[ strlen( sig_str ) - 2 ] >= '1' &&
+				data[ strlen( sig_str ) - 2 ] <= '2' &&
+				data[ strlen( sig_str ) - 1 ] == '\x1a' )
+			{
+				load_config( data + strlen( sig_str ), len - strlen( sig_str ) );
+				success = 0;
+			}
+		}
+		GlobalFree( (HGLOBAL)data );
+	}
+	LeaveCriticalSection( &g_render_cs );
+	return success;
+}
+
+
+
+
+/// smp fun
+
+void C_RenderListClass::smp_Render( int minthreads, C_RBASE2 *render, char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
+{
+	int x;
+	smp_parms.nthreads = minthreads;
+	if( !smp_parms.hQuitHandle ) smp_parms.hQuitHandle = CreateEvent( NULL, TRUE, FALSE, NULL );
+
+	smp_parms.vis_data_ptr = visdata;
+	smp_parms.isBeat = isBeat;
+	smp_parms.framebuffer = framebuffer;
+	smp_parms.fbout = fbout;
+	smp_parms.w = w;
+	smp_parms.h = h;
+	smp_parms.render = render;
+	for( x = 0; x < minthreads; x++ )
+	{
+		if( x >= smp_parms.threadTop )
+		{
+			DWORD id;
+			smp_parms.hThreadSignalsStart[ x ] = CreateEvent( NULL, FALSE, TRUE, NULL );
+			smp_parms.hThreadSignalsDone[ x ] = CreateEvent( NULL, FALSE, FALSE, NULL );
+
+			smp_parms.hThreads[ x ] = CreateThread( NULL, 0, smp_threadProc, (LPVOID)( x ), 0, &id );
+			smp_parms.threadTop = x + 1;
+		}
+		else
+			SetEvent( smp_parms.hThreadSignalsStart[ x ] );
+	}
+	WaitForMultipleObjects( smp_parms.nthreads, smp_parms.hThreadSignalsDone, TRUE, INFINITE );
+}
+
+DWORD WINAPI C_RenderListClass::smp_threadProc( LPVOID parm )
+{
+	int which = (int)parm;
+	HANDLE hdls[ 2 ] = { smp_parms.hThreadSignalsStart[ which ],smp_parms.hQuitHandle };
+	for( ;;)
+	{
+		if( WaitForMultipleObjects( 2, hdls, FALSE, INFINITE ) == WAIT_OBJECT_0 + 1 ) return 0;
+
+		smp_parms.render->smp_render( which, smp_parms.nthreads,
+			*( char( *)[ 2 ][ 2 ][ 576 ] )smp_parms.vis_data_ptr,
+
+			smp_parms.isBeat, smp_parms.framebuffer, smp_parms.fbout, smp_parms.w, smp_parms.h );
+		SetEvent( smp_parms.hThreadSignalsDone[ which ] );
+	}
+}
+
+C_RenderListClass::_s_smp_parms C_RenderListClass::smp_parms;

@@ -54,7 +54,6 @@ static void _do_add( HWND hwnd, HTREEITEM h, C_RenderListClass *list );
 static int treeview_hack;
 static HTREEITEM g_hroot;
 
-extern int g_config_smp_mt, g_config_smp;
 extern struct winampVisModule *g_mod;
 extern int cfg_cancelfs_on_deactivate;
 
@@ -357,26 +356,6 @@ static BOOL CALLBACK DlgProc_Disp( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 			SendDlgItemMessage( hwndDlg, IDC_TRANS_SLIDER, TBM_SETTICFREQ, 10, (LPARAM)0 );
 			SendDlgItemMessage( hwndDlg, IDC_TRANS_SLIDER, TBM_SETPOS, (WPARAM)TRUE, (LPARAM)cfg_trans_amount );
 		}
-#ifdef LASER
-		extern int g_laser_nomessage, g_laser_zones;
-		ShowWindow( GetDlgItem( hwndDlg, IDC_L_SUPPRESS_OUTPUT ), SW_SHOWNA );
-		ShowWindow( GetDlgItem( hwndDlg, IDC_L_SYNC ), SW_SHOWNA );
-		ShowWindow( GetDlgItem( hwndDlg, IDC_L_SUPPRESS_DIALOGS ), SW_SHOWNA );
-		ShowWindow( GetDlgItem( hwndDlg, IDC_L_PROJZONES ), SW_SHOWNA );
-		ShowWindow( GetDlgItem( hwndDlg, IDC_L_FRAME ), SW_SHOWNA );
-		ShowWindow( GetDlgItem( hwndDlg, IDC_L_ACTIVEOUTPUT ), SW_SHOWNA );
-		ShowWindow( GetDlgItem( hwndDlg, IDC_THREADSBORDER ), SW_HIDE );
-		ShowWindow( GetDlgItem( hwndDlg, IDC_CHECK4 ), SW_HIDE );
-		ShowWindow( GetDlgItem( hwndDlg, IDC_EDIT1 ), SW_HIDE );
-		ShowWindow( GetDlgItem( hwndDlg, IDC_THREADS ), SW_HIDE );
-		CheckDlgButton( hwndDlg, IDC_L_SUPPRESS_DIALOGS, ( g_laser_nomessage & 1 ) ? BST_CHECKED : BST_UNCHECKED );
-		CheckDlgButton( hwndDlg, IDC_L_SUPPRESS_OUTPUT, ( g_laser_nomessage & 4 ) ? BST_CHECKED : BST_UNCHECKED );
-		CheckDlgButton( hwndDlg, IDC_L_SYNC, ( g_laser_nomessage & 8 ) ? BST_CHECKED : BST_UNCHECKED );
-		CheckDlgButton( hwndDlg, IDC_L_ACTIVEOUTPUT, ( g_laser_nomessage & 2 ) ? BST_CHECKED : BST_UNCHECKED );
-#else
-		CheckDlgButton( hwndDlg, IDC_CHECK4, g_config_smp ? BST_CHECKED : 0 );
-		SetDlgItemInt( hwndDlg, IDC_EDIT1, g_config_smp_mt, FALSE );
-#endif
 	}
 #ifdef WA2_EMBED
 	{
@@ -443,82 +422,6 @@ static BOOL CALLBACK DlgProc_Disp( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 	case WM_COMMAND:
 		switch( LOWORD( wParam ) )
 		{
-#ifdef LASER
-		case IDC_L_PROJZONES:
-		{
-			extern int g_laser_zones;
-			HMENU hMenu = CreatePopupMenu();
-			int x;
-			for( x = 0; x < 20; x++ )
-			{
-				PROJECTIONZONE pz;
-				if( ReadProjectionZone( x + 1, &pz ) )
-					wsprintf( pz.Name, "Zone %d", x );
-				if( !pz.Name[ 0 ] ) break;
-
-				MENUITEMINFO i = { sizeof( i ), };
-				i.wID = x + 1;
-				i.fMask = MIIM_TYPE | MIIM_ID | MIIM_STATE;
-				i.fState = ( g_laser_zones&( 1 << x ) ) ? MFS_CHECKED : 0;
-				i.fType = MFT_STRING;
-				i.dwTypeData = pz.Name;
-				i.cch = strlen( pz.Name );
-				InsertMenuItem( hMenu, x, TRUE, &i );
-			}
-
-			RECT r;
-			GetWindowRect( GetDlgItem( hwndDlg, IDC_L_PROJZONES ), &r );
-
-			int v = TrackPopupMenu( hMenu, TPM_NONOTIFY | TPM_RETURNCMD, r.right, r.top, 0, GetDlgItem( hwndDlg, IDC_L_PROJZONES ), NULL );
-			DestroyMenu( hMenu );
-			if( v > 0 )
-			{
-				g_laser_zones ^= 1 << ( v - 1 );
-				if( !g_laser_zones ) g_laser_zones = 1;
-			}
-		}
-
-		return 0;
-		case IDC_L_SYNC:
-		{
-			extern int g_laser_nomessage;
-			g_laser_nomessage &= ~8;
-			g_laser_nomessage |= IsDlgButtonChecked( hwndDlg, IDC_L_SYNC ) ? 8 : 0;
-		}
-		return 0;
-		case IDC_L_SUPPRESS_OUTPUT:
-		{
-			extern int g_laser_nomessage;
-			g_laser_nomessage &= ~4;
-			g_laser_nomessage |= IsDlgButtonChecked( hwndDlg, IDC_L_SUPPRESS_OUTPUT ) ? 4 : 0;
-		}
-		return 0;
-		case IDC_L_SUPPRESS_DIALOGS:
-		{
-			extern int g_laser_nomessage;
-			g_laser_nomessage &= ~1;
-			g_laser_nomessage |= IsDlgButtonChecked( hwndDlg, IDC_L_SUPPRESS_DIALOGS ) ? 1 : 0;
-		}
-		return 0;
-		case IDC_L_ACTIVEOUTPUT:
-		{
-			extern int g_laser_nomessage;
-			g_laser_nomessage &= ~2;
-			g_laser_nomessage |= IsDlgButtonChecked( hwndDlg, IDC_L_ACTIVEOUTPUT ) ? 2 : 0;
-		}
-		return 0;
-#else
-		case IDC_CHECK4:
-			g_config_smp = !!IsDlgButtonChecked( hwndDlg, IDC_CHECK4 );
-			return 0;
-		case IDC_EDIT1:
-		{
-			BOOL t;
-			g_config_smp_mt = GetDlgItemInt( hwndDlg, IDC_EDIT1, &t, FALSE );
-		}
-		return 0;
-#endif
-
 		case IDC_TRANS_CHECK:
 			cfg_trans = IsDlgButtonChecked( hwndDlg, IDC_TRANS_CHECK ) ? 1 : 0;
 			SetTransparency( g_hwnd, cfg_trans, cfg_trans_amount );

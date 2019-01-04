@@ -5,15 +5,8 @@
 
 extern int cfg_fs_d;
 
-template<eStage stage>
-HRESULT ShaderBase<stage>::compile( const char* name, const CStringA& hlsl, const CAtlMap<CStringA, CStringA>& inc, Hlsl::Defines &def, bool usesBeat, std::vector<uint8_t>& dxbc )
+void ShaderBase2::setSizeDefines( const CStringA& hlsl, Hlsl::Defines &def )
 {
-	if( eShaderState::Failed == m_state )
-		return S_FALSE;
-
-	dropShader();
-	m_state = eShaderState::Failed;
-
 	bool shaderNeedsResizeEvent = false;
 	if( hlsl.Find( "AVS_RENDER_SIZE" ) >= 0 )
 	{
@@ -25,10 +18,28 @@ HRESULT ShaderBase<stage>::compile( const char* name, const CStringA& hlsl, cons
 		def.set( "AVS_PIXEL_PARTICLES", cfg_fs_d ? "1" : "0" );
 		shaderNeedsResizeEvent = true;
 	}
+
 	if( shaderNeedsResizeEvent )
 		subscribeHandler( this );
 	else
 		unsubscribeHandler( this );
+}
+
+ShaderBase2::~ShaderBase2()
+{
+	unsubscribeHandler( this );
+}
+
+template<eStage stage>
+HRESULT ShaderBase<stage>::compile( const char* name, const CStringA& hlsl, const CAtlMap<CStringA, CStringA>& inc, Hlsl::Defines &def, bool usesBeat, std::vector<uint8_t>& dxbc )
+{
+	if( eShaderState::Failed == m_state )
+		return S_FALSE;
+
+	dropShader();
+	m_state = eShaderState::Failed;
+
+	setSizeDefines( hlsl, def );
 
 	if( usesBeat )
 		def.set( "IS_BEAT", "0" );
@@ -46,7 +57,10 @@ HRESULT ShaderBase<stage>::compile( const char* name, const CStringA& hlsl, cons
 		CHECK( createShader( dxbc, beatShader ) );
 	}
 	else
+	{
+		// This shader doesn't use IS_BEAT macro, no need to waste resources recompiling, just AddRef and use the same compiled shader.
 		beatShader = shader;
+	}
 
 	m_state = eShaderState::Good;
 	return S_OK;

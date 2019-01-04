@@ -44,8 +44,6 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 char *C_RenderListClass::get_desc() { if( isroot ) return "Main"; return "Effect list"; }
 
-int g_config_seh = 1;
-
 static char extsigstr[] = "AVS 2.8+ Effect List Config";
 
 void C_RenderListClass::load_config_code( unsigned char *data, int len )

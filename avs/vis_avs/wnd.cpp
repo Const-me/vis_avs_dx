@@ -97,8 +97,6 @@ HWND last_parent;
 #endif
 
 extern int cfg_fs_use_overlay;
-extern int g_config_seh;
-
 
 void toggleWharfAmpDock( HWND hwnd );
 
@@ -512,8 +510,6 @@ int Wnd_Init( struct winampVisModule *this_mod )
 		config_reuseonresize = GetPrivateProfileInt( AVS_SECTION, "cfg_reuseonresize", config_reuseonresize, INI_FILE );
 		g_log_errors = GetPrivateProfileInt( AVS_SECTION, "cfg_log_errors", g_log_errors, INI_FILE );
 		g_reset_vars_on_recompile = GetPrivateProfileInt( AVS_SECTION, "cfg_reset_vars", g_reset_vars_on_recompile, INI_FILE );
-		g_config_seh = GetPrivateProfileInt( AVS_SECTION, "cfg_seh", g_config_seh, INI_FILE );
-
 
 #ifdef WA2_EMBED
 		memset( &myWindowState, 0, sizeof( myWindowState ) );
@@ -678,7 +674,6 @@ void Wnd_Quit( void )
 		WriteInt( "cfg_reuseonresize", config_reuseonresize );
 		WriteInt( "cfg_log_errors", g_log_errors );
 		WriteInt( "cfg_reset_vars", g_reset_vars_on_recompile );
-		WriteInt( "cfg_seh", g_config_seh );
 
 		int x;
 		for( x = 0; x < 8; x++ )

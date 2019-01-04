@@ -80,6 +80,7 @@ public:
 	struct DotRendering
 	{
 		Shader<Hlsl::Render::PointSpriteGS> gs;
+		Shader<Hlsl::Render::PointSpritePS> ps;
 	};
 
 	struct LinesRendering

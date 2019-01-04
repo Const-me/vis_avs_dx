@@ -13,7 +13,6 @@ namespace StaticResources
 		using namespace Hlsl::StaticShaders;
 		CHECK( createShader( FullScreenTriangleVS(), fullScreenTriangle ) );
 		CHECK( createShader( CopyTexturePS(), copyTexture ) );
-		CHECK( createShader( PointSpritePS(), pointSprite ) );
 		CHECK( createShader( FadeFramePS(), fadeFramePS ) );
 
 		// Sampler
@@ -88,7 +87,6 @@ namespace StaticResources
 		copyTexture = nullptr;
 		fullScreenTriangleTC = nullptr;
 		copyTextureBilinear = nullptr;
-		pointSprite = nullptr;
 		fadeFramePS = nullptr;
 
 		sampleBilinear = nullptr;
@@ -110,7 +108,6 @@ namespace StaticResources
 	CComPtr<ID3D11PixelShader> copyTexture;
 	CComPtr<ID3D11VertexShader> fullScreenTriangleTC;
 	CComPtr<ID3D11PixelShader> copyTextureBilinear;
-	CComPtr<ID3D11PixelShader> pointSprite;
 	CComPtr<ID3D11PixelShader> fadeFramePS;
 
 	CComPtr<ID3D11SamplerState> sampleBilinear;

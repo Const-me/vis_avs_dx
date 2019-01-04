@@ -181,11 +181,13 @@ HRESULT SuperScope::render( bool isBeat, RenderTargets& rt )
 
 		if( !dots.gs.hasShader() )
 			CHECK( dots.gs.compile( Hlsl::includes(), 0 ) );
-		if( !dots.gs.hasShader() )
+		if( !dots.ps.hasShader() )
+			CHECK( dots.ps.compile( Hlsl::includes(), 0 ) );
+		if( !dots.gs.hasShader() || !dots.ps.hasShader() )
 			return S_FALSE;
 
 		bindShader<eStage::Geometry>( dots.gs.ptr( false ) );
-		bindShader<eStage::Pixel>( StaticResources::pointSprite );
+		bindShader<eStage::Pixel>( dots.ps.ptr( false ) );
 		context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_POINTLIST );
 		context->DrawInstancedIndirect( stateBuffer(), argsOffset );
 	}

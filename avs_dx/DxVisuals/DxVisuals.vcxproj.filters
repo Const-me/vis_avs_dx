@@ -250,6 +250,7 @@
     <None Include="Expressions\Builtin\includeFunctions.t4" />
     <None Include="Utils\DXTK\SimpleMath.inl" />
     <None Include="Effects\Trans\Blur\LinearConvolution.txt" />
+    <None Include="Effects\Render\DotFountain\Fountain.fx" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Effects\Render\Simple\SimpleDotsVS.hlsl" />
@@ -296,10 +297,10 @@
     <FxCompile Include="Effects\Render\MovingParticle\MovingParticleGS.hlsl" />
     <FxCompile Include="Effects\Render\MovingParticle\MovingParticleVS.hlsl" />
     <FxCompile Include="Effects\Trans\Mipmaps\MosaicPS.hlsl" />
-    <FxCompile Include="Effects\Render\DotFountain\DotFountain.fx" />
     <FxCompile Include="Effects\Render\DotFountain\FountainInitCS.hlsl" />
     <FxCompile Include="Effects\Render\DotFountain\FountainCS.hlsl" />
     <FxCompile Include="Effects\Render\DotFountain\FountainVS.hlsl" />
+    <FxCompile Include="Effects\Render\PointSpritePS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

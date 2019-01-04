@@ -6,8 +6,5 @@ struct PointSpritesRender
 {
 	using GsData = Hlsl::Render::PointSpriteGS;
 
-	static ID3D11PixelShader* pixelShader()
-	{
-		return StaticResources::pointSprite;
-	}
+	using PsData = Hlsl::Render::PointSpritePS;
 };

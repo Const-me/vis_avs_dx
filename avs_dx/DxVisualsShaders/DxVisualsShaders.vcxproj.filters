@@ -6,7 +6,6 @@
   <ItemGroup>
     <FxCompile Include="FullScreenTriangleVS.hlsl" />
     <FxCompile Include="CopyTexturePS.hlsl" />
-    <FxCompile Include="PointSpritePS.hlsl" />
     <FxCompile Include="FadeFramePS.hlsl" />
     <FxCompile Include="Effects\BlitterVS.hlsl" />
     <FxCompile Include="Effects\BlitterPS.hlsl" />

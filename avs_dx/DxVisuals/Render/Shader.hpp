@@ -52,24 +52,10 @@ public:
 		}
 
 		const ShaderTemplate& tmpl = *m_sourceData.shaderTemplate();
-
-		if( tmpl.hlsl.Find( "AVS_RENDER_SIZE" ) >= 0 )
-		{
-			def.set( "AVS_RENDER_SIZE", getRenderSizeString() );
-			subscribeHandler( this );
-		}
-		else
-			unsubscribeHandler( this );
-
 		std::vector<uint8_t> dxbc;
 		const HRESULT hr = __super::compile( tmpl.name, tmpl.hlsl, inc, def, tmpl.usesBeat, dxbc );
 		if( FAILED( hr ) )
-		{
-			CStringA msg = "Compilation error in shader ";
-			msg += tmpl.name;
-			logError( hr, msg );
 			return hr;
-		}
 		if( S_FALSE == hr )
 			return S_FALSE;
 

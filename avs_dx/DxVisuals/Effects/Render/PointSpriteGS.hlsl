@@ -2,6 +2,7 @@
 // A geometry shader that expands points into point sprites.
 static const float2 sizeInPixels = float2( 8, 8 );
 #define AVS_RENDER_SIZE float2( 1280, 720 )
+#define AVS_PIXEL_PARTICLES 0
 #endif
 
 struct sIn
@@ -22,7 +23,11 @@ void main( point sIn input[1], inout TriangleStream<sOut> output )
 {
     const float4 color = input[ 0 ].color;
     const float4 pos = input[ 0 ].pos;
+#if AVS_PIXEL_PARTICLES
+    const float2 halfSize = float2( 1, 1 ) / AVS_RENDER_SIZE;
+#else
     const float2 halfSize = sizeInPixels / AVS_RENDER_SIZE;
+#endif
 
     [unroll]
 	for( int i = 0; i < 4; i++ )

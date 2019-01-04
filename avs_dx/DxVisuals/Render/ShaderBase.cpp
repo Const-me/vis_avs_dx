@@ -3,6 +3,8 @@
 #include <Hlsl/compile.h>
 #include <Resources/createShader.hpp>
 
+extern int cfg_fs_d;
+
 template<eStage stage>
 HRESULT ShaderBase<stage>::compile( const char* name, const CStringA& hlsl, const CAtlMap<CStringA, CStringA>& inc, Hlsl::Defines &def, bool usesBeat, std::vector<uint8_t>& dxbc )
 {
@@ -11,6 +13,22 @@ HRESULT ShaderBase<stage>::compile( const char* name, const CStringA& hlsl, cons
 
 	dropShader();
 	m_state = eShaderState::Failed;
+
+	bool shaderNeedsResizeEvent = false;
+	if( hlsl.Find( "AVS_RENDER_SIZE" ) >= 0 )
+	{
+		def.set( "AVS_RENDER_SIZE", getRenderSizeString() );
+		shaderNeedsResizeEvent = true;
+	}
+	if( hlsl.Find( "AVS_PIXEL_PARTICLES" ) >= 0 )
+	{
+		def.set( "AVS_PIXEL_PARTICLES", cfg_fs_d ? "1" : "0" );
+		shaderNeedsResizeEvent = true;
+	}
+	if( shaderNeedsResizeEvent )
+		subscribeHandler( this );
+	else
+		unsubscribeHandler( this );
 
 	if( usesBeat )
 		def.set( "IS_BEAT", "0" );

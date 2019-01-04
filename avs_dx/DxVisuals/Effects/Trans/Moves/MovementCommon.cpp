@@ -23,10 +23,10 @@ HRESULT MovementStructs::CommonVsData::updateAvs( bool rectCoords )
 	return res;
 }
 
-HRESULT MovementFx::render( RenderTargets& rt, bool bilinear, bool wrap, UINT psReadSlot, bool blend, bool rectCoords )
+HRESULT MovementFx::render( RenderTargets& rt, bool bilinear, bool wrap, UINT psReadSlot, UINT samplerSlot, bool blend, bool rectCoords )
 {
 	CHECK( m_sampler.update( bilinear, wrap ) );
-	BIND_PS_SAMPLER( 1, m_sampler );
+	BIND_PS_SAMPLER( samplerSlot, m_sampler );
 
 	BoundPsResource psRead;
 	if( blend )

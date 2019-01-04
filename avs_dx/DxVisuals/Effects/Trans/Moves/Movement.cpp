@@ -133,7 +133,8 @@ HRESULT Movement::render( bool isBeat, RenderTargets& rt )
 		if( !ps.bind( isBeat ) )
 			return S_FALSE;
 		const UINT psReadSlot = ps.data().bindPrevFrame;
-		return MovementFx::render( rt, avs->subpixel, avs->wrap, psReadSlot, avs->blend, avs->rectangular );
+		const UINT psSamplerSlot = ps.data().bindSampler;
+		return MovementFx::render( rt, avs->subpixel, avs->wrap, psReadSlot, psSamplerSlot, avs->blend, avs->rectangular );
 	}
 	return std::visit( [ & ]( auto& s ) { return renderFullscreen( s, rt ); }, m_ps );
 }

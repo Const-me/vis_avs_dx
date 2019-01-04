@@ -31,7 +31,7 @@ void main( point sIn input[1], inout TriangleStream<sOut> output )
         const float y = 1.0 - ( i & 2 );
         sOut r;
         r.pos = pos;
-        r.pos.xy += float2( x, y ) * halfSize;
+        r.pos.xy += float2( x, y ) * halfSize * pos.ww;
         r.tc = float2( x, y );
         r.color = color;
         output.Append( r );

@@ -45,7 +45,7 @@ HRESULT ShaderBase<stage>::compile( const char* name, const CStringA& hlsl, cons
 		def.set( "IS_BEAT", "0" );
 
 	// Compile HLSL into DXBC
-	CHECK( Hlsl::compile( shaderStage, hlsl, name, inc, def, dxbc ) );
+	SILENT_CHECK( Hlsl::compile( shaderStage, hlsl, name, inc, def, dxbc ) );
 
 	// Upload DXBC to GPU
 	CHECK( createShader( dxbc, shader ) );
@@ -53,7 +53,7 @@ HRESULT ShaderBase<stage>::compile( const char* name, const CStringA& hlsl, cons
 	if( usesBeat )
 	{
 		def.reset( "IS_BEAT", "1" );
-		CHECK( Hlsl::compile( shaderStage, hlsl, name, inc, def, dxbc ) );
+		SILENT_CHECK( Hlsl::compile( shaderStage, hlsl, name, inc, def, dxbc ) );
 		CHECK( createShader( dxbc, beatShader ) );
 	}
 	else

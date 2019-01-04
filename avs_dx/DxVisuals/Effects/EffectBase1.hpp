@@ -62,7 +62,7 @@ protected:
 			pIncludes = &TStruct::effectIncludes();
 		}
 
-		CHECK( renderer.compileShaders( *pIncludes, stateOffset() ) );
+		SILENT_CHECK( renderer.compileShaders( *pIncludes, stateOffset() ) );
 		return S_OK;
 	}
 };

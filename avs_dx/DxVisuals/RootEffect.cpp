@@ -19,7 +19,7 @@ HRESULT RootEffect::renderRoot( bool isBeat, RenderTargets& rt )
 	}
 
 	Binder binder;
-	CHECK( updateParameters( binder ) );
+	SILENT_CHECK( updateParameters( binder ) );
 
 	// Run a state update shader
 	if( !m_stateShaders.bind( isBeat ) )

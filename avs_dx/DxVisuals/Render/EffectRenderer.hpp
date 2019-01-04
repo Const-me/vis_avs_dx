@@ -56,6 +56,14 @@ public:
 		return std::get<3>( m_shaders ).data();
 	}
 
+	template<eStage stage>
+	HRESULT compileShader( const CAtlMap<CStringA, CStringA>& inc, UINT stateOffset )
+	{
+		constexpr uint8_t i = (uint8_t)stage;
+		static_assert( shaderKinds[ i ] == eShaderKind::Dynamic );
+		return std::get<i>( m_shaders ).compile( inc, stateOffset );
+	}
+
 	// Bind shaders for all 4 stages. If some are not defined in the effect structure, these shaders will be unbound.
 	bool bindShaders( bool isBeat )
 	{

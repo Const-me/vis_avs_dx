@@ -22,6 +22,7 @@ public:
 
 private:
 	HWND m_hWnd = nullptr;
+	CD3D11_VIEWPORT m_viewport;
 
 	int wmCreate( LPCREATESTRUCT lpCreateStruct );
 
@@ -36,6 +37,8 @@ private:
 	HRESULT sendMessageTimeout( UINT wm, const void* wParam );
 
 	HRESULT doPresent();
+
+	HRESULT setupDoublingPresent();
 
 public:
 

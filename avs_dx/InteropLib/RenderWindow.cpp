@@ -4,6 +4,8 @@
 #include "interop.h"
 #include "../DxVisuals/Resources/RenderTarget.h"
 #include "deviceCreation.h"
+#include "../DxVisuals/Effects/shadersCode.h"
+#include "../DxVisuals/Resources/createShader.hpp"
 
 CComAutoCriticalSection renderLock;
 
@@ -40,9 +42,13 @@ namespace
 	CSize g_renderSize;
 }
 
+extern int cfg_fs_d;
+
 CSize getCurrentRenderSize()
 {
-	return g_renderSize;
+	if( !cfg_fs_d )
+		return g_renderSize;
+	return CSize{ g_renderSize.cx / 2, g_renderSize.cy / 2 };
 }
 
 HRESULT RenderWindow::wmSize( UINT nType, CSize size )
@@ -54,6 +60,19 @@ HRESULT RenderWindow::wmSize( UINT nType, CSize size )
 	CHECK( resizeSwapChain( size ) );
 
 	g_renderSize = size;
+	m_viewport = CD3D11_VIEWPORT{ 0.0f, 0.0f, (float)size.cx, (float)size.cy };
+	return S_OK;
+}
+
+HRESULT RenderWindow::setupDoublingPresent()
+{
+	if( !StaticResources::fullScreenTriangleTC )
+		CHECK( createShader( Hlsl::StaticShaders::FullScreenTriangleWithTC(), StaticResources::fullScreenTriangleTC ) );
+	if( !StaticResources::copyTextureBilinear )
+		CHECK( createShader( Hlsl::StaticShaders::CopyTextureBilinear(), StaticResources::copyTextureBilinear ) );
+
+	setShaders( StaticResources::fullScreenTriangleTC, nullptr, StaticResources::copyTextureBilinear );
+	bindSampler<eStage::Pixel>( 0, StaticResources::sampleBilinear );
 	return S_OK;
 }
 
@@ -80,7 +99,11 @@ LRESULT RenderWindow::wmPresent( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 		return 0;
 	}
 
-	setShaders( StaticResources::fullScreenTriangle, nullptr, StaticResources::copyTexture );
+	if( getRenderSize() == g_renderSize )
+		setShaders( StaticResources::fullScreenTriangle, nullptr, StaticResources::copyTexture );
+	else
+		setupDoublingPresent();
+	context->RSSetViewports( 1, &m_viewport );
 	omSetTarget( renderTargetView );
 	{
 		auto bound = pSource->psView( 127 );

@@ -11,6 +11,8 @@
     <FxCompile Include="Effects\BlitterVS.hlsl" />
     <FxCompile Include="Effects\BlitterPS.hlsl" />
     <FxCompile Include="MovingParticlePS.hlsl" />
+    <FxCompile Include="CopyTextureBilinear.hlsl" />
+    <FxCompile Include="FullScreenTriangleWithTC.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />

@@ -51,8 +51,10 @@ HRESULT Transition::prepare( char visdata[ 2 ][ 2 ][ 576 ], int isBeat )
 		g_renderSize = currentSize;
 		g_renderSizeString.Format( "float2( %i, %i )", currentSize.cx, currentSize.cy );
 		callResizeHandlers();
-	}
 
+		m_viewport = CD3D11_VIEWPORT{ 0.0f, 0.0f, (float)currentSize.cx, (float)currentSize.cy };
+	}
+	context->RSSetViewports( 1, &m_viewport );
 	m_prepared.mark();
 	return S_OK;
 }

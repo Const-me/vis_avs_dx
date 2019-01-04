@@ -161,9 +161,6 @@ HRESULT resizeSwapChain( const CSize& size )
 	CHECK( swapChain->GetBuffer( 0, IID_PPV_ARGS( &pBuffer ) ) );
 	CHECK( device->CreateRenderTargetView( pBuffer, nullptr, &renderTargetView ) );
 
-	CD3D11_VIEWPORT vp{ 0.0f, 0.0f, (float)size.cx, (float)size.cy };
-	context->RSSetViewports( 1, &vp );
-
 	logInfo( "Resized the swap chain to %i x %i", size.cx, size.cy );
 
 	return S_OK;

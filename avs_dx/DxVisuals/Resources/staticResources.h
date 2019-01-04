@@ -9,6 +9,8 @@ namespace StaticResources
 
 	extern CComPtr<ID3D11VertexShader> fullScreenTriangle;
 	extern CComPtr<ID3D11PixelShader> copyTexture;
+	extern CComPtr<ID3D11VertexShader> fullScreenTriangleTC;
+	extern CComPtr<ID3D11PixelShader> copyTextureBilinear;
 	extern CComPtr<ID3D11PixelShader> pointSprite;
 	extern CComPtr<ID3D11PixelShader> fadeFramePS;
 

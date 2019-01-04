@@ -28,6 +28,7 @@ public:
 private:
 
 	HRESULT prepare( char visdata[ 2 ][ 2 ][ 576 ], int isBeat );
+	CD3D11_VIEWPORT m_viewport;
 
 	EffectProfiler m_prepared, m_rendered;
 };

@@ -86,6 +86,8 @@ namespace StaticResources
 
 		fullScreenTriangle = nullptr;
 		copyTexture = nullptr;
+		fullScreenTriangleTC = nullptr;
+		copyTextureBilinear = nullptr;
 		pointSprite = nullptr;
 		fadeFramePS = nullptr;
 
@@ -106,6 +108,8 @@ namespace StaticResources
 
 	CComPtr<ID3D11VertexShader> fullScreenTriangle;
 	CComPtr<ID3D11PixelShader> copyTexture;
+	CComPtr<ID3D11VertexShader> fullScreenTriangleTC;
+	CComPtr<ID3D11PixelShader> copyTextureBilinear;
 	CComPtr<ID3D11PixelShader> pointSprite;
 	CComPtr<ID3D11PixelShader> fadeFramePS;
 

@@ -191,6 +191,13 @@ extern int g_rnd_cnt;
 
 int C_RenderTransitionClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
 {
+	iTransition* pTrans = getTransition();
+	if( nullptr == pTrans )
+	{
+		// This happens on shutdown, we first shut down our stuff, like D3D, only then this thread. So the thread may run a few times before quit.
+		Sleep( 1 );
+		return 0;
+	}
 	if( _dotransitionflag || enabled ) g_rnd_cnt = 0;
 	if( _dotransitionflag == 2 || _dotransitionflag == 3 )
 	{
@@ -243,7 +250,7 @@ int C_RenderTransitionClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, 
 			g_render_effects2->freeBuffers();
 		}
 		// return g_render_effects->render( visdata, isBeat, framebuffer, fbout, w, h );
-		getTransition()->renderSingle( visdata, isBeat, *g_render_effects->dxEffect );
+		pTrans->renderSingle( visdata, isBeat, *g_render_effects->dxEffect );
 		return 0;
 	}
 
@@ -296,9 +303,9 @@ int C_RenderTransitionClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, 
 	// now sintrans does a smooth curve from 0 to 1
 
 	if( curtrans & 0x8000 )
-		getTransition()->renderTransition( visdata, isBeat, *g_render_effects->dxEffect, *g_render_effects2->dxEffect, curtrans & 0x7fff, sintrans );
+		pTrans->renderTransition( visdata, isBeat, *g_render_effects->dxEffect, *g_render_effects2->dxEffect, curtrans & 0x7fff, sintrans );
 	else
-		getTransition()->renderSingle( visdata, isBeat, *g_render_effects->dxEffect );
+		pTrans->renderSingle( visdata, isBeat, *g_render_effects->dxEffect );
 
 	/* switch( curtrans & 0x7fff )
 	{

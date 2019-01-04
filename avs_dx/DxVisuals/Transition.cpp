@@ -127,7 +127,6 @@ Transition* getTransitionInstance()
 
 iTransition* getTransition()
 {
-	assert( g_transition );
 	return g_transition.get();
 }
 

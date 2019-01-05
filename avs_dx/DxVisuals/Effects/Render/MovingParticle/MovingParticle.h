@@ -14,14 +14,12 @@ struct MovingParticleStructs
 
 	struct AvsState
 	{
+		size_t vtbl;
 		int enabled;
 		int colors;
 		int maxdist, size, size2;
 		int blend;
-
 		int s_pos;
-
-
 		double c[ 2 ];
 		double v[ 2 ];
 		double p[ 2 ];

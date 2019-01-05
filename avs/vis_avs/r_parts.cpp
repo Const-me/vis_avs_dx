@@ -87,8 +87,6 @@ int  C_THISCLASS::save_config( unsigned char *data )
 	return pos;
 }
 
-
-
 C_THISCLASS::C_THISCLASS()
 {
 	blend = 1;
@@ -103,7 +101,7 @@ C_THISCLASS::C_THISCLASS()
 	p[ 0 ] = -0.6;
 	p[ 1 ] = 0.3;
 
-	CREATE_DX_EFFECT( enabled );
+	CREATE_DX_EFFECT( *this );
 }
 
 C_THISCLASS::~C_THISCLASS()

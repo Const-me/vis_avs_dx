@@ -2,10 +2,22 @@
 #include "Blender.h"
 #include "../../Resources/staticResources.h"
 
-Blender::Blender()
+bool Blender::modeUsesShader( eBlendMode mode )
 {
-	blendShader.data().source = 11;
-	blendShader.data().dest = 12;
+	switch( mode )
+	{
+	case eBlendMode::Ignore:
+	case eBlendMode::Replace:
+	case eBlendMode::Buffer:
+		return false;
+	}
+	return true;
+}
+
+bool Blender::updateBindings( Binder& binder )
+{
+	BoolHr hr = blendShader.update( binder, nullptr, nullptr );
+	return hr.value();
 }
 
 HRESULT Blender::blend( RenderTargets& source, RenderTargets& dest, eBlendMode mode, float blendVal )
@@ -41,17 +53,14 @@ HRESULT Blender::blend( RenderTargets& source, RenderTargets& dest, eBlendMode m
 	setShaders( StaticResources::fullScreenTriangle, nullptr, blendShader.ptr( false ) );
 
 	const UINT bindSource = blendShader.data().source;
-	const UINT bindDest = blendShader.data().dest;
+	BoundPsResource boundDest;
+	CHECK( dest.writeToNext( boundDest ) );
 
-	BoundSrv<eStage::Pixel> boundDest;
-	CHECK( dest.writeToNext( bindDest, boundDest, false ) );
-
-	auto boundSource = src ? src.psView( bindSource ) : boundResource( bindSource, StaticResources::blackTexture );
+	bindResource<eStage::Pixel>( bindSource, src ? src.srv() : StaticResources::blackTexture.operator ->() );
 
 	omBlend( eBlend::None );
 	blendShader.bind( false );
 	drawFullscreenTriangle();
-
 	return S_OK;
 }
 

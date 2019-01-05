@@ -37,10 +37,7 @@ public:
 
 	ID3D11ShaderResourceView* srv() const { return m_srv; }
 
-	BoundSrv<eStage::Pixel> psView( UINT slot ) const
-	{
-		return std::move( BoundSrv<eStage::Pixel>{ slot, m_srv } );
-	}
+	BoundSrv<eStage::Pixel> psView() const;
 
 	// UAVs are only required by some effects and aren't created automatically. This method creates them.
 	HRESULT createUav();

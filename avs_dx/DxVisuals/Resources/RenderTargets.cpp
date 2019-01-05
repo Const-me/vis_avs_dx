@@ -2,6 +2,7 @@
 #include "RenderTargets.h"
 #include "staticResources.h"
 #include <../InteropLib/interop.h>
+#include <Render/Binder.h>
 
 inline void unbindTarget()
 {
@@ -22,15 +23,15 @@ HRESULT RenderTargets::writeToLast( bool clear )
 	return S_OK;
 }
 
-HRESULT RenderTargets::writeToNext( UINT readPsSlot, BoundSrv<eStage::Pixel>& bound, bool clearNext )
+HRESULT RenderTargets::writeToNext( BoundSrv<eStage::Pixel>& bound, bool clearNext )
 {
 	unbindTarget();
 
 	RenderTarget& tRead = m_targets[ m_lastTarget ];
 	if( tRead )
-		bound.swap( tRead.psView( readPsSlot ) );
+		bound.swap( tRead.psView() );
 	else
-		bindResource<eStage::Pixel>( readPsSlot, StaticResources::blackTexture );
+		bindResource<eStage::Pixel>( Binder::psPrevFrame, StaticResources::blackTexture );
 
 	m_lastTarget ^= 1;
 	RenderTarget& tWrite = m_targets[ m_lastTarget ];
@@ -42,12 +43,12 @@ HRESULT RenderTargets::writeToNext( UINT readPsSlot, BoundSrv<eStage::Pixel>& bo
 	return S_OK;
 }
 
-HRESULT RenderTargets::blendToNext( UINT readPsSlot, BoundSrv<eStage::Pixel>& bound )
+HRESULT RenderTargets::blendToNext( BoundSrv<eStage::Pixel>& bound )
 {
 	omBlend( eBlend::Premultiplied );
 	RenderTarget& tRead = m_targets[ m_lastTarget ];
 	if( !tRead )
-		return writeToNext( readPsSlot, bound, true );
+		return writeToNext( bound, true );
 
 	unbindTarget();
 	m_lastTarget ^= 1;
@@ -58,6 +59,6 @@ HRESULT RenderTargets::blendToNext( UINT readPsSlot, BoundSrv<eStage::Pixel>& bo
 	tRead.copyTo( tWrite );
 
 	tWrite.bindTarget();
-	bound.swap( tRead.psView( readPsSlot ) );
+	bound.swap( tRead.psView() );
 	return S_OK;
 }

@@ -108,8 +108,8 @@ HRESULT EffectListBase::render( bool isBeat, RenderTargets& rt )
 HRESULT EffectListBase::fadeRenderTarget( RenderTargets &rt )
 {
 	setShaders( StaticResources::fullScreenTriangle, nullptr, StaticResources::fadeFramePS );
-	BoundSrv<eStage::Pixel> bound;
-	CHECK( rt.writeToNext( 127, bound, false ) );
+	BoundPsResource bound;
+	CHECK( rt.writeToNext( bound ) );
 	drawFullscreenTriangle( false );
 	return S_OK;
 }

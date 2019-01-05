@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MipMaps.h"
 #include <../InteropLib/interop.h>
+#include <Render/Binder.h>
 
 void MipMaps::destroy()
 {
@@ -53,9 +54,9 @@ HRESULT MipMapsRenderer::updateMipmaps( RenderTarget& src )
 	return S_OK;
 }
 
-HRESULT MipMapsRenderer::bindMipmaps( UINT prevFrameSlot, UINT samplerSlot )
+HRESULT MipMapsRenderer::bindMipmaps( UINT samplerSlot )
 {
-	bindResource<eStage::Pixel>( prevFrameSlot, m_mipMaps.srv() );
+	bindResource<eStage::Pixel>( Binder::psPrevFrame, m_mipMaps.srv() );
 
 #ifdef DEBUG
 	if( !m_sampler )

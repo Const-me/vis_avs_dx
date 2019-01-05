@@ -7,9 +7,16 @@ class Binder
 	{
 		UINT srv, uav, cbuffer, sampler;
 	};
-	std::array<Slots, 4> m_data;
+	using BindingsData = std::array<Slots, 4>;
+
+	static const BindingsData m_staticBinds;
+	static BindingsData staticallyBoundSlots();
+
+	BindingsData m_data;
 
 public:
+
+	static constexpr UINT psPrevFrame = 3;
 
 	Binder();
 

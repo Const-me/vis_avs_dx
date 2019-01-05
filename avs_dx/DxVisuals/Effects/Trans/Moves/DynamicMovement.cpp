@@ -59,7 +59,6 @@ HRESULT DynamicMovement::render( bool isBeat, RenderTargets& rt )
 {
 	if( !renderer.bindShaders( isBeat ) )
 		return S_FALSE;
-	const UINT psReadSlot = renderer.pixel().bindPrevFrame;
 	const UINT psSamplerSlot = renderer.pixel().bindSampler;
-	return MovementFx::render( rt, avs->subpixel, avs->wrap, psReadSlot, psSamplerSlot, avs->blend, avs->rectcoords );
+	return MovementFx::render( rt, avs->subpixel, avs->wrap, psSamplerSlot, avs->blend, avs->rectcoords );
 }

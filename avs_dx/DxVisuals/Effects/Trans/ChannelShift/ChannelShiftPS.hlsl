@@ -1,9 +1,7 @@
 #ifndef AVS_SHADER
-#define BIND_PREV_FRAME t1
-// <macro-resource name="bindPrevFrame" macro="BIND_PREV_FRAME" />
 static const uint mode = 1;
 #endif
-Texture2D<float4> texPrevFrame : register(BIND_PREV_FRAME);
+Texture2D<float4> texPrevFrame : register(t3);
 
 #define IDC_GBR                         1018
 #define IDC_BRG                         1019

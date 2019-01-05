@@ -3,12 +3,11 @@
 #define BIND_SOURCE t1
 #define BIND_DEST t2
 // <macro-resource name="source" macro="BIND_SOURCE" />
-// <macro-resource name="dest" macro="BIND_DEST" />
 static const uint blend = 0;
 static const float blendVal = 1.0f;
 #endif
 Texture2D<float4> texSource : register(BIND_SOURCE);
-Texture2D<float4> texDest : register(BIND_DEST);
+Texture2D<float4> texDest : register(t3);
 
 float4 main( float4 screenSpace : SV_Position ) : SV_Target
 {

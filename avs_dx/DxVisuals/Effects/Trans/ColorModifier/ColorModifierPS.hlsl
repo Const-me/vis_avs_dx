@@ -2,12 +2,8 @@
 #ifndef AVS_SHADER
 #define SHADER_GLOBALS
 #define SHADER_CODE
-
-#define BIND_PREV_FRAME t1
-// <macro-resource name="bindPrevFrame" macro="BIND_PREV_FRAME" />
-
 #endif
-Texture2D<float4> texPrevFrame : register( BIND_PREV_FRAME );
+Texture2D<float4> texPrevFrame : register(t3);
 
 SHADER_GLOBALS
 

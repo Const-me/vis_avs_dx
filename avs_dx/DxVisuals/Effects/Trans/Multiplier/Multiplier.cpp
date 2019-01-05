@@ -42,8 +42,9 @@ HRESULT Multiplier::render( bool isBeat, RenderTargets& rt )
 {
 	if( !renderer.bindShaders( isBeat ) )
 		return S_FALSE;
-	BoundSrv<eStage::Pixel> bound;
-	CHECK( rt.writeToNext( renderer.pixel().bindPrevFrame, bound, false ) );
+
+	BoundPsResource bound;
+	CHECK( rt.writeToNext( bound ) );
 	omBlend( eBlend::None );
 	drawFullscreenTriangle( false );
 	return S_OK;

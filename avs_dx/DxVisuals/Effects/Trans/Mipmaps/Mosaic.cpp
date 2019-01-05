@@ -55,8 +55,8 @@ HRESULT Mosaic::renderDisabled( RenderTargets& rt )
 	else
 		return S_FALSE;
 
-	BoundSrv<eStage::Pixel> bound;
-	CHECK( rt.blendToNext( 127, bound ) );
+	BoundPsResource bound;
+	CHECK( rt.blendToNext( bound ) );
 
 	drawFullscreenTriangle( false );
 	return S_OK;
@@ -79,7 +79,7 @@ HRESULT Mosaic::render( bool isBeat, RenderTargets& rt )
 	CHECK( updateCBuffer( m_cb, &cb, sizeof( cb ) ) );
 	bindConstantBuffer<eStage::Pixel>( renderer.pixel().bindConstBuffer, m_cb );
 
-	CHECK( bindMipmaps( renderer.pixel().bindPrevFrame, renderer.pixel().bindSampler ) );
+	CHECK( bindMipmaps( renderer.pixel().bindSampler ) );
 
 	BoundSrv<eStage::Pixel> bound;
 	if( avs->blend )

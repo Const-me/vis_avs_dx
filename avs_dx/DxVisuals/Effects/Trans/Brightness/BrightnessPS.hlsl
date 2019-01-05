@@ -1,13 +1,12 @@
 #include "VisCommon.fx"
 #ifndef AVS_SHADER
-#define BIND_PREV_FRAME t1
 // <macro-resource name="bindPrevFrame" macro="BIND_PREV_FRAME" />
 static const float3 values = float3( 1, 1, 1 );
 static const bool exclude = false;
 static const float3 excludeColor = float3( 1, 1, 1 );
 static const float excludeDistance = 0.125f;
 #endif
-Texture2D<float4> texPrevFrame : register(BIND_PREV_FRAME);
+Texture2D<float4> texPrevFrame : register(t3);
 
 float4 main( float4 screenSpace : SV_Position ) : SV_Target
 {

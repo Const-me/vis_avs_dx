@@ -2,12 +2,10 @@
 #ifndef AVS_SHADER
 #define SHADER_GLOBALS
 #define SHADER_CODE
-#define BIND_PREV_FRAME t1
-// <macro-resource name="bindPrevFrame" macro="BIND_PREV_FRAME" />
 #define AVS_RENDER_SIZE float2( 1280, 720 )
 static const float fuzzyRadius = 4;
 #endif
-Texture2D<float4> texPrevFrame : register( BIND_PREV_FRAME );
+Texture2D<float4> texPrevFrame : register(t3);
 
 inline float avs_rand( inout uint rng_state, float maxVal )
 {

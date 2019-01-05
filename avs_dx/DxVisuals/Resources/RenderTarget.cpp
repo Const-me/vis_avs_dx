@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "RenderTarget.h"
 #include "../../InteropLib/interop.h"
+#include <Render/Binder.h>
 
 HRESULT RenderTarget::create( const CSize& size, bool unorderedAccess )
 {
@@ -60,22 +61,10 @@ void RenderTarget::bindTarget()
 	context->OMSetRenderTargets( 1, &v, nullptr );
 }
 
-/* void RenderTarget::bindView( UINT slot ) const
-{
-	bindResource<eStage::Pixel>( slot, m_srv );
-} */
-
 void RenderTarget::copyTo( const RenderTarget& that ) const
 {
 	context->CopyResource( that.m_tex, m_tex );
 }
-
-/* void RenderTarget::swap( RenderTarget& rt )
-{
-	std::swap( m_tex, rt.m_tex );
-	std::swap( m_rtv, rt.m_rtv );
-	std::swap( m_srv, rt.m_srv );
-} */
 
 HRESULT RenderTarget::createUav()
 {
@@ -87,4 +76,10 @@ HRESULT RenderTarget::createUav()
 	CD3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc{ D3D11_UAV_DIMENSION_TEXTURE2D, format };
 	CHECK( device->CreateUnorderedAccessView( m_tex, &uavDesc, &m_uav ) );
 	return S_OK;
+}
+
+BoundSrv<eStage::Pixel> RenderTarget::psView() const
+{
+	assert( nullptr != m_srv );
+	return std::move( BoundSrv<eStage::Pixel>{ Binder::psPrevFrame, m_srv } );
 }

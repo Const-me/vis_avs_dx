@@ -78,8 +78,8 @@ HRESULT ColorFade::render( bool isBeat, RenderTargets& rt )
 	CHECK( updateCBuffer( m_cb, data.data(), sizeof( data ) ) );
 
 	bindConstantBuffer<eStage::Pixel>( renderer.pixel().bindConstBuffer, m_cb );
-	BoundSrv<eStage::Pixel> bound;
-	CHECK( rt.writeToNext( renderer.pixel().bindPrevFrame, bound, false ) );
+	BoundPsResource bound;
+	CHECK( rt.writeToNext( bound ) );
 
 	omBlend( eBlend::None );
 	drawFullscreenTriangle( false );

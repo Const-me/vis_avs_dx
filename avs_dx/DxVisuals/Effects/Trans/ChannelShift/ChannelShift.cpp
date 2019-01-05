@@ -55,9 +55,8 @@ HRESULT ChannelShift::render( bool isBeat, RenderTargets& rt )
 	}
 
 	omBlend( eBlend::None );
-	const UINT psReadSlot = renderer.pixel().bindPrevFrame;
-	BoundPsResource read;
-	CHECK( rt.writeToNext( psReadSlot, read, false ) );
+	BoundPsResource bound;
+	CHECK( rt.writeToNext( bound ) );
 
 	if( !renderer.bindShaders( isBeat ) )
 		return S_FALSE;

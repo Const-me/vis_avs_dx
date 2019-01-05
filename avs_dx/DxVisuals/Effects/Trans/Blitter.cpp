@@ -80,9 +80,8 @@ HRESULT Blitter::updateBuffer( float val )
 
 HRESULT Blitter::render( bool isBeat, RenderTargets& rt )
 {
-	constexpr UINT psSlot = 16;
-	BoundSrv<eStage::Pixel> bound;
-	CHECK( rt.blendToNext( psSlot, bound ) );
+	BoundPsResource bound;
+	CHECK( rt.blendToNext( bound ) );
 
 	float val = 0;
 	if( avs->beatch )

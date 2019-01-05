@@ -23,6 +23,25 @@ float EffectList::outblendval() const
 	return div255 * avs->outblendval;
 }
 
+inline bool blendShaderRequired( eBlendMode  bm)
+{
+
+}
+
+HRESULT EffectList::updateParameters( Binder& binder )
+{
+	BoolHr hr;
+	if( Blender::modeUsesShader( blendin() ) )
+		hr.combine( m_blendIn.updateBindings( binder ) );
+
+	hr.combine( __super::updateParameters( binder ) );
+
+	if( Blender::modeUsesShader( blendout() ) )
+		hr.combine( m_blendOut.updateBindings( binder ) );
+
+	return hr;
+}
+
 HRESULT EffectList::render( bool isBeat, RenderTargets& rt )
 {
 	const int enabled = ( avs->mode & 2 ) ^ 2;

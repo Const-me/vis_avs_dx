@@ -29,7 +29,9 @@ class Blender
 
 public:
 
-	Blender();
+	static bool modeUsesShader( eBlendMode mode );
+
+	bool updateBindings( Binder& binder );
 
 	HRESULT blend( RenderTargets& source, RenderTargets& dest, eBlendMode mode, float blendVal );
 };

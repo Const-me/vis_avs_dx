@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "Binder.h"
 
-Binder::Binder()
+Binder::BindingsData Binder::staticallyBoundSlots()
 {
-	ZeroMemory( &m_data, sizeof( m_data ) );
-	
-	for( Slots& s : m_data )
+	BindingsData res;
+	ZeroMemory( &res, sizeof( res ) );
+
+	for( Slots& s : res )
 	{
 		// cbuffer FrameGlobalData : register(b0)
 		s.cbuffer++;
@@ -27,12 +28,19 @@ Binder::Binder()
 	}
 
 	// RWByteAddressBuffer effectStates : register(u0);
-	UINT unused;
-	reserveInputSlot( unused, eStage::Compute, 'u' );
+	res[ (uint32_t)eStage::Compute ].uav++;
 
-	// Texture2D<float4> prevFrameTexture : register(t2);
-	reserveInputSlot( unused, eStage::Pixel, 't' );
+	// Texture2D<float4> prevFrameTexture : register(t3);
+	res[ (uint32_t)eStage::Pixel ].srv++;
+
+	return res;
 }
+
+const Binder::BindingsData Binder::m_staticBinds = staticallyBoundSlots();
+
+Binder::Binder() :
+	m_data( m_staticBinds )
+{ }
 
 namespace
 {
@@ -53,7 +61,7 @@ bool Binder::reserveInputSlot( UINT& result, eStage pipelineStage, char resource
 	switch( resourceType )
 	{
 	case 't':
-		return inc( s.srv, result, D3D11_COMMONSHADER_INPUT_RESOURCE_REGISTER_COUNT - 2 );	// The 2 last ones are used by Transition
+		return inc( s.srv, result, D3D11_COMMONSHADER_INPUT_RESOURCE_REGISTER_COUNT );
 	case 'u':
 		return inc( s.uav, result, D3D11_PS_CS_UAV_REGISTER_COUNT );
 	case 'b':

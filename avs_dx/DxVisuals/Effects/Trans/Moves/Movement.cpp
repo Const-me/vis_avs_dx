@@ -102,16 +102,15 @@ HRESULT Movement::updateParameters( Binder& binder )
 template<class S>
 HRESULT Movement::renderFullscreen( S& ps, RenderTargets& rt )
 {
-	const UINT psReadSlot = ps.data().bindPrevFrame;
-	BoundPsResource psRead;
+	BoundPsResource bound;
 	if( avs->blend )
 	{
-		CHECK( rt.blendToNext( psReadSlot, psRead ) );
+		CHECK( rt.blendToNext( bound ) );
 		omCustomBlend( 0.5f );
 	}
 	else
 	{
-		CHECK( rt.writeToNext( psReadSlot, psRead, false ) );
+		CHECK( rt.writeToNext( bound ) );
 		omBlend( eBlend::None );
 	}
 
@@ -132,9 +131,8 @@ HRESULT Movement::render( bool isBeat, RenderTargets& rt )
 		DynamicShader& ps = std::get<DynamicShader>( m_ps );
 		if( !ps.bind( isBeat ) )
 			return S_FALSE;
-		const UINT psReadSlot = ps.data().bindPrevFrame;
 		const UINT psSamplerSlot = ps.data().bindSampler;
-		return MovementFx::render( rt, avs->subpixel, avs->wrap, psReadSlot, psSamplerSlot, avs->blend, avs->rectangular );
+		return MovementFx::render( rt, avs->subpixel, avs->wrap, psSamplerSlot, avs->blend, avs->rectangular );
 	}
 	return std::visit( [ & ]( auto& s ) { return renderFullscreen( s, rt ); }, m_ps );
 }

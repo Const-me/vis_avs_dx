@@ -1,10 +1,8 @@
 #include "VisCommon.fx"
 #ifndef AVS_SHADER
-#define BIND_PREV_FRAME t1
-// <macro-resource name="bindPrevFrame" macro="BIND_PREV_FRAME" />
 static const uint dir = 0;
 #endif
-Texture2D<float4> texPrevFrame : register( BIND_PREV_FRAME );
+Texture2D<float4> texPrevFrame : register( t3 );
 
 float4 main( float4 screenSpace : SV_Position ) : SV_Target
 {

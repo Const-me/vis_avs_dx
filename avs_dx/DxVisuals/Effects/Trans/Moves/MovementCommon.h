@@ -35,5 +35,5 @@ class MovementFx
 
 protected:
 
-	HRESULT render( RenderTargets& rt, bool bilinear, bool wrap, UINT psReadSlot, UINT samplerSlot, bool blend, bool rectCoords );
+	HRESULT render( RenderTargets& rt, bool bilinear, bool wrap, UINT samplerSlot, bool blend, bool rectCoords );
 };

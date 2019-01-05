@@ -40,7 +40,7 @@ HRESULT FastBrightness::render( bool isBeat, RenderTargets& rt )
 		return S_FALSE;
 
 	BoundPsResource bound;
-	CHECK( rt.writeToNext( renderer.pixel().bindPrevFrame, bound, false ) );
+	CHECK( rt.writeToNext( bound ) );
 	if( !renderer.bindShaders( false ) )
 		return S_FALSE;
 	omBlend( eBlend::None );

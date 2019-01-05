@@ -44,9 +44,8 @@ HRESULT Fadeout::render( bool isBeat, RenderTargets& rt )
 	if( !renderer.bindShaders( false ) )
 		return S_FALSE;
 
-	constexpr UINT slotPrevFrame = 4;
-	BoundSrv<eStage::Pixel> bound;
-	CHECK( rt.writeToNext( slotPrevFrame, bound, false ) );
+	BoundPsResource bound;
+	CHECK( rt.writeToNext( bound ) );
 	omBlend( eBlend::None );
 	drawFullscreenTriangle( false );
 	return S_OK;

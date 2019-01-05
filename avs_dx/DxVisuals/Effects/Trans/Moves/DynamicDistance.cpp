@@ -35,7 +35,6 @@ HRESULT DynamicDistance::render( bool isBeat, RenderTargets& rt )
 {
 	if( !renderer.bindShaders( isBeat ) )
 		return S_FALSE;
-	const UINT psReadSlot = renderer.pixel().bindPrevFrame;
 	const UINT psSamplerSlot = renderer.pixel().bindSampler;
-	return MovementFx::render( rt, avs->subpixel, false, psReadSlot, psSamplerSlot, avs->blend, false );
+	return MovementFx::render( rt, avs->subpixel, false, psSamplerSlot, avs->blend, false );
 }

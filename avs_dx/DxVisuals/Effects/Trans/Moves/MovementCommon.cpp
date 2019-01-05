@@ -23,20 +23,20 @@ HRESULT MovementStructs::CommonVsData::updateAvs( bool rectCoords )
 	return res;
 }
 
-HRESULT MovementFx::render( RenderTargets& rt, bool bilinear, bool wrap, UINT psReadSlot, UINT samplerSlot, bool blend, bool rectCoords )
+HRESULT MovementFx::render( RenderTargets& rt, bool bilinear, bool wrap, UINT samplerSlot, bool blend, bool rectCoords )
 {
 	CHECK( m_sampler.update( bilinear, wrap ) );
 	BIND_PS_SAMPLER( samplerSlot, m_sampler );
 
-	BoundPsResource psRead;
+	BoundPsResource bound;
 	if( blend )
 	{
-		CHECK( rt.blendToNext( psReadSlot, psRead ) );
+		CHECK( rt.blendToNext( bound ) );
 		omCustomBlend( 0.5f );
 	}
 	else
 	{
-		CHECK( rt.writeToNext( psReadSlot, psRead, false ) );
+		CHECK( rt.writeToNext( bound ) );
 		omBlend( eBlend::None );
 	}
 	CHECK( m_mesh.draw( rectCoords ) );

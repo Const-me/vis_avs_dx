@@ -54,23 +54,23 @@ private:
 		if( !avs->enabled )
 			return S_FALSE;
 
-		BoundPsResource bound;
 		if( !renderer.bindShaders( false ) )
 			return S_FALSE;
 
+		BoundPsResource bound;
 		if( avs->blend )
 		{
-			CHECK( rt.blendToNext( renderer.pixel().bindPrevFrame, bound ) );
+			CHECK( rt.blendToNext( bound ) );
 			omBlend( eBlend::Add );
 		}
 		else if( avs->blendavg )
 		{
-			CHECK( rt.blendToNext( renderer.pixel().bindPrevFrame, bound ) );
+			CHECK( rt.blendToNext( bound ) );
 			omCustomBlend( 0.5f );
 		}
 		else
 		{
-			CHECK( rt.writeToNext( renderer.pixel().bindPrevFrame, bound, false ) );
+			CHECK( rt.writeToNext( bound ) );
 			omBlend( eBlend::None );
 		}
 		drawFullscreenTriangle( false );

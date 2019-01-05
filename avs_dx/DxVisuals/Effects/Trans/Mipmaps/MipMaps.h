@@ -38,5 +38,5 @@ protected:
 	HRESULT updateMipmaps( RenderTarget& src );
 
 	// Bind mipmaps and the sampler to the PS stage
-	HRESULT bindMipmaps( UINT prevFrameSlot, UINT samplerSlot );
+	HRESULT bindMipmaps( UINT samplerSlot );
 };

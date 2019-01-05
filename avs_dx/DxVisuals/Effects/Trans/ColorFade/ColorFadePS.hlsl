@@ -1,11 +1,9 @@
 #include "VisCommon.fx"
 #ifndef AVS_SHADER
-#define BIND_PREV_FRAME t1
-// <macro-resource name="bindPrevFrame" macro="BIND_PREV_FRAME" />
 #define BIND_CB b3
 // <macro-resource name="bindConstBuffer" macro="BIND_CB" type="cbuffer" />
 #endif
-Texture2D<float4> texPrevFrame : register(BIND_PREV_FRAME);
+Texture2D<float4> texPrevFrame : register(t3);
 
 cbuffer ColorFadeCb : register(BIND_CB)
 {

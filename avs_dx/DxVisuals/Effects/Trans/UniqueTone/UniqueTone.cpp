@@ -49,21 +49,20 @@ HRESULT UniqueTone::render( bool isBeat, RenderTargets& rt )
 	if( !renderer.bindShaders( false ) )
 		return S_FALSE;
 
-	constexpr UINT slotPrevFrame = 4;
-	BoundSrv<eStage::Pixel> bound;
+	BoundPsResource bound;
 	if( avs->blend )
 	{
-		CHECK( rt.blendToNext( slotPrevFrame, bound ) );
+		CHECK( rt.blendToNext( bound ) );
 		omBlend( eBlend::Add );
 	}
 	else if( avs->blendavg )
 	{
-		CHECK( rt.blendToNext( slotPrevFrame, bound ) );
+		CHECK( rt.blendToNext( bound ) );
 		omCustomBlend( 0.5f );
 	}
 	else
 	{
-		CHECK( rt.writeToNext( slotPrevFrame, bound, false ) );
+		CHECK( rt.writeToNext( bound ) );
 		omBlend( eBlend::None );
 	}
 	drawFullscreenTriangle( false );

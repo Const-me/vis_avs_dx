@@ -1,13 +1,11 @@
 #include "VisCommon.fx"
 #ifndef AVS_SHADER
-#define BIND_PREV_FRAME t1
-// <macro-resource name="bindPrevFrame" macro="BIND_PREV_FRAME" />
 static const uint enabled = 1;
 static const float3 color_clip = float3( 0, 0, 0 );
 static const float3 color_clip_out = float3( 0, 0, 0 );
 static const float color_dist = 0.1f;
 #endif
-Texture2D<float4> texPrevFrame : register(BIND_PREV_FRAME);
+Texture2D<float4> texPrevFrame : register(t3);
 
 inline float lengthSquared( float3 v )
 {

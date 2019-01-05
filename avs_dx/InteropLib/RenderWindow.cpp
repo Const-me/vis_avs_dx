@@ -107,7 +107,7 @@ LRESULT RenderWindow::wmPresent( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	context->RSSetViewports( 1, &m_viewport );
 	omSetTarget( renderTargetView );
 	{
-		auto bound = pSource->psView( 127 );
+		auto bound = pSource->psView();
 		omBlend( eBlend::None );
 		drawFullscreenTriangle( false );
 	}
@@ -233,6 +233,6 @@ LRESULT RenderWindow::wmTransition( UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 {
 	drawTransition();
 	HRESULT* pResult = (HRESULT*)lParam;
-	*pResult = doPresent();;
+	*pResult = doPresent();
 	return TRUE;
 }

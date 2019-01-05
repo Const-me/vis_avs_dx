@@ -44,8 +44,16 @@ namespace Expressions
 
 		HRESULT defines( Hlsl::Defines& def ) const
 		{
-			compiledDefines( def );
-			return T::defines( def );
+			__if_exists( T::defines )
+			{
+				compiledDefines( def );
+				return T::defines( def );
+			}
+			__if_not_exists( T::defines )
+			{
+				compiledDefines( def );
+				return S_FALSE;
+			}
 		}
 
 		HRESULT updateDx( const Expressions::Compiler& compiler )

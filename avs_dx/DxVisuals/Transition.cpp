@@ -4,6 +4,7 @@
 #include <Utils/resizeHandler.h>
 #include "../InteropLib/interop.h"
 #include "../InteropLib/Utils/shutdown.h"
+#include "effects.h"
 
 // The critical section that guards renderers, linked from deep inside AVS.
 extern CRITICAL_SECTION g_render_cs;
@@ -59,10 +60,14 @@ HRESULT Transition::prepare( char visdata[ 2 ][ 2 ][ 576 ], int isBeat )
 	return S_OK;
 }
 
-HRESULT Transition::renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, iRootEffect &e )
+HRESULT Transition::renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *pRBase )
 {
 	if( checkShutdown() )
 		return S_FALSE;
+
+	EffectBase* p = getDxEffect( pRBase );
+	if( nullptr == p )
+		return E_POINTER;
 
 #if GPU_PROFILE
 	gpuProfiler().frameStart();
@@ -72,7 +77,7 @@ HRESULT Transition::renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, iRo
 		CSLock __lock( renderLock );
 		CHECK( prepare( visdata, isBeat ) );
 
-		CHECK( e.renderRoot( 0 != isBeat, m_targets1 ) );
+		CHECK( p->renderRoot( 0 != isBeat, m_targets1 ) );
 	}
 
 	m_rendered.mark();
@@ -87,7 +92,7 @@ HRESULT Transition::renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, iRo
 	return S_OK;
 }
 
-HRESULT Transition::renderTransition( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, iRootEffect &e1, iRootEffect &e2, int trans, float sintrans ) 
+HRESULT Transition::renderTransition( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *e1, const C_RBASE *e2, int trans, float sintrans )
 {
 	if( checkShutdown() )
 		return S_FALSE;
@@ -102,8 +107,12 @@ HRESULT Transition::renderTransition( char visdata[ 2 ][ 2 ][ 576 ], int isBeat,
 
 		const bool beat = 0 != isBeat;
 
-		CHECK( e1.renderRoot( beat, m_targets1 ) );
-		CHECK( e2.renderRoot( beat, m_targets2 ) );
+		EffectBase* p1 = getDxEffect( e1 ), *p2 = getDxEffect( e2 );
+		if( nullptr == p1 || nullptr == p2 )
+			return E_POINTER;
+
+		CHECK( p1->renderRoot( beat, m_targets1 ) );
+		CHECK( p2->renderRoot( beat, m_targets2 ) );
 	}
 
 	m_rendered.mark();

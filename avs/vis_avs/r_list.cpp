@@ -415,8 +415,7 @@ void C_RenderListClass::clearRenders( void )
 	renders = NULL;
 	if( thisfb ) GlobalFree( (HGLOBAL)thisfb );
 	thisfb = 0;
-	if( dxEffect )
-		dxEffect->clearRenders();
+	clearListRenderers( this );
 }
 
 int C_RenderListClass::insertRenderBefore( T_RenderListType *r, T_RenderListType *before )

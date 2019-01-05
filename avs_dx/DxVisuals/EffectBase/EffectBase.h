@@ -1,14 +1,20 @@
 #pragma once
-#include "../iRootEffect.h"
 #include "../Render/EffectStateShader.hpp"
 class Binder;
 class RenderTargets;
 class RootEffect;
 
 // All effects must inherit from this abstract class. Unlike iRootEffect, this one is for consumption in DxVisuals, not just for interop with vis_avs.dll code.
-class EffectBase: public iRootEffect
+class EffectBase
 {
 public:
+	virtual ~EffectBase() { }
+
+	// These methods are only called on the root C_RenderListClass object. Can't make them abstract because non-root effects also inherit from this interface, it's pointless to copy-paste the empty implementation to every one of them.
+	virtual HRESULT renderRoot( bool isBeat, RenderTargets& rt ) { return CO_E_NOT_SUPPORTED; }
+
+	virtual HRESULT clearRenders() { return CO_E_NOT_SUPPORTED; }
+
 	struct Metadata
 	{
 		const char* const name;

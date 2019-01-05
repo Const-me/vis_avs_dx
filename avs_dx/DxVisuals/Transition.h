@@ -21,9 +21,9 @@ public:
 
 	~Transition() override;
 
-	HRESULT renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, iRootEffect &e ) override;
+	HRESULT renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *pRBase ) override;
 
-	HRESULT renderTransition( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, iRootEffect &e1, iRootEffect &e2, int trans, float sintrans ) override;
+	HRESULT renderTransition( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *e1, const C_RBASE *e2, int trans, float sintrans ) override;
 
 private:
 

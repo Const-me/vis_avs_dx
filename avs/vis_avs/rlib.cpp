@@ -224,6 +224,75 @@ void C_RLibrary::_add_dll( HINSTANCE hlib, class C_RBASE *( __cdecl *cre )( char
 	NumDLLFuncs++;
 }
 
+extern "C" VM_CODEHANDLE NSEEL_code_compile( VM_CONTEXT, char *code )
+{
+	return nullptr;
+}
+
+static APEinfo ext_info =
+{
+  3,
+  0,
+  &g_line_blend_mode,
+  NSEEL_VM_alloc,
+  AVS_EEL_IF_VM_free,
+  AVS_EEL_IF_resetvars,
+  NSEEL_VM_regvar,
+  NSEEL_code_compile,
+  AVS_EEL_IF_Execute,
+  NSEEL_code_free,
+  compilerfunctionlist,
+  getGlobalBuffer,
+};
+
+void C_RLibrary::initdll()
+{
+	ext_info.global_registers = NSEEL_getglobalregs();
+
+	HANDLE h;
+	WIN32_FIND_DATA d;
+	char dirmask[ MAX_PATH * 2 ];
+	wsprintf( dirmask, "%s\\*.ape", g_path );
+	h = FindFirstFile( dirmask, &d );
+	if( h != INVALID_HANDLE_VALUE )
+	{
+		do {
+			char s[ MAX_PATH ];
+			HINSTANCE hlib;
+			wsprintf( s, "%s\\%s", g_path, d.cFileName );
+			hlib = LoadLibrary( s );
+			if( hlib )
+			{
+				int cre;
+				char *inf;
+
+				void( *sei )( HINSTANCE hDllInstance, APEinfo *ptr );
+				*(void**)&sei = (void *)GetProcAddress( hlib, "_AVS_APE_SetExtInfo" );
+				if( sei )
+					sei( hlib, &ext_info );
+
+				int( *retr )( HINSTANCE hDllInstance, char **info, int *create );
+				retr = ( int( *)( HINSTANCE, char **, int * ) ) GetProcAddress( hlib, "_AVS_APE_RetrFuncEXT2" );
+				if( retr && retr( hlib, &inf, &cre ) )
+				{
+					_add_dll( hlib, ( class C_RBASE *( __cdecl * )( char * ) )cre, inf, 1 );
+				}
+				else
+				{
+					retr = ( int( *)( HINSTANCE, char **, int * ) ) GetProcAddress( hlib, "_AVS_APE_RetrFunc" );
+					if( retr && retr( hlib, &inf, &cre ) )
+					{
+						_add_dll( hlib, ( class C_RBASE *( __cdecl * )( char * ) )cre, inf, 0 );
+					}
+					else FreeLibrary( hlib );
+				}
+			}
+		} while( FindNextFile( h, &d ) );
+		FindClose( h );
+	}
+}
+
+
 int C_RLibrary::GetRendererDesc( int which, char *str )
 {
 	*str = 0;
@@ -298,7 +367,9 @@ C_RLibrary::C_RLibrary()
 	NumRetrFuncs = 0;
 
 	initfx();
+	initdll();
 	initbuiltinape();
+
 }
 
 C_RLibrary::~C_RLibrary()

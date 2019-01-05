@@ -21,18 +21,18 @@ HRESULT getVideoFilePath( const char *selection, CString& result )
 IMPLEMENT_EFFECT( VideoEffect, C_AVIClass );
 
 // Start playing the video
-HRESULT videoOpen( iRootEffect* pEffect, const char *selection )
+HRESULT videoOpen( const C_RBASE* pRBase, const char *selection )
 {
-	VideoEffect* const pfx = dynamic_cast<VideoEffect*>( pEffect );
+	VideoEffect* const pfx = dynamic_cast<VideoEffect*>( getDxEffect( pRBase ) );
 	if( nullptr == pfx )
 		return E_INVALIDARG;
 	return pfx->open( selection );
 }
 
 // Close the video
-HRESULT videoClose( iRootEffect* pEffect )
+HRESULT videoClose( const C_RBASE* pRBase )
 {
-	VideoEffect* const pfx = dynamic_cast<VideoEffect*>( pEffect );
+	VideoEffect* const pfx = dynamic_cast<VideoEffect*>( getDxEffect( pRBase ) );
 	if( nullptr == pfx )
 		return E_INVALIDARG;
 	return pfx->close();

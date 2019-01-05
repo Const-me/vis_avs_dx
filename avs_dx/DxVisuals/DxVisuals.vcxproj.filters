@@ -48,7 +48,6 @@
     <ClInclude Include="Hlsl\ShaderBaseStruct.h" />
     <ClInclude Include="Utils\BoolHr.hpp" />
     <ClInclude Include="Expressions\CompiledShader.h" />
-    <ClInclude Include="iRootEffect.h" />
     <ClInclude Include="Transition.h" />
     <ClInclude Include="iTransition.h" />
     <ClInclude Include="RootEffect.h" />
@@ -77,7 +76,6 @@
     <ClInclude Include="Effects\Video\MF\playerApi.h" />
     <ClInclude Include="Effects\Video\MF\FrameTexture.h" />
     <ClInclude Include="Utils\FadeOut.h" />
-    <ClInclude Include="Utils\effectsRegistry.h" />
     <ClInclude Include="Effects\Render\Picture\interop.h" />
     <ClInclude Include="Utils\findAssets.h" />
     <ClInclude Include="Effects\Render\Picture\PictureEffect.h" />
@@ -127,6 +125,7 @@
     <ClInclude Include="Effects\Trans\Mipmaps\Mosaic.h" />
     <ClInclude Include="Effects\Render\ParticleSystem.hpp" />
     <ClInclude Include="Effects\Render\DotFountain\DotFountain.h" />
+    <ClInclude Include="effects.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -182,7 +181,6 @@
     <ClCompile Include="Effects\Video\MF\mfStatic.cpp" />
     <ClCompile Include="Effects\Video\MF\Player.cpp" />
     <ClCompile Include="Effects\Video\MF\FrameTexture.cpp" />
-    <ClCompile Include="Utils\effectsRegistry.cpp" />
     <ClCompile Include="shutdown.cpp" />
     <ClCompile Include="Utils\findAssets.cpp" />
     <ClCompile Include="Effects\Render\Picture\PictureEffect.cpp" />

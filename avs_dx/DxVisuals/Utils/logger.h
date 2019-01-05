@@ -1,4 +1,5 @@
 #pragma once
+#include <stdint.h>
 #define DXERR_ATL_STRING
 #include "DirectXErrors/DirectXErrors.h"
 

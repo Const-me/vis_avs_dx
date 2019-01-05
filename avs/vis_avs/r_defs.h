@@ -37,18 +37,16 @@ class RString;
 class C_RBASE {
 public:
 	C_RBASE() { }
-	virtual ~C_RBASE() { };
+	virtual ~C_RBASE() { destroyDxEffect( this ); };
 	// Was abstract virtual
-	int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h ) { return 0; }; // returns 1 if fbout has dest
+	virtual int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h ) { return 0; };
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent ) { return 0; };
 	virtual char *get_desc() = 0;
 	virtual void load_config( unsigned char *data, int len ) { }
-	virtual int  save_config( unsigned char *data ) { return 0; }
+	virtual int save_config( unsigned char *data ) { return 0; }
 
 	void load_string( RString &s, unsigned char *data, int &pos, int len );
 	void save_string( unsigned char *data, int &pos, RString &text );
-
-	DxEffectPtr dxEffect;
 };
 
 class C_RBASE2 : public C_RBASE {
@@ -58,15 +56,13 @@ public:
 
 	int getRenderVer2() { return 2; }
 
-	// Were virtuals
-	int smp_getflags() { return 0; } // return 1 to enable smp support
+	virtual int smp_getflags() { return 0; } // return 1 to enable smp support
 
 	// returns # of threads you desire, <= max_threads, or 0 to not do anything
 	// default should return max_threads if you are flexible
-	int smp_begin( int max_threads, char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h ) { return 0; }
-	void smp_render( int this_thread, int max_threads, char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h ) { };
-	int smp_finish( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h ) { return 0; }; // return value is that of render() for fbstuff etc
-
+	virtual int smp_begin( int max_threads, char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h ) { return 0; }
+	virtual void smp_render( int this_thread, int max_threads, char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h ) { };
+	virtual int smp_finish( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h ) { return 0; }; // return value is that of render() for fbstuff etc
 };
 
 

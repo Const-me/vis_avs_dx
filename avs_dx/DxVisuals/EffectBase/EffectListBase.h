@@ -14,7 +14,7 @@ public:
 
 		bool hasDxEffect() const
 		{
-			return !render->dxEffect.empty();
+			return nullptr != getDxEffect( render );
 		}
 		EffectBase* dxEffect() const;
 	};

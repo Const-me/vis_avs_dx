@@ -35,6 +35,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <math.h>
 #include "resource.h"
 #include "r_defs.h"
+#include <stdint.h>
 
 #define MOD_NAME "Misc / Custom BPM"
 #define C_THISCLASS C_BpmClass

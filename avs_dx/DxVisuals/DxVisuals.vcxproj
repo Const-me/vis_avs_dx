@@ -98,6 +98,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Effects\Render\DotFountain\DotFountain.cpp" />
+    <ClInclude Include="effects.h" />
     <ClInclude Include="Effects\Render\DotFountain\DotFountain.h" />
     <ClInclude Include="Effects\Render\MovingParticle\MovingParticle.h" />
     <ClInclude Include="Effects\Render\ParticleSystem.hpp" />
@@ -141,7 +142,6 @@
     <ClInclude Include="Utils\DXTK\XboxDDSTextureLoader.h" />
     <ClInclude Include="Utils\DynamicArray.hpp" />
     <ClInclude Include="Utils\findAssets.h" />
-    <ClInclude Include="Utils\effectsRegistry.h" />
     <ClInclude Include="Effects\List\Blender.h" />
     <ClInclude Include="Effects\Video\MF\FrameTexture.h" />
     <ClInclude Include="Effects\Video\MF\mf.h" />
@@ -186,7 +186,6 @@
     <ClInclude Include="Expressions\Prototype.h" />
     <ClInclude Include="Render\EffectStateShader.hpp" />
     <ClInclude Include="Render\Shader.hpp" />
-    <ClInclude Include="iRootEffect.h" />
     <ClInclude Include="Render\EffectRenderer.hpp" />
     <ClInclude Include="Hlsl\ShaderTemplate.h" />
     <ClInclude Include="Hlsl\StateShaderTemplate.h" />
@@ -262,7 +261,6 @@
     <ClCompile Include="Utils\DXTK\WICTextureLoader.cpp" />
     <ClCompile Include="Utils\findAssets.cpp" />
     <ClCompile Include="shutdown.cpp" />
-    <ClCompile Include="Utils\effectsRegistry.cpp" />
     <ClCompile Include="Effects\List\Blender.cpp" />
     <ClCompile Include="Effects\List\EffectList.cpp" />
     <ClCompile Include="Effects\Video\MF\FrameTexture.cpp" />

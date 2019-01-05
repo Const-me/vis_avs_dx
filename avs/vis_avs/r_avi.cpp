@@ -124,7 +124,7 @@ C_THISCLASS::~C_THISCLASS()
 
 void C_THISCLASS::loadAvi( char *name )
 {
-	videoOpen( dxEffect.get(), name );
+	videoOpen( this, name );
 	return;
 
 	char pathfile[ MAX_PATH ];
@@ -151,7 +151,7 @@ void C_THISCLASS::loadAvi( char *name )
 
 void C_THISCLASS::closeAvi( void )
 {
-	videoClose( dxEffect.get() );
+	videoClose( this );
 	return;
 
 	if( loaded )

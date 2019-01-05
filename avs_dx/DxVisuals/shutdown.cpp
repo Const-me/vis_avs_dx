@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Utils/effectsRegistry.h"
+#include "effects.h"
 #include "Resources/staticResources.h"
 #include "Effects/Video/MF/mfStatic.h"
 #include "Render/Profiler.h"
@@ -9,7 +9,7 @@
 // Called on the rendering thread, immediately before shutting down. The GUI thread is waiting for this function to succeed.
 HRESULT onRenderThreadShuttingDown()
 {
-	destroyEffects();
+	destroyAllEffects();
 	destroyTransitionInstance();
 	StaticResources::destroy();
 	mfShutdown();

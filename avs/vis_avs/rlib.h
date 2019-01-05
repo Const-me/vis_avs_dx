@@ -57,6 +57,7 @@ protected:
 
 	void add_dofx( void *rf, int has_r2 );
 	void initfx( void );
+	void initdll( void );
 	void initbuiltinape( void );
 	void _add_dll( HINSTANCE, class C_RBASE *( __cdecl * )( char * ), char *, int );
 public:

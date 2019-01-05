@@ -9,10 +9,7 @@ EffectListBase::EffectListBase( AvsState* pState ) :
 
 EffectBase* EffectListBase::T_RenderListType::dxEffect() const
 {
-	if( render->dxEffect.empty() )
-		return nullptr;
-	iRootEffect* p = render->dxEffect.get();
-	return static_cast<EffectBase*>( p );
+	return getDxEffect( render );
 }
 
 bool EffectListBase::updateList( RootEffect* pRoot )

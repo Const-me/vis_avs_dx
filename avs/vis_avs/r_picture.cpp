@@ -88,12 +88,12 @@ C_THISCLASS::C_THISCLASS() // set up default configuration
 }
 C_THISCLASS::~C_THISCLASS()
 {
-	pictureClose( dxEffect.get() );
+	pictureClose( this );
 }
 
 void C_THISCLASS::loadPicture( char *name )
 {
-	pictureOpen( dxEffect.get(), name );
+	pictureOpen( this, name );
 	return;
 
 	freePicture();
@@ -111,7 +111,7 @@ void C_THISCLASS::loadPicture( char *name )
 }
 void C_THISCLASS::freePicture()
 {
-	pictureClose( dxEffect.get() );
+	pictureClose( this );
 	return;
 
 	if( hb )

@@ -96,5 +96,6 @@
     <ClCompile Include="nseel-shims.cpp" />
     <ClCompile Include="Profiler\ProfilerWindow.cpp" />
     <ClCompile Include="Profiler\ProfilerAverages.cpp" />
+    <ClCompile Include="effectsFactory.cpp" />
   </ItemGroup>
 </Project>

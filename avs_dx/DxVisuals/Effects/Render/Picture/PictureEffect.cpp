@@ -14,17 +14,17 @@ int initPictureCombobox( HWND wndDialog, HWND wndComboBox, char *selectedName )
 	return initAssetsCombobox( wndDialog, wndComboBox, selectedName, &isPictureExt );
 }
 
-HRESULT pictureOpen( iRootEffect* pEffect, const char *selection )
+HRESULT pictureOpen( const C_RBASE* pEffect, const char *selection )
 {
-	PictureEffect* const pfx = dynamic_cast<PictureEffect*>( pEffect );
+	PictureEffect* const pfx = dynamic_cast<PictureEffect*>( getDxEffect( pEffect ) );
 	if( nullptr == pfx )
 		return E_INVALIDARG;
 	return pfx->open( selection );
 }
 
-HRESULT pictureClose( iRootEffect* pEffect )
+HRESULT pictureClose( const C_RBASE* pEffect )
 {
-	PictureEffect* const pfx = dynamic_cast<PictureEffect*>( pEffect );
+	PictureEffect* const pfx = dynamic_cast<PictureEffect*>( getDxEffect( pEffect ) );
 	if( nullptr == pfx )
 		return E_INVALIDARG;
 	return pfx->close();

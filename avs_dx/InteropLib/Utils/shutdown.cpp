@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "shutdown.h"
-#include "../../DxVisuals/Utils/effectsRegistry.h"
 #include "../ConsoleLogger.h"
 #include "../profilerApi.h"
 

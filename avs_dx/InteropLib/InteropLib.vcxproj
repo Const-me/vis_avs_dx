@@ -129,6 +129,7 @@
     <ClCompile Include="avsUtils.cpp" />
     <ClCompile Include="ConsoleLogger.cpp" />
     <ClCompile Include="deviceCreation.cpp" />
+    <ClCompile Include="effectsFactory.cpp" />
     <ClCompile Include="enumDisplays.cpp" />
     <ClCompile Include="draw.cpp" />
     <ClCompile Include="module.cpp" />

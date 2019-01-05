@@ -13,6 +13,7 @@ using Hlsl::Defines;
 #include "../InteropLib/effectsFactory.h"
 #include "ShaderUpdatesSimple.hpp"
 #include "EffectProfiler.h"
+#include "../effects.h"
 
 CSize getRenderSize();
 
@@ -31,10 +32,11 @@ public:
 		logShutdown( s_effectName );
 	}
 
-	static inline HRESULT create( void* pState, DxEffectPtr& res )
+	static inline HRESULT create( void* pState, const C_RBASE* pThis )
 	{
 		using tImpl = EffectImpl<TEffect>;
-		res.create<tImpl>( pState );
+		std::unique_ptr<tImpl> res = std::make_unique<tImpl>( pState );
+		addNewEffect( pThis, std::move( res ) );
 		return S_OK;
 	}
 
@@ -53,9 +55,9 @@ private:
 
 #define IMPLEMENT_EFFECT( DX, NATIVE )                                         \
 class NATIVE;                                                                  \
-template<> HRESULT createDxEffect<NATIVE>( void* pState, DxEffectPtr& dest )   \
+template<> HRESULT createDxEffect<NATIVE>( void* pState, const C_RBASE* pThis )\
 {                                                                              \
-	return EffectImpl<DX>::create( pState, dest );                             \
+	return EffectImpl<DX>::create( pState, pThis );                            \
 };                                                                             \
 const char* const EffectImpl<DX>::s_effectName = #DX;                          \
 static const EffectBase::Metadata s_metadada{ EffectImpl<DX>::s_effectName, false };  \

@@ -5,7 +5,7 @@ class iRootEffect;
 int initVideoCombobox( HWND wndDialog, HWND wndComboBox, char *selectedName );
 
 // Start playing the video
-HRESULT videoOpen( iRootEffect* pEffect, const char *selection );
+HRESULT videoOpen( const C_RBASE* pRBase, const char *selection );
 
 // Close the video
-HRESULT videoClose( iRootEffect* pEffect );
+HRESULT videoClose( const C_RBASE* pRBase );

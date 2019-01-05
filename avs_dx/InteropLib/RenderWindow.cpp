@@ -6,6 +6,9 @@
 #include "deviceCreation.h"
 #include "../DxVisuals/Effects/shadersCode.h"
 #include "../DxVisuals/Resources/createShader.hpp"
+#include "../DxVisuals/Resources/dynamicBuffers.h"
+#include <algorithm> 
+#include <random>
 
 CComAutoCriticalSection renderLock;
 
@@ -66,13 +69,9 @@ HRESULT RenderWindow::wmSize( UINT nType, CSize size )
 
 HRESULT RenderWindow::setupDoublingPresent()
 {
-	if( !StaticResources::fullScreenTriangleTC )
-		CHECK( createShader( Hlsl::StaticShaders::FullScreenTriangleWithTC(), StaticResources::fullScreenTriangleTC ) );
 	if( !StaticResources::copyTextureBilinear )
 		CHECK( createShader( Hlsl::StaticShaders::CopyTextureBilinear(), StaticResources::copyTextureBilinear ) );
-
 	setShaders( StaticResources::fullScreenTriangleTC, nullptr, StaticResources::copyTextureBilinear );
-	bindSampler<eStage::Pixel>( 0, StaticResources::sampleBilinear );
 	return S_OK;
 }
 
@@ -143,13 +142,65 @@ HRESULT RenderWindow::presentSingle( const RenderTarget& src )
 	return sendMessageTimeout( WM_PRESENT, &src );
 }
 
-struct RenderWindow::sPresentTransition
+struct RenderWindow::TransitionConstants
 {
-	const RenderTarget* rt1;
-	const RenderTarget* rt2;
-	int trans;
 	float sintrans;
+	uint32_t curtrans;
+	uint mask;
+	uint zzUnused;
 };
+
+HRESULT RenderWindow::setupTransition( int trans, float sintrans )
+{
+	TransitionConstants values;
+	values.sintrans = sintrans;
+	values.curtrans = (uint32_t)trans;
+	values.mask = 0;
+	if( trans == 6 && !m_inTransition )	// 9 random blocks
+	{
+		std::array<uint8_t, 9> blocks;
+		for( int i = 0; i < 9; i++ )
+			blocks[ i ] = i;
+		// They <s>killed Kenny</s> deprecated std::random_shuffle :-(
+
+		std::random_device rng;
+		std::mt19937 urng( rng() );
+		std::shuffle( blocks.begin(), blocks.end(), urng );
+
+		uint mask = 0;
+		for( int i = 0; i < 8; i++ )
+		{
+			mask |= 1 << blocks[ i ];
+			m_randomBlocks[ i ] = mask;
+		}
+	}
+	m_inTransition = true;
+
+	if( trans == 6 )
+	{
+		int b = (int)roundf( floorf( sintrans * 8 ) );
+		b = std::min( b, 7 );
+		values.mask = m_randomBlocks[ b ];
+	}
+
+	values.zzUnused = 0;
+	CHECK( updateCBuffer( m_cb, &values, sizeof( values ) ) );
+
+	if( !m_ps )
+		CHECK( createShader( Hlsl::StaticShaders::TransitionPS(), m_ps ) );
+	setShaders( StaticResources::fullScreenTriangleTC, nullptr, m_ps );
+
+	bindConstantBuffer<eStage::Pixel>( 0, m_cb );
+	return S_OK;
+}
+
+void RenderWindow::drawTransition()
+{
+	context->RSSetViewports( 1, &m_viewport );
+	omSetTarget( renderTargetView );
+	omBlend( eBlend::None );
+	drawFullscreenTriangle( false );
+}
 
 HRESULT RenderWindow::presentTransition( const RenderTarget& t1, const RenderTarget& t2, int trans, float sintrans )
 {
@@ -167,29 +218,21 @@ HRESULT RenderWindow::presentTransition( const RenderTarget& t1, const RenderTar
 		return presentSingle( t2 );
 	}
 
-	sPresentTransition spt;
-	spt.rt1 = &t1;
-	spt.rt2 = &t2;
-	spt.trans = trans;
-	spt.sintrans = sintrans;
+	CHECK( setupTransition( trans, sintrans ) );
+	omClearTargets();
+	bindResource<eStage::Pixel>( 0, t1.srv() );
+	bindResource<eStage::Pixel>( 1, t2.srv() );
 
-	return sendMessageTimeout( WM_TRANSITION, &spt );
+	HRESULT hr = sendMessageTimeout( WM_TRANSITION, nullptr );
+
+	StaticResources::sourceData.bind<eStage::Pixel>();
+	return hr;
 }
 
 LRESULT RenderWindow::wmTransition( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& handled )
 {
-	const sPresentTransition spt = *(sPresentTransition*)( wParam );
+	drawTransition();
 	HRESULT* pResult = (HRESULT*)lParam;
-
-	if( !renderTargetView )
-	{
-		logWarning( "Present is called while there's no render target" );
-		*pResult = S_FALSE;
-		return 0;
-	}
-
-	// TODO: implement transitions
-
-	*pResult = E_NOTIMPL;
+	*pResult = doPresent();;
 	return TRUE;
 }

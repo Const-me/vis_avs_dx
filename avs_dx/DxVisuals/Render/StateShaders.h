@@ -9,7 +9,6 @@ class StateShaders:
 
 public:
 	StateShaders() = default;
-	~StateShaders();
 
 	CComPtr<ID3D11ComputeShader> init;
 

@@ -273,7 +273,6 @@
     <FxCompile Include="Expressions\Builtin\random.hlsl" />
     <FxCompile Include="Expressions\Builtin\doubleFunctions.hlsl" />
     <FxCompile Include="Effects\Render\Picture\PicturePS.hlsl" />
-    <FxCompile Include="Effects\TransitionPS.hlsl" />
     <FxCompile Include="Effects\Trans\UniqueTone\UniqueTonePS.hlsl" />
     <FxCompile Include="Effects\Trans\Interleave\InterleavePS.hlsl" />
     <FxCompile Include="Effects\Trans\Interleave\InterleaveState.hlsl" />

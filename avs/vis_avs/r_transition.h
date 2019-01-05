@@ -36,7 +36,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 class C_RenderTransitionClass {
 protected:
 
-	int *fbs[ 4 ];
+	// int *fbs[ 4 ];
 	int ep[ 2 ];
 	int l_w, l_h;
 	int enabled;

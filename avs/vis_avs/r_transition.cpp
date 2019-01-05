@@ -65,7 +65,6 @@ C_RenderTransitionClass::C_RenderTransitionClass()
 {
 	last_file[ 0 ] = 0;
 	l_w = l_h = 0;
-	memset( fbs, 0, sizeof( fbs ) );
 	enabled = 0;
 	start_time = 0;
 	_dotransitionflag = 0;
@@ -75,16 +74,11 @@ C_RenderTransitionClass::C_RenderTransitionClass()
 
 C_RenderTransitionClass::~C_RenderTransitionClass()
 {
-	int x;
 	if( initThread )
 	{
 		WaitForSingleObject( initThread, INFINITE );
 		CloseHandle( initThread );
 		initThread = 0;
-	}  for( x = 0; x < 4; x++ )
-	{
-		if( fbs[ x ] ) GlobalFree( fbs[ x ] );
-		fbs[ x ] = NULL;
 	}
 }
 
@@ -233,17 +227,8 @@ int C_RenderTransitionClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, 
 
 	if( !enabled )
 	{
-		int x;
 		l_w = w;
 		l_h = h;
-		if( fbs[ 0 ] ) for( x = 0; x < 4; x++ )
-		{
-			if( fbs[ x ] )
-			{
-				GlobalFree( fbs[ x ] );
-				fbs[ x ] = NULL;
-			}
-		}
 		if( !initThread && g_render_effects2->getNumRenders() )
 		{
 			g_render_effects2->clearRenders();
@@ -253,37 +238,6 @@ int C_RenderTransitionClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, 
 		pTrans->renderSingle( visdata, isBeat, *g_render_effects->dxEffect );
 		return 0;
 	}
-
-	// handle resize
-	if( l_w != w || l_h != h || !fbs[ 0 ] )
-	{
-		l_w = w;
-		l_h = h;
-		int x;
-		for( x = 0; x < 4; x++ )
-		{
-			if( fbs[ x ] ) GlobalFree( fbs[ x ] );
-			fbs[ x ] = (int*)GlobalAlloc( GPTR, l_w*l_h * sizeof( int ) );
-		}
-	}
-
-	if( start_time == 0 )
-	{
-		memcpy( fbs[ ep[ 0 ] ], framebuffer, sizeof( int )*l_w*l_h );
-		memcpy( fbs[ ep[ 1 ] ], framebuffer, sizeof( int )*l_w*l_h );
-	}
-
-	/*
-	// maybe there's a faster way than using 3 more buffers without screwing
-	// any effect... justin ?
-	if( curtrans & 0x8000 )
-		ep[ 1 ] ^= g_render_effects2->render( visdata, isBeat, fbs[ ep[ 1 ] ], fbs[ ep[ 1 ] ^ 1 ], w, h ) & 1;
-	ep[ 0 ] ^= g_render_effects->render( visdata, isBeat, fbs[ ep[ 0 ] ], fbs[ ep[ 0 ] ^ 1 ], w, h ) & 1;
-
-	int *p = fbs[ ep[ 1 ] ];
-	int *d = fbs[ ep[ 0 ] ];
-	int *o = framebuffer;
-	int x = w * h; */
 
 	int ttime = 250 * cfg_transitions_speed;
 	if( ttime < 100 ) ttime = 100;
@@ -303,7 +257,7 @@ int C_RenderTransitionClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, 
 	// now sintrans does a smooth curve from 0 to 1
 
 	if( curtrans & 0x8000 )
-		pTrans->renderTransition( visdata, isBeat, *g_render_effects->dxEffect, *g_render_effects2->dxEffect, curtrans & 0x7fff, sintrans );
+		pTrans->renderTransition( visdata, isBeat, *g_render_effects2->dxEffect, *g_render_effects->dxEffect, curtrans & 0x7fff, sintrans );
 	else
 		pTrans->renderSingle( visdata, isBeat, *g_render_effects->dxEffect );
 
@@ -542,14 +496,8 @@ int C_RenderTransitionClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, 
 
 	if( n == 255 )
 	{
-		int x;
 		enabled = 0;
 		start_time = 0;
-		for( x = 0; x < 4; x++ )
-		{
-			if( fbs[ x ] ) GlobalFree( fbs[ x ] );
-			fbs[ x ] = NULL;
-		}
 		g_render_effects2->clearRenders();
 		g_render_effects2->freeBuffers();
 	}

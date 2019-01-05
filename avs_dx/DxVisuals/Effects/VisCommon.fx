@@ -10,6 +10,7 @@ Texture2D<float> texVisDataS8 : register(t1);
 ByteAddressBuffer effectStates : register(t2);
 
 SamplerState sampleBilinear : register(s0);
+SamplerState sampleNearest : register(s1);
 
 #ifndef AVS_SHADER
 #define STATE_OFFSET 0

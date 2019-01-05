@@ -12,6 +12,8 @@ namespace StaticResources
 		// Static shaders
 		using namespace Hlsl::StaticShaders;
 		CHECK( createShader( FullScreenTriangleVS(), fullScreenTriangle ) );
+		CHECK( createShader( FullScreenTriangleWithTC(), fullScreenTriangleTC ) );
+
 		CHECK( createShader( CopyTexturePS(), copyTexture ) );
 		CHECK( createShader( FadeFramePS(), fadeFramePS ) );
 
@@ -20,6 +22,9 @@ namespace StaticResources
 			CD3D11_SAMPLER_DESC samplerDesc{ D3D11_DEFAULT };
 			samplerDesc.Filter = D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
 			CHECK( device->CreateSamplerState( &samplerDesc, &sampleBilinear ) );
+
+			samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+			CHECK( device->CreateSamplerState( &samplerDesc, &sampleNearest ) );
 		}
 
 		// Blend states
@@ -75,6 +80,7 @@ namespace StaticResources
 		sourceData.bind<eStage::Pixel>();
 
 		bindSampler( 0, sampleBilinear );
+		bindSampler( 1, sampleNearest );
 
 		return S_OK;
 	}
@@ -89,7 +95,7 @@ namespace StaticResources
 		copyTextureBilinear = nullptr;
 		fadeFramePS = nullptr;
 
-		sampleBilinear = nullptr;
+		sampleBilinear = sampleNearest = nullptr;
 
 		blendPremultipliedAlpha = nullptr;
 		blendAdditive = nullptr;
@@ -110,7 +116,7 @@ namespace StaticResources
 	CComPtr<ID3D11PixelShader> copyTextureBilinear;
 	CComPtr<ID3D11PixelShader> fadeFramePS;
 
-	CComPtr<ID3D11SamplerState> sampleBilinear;
+	CComPtr<ID3D11SamplerState> sampleBilinear, sampleNearest;
 
 	CComPtr<ID3D11BlendState> blendPremultipliedAlpha;
 	CComPtr<ID3D11BlendState> blendAdditive;

@@ -12,6 +12,7 @@
     <FxCompile Include="MovingParticlePS.hlsl" />
     <FxCompile Include="CopyTextureBilinear.hlsl" />
     <FxCompile Include="FullScreenTriangleWithTC.hlsl" />
+    <FxCompile Include="TransitionPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />

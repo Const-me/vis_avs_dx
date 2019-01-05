@@ -21,6 +21,9 @@ Binder::Binder()
 
 		// SamplerState sampleBilinear : register(s0);
 		s.sampler++;
+
+		// SamplerState sampleNearest : register(s1);
+		s.sampler++;
 	}
 
 	// RWByteAddressBuffer effectStates : register(u0);
@@ -50,7 +53,7 @@ bool Binder::reserveInputSlot( UINT& result, eStage pipelineStage, char resource
 	switch( resourceType )
 	{
 	case 't':
-		return inc( s.srv, result, D3D11_COMMONSHADER_INPUT_RESOURCE_REGISTER_COUNT );
+		return inc( s.srv, result, D3D11_COMMONSHADER_INPUT_RESOURCE_REGISTER_COUNT - 2 );	// The 2 last ones are used by Transition
 	case 'u':
 		return inc( s.uav, result, D3D11_PS_CS_UAV_REGISTER_COUNT );
 	case 'b':

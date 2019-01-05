@@ -116,14 +116,6 @@ HRESULT StateShaders::compile( const std::vector<EffectStateShader> &effects, UI
 	Hlsl::Defines def;
 	def.set( "INIT_STATE", "0" );
 
-	if( hlsl.Find( "AVS_RENDER_SIZE" ) >= 0 )
-	{
-		def.set( "AVS_RENDER_SIZE", getRenderSizeString() );
-		subscribeHandler( this );
-	}
-	else
-		unsubscribeHandler( this );
-
 	// Compile two main shaders
 	CHECK( __super::compile( "UpdateState", hlsl, Hlsl::includes(), def, anyBeat, dxbc ) );
 
@@ -139,11 +131,6 @@ HRESULT StateShaders::compile( const std::vector<EffectStateShader> &effects, UI
 
 	logInfo( "Compiled the state shaders" );
 	return S_OK;
-}
-
-StateShaders::~StateShaders()
-{
-	unsubscribeHandler( this );
 }
 
 void StateShaders::onRenderSizeChanged()

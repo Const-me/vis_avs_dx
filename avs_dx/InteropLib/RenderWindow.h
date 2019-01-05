@@ -7,7 +7,6 @@ class RenderWindow
 	// Direct3D 11 is essentially single threaded, that's why using this workaround.
 	static constexpr UINT WM_PRESENT = WM_USER + 1337;
 	static constexpr UINT WM_TRANSITION = WM_PRESENT + 1;
-	struct sPresentTransition;
 
 public:
 	BEGIN_MSG_MAP_EX( RenderWindow )
@@ -39,6 +38,16 @@ private:
 	HRESULT doPresent();
 
 	HRESULT setupDoublingPresent();
+
+	struct TransitionConstants;
+
+	CComPtr<ID3D11Buffer> m_cb;
+	ShaderPtr<eStage::Pixel> m_ps;
+
+	int m_inTransition = false;
+	std::array<uint32_t, 8> m_randomBlocks;
+	HRESULT setupTransition( int trans, float sintrans );
+	void drawTransition();
 
 public:
 

@@ -23,10 +23,10 @@ public:
 	HRESULT writeToLast( bool clear = false );
 
 	// Bind last written RT for input, advance to the next target, bind next one for output. Optionally clear the output.
-	HRESULT writeToNext( BoundSrv<eStage::Pixel>& bound, bool clearNext = false );
+	HRESULT writeToNext( BoundPsResource& bound, bool clearNext = false );
 
 	// Copy last written RT to the next one, advance to the next target, bind last written RT for input, next one for output.
-	HRESULT blendToNext( BoundSrv<eStage::Pixel>& bound );
+	HRESULT blendToNext( BoundPsResource& bound );
 
 	RenderTarget& lastWritten()
 	{

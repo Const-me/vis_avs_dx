@@ -23,7 +23,7 @@ HRESULT RenderTargets::writeToLast( bool clear )
 	return S_OK;
 }
 
-HRESULT RenderTargets::writeToNext( BoundSrv<eStage::Pixel>& bound, bool clearNext )
+HRESULT RenderTargets::writeToNext( BoundPsResource& bound, bool clearNext )
 {
 	unbindTarget();
 
@@ -43,7 +43,7 @@ HRESULT RenderTargets::writeToNext( BoundSrv<eStage::Pixel>& bound, bool clearNe
 	return S_OK;
 }
 
-HRESULT RenderTargets::blendToNext( BoundSrv<eStage::Pixel>& bound )
+HRESULT RenderTargets::blendToNext( BoundPsResource& bound )
 {
 	omBlend( eBlend::Premultiplied );
 	RenderTarget& tRead = m_targets[ m_lastTarget ];

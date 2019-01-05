@@ -23,11 +23,6 @@ float EffectList::outblendval() const
 	return div255 * avs->outblendval;
 }
 
-inline bool blendShaderRequired( eBlendMode  bm)
-{
-
-}
-
 HRESULT EffectList::updateParameters( Binder& binder )
 {
 	BoolHr hr;

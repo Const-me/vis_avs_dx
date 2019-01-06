@@ -97,6 +97,7 @@
     <ClInclude Include="drawDx.h" />
     <ClInclude Include="effectsFactory.h" />
     <ClInclude Include="interop.h" />
+    <ClInclude Include="miscGui.h" />
     <ClInclude Include="Profiler\ProfilerAverages.h" />
     <ClInclude Include="profilerApi.h" />
     <ClInclude Include="Profiler\ProfilerWindow.h" />
@@ -132,6 +133,7 @@
     <ClCompile Include="effectsFactory.cpp" />
     <ClCompile Include="enumDisplays.cpp" />
     <ClCompile Include="draw.cpp" />
+    <ClCompile Include="miscGui.cpp" />
     <ClCompile Include="module.cpp" />
     <ClCompile Include="nseel-shims.cpp" />
     <ClCompile Include="Profiler\ProfilerAverages.cpp" />

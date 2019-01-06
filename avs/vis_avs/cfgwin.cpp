@@ -42,12 +42,8 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "../../avs_dx/InteropLib/drawDx.h"
 #include "../../avs_dx/InteropLib/ConsoleLogger.h"
 #include "../../avs_dx/InteropLib/profilerApi.h"
+#include "../../avs_dx/InteropLib/miscGui.h"
 
-#ifdef LASER
-extern "C" {
-#include "laser/ld32.h"
-}
-#endif
 static void _do_add( HWND hwnd, HTREEITEM h, C_RenderListClass *list );
 static int treeview_hack;
 static HTREEITEM g_hroot;
@@ -810,6 +806,8 @@ int dosavePreset( HWND hwndDlg )
 	return r;
 }
 
+constexpr UINT TVIF = TVIF_PARAM | TVIF_TEXT | TVIF_CHILDREN | TVIF_IMAGE | TVIF_SELECTEDIMAGE;
+
 static BOOL CALLBACK dlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 	static HMENU presetTreeMenu;
@@ -892,15 +890,13 @@ static BOOL CALLBACK dlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 		return 0;
 	case WM_INITDIALOG:
 	{
-#ifdef LASER
-		HMENU m = GetMenu( hwndDlg );
-		m = GetSubMenu( m, 1 );
-		DeleteMenu( m, IDM_TRANSITIONS, MF_BYCOMMAND );
-#endif
 		g_hwndDlg = hwndDlg;
 		//SetDlgItemText(hwndDlg,IDC_AVS_VER,verstr);
+		HWND wndTree = GetDlgItem( hwndDlg, IDC_TREE1 );
+		TreeView_SetIndent( wndTree, 8 );
+		setupTreeIcons( wndTree );
 	}
-	TreeView_SetIndent( GetDlgItem( hwndDlg, IDC_TREE1 ), 8 );
+
 	SetTimer( hwndDlg, 1, 250, NULL );
 	if( cfg_cfgwnd_open ) ShowWindow( hwndDlg, SW_SHOWNA );
 	CfgWnd_Populate();
@@ -1121,7 +1117,8 @@ static BOOL CALLBACK dlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 					treeview_hack = 1;
 					TreeView_DeleteItem( hwnd, g_dragsource_item );
 
-					TV_INSERTSTRUCT is = { dest_parent_handle,0,{TVIF_PARAM | TVIF_TEXT | TVIF_CHILDREN,0,0,0,source->render->get_desc(),0,0,0,source->effect_index == LIST_ID ? 1 : 0,(int)source} };
+					const int ii = source->iconIndex();
+					TV_INSERTSTRUCT is = { dest_parent_handle,0,{TVIF,0,0,0,source->render->get_desc(),0,ii,ii,source->effect_index == LIST_ID ? 1 : 0,(int)source} };
 
 					if( dest_handle )
 					{
@@ -1434,7 +1431,8 @@ static BOOL CALLBACK dlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 					LeaveCriticalSection( &g_render_cs );
 					C_RenderListClass::T_RenderListType *newt = ( C_RenderListClass::T_RenderListType * )GlobalAlloc( GMEM_FIXED, sizeof( C_RenderListClass::T_RenderListType ) );
 					*newt = ren;
-					TV_INSERTSTRUCT is = { parenthandle,0,{TVIF_PARAM | TVIF_TEXT | TVIF_CHILDREN,0,0,0,ren.render->get_desc(),0,0,0,newt->effect_index == LIST_ID ? 1 : 0,(int)newt} };
+					const int ii = ren.iconIndex();
+					TV_INSERTSTRUCT is = { parenthandle,0,{TVIF,0,0,0,ren.render->get_desc(),0,ii,ii,newt->effect_index == LIST_ID ? 1 : 0,(int)newt} };
 					if( !hTreeItem || parenthandle == hTreeItem ) is.hInsertAfter = TVI_FIRST;
 					else
 					{
@@ -1543,7 +1541,8 @@ static BOOL CALLBACK dlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 						C_RenderListClass::T_RenderListType *newt = ( C_RenderListClass::T_RenderListType * )GlobalAlloc( GMEM_FIXED, sizeof( C_RenderListClass::T_RenderListType ) );
 						*newt = ren;
-						TV_INSERTSTRUCT is = { hParent,0,{TVIF_PARAM | TVIF_TEXT | TVIF_CHILDREN,0,0,0,ren.render->get_desc(),0,0,0,newt->effect_index == LIST_ID ? 1 : 0,(int)newt} };
+						const int ii = ren.iconIndex();
+						TV_INSERTSTRUCT is = { hParent,0,{TVIF,0,0,0,ren.render->get_desc(),0,ii,ii,newt->effect_index == LIST_ID ? 1 : 0,(int)newt} };
 						is.hInsertAfter = hTreeItem;
 						HTREEITEM newh = TreeView_InsertItem( GetDlgItem( hwndDlg, IDC_TREE1 ), &is );
 						TreeView_Select( GetDlgItem( hwndDlg, IDC_TREE1 ), newh, TVGN_CARET );
@@ -1614,8 +1613,11 @@ static void _do_add( HWND hwnd, HTREEITEM h, C_RenderListClass *list )
 
 			is.hParent = h;
 			is.hInsertAfter = TVI_LAST;
-			is.item.mask = TVIF_PARAM | TVIF_TEXT | TVIF_CHILDREN;
+			is.item.mask = TVIF;
 			is.item.pszText = t->render->get_desc();
+			const int ii = t->iconIndex();
+			is.item.iImage = ii;
+			is.item.iSelectedImage = ii;
 			is.item.cChildren = t->effect_index == LIST_ID ? 1 : 0;
 			is.item.lParam = (int)newt;
 
@@ -1686,9 +1688,10 @@ void CfgWnd_Populate( int force )
 		memset( &is, 0, sizeof( is ) );
 		is.hParent = TVI_ROOT;
 		is.hInsertAfter = TVI_LAST;
-		is.item.mask = TVIF_PARAM | TVIF_TEXT | TVIF_CHILDREN;
+		is.item.mask = TVIF;
 		is.item.pszText = "Main";
 		is.item.cChildren = 1;
+		is.item.iImage = is.item.iSelectedImage = 1;
 		is.item.lParam = (int)newt;
 		g_hroot = TreeView_InsertItem( hwnd, &is );
 		if( g_hroot )

@@ -14,6 +14,12 @@ void addNewEffect( const C_RBASE *pThis, std::unique_ptr<EffectBase>&& fx )
 	up.swap( fx );
 }
 
+bool hasDxEffect( const C_RBASE* pThis )
+{
+	CSLock __lock( g_effectsLock );
+	return nullptr != g_effects.Lookup( pThis );
+}
+
 void destroyDxEffect( const C_RBASE* pThis )
 {
 	CSLock __lock( g_effectsLock );

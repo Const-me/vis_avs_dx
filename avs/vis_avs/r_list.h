@@ -46,6 +46,10 @@ public:
 		C_RBASE *render;
 		int effect_index;
 		int has_rbase2;
+		inline int iconIndex() const
+		{
+			return hasDxEffect( render ) ? 1 : 0;
+		}
 	} T_RenderListType;
 
 protected:

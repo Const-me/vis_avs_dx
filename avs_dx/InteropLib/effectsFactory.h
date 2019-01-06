@@ -16,3 +16,5 @@ void clearListRenderers( const C_RBASE* pThis );
 
 // Try to create D3D effect for an APE. Only a few built-ins are supported, if you'll write your own APE it won't work.
 bool createApeEffect( HINSTANCE hDllInstance, const char* name, C_RBASE* pThis );
+
+bool hasDxEffect( const C_RBASE* pThis );

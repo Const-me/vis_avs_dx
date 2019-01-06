@@ -78,6 +78,9 @@
 #define IDD_CFG_MULT                    170
 #define IDD_CFG_MULTIDELAY              171
 #define IDD_CFG_VIDEODELAY              172
+#define IDI_DX                          172
+#define IDI_ICON1                       174
+#define IDI_NODX                        174
 #define IDC_EFFECTS                     1000
 #define IDC_ENABLED                     1001
 #define IDC_FBCLEAR                     1002
@@ -410,7 +413,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        172
+#define _APS_NEXT_RESOURCE_VALUE        175
 #define _APS_NEXT_COMMAND_VALUE         40013
 #define _APS_NEXT_CONTROL_VALUE         1210
 #define _APS_NEXT_SYMED_VALUE           101

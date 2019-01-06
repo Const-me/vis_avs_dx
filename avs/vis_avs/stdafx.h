@@ -9,6 +9,7 @@
 #include <commdlg.h>
 #include <process.h>
 
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <stdint.h>
 #include <time.h>

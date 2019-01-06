@@ -34,9 +34,6 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "r_list.h"
 
 #include "timing.h"
-#define M_PI 3.14159265358979323846
-
-
 
 #if 0 
 static void __docheck( int xp, int yp, int m_lastw, int m_lasth, int d_x, int d_y )

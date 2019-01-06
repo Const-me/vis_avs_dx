@@ -35,7 +35,6 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "timing.h"
 #include <atlbase.h>
 
-#define M_PI 3.14159265358979323846
 using CSLock = CComCritSecLock<CComAutoCriticalSection>;
 
 #ifndef LASER

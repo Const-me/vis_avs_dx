@@ -75,10 +75,10 @@ HRESULT DotsRendering::VsData::updateAvs( const AvsState& avs )
 
 HRESULT SimpleDotsFx::render( bool isBeat, RenderTargets& rt )
 {
-	const UINT pointsCount = renderer.vertex().pointsCount;
+	const UINT pointsCount = vertex().pointsCount;
 
 	CHECK( rt.writeToLast( false ) );
-	if( !renderer.bindShaders( isBeat ) )
+	if( !bindShaders( isBeat ) )
 		return S_FALSE;
 
 	iaClearBuffer();
@@ -103,7 +103,7 @@ HRESULT SolidRendering::PsData::updateAvs( const AvsState& avs )
 HRESULT SimpleSolidFx::render( bool isBeat, RenderTargets& rt )
 {
 	CHECK( rt.writeToLast( false ) );
-	if( !renderer.bindShaders( isBeat ) )
+	if( !bindShaders( isBeat ) )
 		return S_FALSE;
 
 	iaClearBuffer();
@@ -125,12 +125,12 @@ HRESULT LinesRendering::VsData::updateAvs( const AvsState& avs )
 HRESULT SimpleLinesFx::render( bool isBeat, RenderTargets& rt )
 {
 	CHECK( rt.writeToLast( false ) );
-	if( !renderer.bindShaders( isBeat ) )
+	if( !bindShaders( isBeat ) )
 		return S_FALSE;
 
 	iaClearBuffer();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_LINESTRIP_ADJ );
-	context->Draw( renderer.vertex().pointsCount + 2, 0 );
+	context->Draw( vertex().pointsCount + 2, 0 );
 	return S_OK;
 }
 
@@ -148,7 +148,7 @@ bool Simple::replaceStyleIfNeeded()
 	const eSimpleStyle rs = avs->style();
 	switch( rs )
 	{
-#define REPLACE_STYLE( eStyle, tEffect ) case eStyle: if( std::holds_alternative<tEffect>( m_impl ) ) return false; m_pImpl = &m_impl.emplace<tEffect>( avs ); return true
+#define REPLACE_STYLE( eStyle, tEffect ) case eStyle: if( std::holds_alternative<tEffect>( m_impl ) ) return false; m_pImpl = &m_impl.emplace<tEffect>(); return true
 
 		REPLACE_STYLE( eSimpleStyle::Dots, SimpleDotsFx );
 		REPLACE_STYLE( eSimpleStyle::Solid, SimpleSolidFx );
@@ -162,17 +162,18 @@ bool Simple::replaceStyleIfNeeded()
 
 HRESULT Simple::shouldRebuildState()
 {
-	if( replaceStyleIfNeeded() )
-		m_pImpl->setStateOffset( stateOffset() );
+	replaceStyleIfNeeded();
 
 	// All rendering use the same state data i.e. cycling colors, no need to rebuild it when user switches the rendering style
 	return EffectBase1::shouldRebuildState();
 }
 
-void Simple::setStateOffset( UINT off )
+HRESULT Simple::updateParameters( Binder& binder )
 {
-	EffectBase1::setStateOffset( off );
-	m_pImpl->setStateOffset( off );
+	BoolHr hr = m_pImpl->updateParameters( binder, *avs, stateData );
+	if( hr.succeeded() && hr.value() )
+		hr.combine( m_pImpl->compileShaders( stateOffset() ) );
+	return hr;
 }
 
 HRESULT Simple::render( bool isBeat, RenderTargets& rt )

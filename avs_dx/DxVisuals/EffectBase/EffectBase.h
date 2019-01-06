@@ -4,7 +4,7 @@ class Binder;
 class RenderTargets;
 class RootEffect;
 
-// All effects must inherit from this abstract class. Unlike iRootEffect, this one is for consumption in DxVisuals, not just for interop with vis_avs.dll code.
+// All effects must inherit from this abstract class.
 class EffectBase
 {
 public:
@@ -19,7 +19,7 @@ public:
 	};
 
 	// Get the compile-time metadata for this effect instance.
-	virtual const Metadata& metadata();
+	virtual const Metadata& metadata() = 0;
 
 	// Effects will return S_OK if user has changed their settings in a way that deprecates GPU state buffer data and/or state shaders.
 	// S_FALSE means the previous state is fine.

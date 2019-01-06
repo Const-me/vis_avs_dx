@@ -4,6 +4,8 @@
 #include <variant>
 using namespace Hlsl::Render::Simple;
 
+// Ironically, because of 3 very different rendering styles, this "Simple" is one of the most complex effects.
+
 // ==== Common stuff for all styles ====
 enum struct eSimpleStyle : uint8_t
 {
@@ -43,8 +45,30 @@ public:
 	};
 };
 
-// ==== Dots rendering ====
+__interface iSimpleRenderer
+{
+	HRESULT updateParameters( Binder& binder, const SimpleBase::AvsState& avs, const SimpleBase::StateData& dx );
+	HRESULT compileShaders( UINT stateOffset );
+	HRESULT render( bool isBeat, RenderTargets& rt );
+};
 
+template<class FxDef>
+class SimpleRenderer : public EffectRenderer<FxDef>, public iSimpleRenderer
+{
+public:
+	using AvsState = SimpleBase::AvsState;
+	SimpleRenderer() = default;
+	HRESULT updateParameters( Binder& binder, const SimpleBase::AvsState& avs, const SimpleBase::StateData& dx ) override
+	{
+		return __super::update( binder, avs, dx );
+	}
+	HRESULT compileShaders( UINT stateOffset ) override
+	{
+		return __super::compileShaders( Hlsl::includes(), stateOffset );
+	}
+};
+
+// ==== Dots rendering ====
 struct DotsRendering : public PointSpritesRender
 {
 	using AvsState = SimpleBase::AvsState;
@@ -55,17 +79,12 @@ struct DotsRendering : public PointSpritesRender
 		HRESULT updateAvs( const AvsState& avs );
 	};
 };
-
-class SimpleDotsFx : public EffectBase1<DotsRendering>
+class SimpleDotsFx : public SimpleRenderer<DotsRendering>
 {
-public:
-	SimpleDotsFx( AvsState *pState ) : tBase( pState ) { }
-
 	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 };
 
 // ==== Solid rendering ====
-
 struct SolidRendering
 {
 	using AvsState = SimpleBase::AvsState;
@@ -81,12 +100,8 @@ struct SolidRendering
 		HRESULT updateAvs( const AvsState& avs );
 	};
 };
-
-class SimpleSolidFx : public EffectBase1<SolidRendering>
+class SimpleSolidFx : public SimpleRenderer<SolidRendering>
 {
-public:
-	SimpleSolidFx( AvsState *pState ) : tBase( pState ) { }
-
 	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 };
 
@@ -105,12 +120,8 @@ struct LinesRendering
 
 	using PsData = Hlsl::Render::PolylinePS;
 };
-
-class SimpleLinesFx : public EffectBase1<LinesRendering>
+class SimpleLinesFx : public SimpleRenderer<LinesRendering>
 {
-public:
-	SimpleLinesFx( AvsState *pState ) : tBase( pState ) { }
-
 	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 };
 
@@ -119,7 +130,7 @@ class Simple : public EffectBase1<SimpleBase>
 {
 	eSimpleStyle m_style;
 	std::variant<std::monostate, SimpleSolidFx, SimpleDotsFx, SimpleLinesFx> m_impl;
-	EffectBase* m_pImpl = nullptr;
+	iSimpleRenderer* m_pImpl = nullptr;
 
 	bool replaceStyleIfNeeded();
 
@@ -130,10 +141,8 @@ public:
 
 	HRESULT shouldRebuildState() override;
 
-	void setStateOffset( UINT off ) override;
-
 	// Forward the rest of the calls to specific renderers
-	HRESULT updateParameters( Binder& binder ) override { return m_pImpl->updateParameters( binder ); }
+	HRESULT updateParameters( Binder& binder ) override;
 
 	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 };

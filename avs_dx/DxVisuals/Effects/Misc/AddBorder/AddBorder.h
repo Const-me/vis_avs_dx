@@ -33,5 +33,7 @@ public:
 
 	DECLARE_EFFECT()
 
+	void bindResources() override;
+
 	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 };

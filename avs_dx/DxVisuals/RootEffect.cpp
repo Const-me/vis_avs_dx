@@ -5,21 +5,28 @@
 #include "Render/Binder.h"
 #include "Render/StateShaders.h"
 
-HRESULT RootEffect::renderRoot( bool isBeat, RenderTargets& rt )
+HRESULT RootEffect::renderRoot( bool isBeat, RenderTargets& rt, bool rebindResources )
 {
 	ProfilerLevel plvl;
 	// Collect the effects in the local list
 	const bool listChanged = updateList( this );
+	bool paramsChanged = listChanged;
 	const BoolHr stateChanged = shouldRebuildState();
 	if( stateChanged.failed() )
 		return stateChanged;
 	if( listChanged || stateChanged.value() || !m_stateShaders )
 	{
 		CHECK( buildState() );
+		paramsChanged = true;
 	}
-
-	Binder binder;
-	SILENT_CHECK( updateParameters( binder ) );
+	
+	{
+		Binder binder;
+		const HRESULT hr = updateParameters( binder );
+		SILENT_CHECK( hr );
+		if( hr == S_OK )
+			paramsChanged = true;
+	}
 
 	// Run a state update shader
 	if( !m_stateShaders.bind( isBeat ) )
@@ -42,6 +49,9 @@ HRESULT RootEffect::renderRoot( bool isBeat, RenderTargets& rt )
 		else
 			CHECK( fadeRenderTarget( rt ) );
 	}
+
+	if( paramsChanged || rebindResources )
+		bindResources();
 
 	CHECK( render( isBeat, rt ) );
 

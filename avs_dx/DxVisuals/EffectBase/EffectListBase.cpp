@@ -72,6 +72,11 @@ HRESULT EffectListBase::updateParameters( Binder& binder )
 	return apply( [ &binder ]( EffectBase &e ) { return e.updateParameters( binder ); } );
 }
 
+void EffectListBase::bindResources()
+{
+	apply( []( EffectBase &e ) { e.bindResources(); return S_FALSE; } );
+}
+
 HRESULT EffectListBase::render( bool isBeat, RenderTargets& rt )
 {
 	m_profilerStart.mark();

@@ -126,7 +126,7 @@ class Simple : public EffectBase1<SimpleBase>
 public:
 	Simple( AvsState *pState );
 
-	const Metadata& metadata() override;
+	DECLARE_EFFECT()
 
 	HRESULT shouldRebuildState() override;
 

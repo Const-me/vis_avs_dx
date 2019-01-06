@@ -22,6 +22,11 @@ HRESULT ColorMap::updateParameters( Binder& binder )
 	return hr;
 }
 
+void ColorMap::bindResources()
+{
+	bindResource<eStage::Pixel>( m_ps.data().bindMap, m_mapSrv );
+}
+
 HRESULT ColorMap::render( bool isBeat, RenderTargets& rt )
 {
 	const C_RBASE* const pfx = m_pNative;
@@ -30,7 +35,7 @@ HRESULT ColorMap::render( bool isBeat, RenderTargets& rt )
 		return S_FALSE;
 
 	int fb = 0xCCCCCC, fbOut = 0;
-	// Run the native update for beat randomization
+	// Run the native update for beat randomization.
 	const int res = m_pNative->render( nullptr, isBeat ? 1 : 0, &fb, &fbOut, 1, 1 );
 
 	const uint32_t* pTable = MapHacks::getTablePointer( pfx, idMap );
@@ -53,10 +58,7 @@ HRESULT ColorMap::render( bool isBeat, RenderTargets& rt )
 		m_ps.dropShader();
 
 	if( !m_ps.hasShader() )
-	{
 		CHECK( m_ps.compile( Hlsl::includes(), stateOffset() ) );
-		bindResource<eStage::Pixel>( m_ps.data().bindMap, m_mapSrv );
-	}
 
 	omBlend( eBlend::None );
 	BoundPsResource boundFrame;
@@ -84,6 +86,8 @@ HRESULT ColorMap::updateTexture( const uint32_t* pData )
 
 	CD3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{ D3D11_SRV_DIMENSION_TEXTURE1D, fmt };
 	CHECK( device->CreateShaderResourceView( m_mapTexture, &srvDesc, &m_mapSrv ) );
+
+	bindResource<eStage::Pixel>( m_ps.data().bindMap, m_mapSrv );
 
 	return S_OK;
 }

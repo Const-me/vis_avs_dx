@@ -97,7 +97,7 @@ class SuperScope : public EffectBase1<ScopeBase>
 public:
 	SuperScope( AvsState *pState ) : EffectBase1( pState ) { }
 
-	const Metadata& metadata() override;
+	DECLARE_EFFECT()
 
 	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 };

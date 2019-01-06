@@ -45,7 +45,7 @@ class ColorModifier : public EffectBase1<ColorModifierStructs>
 public:
 	inline ColorModifier( AvsState *pState ) : tBase( pState ) { }
 
-	const Metadata& metadata() override;
+	DECLARE_EFFECT()
 
 	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 };

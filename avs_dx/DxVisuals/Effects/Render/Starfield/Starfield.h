@@ -52,7 +52,7 @@ public:
 
 	Starfield( AvsState *pState );
 
-	const Metadata& metadata() override;
+	DECLARE_EFFECT()
 
 	HRESULT initializedState() override;
 

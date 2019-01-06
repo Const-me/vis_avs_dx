@@ -8,9 +8,10 @@ class RootEffect : public EffectListBase
 {
 public:
 	RootEffect( AvsState* pState ) : EffectListBase( pState ){ }
-	const Metadata& metadata() override;
 
-	HRESULT renderRoot( bool isBeat, RenderTargets& rt );
+	DECLARE_EFFECT()
+
+	HRESULT renderRoot( bool isBeat, RenderTargets& rt, bool rebindResources );
 
 	HRESULT clearRenders() override;
 

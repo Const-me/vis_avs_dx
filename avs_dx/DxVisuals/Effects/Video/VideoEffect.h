@@ -26,7 +26,7 @@ public:
 	VideoEffect( AvsState *pState );
 	~VideoEffect();
 
-	const Metadata& metadata() override;
+	DECLARE_EFFECT()
 
 	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 

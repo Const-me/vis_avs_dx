@@ -83,7 +83,7 @@ HRESULT Transition::renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, con
 		CSLock __lock( renderLock );
 		CHECK( prepare( visdata, isBeat ) );
 
-		CHECK( p->renderRoot( 0 != isBeat, m_targets1 ) );
+		CHECK( p->renderRoot( 0 != isBeat, m_targets1, false ) );
 	}
 
 	m_rendered.mark();
@@ -117,8 +117,8 @@ HRESULT Transition::renderTransition( char visdata[ 2 ][ 2 ][ 576 ], int isBeat,
 		if( nullptr == p1 || nullptr == p2 )
 			return E_POINTER;
 
-		CHECK( p1->renderRoot( beat, m_targets1 ) );
-		CHECK( p2->renderRoot( beat, m_targets2 ) );
+		CHECK( p1->renderRoot( beat, m_targets1, true ) );
+		CHECK( p2->renderRoot( beat, m_targets2, true ) );
 	}
 
 	m_rendered.mark();

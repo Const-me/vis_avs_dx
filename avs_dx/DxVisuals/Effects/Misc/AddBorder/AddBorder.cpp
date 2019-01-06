@@ -55,6 +55,12 @@ HRESULT AddBorder::ensureIndexBuffer()
 	return S_OK;
 }
 
+void AddBorder::bindResources()
+{
+	bindConstantBuffer<eStage::Vertex>( renderer.vertex().bindConstBuffer, m_cb );
+	bindConstantBuffer<eStage::Pixel>( renderer.pixel().bindConstBuffer, m_cb );
+}
+
 HRESULT AddBorder::render( bool isBeat, RenderTargets& rt )
 {
 	if( !BorderHacks::isEnabled( avs ) )
@@ -64,10 +70,10 @@ HRESULT AddBorder::render( bool isBeat, RenderTargets& rt )
 		return S_FALSE;
 
 	Vector4 cb = queryData().getConstantBuffer();
+	const bool hadNoCb = nullptr == m_cb;
 	CHECK( updateCBuffer( m_cb, &cb, sizeof( cb ) ) );
-
-	bindConstantBuffer<eStage::Vertex>( renderer.vertex().bindConstBuffer, m_cb );
-	bindConstantBuffer<eStage::Pixel>( renderer.pixel().bindConstBuffer, m_cb );
+	if( hadNoCb )
+		bindResources();
 
 	CHECK( ensureIndexBuffer() );
 

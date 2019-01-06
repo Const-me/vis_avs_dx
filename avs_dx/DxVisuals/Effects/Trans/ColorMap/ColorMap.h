@@ -19,5 +19,6 @@ public:
 
 	HRESULT updateParameters( Binder& binder ) override;
 
+	void bindResources() override;
 	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 };

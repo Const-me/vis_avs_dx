@@ -30,7 +30,11 @@ public:
 	virtual HRESULT initializedState() { return S_FALSE; }
 
 	// If user has changed something with the GUI controls, this method will recompile shaders / update GPU resources accordingly.
+	// This method also reserves /updates resource slots used by this effect.
 	virtual HRESULT updateParameters( Binder& binder ) { return S_FALSE; }
+
+	// After updateParameters() returns S_OK, this method will be called before rendering, to bind all preset specific resources to the slots declared by the binder.
+	virtual void bindResources() { }
 
 	virtual HRESULT render( bool isBeat, RenderTargets& rt ) = 0;
 

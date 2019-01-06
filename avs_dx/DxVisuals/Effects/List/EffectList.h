@@ -17,7 +17,7 @@ public:
 
 	EffectList( AvsState* pState ) : EffectListBase( pState ) { }
 
-	const Metadata& metadata() override;
+	DECLARE_EFFECT()
 
 	HRESULT updateParameters( Binder& binder ) override;
 

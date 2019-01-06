@@ -302,7 +302,6 @@
     <Image Include="avs-normal.png" />
     <Image Include="avs-selected.png" />
     <Image Include="dxIcon.ico" />
-    <Image Include="icon2.ico" />
     <Image Include="naIcon.ico" />
   </ItemGroup>
 </Project>

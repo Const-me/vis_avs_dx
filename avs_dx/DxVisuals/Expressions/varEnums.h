@@ -46,9 +46,9 @@ namespace Expressions
 
 		// It's not a variable at all but macro, will be compiled into immediate value in DXBC
 		macro,
-		// Statically allocated in the state, by effect prototype
+		// Statically allocated in the state by effect prototype
 		stateStatic,
-		// Dynamically allocated in the state, by NSEEL code
+		// Dynamically allocated in the state by NSEEL code
 		stateDynamic,
 
 		// Set by hardcoded part of the fragment code

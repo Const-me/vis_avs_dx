@@ -4,6 +4,7 @@
 
 namespace Expressions
 {
+	// Non-template base class to save compilation time and code size
 	class CompiledShaderBase
 	{
 		ShaderTemplate m_template;

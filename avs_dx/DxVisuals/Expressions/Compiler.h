@@ -71,6 +71,8 @@ namespace Expressions
 
 	CStringA expressionMacroName( const char* name );
 
+	// Built-in effects use variable names like `w` and `x`, defining such short symbols breaks some #included HLSL code.
+	// That's why renaming the defines to e.g. `MACRO_w`. The script engine still sees short names, the longer name is for HLSL only.
 	template<class T>
 	inline void setExpressionMacro( Hlsl::Defines& def, const char* name, T value )
 	{

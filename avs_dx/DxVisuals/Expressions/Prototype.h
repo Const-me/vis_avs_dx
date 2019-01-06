@@ -4,7 +4,7 @@
 
 namespace Expressions
 {
-	// A prototype for the expression-based effect, contains input/output variables/constants.
+	// A prototype for the expression-based effect, contains declarations of input/output variables/constants visible to the scripts code.
 	class Prototype
 	{
 		// Count of uint variables in the state block

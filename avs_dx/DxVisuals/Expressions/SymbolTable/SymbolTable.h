@@ -4,6 +4,7 @@
 
 namespace Expressions
 {
+	// Combines functions and variables tables.
 	struct SymbolTable
 	{
 		FunctionsTable functions;

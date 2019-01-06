@@ -63,7 +63,7 @@ void Defines::set( const CStringA &key, bool value )
 	set( key, s );
 }
 
-void Defines::set( const CStringA &key, const std::vector<int>& vec )
+void Defines::set( const CStringA &key, const vector<int>& vec )
 {
 	CStringA str;
 	for( int i : vec )
@@ -113,9 +113,9 @@ void Defines::setBinding( const CStringA &key, char type, UINT slot )
 	set( key, value );
 }
 
-std::vector<D3D_SHADER_MACRO> Defines::data() const
+vector<D3D_SHADER_MACRO> Defines::data() const
 {
-	std::vector<D3D_SHADER_MACRO> macros;
+	vector<D3D_SHADER_MACRO> macros;
 	macros.reserve( m_map.size() + 2 );
 
 	macros.emplace_back( D3D_SHADER_MACRO{ "AVS_SHADER", "1" } );

@@ -20,8 +20,8 @@ void AVS_EEL_IF_Execute( void *handle, char visdata[ 2 ][ 2 ][ 576 ] ) { }
 void AVS_EEL_IF_resetvars( NSEEL_VMCTX ctx ) { }
 void AVS_EEL_IF_VM_free( NSEEL_VMCTX ctx ) { }
 
-static std::array<int, 5> nseel_evallib_stats = {}; // source bytes, static code bytes, call code bytes, data bytes, segments
-static std::array<double, 100> nseel_globalregs = {};
+static array<int, 5> nseel_evallib_stats = {}; // source bytes, static code bytes, call code bytes, data bytes, segments
+static array<double, 100> nseel_globalregs = {};
 
 extern "C"
 {

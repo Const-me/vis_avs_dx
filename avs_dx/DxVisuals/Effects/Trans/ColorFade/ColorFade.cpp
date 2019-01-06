@@ -34,14 +34,14 @@ void ColorFadeStructs::AvsState::update( bool isBeat )
 	}
 }
 
-std::array<Vector4, 4> ColorFadeStructs::AvsState::shaderConstants() const
+array<Vector4, 4> ColorFadeStructs::AvsState::shaderConstants() const
 {
 	constexpr float mul = (float)( 1.0 / 255.0 );
 	const float fs1 = mul * (float)faderpos[ 0 ];
 	const float fs2 = mul * (float)faderpos[ 1 ];
 	const float fs3 = mul * (float)faderpos[ 2 ];
 
-	std::array<Vector4, 4> res;
+	array<Vector4, 4> res;
 	res[ 0 ].x = fs3;
 	res[ 0 ].y = fs2;
 	res[ 0 ].z = fs1;

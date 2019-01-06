@@ -199,7 +199,7 @@ static void writeStateTemplate( CppBuilder sb, int lvl, string sourcePath )
 		.Select( s => compressHlsl.addFragment( s ).stringCtor() )
 		.ToArray();
 
-	sb.tl( "static const std::vector<CStringA> globals{{ {0} }};", string.Join( ", ", rGlobals ) );
+	sb.tl( "static const vector<CStringA> globals{{ {0} }};", string.Join( ", ", rGlobals ) );
 
 	var rMain = compressHlsl.addFragment( content );
 
@@ -270,7 +270,7 @@ class Compressor
 		byte[] orig = origBuffer.ToArray();
 		byte[] compressed = compressBuffer( orig );
 		printBytes( sb, compressed );
-		sb.tl( "static const std::vector<uint8_t> buffer = decompressBytes( src, {0}, {1} );	// {2:P1}", compressed.Length, orig.Length, (double)compressed.Length / orig.Length );
+		sb.tl( "static const vector<uint8_t> buffer = decompressBytes( src, {0}, {1} );	// {2:P1}", compressed.Length, orig.Length, (double)compressed.Length / orig.Length );
 		return sb.ToString();
 	}
 }

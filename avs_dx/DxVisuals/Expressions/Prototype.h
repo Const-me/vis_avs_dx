@@ -21,9 +21,9 @@ namespace Expressions
 				VariableDecl( eVarLocation::stateStatic, t, n ), initVal( iv ), offset( off ) { }
 		};
 
-		std::vector<FixedStateVar> m_fixedState;
+		vector<FixedStateVar> m_fixedState;
 
-		std::vector<VariableDecl> m_vars;
+		vector<VariableDecl> m_vars;
 		CStringA m_beatMacro;
 
 		HRESULT addVariable( eVarLocation loc, eVarType vt, const CStringA& name );
@@ -35,7 +35,7 @@ namespace Expressions
 			CStringA update;
 			int offset;
 		};
-		std::vector<IndirectDrawArgs> m_indirectArgs;
+		vector<IndirectDrawArgs> m_indirectArgs;
 
 	public:
 

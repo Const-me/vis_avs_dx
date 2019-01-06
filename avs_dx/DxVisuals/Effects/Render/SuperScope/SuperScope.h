@@ -43,7 +43,7 @@ public:
 		FixedStateData m_fixed;
 		DynamicStateData m_dynamic;
 
-		std::vector<CStringA> m_templateGlobals;
+		vector<CStringA> m_templateGlobals;
 		StateShaderTemplate m_template;
 
 		CSize screenSize;

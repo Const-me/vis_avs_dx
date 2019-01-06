@@ -38,7 +38,7 @@ namespace Expressions
 		{
 			CStringA name;
 		};
-		std::vector<Function> table;
+		vector<Function> table;
 		CAtlMap<CStringA, int> map;
 
 		int add( const CStringA& name, eFunctionKind kind, eVarType vt = eVarType::unknown );
@@ -63,7 +63,7 @@ namespace Expressions
 		const CStringA& name( int id ) const;
 
 		// Get code of AVS functions, 1 string per function
-		void getStateGlobals( std::vector<CStringA>& list ) const;
+		void getStateGlobals( vector<CStringA>& list ) const;
 
 		// Get code of AVS functions, joined with newlines into a single string
 		CStringA getFragmentGlobals() const;

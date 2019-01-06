@@ -48,7 +48,7 @@ public:
 		}
 
 		const ShaderTemplate& tmpl = *m_sourceData.shaderTemplate();
-		std::vector<uint8_t> dxbc;
+		vector<uint8_t> dxbc;
 		const HRESULT hr = __super::compile( tmpl.name, tmpl.hlsl, inc, def, tmpl.usesBeat, dxbc );
 		if( FAILED( hr ) )
 			return hr;
@@ -58,7 +58,7 @@ public:
 		// Invoke optional compiledShader method. Some shaders need that to create input layouts.
 		__if_exists( TSourceData::compiledShader )
 		{
-			CHECK( m_sourceData.compiledShader( ( const std::vector<uint8_t>& )dxbc ) );
+			CHECK( m_sourceData.compiledShader( ( const vector<uint8_t>& )dxbc ) );
 		}
 
 		return S_OK;

@@ -36,7 +36,7 @@ HRESULT AddBorder::ensureIndexBuffer()
 	// |   |           |   |
 	// |   |           |   |
 
-	std::array<std::array<uint16_t, 3>, 8> ibData;
+	array<array<uint16_t, 3>, 8> ibData;
 	for( uint16_t i = 0; i < 4; i++ )
 	{
 		const uint16_t outerThis = i * 2;
@@ -44,8 +44,8 @@ HRESULT AddBorder::ensureIndexBuffer()
 		const uint16_t nc = ( i + 1 ) % 4;
 		const uint16_t outerNext = nc * 2;
 		const uint16_t innernext = nc * 2 + 1;
-		ibData[ i * 2 ] = std::array<uint16_t, 3>{ outerThis, innerThis, outerNext };
-		ibData[ i * 2 + 1 ] = std::array<uint16_t, 3>{ outerNext, innerThis, innernext };
+		ibData[ i * 2 ] = array<uint16_t, 3>{ outerThis, innerThis, outerNext };
+		ibData[ i * 2 + 1 ] = array<uint16_t, 3>{ outerNext, innerThis, innernext };
 	}
 
 	CD3D11_BUFFER_DESC desc{ sizeof( ibData ), D3D11_BIND_INDEX_BUFFER, D3D11_USAGE_IMMUTABLE };

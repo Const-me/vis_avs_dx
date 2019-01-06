@@ -1,5 +1,4 @@
 #pragma once
-#include <vector>
 
 bool isProfilerEnabled();
 
@@ -25,4 +24,4 @@ struct sProfilerEntry
 };
 
 // Update the GUI. This destroys data in the entries argument: for performance reasons, this function swaps vectors instead of copying them.
-bool updateProfilerGui( uint32_t frame, std::vector<sProfilerEntry>& entries );
+bool updateProfilerGui( uint32_t frame, vector<sProfilerEntry>& entries );

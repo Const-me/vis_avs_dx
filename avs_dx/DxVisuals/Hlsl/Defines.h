@@ -6,7 +6,7 @@ namespace Hlsl
 	// A set of HLSL macros with their values.
 	class Defines
 	{
-		std::vector<std::pair<CStringA, CStringA>> m_map;
+		vector<std::pair<CStringA, CStringA>> m_map;
 
 	public:
 		Defines() = default;
@@ -24,10 +24,10 @@ namespace Hlsl
 		void set( const CStringA &key, bool value );
 
 		// Add macro with value like "0x11, 0x22, 0x33"
-		void set( const CStringA &key, const std::vector<int>& vec );
+		void set( const CStringA &key, const vector<int>& vec );
 
 		template<size_t size>
-		void set( const CStringA &key, const std::array<float3, size>& arr )
+		void set( const CStringA &key, const array<float3, size>& arr )
 		{
 			CStringA str;
 			str.Preallocate( 128 );
@@ -56,6 +56,6 @@ namespace Hlsl
 		CStringA expand( CStringA hlsl ) const;
 
 		// For HLSL-expanding macros, used by various per-effect shaders.
-		std::vector<D3D_SHADER_MACRO> data() const;
+		vector<D3D_SHADER_MACRO> data() const;
 	};
 }

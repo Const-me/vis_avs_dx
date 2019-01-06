@@ -17,7 +17,7 @@ public:
 		return nullptr != init && hasShader();
 	}
 
-	HRESULT compile( const std::vector<EffectStateShader> &effects, UINT& totalStateSize );
+	HRESULT compile( const vector<EffectStateShader> &effects, UINT& totalStateSize );
 
 protected:
 

@@ -40,7 +40,7 @@ UnlockExternCs::~UnlockExternCs()
 	EnterCriticalSection( &m_cs );
 }
 
-void setMacro( std::vector<std::pair<CStringA, CStringA>> &macros, const CStringA& key, const CStringA& value )
+void setMacro( vector<std::pair<CStringA, CStringA>> &macros, const CStringA& key, const CStringA& value )
 {
 	for( auto& p : macros )
 	{

@@ -31,7 +31,7 @@ struct MovingParticleStructs
 
 	struct VsData : public MovingParticleVS
 	{
-		static HRESULT compiledShader( const std::vector<uint8_t>& dxbc );
+		static HRESULT compiledShader( const vector<uint8_t>& dxbc );
 	};
 
 	using GsData = MovingParticleGS;

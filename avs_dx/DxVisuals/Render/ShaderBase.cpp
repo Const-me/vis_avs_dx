@@ -31,7 +31,7 @@ ShaderBase2::~ShaderBase2()
 }
 
 template<eStage stage>
-HRESULT ShaderBase<stage>::compile( const char* name, const CStringA& hlsl, const CAtlMap<CStringA, CStringA>& inc, Hlsl::Defines &def, bool usesBeat, std::vector<uint8_t>& dxbc )
+HRESULT ShaderBase<stage>::compile( const char* name, const CStringA& hlsl, const CAtlMap<CStringA, CStringA>& inc, Hlsl::Defines &def, bool usesBeat, vector<uint8_t>& dxbc )
 {
 	if( eShaderState::Failed == m_state )
 		return S_FALSE;

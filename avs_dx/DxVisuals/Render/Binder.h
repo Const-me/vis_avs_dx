@@ -7,7 +7,7 @@ class Binder
 	{
 		UINT srv, uav, cbuffer, sampler;
 	};
-	using BindingsData = std::array<Slots, 4>;
+	using BindingsData = array<Slots, 4>;
 
 	static const BindingsData m_staticBinds;
 	static BindingsData staticallyBoundSlots();

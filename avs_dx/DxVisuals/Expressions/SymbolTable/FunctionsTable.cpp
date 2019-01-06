@@ -123,7 +123,7 @@ void FunctionsTable::enumAvsFuncs( TFunc callback ) const
 	}
 }
 
-void FunctionsTable::getStateGlobals( std::vector<CStringA>& list ) const
+void FunctionsTable::getStateGlobals( vector<CStringA>& list ) const
 {
 	list.clear();
 	enumAvsFuncs( [ & ]( const char* hlsl )

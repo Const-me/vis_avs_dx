@@ -147,7 +147,7 @@ eVarType Tree::functionTypeInternal<eInternalFunc::Rand>( int indFunc )
 	return eVarType::f32;
 }
 
-const std::array<Tree::pfnFunctionType, 4> Tree::s_functionTypeInternal =
+const array<Tree::pfnFunctionType, 4> Tree::s_functionTypeInternal =
 {
 	&Tree::functionTypeInternal<0>,
 	&Tree::functionTypeInternal<1>,

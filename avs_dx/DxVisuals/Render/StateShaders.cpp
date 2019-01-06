@@ -10,12 +10,12 @@ namespace
 	// Un-duplicate global pieces but preserve their order, they may depend upon each other.
 	class GlobalPieces
 	{
-		std::vector<CStringA> list;
+		vector<CStringA> list;
 		CAtlMap<CStringA, bool> map;
 		int totalLength = 0;
 
 	public:
-		void add( const std::vector<CStringA> *pGlobals )
+		void add( const vector<CStringA> *pGlobals )
 		{
 			if( nullptr == pGlobals )
 				return;
@@ -40,7 +40,7 @@ namespace
 		}
 	};
 
-	CStringA assembleEffects( const std::vector<EffectStateShader> &effects, bool &anyBeat, UINT& totalStateSize )
+	CStringA assembleEffects( const vector<EffectStateShader> &effects, bool &anyBeat, UINT& totalStateSize )
 	{
 		anyBeat = false;
 		bool needRng = false;
@@ -99,7 +99,7 @@ void main()
 	}
 }
 
-HRESULT StateShaders::compile( const std::vector<EffectStateShader> &effects, UINT& totalStateSize )
+HRESULT StateShaders::compile( const vector<EffectStateShader> &effects, UINT& totalStateSize )
 {
 	bool anyBeat;
 	const CStringA hlsl = assembleEffects( effects, anyBeat, totalStateSize );
@@ -112,7 +112,7 @@ HRESULT StateShaders::compile( const std::vector<EffectStateShader> &effects, UI
 	dropShader();
 	init = nullptr;
 
-	std::vector<uint8_t> dxbc;
+	vector<uint8_t> dxbc;
 	Hlsl::Defines def;
 	def.set( "INIT_STATE", "0" );
 

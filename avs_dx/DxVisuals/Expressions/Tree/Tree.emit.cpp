@@ -24,7 +24,7 @@ struct Tree::EmitContext
 		result += ";\r\n";
 	}
 
-	void code( const Node& node, const std::vector<char> &codez )
+	void code( const Node& node, const vector<char> &codez )
 	{
 		assert( node.node == eNode::Code );
 		result.AppendFormat( "%.*s", node.length, codez.data() + node.id );
@@ -119,7 +119,7 @@ void Tree::emitInternal<eInternalFunc::Rand>( EmitContext& ec, const Node& node,
 
 // A bit of C++ magic here: instantiate the emitters for internal functions.
 // They're specialized templates but the following code instantiates them, and places pointers to these functions into the static array.
-const std::array<Tree::pfnEmitNode, 4> Tree::s_emitInternal =
+const array<Tree::pfnEmitNode, 4> Tree::s_emitInternal =
 {
 	&Tree::emitInternal<0>,
 	&Tree::emitInternal<1>,

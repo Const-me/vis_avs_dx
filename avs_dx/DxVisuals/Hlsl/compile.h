@@ -6,5 +6,5 @@ namespace Hlsl
 {
 	const char* targetName( eStage t );
 
-	HRESULT compile( eStage stage, const CStringA& hlsl, const char* name, const CAtlMap<CStringA, CStringA>& inc, const Defines& def, std::vector<uint8_t>& dxbc, CStringA* pErrorMessages = nullptr );
+	HRESULT compile( eStage stage, const CStringA& hlsl, const char* name, const CAtlMap<CStringA, CStringA>& inc, const Defines& def, vector<uint8_t>& dxbc, CStringA* pErrorMessages = nullptr );
 }

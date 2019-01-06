@@ -6,7 +6,7 @@ using namespace Hlsl;
 
 CStringA Defines::expand( CStringA hlsl ) const
 {
-	std::vector<int> ids;
+	vector<int> ids;
 
 	for( const auto& m : m_map )
 	{

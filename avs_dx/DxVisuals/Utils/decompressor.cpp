@@ -38,9 +38,9 @@ namespace
 	};
 }
 
-std::vector<uint8_t> decompressBytes( const uint8_t* src, int compressedLength, int origLength )
+vector<uint8_t> decompressBytes( const uint8_t* src, int compressedLength, int origLength )
 {
-	std::vector<uint8_t> result;
+	vector<uint8_t> result;
 	result.resize( (size_t)origLength );
 	Decompressor::instance().decompress( src, compressedLength, result.data(), origLength );
 	return std::move( result );

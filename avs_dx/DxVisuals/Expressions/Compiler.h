@@ -43,15 +43,15 @@ namespace Expressions
 
 	private:
 		// Local copy of the effect's expression strings
-		std::array<CStringA, 4> m_expressions;
+		array<CStringA, 4> m_expressions;
 		// Recompiled from NSEEL to HLSL
-		std::array<CStringA, 4> m_hlsl;
+		array<CStringA, 4> m_hlsl;
 
 		// Symbols table. The VariablesTable accumulates variables from all 4 expressions, FunctionsTable is temporary.
 		SymbolTable m_symbols;
 		Tree m_tree;
 
-		std::vector<uint8_t> m_varUsage;
+		vector<uint8_t> m_varUsage;
 		CStringA m_dynStateLoad, m_dynStateStore;
 		
 		int m_stateSize;
@@ -60,7 +60,7 @@ namespace Expressions
 
 		CStringA m_fragmentGlobals;
 		CStringA m_hlslFragment;
-		std::vector<CStringA> m_stateGlobals;
+		vector<CStringA> m_stateGlobals;
 		StateShaderTemplate m_stateTemplate;
 
 		void appendMacros( CStringA& hlsl ) const;

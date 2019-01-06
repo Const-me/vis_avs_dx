@@ -10,7 +10,7 @@ class EffectBase;
 class EffectProfiler
 {
 	friend class Profiler;
-	std::array<CComPtr<ID3D11Query>, profilerBuffersCount> m_queries;
+	array<CComPtr<ID3D11Query>, profilerBuffersCount> m_queries;
 	const char* const m_name;
 
 	HRESULT create();
@@ -37,7 +37,7 @@ class Profiler
 			EffectProfiler* pfx;
 			uint32_t level;
 		};
-		std::vector<sEntry> effects;
+		vector<sEntry> effects;
 
 	public:
 
@@ -48,18 +48,18 @@ class Profiler
 		void mark( uint8_t current, uint32_t level, EffectProfiler* fx );
 		void frameEnd();
 
-		HRESULT report( uint32_t frame, std::vector<sProfilerEntry> &result, uint8_t buffer );
+		HRESULT report( uint32_t frame, vector<sProfilerEntry> &result, uint8_t buffer );
 
 		void removeEffect( EffectProfiler* pfx );
 	};
 
-	std::array<FrameData, profilerBuffersCount> m_frames;
+	array<FrameData, profilerBuffersCount> m_frames;
 	bool m_running = false;
 	uint8_t m_buffer = 0;
 	uint32_t m_frame = 0;
 	uint32_t m_level = 0;
 
-	std::vector<sProfilerEntry> m_result;
+	vector<sProfilerEntry> m_result;
 
 	void levelInc()
 	{

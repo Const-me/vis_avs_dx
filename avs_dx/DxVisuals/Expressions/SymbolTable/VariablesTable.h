@@ -6,7 +6,7 @@ namespace Expressions
 {
 	class VariablesTable
 	{
-		std::vector<VariableDecl> table;
+		vector<VariableDecl> table;
 		CAtlMap<CStringA, int> map;
 		int prototypeSize = 0;
 		int m_beatMacro = -1;

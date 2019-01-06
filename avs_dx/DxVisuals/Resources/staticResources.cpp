@@ -129,7 +129,7 @@ namespace StaticResources
 	SourceData sourceData;
 	GlobalBuffers globalBuffers;
 
-	HRESULT createLayout( const std::vector<uint8_t>& dxbc )
+	HRESULT createLayout( const vector<uint8_t>& dxbc )
 	{
 		if( nullptr != layoutPos2Tc2 )
 			return S_FALSE;
@@ -143,7 +143,7 @@ namespace StaticResources
 		return S_OK;
 	}
 
-	HRESULT cacheInputLayout( const void* key, const D3D11_INPUT_ELEMENT_DESC *desc, UINT count, const std::vector<uint8_t>& dxbc )
+	HRESULT cacheInputLayout( const void* key, const D3D11_INPUT_ELEMENT_DESC *desc, UINT count, const vector<uint8_t>& dxbc )
 	{
 		if( nullptr != s_layoutsCache.Lookup( key ) )
 			return S_FALSE;

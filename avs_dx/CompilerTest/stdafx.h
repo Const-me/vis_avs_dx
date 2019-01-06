@@ -9,9 +9,11 @@
 #include <atlcoll.h>
 #include <atltypes.h>
 
-#include <vector>
-#include <array>
 #include <algorithm>
+#include <EASTL/vector.h>
+#include <EASTL/array.h>
+using eastl::vector;
+using eastl::array;
 
 #include <d3d11.h>
 #include "../DxVisuals/Utils/DXTK/SimpleMath.h"

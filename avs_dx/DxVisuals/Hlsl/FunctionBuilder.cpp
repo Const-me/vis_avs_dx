@@ -28,7 +28,7 @@ HRESULT FunctionBuilder::uintConstants( const char* constantName, const int* arr
 	return S_OK;
 }
 
-void FunctionBuilder::print( const std::array<uint32_t, 4>& uint4 )
+void FunctionBuilder::print( const array<uint32_t, 4>& uint4 )
 {
 	print( "uint4( %08X, %08X, %08X, %08X )", uint4[ 0 ], uint4[ 1 ], uint4[ 2 ], uint4[ 3 ] );
 }
@@ -43,7 +43,7 @@ HRESULT FunctionBuilder::uint4Constants( const char* constantName, const int* ar
 
 	for( int i = 0; i < nVectors; i++ )
 	{
-		std::array<uint32_t, 4> uint4;
+		array<uint32_t, 4> uint4;
 		for( int j = 0; j < 4; j++ )
 		{
 			const int ind = i * 4 + j;

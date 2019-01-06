@@ -3,7 +3,7 @@
 
 namespace
 {
-	std::array<CStringA, 3> splitTemplate( const CStringA& hlsl )
+	array<CStringA, 3> splitTemplate( const CStringA& hlsl )
 	{
 		const CStringA macroGlobals = "SHADER_GLOBALS";
 		const CStringA macroCode = "SHADER_CODE";
@@ -19,7 +19,7 @@ namespace
 		const int sge = sg + macroGlobals.GetLength();
 		const int mce = mc + macroCode.GetLength();
 
-		std::array<CStringA, 3> res;
+		array<CStringA, 3> res;
 		res[ 0 ] = hlsl.Left( sg );
 		res[ 1 ] = hlsl.Mid( sge, mc - sge );
 		res[ 2 ] = hlsl.Mid( mce );

@@ -45,7 +45,7 @@ private:
 	ShaderPtr<eStage::Pixel> m_ps;
 
 	int m_inTransition = false;
-	std::array<uint32_t, 8> m_randomBlocks;
+	array<uint32_t, 8> m_randomBlocks;
 	HRESULT setupTransition( int trans, float sintrans );
 	void drawTransition();
 

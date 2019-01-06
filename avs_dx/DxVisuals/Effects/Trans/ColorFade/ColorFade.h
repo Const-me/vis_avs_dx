@@ -13,7 +13,7 @@ struct ColorFadeStructs
 
 		void update( bool isBeat );
 
-		std::array<Vector4, 4> shaderConstants() const;
+		array<Vector4, 4> shaderConstants() const;
 	};
 
 	using StateData = EmptyStateData;

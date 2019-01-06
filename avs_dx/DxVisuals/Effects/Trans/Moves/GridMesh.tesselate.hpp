@@ -14,7 +14,7 @@ namespace
 
 	using TriList = DynamicArray<uint16_t, 6>;
 
-	void buildTopology( const std::vector<Ind3> &ib, CAtlMap<uint16_t, TriList> &mapV2T )
+	void buildTopology( const vector<Ind3> &ib, CAtlMap<uint16_t, TriList> &mapV2T )
 	{
 		const uint16_t size = (uint16_t)ib.size();
 		for( uint16_t i = 0; i < size; i++ )
@@ -41,11 +41,11 @@ namespace
 	}
 
 	// Calculate per-vertex tessellation factors. The center triangle has all vertices set to the lod parameter, then lod decays to 1, 1 edge at a time.
-	void calculateVertexLevels( const std::vector<Ind3> &ib, const CAtlMap<uint16_t, TriList> &mapV2T, Ind3 centerTri, uint8_t lod, CAtlMap<uint16_t, uint8_t> &vertexLoD )
+	void calculateVertexLevels( const vector<Ind3> &ib, const CAtlMap<uint16_t, TriList> &mapV2T, Ind3 centerTri, uint8_t lod, CAtlMap<uint16_t, uint8_t> &vertexLoD )
 	{
 		assert( lod > 0 );
 
-		std::vector<uint16_t> verts;
+		vector<uint16_t> verts;
 		verts.assign( centerTri.begin(), centerTri.end() );
 		for( uint16_t v : verts )
 			vertexLoD[ v ] = lod;
@@ -57,7 +57,7 @@ namespace
 			if( lod <= 0 )
 				return;
 			e += 2;
-			std::vector<uint16_t> verts2;
+			vector<uint16_t> verts2;
 			verts2.reserve( e * 3 );
 			for( uint16_t v1 : verts )
 			{
@@ -82,8 +82,8 @@ namespace
 	}
 
 	// Collect per-vertex tessellation levels into per-triangle ones.
-	using VertsLevels = std::array<uint8_t, 3>;
-	void calculateLevels( const std::vector<Ind3> &ib, const CAtlMap<uint16_t, TriList> &mapV2T, const CAtlMap<uint16_t, uint8_t> &vertexLoD, CAtlMap<uint16_t, VertsLevels> &triangleLoD )
+	using VertsLevels = array<uint8_t, 3>;
+	void calculateLevels( const vector<Ind3> &ib, const CAtlMap<uint16_t, TriList> &mapV2T, const CAtlMap<uint16_t, uint8_t> &vertexLoD, CAtlMap<uint16_t, VertsLevels> &triangleLoD )
 	{
 		for( POSITION pos = vertexLoD.GetStartPosition(); pos; )
 		{
@@ -114,7 +114,7 @@ namespace
 	}
 
 	// Split an edge in the middle, insert a new vertex. Or if it was already done, return old vertex ID from the hash map.
-	uint16_t splitEdge( std::vector<sInput> &vb, CAtlMap<uint32_t, uint16_t> &newVerts, uint16_t v1, uint16_t v2 )
+	uint16_t splitEdge( vector<sInput> &vb, CAtlMap<uint32_t, uint16_t> &newVerts, uint16_t v1, uint16_t v2 )
 	{
 		const uint32_t e = edgeId( v1, v2 );
 		auto p = newVerts.Lookup( e );
@@ -135,12 +135,12 @@ namespace
 	}
 
 	template<class T>
-	inline T min3( const std::array<T, 3> a )
+	inline T min3( const array<T, 3> a )
 	{
 		return std::min( { a[ 0 ], a[ 1 ], a[ 2 ] } );
 	}
 	template<class T>
-	inline T max3( const std::array<T, 3> a )
+	inline T max3( const array<T, 3> a )
 	{
 		return std::max( { a[ 0 ], a[ 1 ], a[ 2 ] } );
 	}
@@ -148,7 +148,7 @@ namespace
 	struct TriContext
 	{
 		uint8_t minLod, maxLod;
-		std::array<uint8_t, 3> edges;
+		array<uint8_t, 3> edges;
 
 		TriContext() = default;
 
@@ -193,7 +193,7 @@ namespace
 
 	// The template argument is vertex index, which, as shown on the above comment, for parts 0-2 also the id of the "next" edge.
 	template<uint8_t iPart>
-	inline void trianglePart( const Ind3& oldIndices, const std::array<uint16_t, 3>& midpoints, const TriContext &tri, Ind3& ind, TriContext &c )
+	inline void trianglePart( const Ind3& oldIndices, const array<uint16_t, 3>& midpoints, const TriContext &tri, Ind3& ind, TriContext &c )
 	{
 		static_assert( iPart >= 0 && iPart < 3 );
 		constexpr uint8_t prevEdge = ( iPart + 2 ) % 3;
@@ -211,7 +211,7 @@ namespace
 
 	// Part 3 is the central one, with all 3 vertices being the edge's midpoints.
 	template<>
-	inline void trianglePart<3>( const Ind3& oldIndices, const std::array<uint16_t, 3>& midpoints, const TriContext &tri, Ind3& ind, TriContext &c )
+	inline void trianglePart<3>( const Ind3& oldIndices, const array<uint16_t, 3>& midpoints, const TriContext &tri, Ind3& ind, TriContext &c )
 	{
 		ind[ 0 ] = midpoints[ 0 ];
 		ind[ 1 ] = midpoints[ 1 ];
@@ -219,7 +219,7 @@ namespace
 		c = TriContext{ tri.minLod };
 	}
 
-	inline uint16_t push( std::vector<Ind3> &ib, Ind3 nv )
+	inline uint16_t push( vector<Ind3> &ib, Ind3 nv )
 	{
 		assert( ib.size() < 0xFFFF );
 		const uint16_t res = (uint16_t)ib.size();
@@ -227,9 +227,9 @@ namespace
 		return res;
 	}
 
-	void tesselateTriangle( std::vector<sInput> &vb, std::vector<Ind3> &ib, CAtlMap<uint32_t, uint16_t> &newVertices, uint16_t id, TriContext tri );
+	void tesselateTriangle( vector<sInput> &vb, vector<Ind3> &ib, CAtlMap<uint32_t, uint16_t> &newVertices, uint16_t id, TriContext tri );
 
-	void splitTriangleIn4( std::vector<sInput> &vb, std::vector<Ind3> &ib, CAtlMap<uint32_t, uint16_t> &newVertices, uint16_t id, TriContext tri )
+	void splitTriangleIn4( vector<sInput> &vb, vector<Ind3> &ib, CAtlMap<uint32_t, uint16_t> &newVertices, uint16_t id, TriContext tri )
 	{
 		const Ind3 indices = ib[ id ];
 		tri.decrement();
@@ -261,7 +261,7 @@ namespace
 	}
 
 	template<uint8_t iEdge>
-	inline void splitTriangleIn2( std::vector<Ind3> &ib, uint16_t id, const Ind3& indices, const Ind3& midpoints )
+	inline void splitTriangleIn2( vector<Ind3> &ib, uint16_t id, const Ind3& indices, const Ind3& midpoints )
 	{
 		constexpr uint8_t i1 = iEdge;
 		constexpr uint8_t i2 = ( iEdge + 1 ) % 3;
@@ -275,7 +275,7 @@ namespace
 		push( ib, nt );
 	}
 
-	void tesselateTriangle( std::vector<sInput> &vb, std::vector<Ind3> &ib, CAtlMap<uint32_t, uint16_t> &newVertices, uint16_t id, TriContext tri )
+	void tesselateTriangle( vector<sInput> &vb, vector<Ind3> &ib, CAtlMap<uint32_t, uint16_t> &newVertices, uint16_t id, TriContext tri )
 	{
 		if( tri.maxLod <= 0 )
 			return;
@@ -331,7 +331,7 @@ namespace
 		__debugbreak();
 	}
 
-	void tesselate( std::vector<sInput> &vb, std::vector<Ind3> &ib, const CAtlMap<uint16_t, VertsLevels>& triLoD )
+	void tesselate( vector<sInput> &vb, vector<Ind3> &ib, const CAtlMap<uint16_t, VertsLevels>& triLoD )
 	{
 		CAtlMap<uint32_t, uint16_t> newVertices;
 		for( POSITION pos = triLoD.GetStartPosition(); pos; )
@@ -342,7 +342,7 @@ namespace
 		}
 	}
 
-	void tesselateCenter( std::vector<sInput> &vb, std::vector<Ind3> &ib )
+	void tesselateCenter( vector<sInput> &vb, vector<Ind3> &ib )
 	{
 		assert( 0 != ( ib.size() & 1 ) );
 

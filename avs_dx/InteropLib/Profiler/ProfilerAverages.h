@@ -22,15 +22,15 @@ class ProfilerAverages
 
 	float createEntry( const void* key, float current );
 
-	std::vector<POSITION> m_drop; // Placing it here instead of a local variable to avoid dynamic allocations in runtime
+	vector<POSITION> m_drop; // Placing it here instead of a local variable to avoid dynamic allocations in runtime
 
-	std::vector<float> m_result;
+	vector<float> m_result;
 
 public:
 
 	ProfilerAverages();
 
-	bool update( const std::vector<sProfilerEntry>& entries );
+	bool update( const vector<sProfilerEntry>& entries );
 
 	float operator[]( size_t i ) const
 	{

@@ -20,7 +20,7 @@ public:
 
 		END_MSG_MAP()
 
-	void update( uint32_t frame, std::vector<sProfilerEntry>& entries );
+	void update( uint32_t frame, vector<sProfilerEntry>& entries );
 
 	HRESULT create();
 
@@ -34,7 +34,7 @@ private:
 
 	CComAutoCriticalSection m_cs;
 	uint32_t m_frame;
-	std::vector<sProfilerEntry> m_entries;
+	vector<sProfilerEntry> m_entries;
 	ProfilerAverages m_averages;
 
 	CString m_text;

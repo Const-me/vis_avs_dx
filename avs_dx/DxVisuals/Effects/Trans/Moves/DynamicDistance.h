@@ -22,7 +22,7 @@ struct DynamicDistanceStructs : public MovementStructs
 
 	struct VsData : public Expressions::CompiledShader<DynamicDistanceVS>
 	{
-		static HRESULT compiledShader( const std::vector<uint8_t>& dxbc )
+		static HRESULT compiledShader( const vector<uint8_t>& dxbc )
 		{
 			return StaticResources::createLayout( dxbc );
 		}

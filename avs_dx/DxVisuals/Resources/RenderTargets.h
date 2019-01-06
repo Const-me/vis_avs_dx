@@ -5,7 +5,7 @@
 // A set of 2 render target textures.
 class RenderTargets
 {
-	std::array<RenderTarget, 2> m_targets;
+	array<RenderTarget, 2> m_targets;
 	uint8_t m_lastTarget = 0;
 
 public:

@@ -29,9 +29,9 @@ namespace
 	{
 		Vector2 pos, tc;
 	};
-	using Ind3 = std::array<uint16_t, 3>;
+	using Ind3 = array<uint16_t, 3>;
 
-	HRESULT reserveVertexBuffer( const CSize &size, std::vector<sInput> &vb, bool tess )
+	HRESULT reserveVertexBuffer( const CSize &size, vector<sInput> &vb, bool tess )
 	{
 		const size_t vbEven = (size_t)size.cx + 1;
 		const size_t vbOdd = vbEven + 1;
@@ -46,7 +46,7 @@ namespace
 		return S_OK;
 	}
 
-	void reserveIndexBuffer( const CSize &size, std::vector<Ind3> &ib, bool tess )
+	void reserveIndexBuffer( const CSize &size, vector<Ind3> &ib, bool tess )
 	{
 		size_t trisPerStripe = size_t( size.cx );
 		trisPerStripe = trisPerStripe + trisPerStripe + 1;
@@ -57,7 +57,7 @@ namespace
 		ib.reserve( totalTris );
 	}
 
-	HRESULT reserveBuffers( const CSize &size, std::vector<sInput> &vb, std::vector<Ind3> &ib, bool tesselateCenter )
+	HRESULT reserveBuffers( const CSize &size, vector<sInput> &vb, vector<Ind3> &ib, bool tesselateCenter )
 	{
 		CHECK( reserveVertexBuffer( size, vb, tesselateCenter ) );
 		reserveIndexBuffer( size, ib, tesselateCenter );
@@ -102,25 +102,25 @@ namespace
 	};
 
 	// Push odd-numbered vertices row e.g. 0-th or 6-th
-	void pushEvenRow( const GridDim &dim, std::vector<sInput> &vb, int yInt )
+	void pushEvenRow( const GridDim &dim, vector<sInput> &vb, int yInt )
 	{
 		for( int i = 0; i <= dim.cx; i++ )
 			vb.emplace_back( dim.posEven( yInt, i ) );
 	}
 	// Push even-numbered vertices row e.g. 1-st or 3-rd
-	void pushOddRow( const GridDim &dim, std::vector<sInput> &vb, int yInt )
+	void pushOddRow( const GridDim &dim, vector<sInput> &vb, int yInt )
 	{
 		for( int i = -1; i <= dim.cx; i++ )
 			vb.emplace_back( dim.posOdd( yInt, i ) );
 	}
 
-	inline void pt( std::vector<Ind3> &ib, uint16_t a, uint16_t b, uint16_t c )
+	inline void pt( vector<Ind3> &ib, uint16_t a, uint16_t b, uint16_t c )
 	{
 		ib.emplace_back( Ind3{ a, b, c } );
 	}
 
 	// Push triangle strip indices where bottom row has odd index.
-	void pushOddStrip( const GridDim &dim, std::vector<Ind3> &ib, uint16_t r1, uint16_t r2 )
+	void pushOddStrip( const GridDim &dim, vector<Ind3> &ib, uint16_t r1, uint16_t r2 )
 	{
 		for( int i = 0; i < dim.cx; i++ )
 		{
@@ -133,7 +133,7 @@ namespace
 	}
 
 	// Push triangle strip indices where bottom row has even index.
-	void pushEvenStrip( const GridDim &dim, std::vector<Ind3> &ib, uint16_t r1, uint16_t r2 )
+	void pushEvenStrip( const GridDim &dim, vector<Ind3> &ib, uint16_t r1, uint16_t r2 )
 	{
 		for( int i = 0; i < dim.cx; i++ )
 		{
@@ -156,8 +156,8 @@ HRESULT GridMesh::create()
 	if( size.cx < 1 || size.cy < 1 )
 		return E_INVALIDARG;
 
-	std::vector<sInput> vb;
-	std::vector<Ind3> ib;
+	vector<sInput> vb;
+	vector<Ind3> ib;
 	CHECK( reserveBuffers( size, vb, ib, !m_rectangular ) );
 
 	const GridDim dim{ size };

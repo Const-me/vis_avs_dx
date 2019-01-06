@@ -8,7 +8,7 @@ namespace Expressions
 	class CompiledShaderBase
 	{
 		ShaderTemplate m_template;
-		std::array<CStringA, 3> templatePieces;
+		array<CStringA, 3> templatePieces;
 		// Copy of the code produced by Expressions::Compiler class. That code will go into the placeholders.
 		CStringA fragmentCode, fragmentGlobals;
 		bool needsRng = false;

@@ -5,7 +5,7 @@
 
 namespace
 {
-	const std::array<const char*, 4> s_targetStrings =
+	const array<const char*, 4> s_targetStrings =
 	{
 		"cs_5_0",
 		"vs_5_0",
@@ -17,7 +17,7 @@ namespace
 		return s_targetStrings[ (uint8_t)t ];
 	}
 
-	const std::array<const char*, 4> s_targetNames =
+	const array<const char*, 4> s_targetNames =
 	{
 		"compute",
 		"vertex",
@@ -70,7 +70,7 @@ namespace Hlsl
 		return s_targetNames[ (uint8_t)t ];
 	}
 
-	HRESULT compile( eStage stage, const CStringA& hlsl, const char* name, const CAtlMap<CStringA, CStringA>& inc, const Defines& def, std::vector<uint8_t>& dxbc, CStringA* pErrorMessages )
+	HRESULT compile( eStage stage, const CStringA& hlsl, const char* name, const CAtlMap<CStringA, CStringA>& inc, const Defines& def, vector<uint8_t>& dxbc, CStringA* pErrorMessages )
 	{
 		// https://docs.microsoft.com/en-us/windows/desktop/api/d3dcompiler/nf-d3dcompiler-d3dcompile
 

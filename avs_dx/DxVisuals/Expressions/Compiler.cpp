@@ -26,7 +26,7 @@ Compiler::Compiler( const char* effectName, const Prototype& effectPrototype, UI
 HRESULT Compiler::update( const char* init, const char* frame, const char* beat, const char* fragment )
 {
 	bool somethingChanged = false;
-	const std::array<const char*, 4> nseel{ init, frame, beat, fragment };
+	const array<const char*, 4> nseel{ init, frame, beat, fragment };
 	CStringA ee;
 	for( int i = 0; i < 4; i++ )
 	{

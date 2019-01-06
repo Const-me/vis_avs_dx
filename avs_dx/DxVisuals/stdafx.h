@@ -25,8 +25,10 @@ using DirectX::SimpleMath::Vector4;
 #include <stdint.h>
 #include <memory>
 #include <algorithm>
-#include <array>
-#include <vector>
+#include <EASTL/vector.h>
+#include <EASTL/array.h>
+using eastl::vector;
+using eastl::array;
 #include <functional>
 
 #include <mfobjects.h>

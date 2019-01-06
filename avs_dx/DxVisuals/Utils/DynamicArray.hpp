@@ -1,10 +1,10 @@
 #pragma once
 
-// Very similar to std::array but can contain less elements.
+// Very similar to array but can contain less elements.
 template<class T, uint8_t capacity>
 class DynamicArray
 {
-	std::array<T, capacity> m_data;
+	array<T, capacity> m_data;
 	uint8_t m_count = 0;
 
 public:

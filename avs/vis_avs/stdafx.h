@@ -26,3 +26,6 @@ inline int max( int a, int b )
 }
 
 #include "r_defs.h"
+
+#include <EASTL/vector.h>
+using eastl::vector;

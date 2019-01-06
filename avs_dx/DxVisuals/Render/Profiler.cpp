@@ -19,8 +19,8 @@ inline void waitForData()
 HRESULT EffectProfiler::create()
 {
 	CD3D11_QUERY_DESC desc{ D3D11_QUERY_TIMESTAMP };
-	for( auto& q : m_queries )
-		CHECK( device->CreateQuery( &desc, &q ) );
+	for( uint8_t i = 0; i < profilerBuffersCount; i++ )
+		CHECK( device->CreateQuery( &desc, &m_queries[ i ] ) );
 	return S_OK;
 }
 
@@ -145,7 +145,7 @@ namespace
 	}
 }
 
-HRESULT Profiler::FrameData::report( uint32_t frame, std::vector<sProfilerEntry> &result, uint8_t buffer )
+HRESULT Profiler::FrameData::report( uint32_t frame, vector<sProfilerEntry> &result, uint8_t buffer )
 {
 	if( !haveMeasures )
 		return S_FALSE;
@@ -202,7 +202,7 @@ void Profiler::removeEffect( EffectProfiler* pfx )
 void Profiler::FrameData::removeEffect( EffectProfiler* pfx )
 {
 	// This happens very rarely, i.e. dynamic memory is fine.
-	std::vector<sEntry> result;
+	vector<sEntry> result;
 	result.reserve( effects.size() );
 	bool found = false;
 	for( auto e : effects )

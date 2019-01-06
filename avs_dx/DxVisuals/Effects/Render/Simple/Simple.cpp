@@ -41,7 +41,7 @@ eSimpleStyle SimpleBase::AvsState::style() const
 	return eSimpleStyle::Lines;
 }
 
-static const std::array<float2, 3> s_positions =
+static const array<float2, 3> s_positions =
 {
 	float2{ 0, 1 },				// top
 	float2{ 0, -1 },			// bottom

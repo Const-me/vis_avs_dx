@@ -65,7 +65,7 @@ public:
 
 protected:
 
-	HRESULT compile( const char* name, const CStringA& hlsl, const CAtlMap<CStringA, CStringA>& inc, Hlsl::Defines &def, bool usesBeat, std::vector<uint8_t>& dxbc );
+	HRESULT compile( const char* name, const CStringA& hlsl, const CAtlMap<CStringA, CStringA>& inc, Hlsl::Defines &def, bool usesBeat, vector<uint8_t>& dxbc );
 
 	void onRenderSizeChanged() override;
 };

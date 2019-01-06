@@ -58,7 +58,7 @@ public:
 
 	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 
-	std::vector<EffectBase*> m_effects;
+	vector<EffectBase*> m_effects;
 
 	virtual HRESULT clearRenders() { return S_FALSE; }
 

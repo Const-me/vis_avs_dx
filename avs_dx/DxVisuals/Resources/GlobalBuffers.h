@@ -4,7 +4,7 @@
 
 class GlobalBuffers: public ResizeHandler
 {
-	std::array<RenderTargets, 8> m_buffers;
+	array<RenderTargets, 8> m_buffers;
 
 	void onRenderSizeChanged() override
 	{

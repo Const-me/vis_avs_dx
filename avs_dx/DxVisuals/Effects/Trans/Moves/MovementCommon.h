@@ -21,7 +21,7 @@ struct MovementStructs
 
 	struct CommonVsData : public Expressions::CompiledShader<DMoveVS>
 	{
-		static HRESULT compiledShader( const std::vector<uint8_t>& dxbc );
+		static HRESULT compiledShader( const vector<uint8_t>& dxbc );
 
 	protected:
 		HRESULT updateAvs( bool rectCoords );

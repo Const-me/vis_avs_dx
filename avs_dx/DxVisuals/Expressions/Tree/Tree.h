@@ -47,8 +47,8 @@ namespace Expressions
 		SymbolTable& symbols;
 		// Index of the last top-level node, or -1 for an empty tree.
 		int m_lastStatement = -1;
-		std::vector<char> m_codez;
-		std::vector<Node> m_nodes;
+		vector<char> m_codez;
+		vector<Node> m_nodes;
 
 		bool nextSibling( int& ind ) const
 		{
@@ -78,7 +78,7 @@ namespace Expressions
 		// ==== Type deduction ====
 
 		using pfnFunctionType = eVarType( Tree::* )( int indFunc );
-		static const std::array<pfnFunctionType, eInternalFunc::valuesCount> s_functionTypeInternal;
+		static const array<pfnFunctionType, eInternalFunc::valuesCount> s_functionTypeInternal;
 		template<eInternalFunc id>
 		eVarType functionTypeInternal( int indFunc );
 
@@ -101,7 +101,7 @@ namespace Expressions
 		void emitInternal( EmitContext& ec, const Node& node, int ind ) const;
 
 		using pfnEmitNode = void ( Tree::* )( EmitContext& ec, const Node& node, int ind ) const;
-		static const std::array<pfnEmitNode, eInternalFunc::valuesCount> s_emitInternal;
+		static const array<pfnEmitNode, eInternalFunc::valuesCount> s_emitInternal;
 
 	public:
 
@@ -126,6 +126,6 @@ namespace Expressions
 
 		// Gather data on how variables are used by this expression tree. The values are from eVarAccess enum, they're written to the vector with bitwise OR.
 		// nBlock bust be between 0 and 3, the values are shifted left by (nExpressionBlock<<2)
-		void getVariablesUsage( std::vector<uint8_t>& usage, uint8_t nExpressionBlock ) const;
+		void getVariablesUsage( vector<uint8_t>& usage, uint8_t nExpressionBlock ) const;
 	};
 }

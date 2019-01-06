@@ -58,7 +58,7 @@ public:
 	~UnlockExternCs();
 };
 
-void setMacro( std::vector<std::pair<CStringA, CStringA>> &macros, const CStringA& key, const CStringA& value );
+void setMacro( vector<std::pair<CStringA, CStringA>> &macros, const CStringA& key, const CStringA& value );
 
 enum struct eBlend : uint8_t
 {
@@ -85,7 +85,7 @@ HRESULT comUninitialize();
 
 // Size of the vector's payload in bytes.
 template<class T>
-inline uint32_t sizeofVector( const std::vector<T>& r )
+inline uint32_t sizeofVector( const vector<T>& r )
 {
 	return (uint32_t)( r.size() * sizeof( T ) );
 }

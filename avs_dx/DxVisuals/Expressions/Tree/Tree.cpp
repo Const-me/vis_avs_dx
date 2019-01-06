@@ -59,7 +59,7 @@ bool Tree::transformDoubleFuncs()
 	return any;
 }
 
-void Tree::getVariablesUsage( std::vector<uint8_t>& usage, uint8_t nExpressionBlock ) const
+void Tree::getVariablesUsage( vector<uint8_t>& usage, uint8_t nExpressionBlock ) const
 {
 	usage.resize( symbols.vars.size(), 0 );
 	assert( nExpressionBlock < 4 );

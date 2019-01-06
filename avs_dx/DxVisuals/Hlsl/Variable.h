@@ -21,7 +21,7 @@ namespace Hlsl
 	struct Variable
 	{
 		// Name of the variable. Size is limited to 8 because that's the limit in the original code.
-		std::array<char, 8> name;
+		array<char, 8> name;
 
 		// Type of the variable
 		eVarType vt;
@@ -49,8 +49,8 @@ namespace Hlsl
 	};
 
 	// Pack variables i.e. calculate offsets
-	HRESULT appendPacked( const std::vector<Variable> &src, uint16_t effect, uint16_t &startOffset, std::vector<PackedVariable> &dest );
+	HRESULT appendPacked( const vector<Variable> &src, uint16_t effect, uint16_t &startOffset, vector<PackedVariable> &dest );
 
 	// Append packed variables to HLSL structure definition
-	// void hlslStructure( const std::vector<PackedVariable>& vars, int effect, uint16_t startOffset, CStringA& hlsl );
+	// void hlslStructure( const vector<PackedVariable>& vars, int effect, uint16_t startOffset, CStringA& hlsl );
 }

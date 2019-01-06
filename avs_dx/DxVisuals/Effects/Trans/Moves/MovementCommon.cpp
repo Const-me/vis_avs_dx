@@ -6,7 +6,7 @@ HRESULT MovementStructs::CommonStateData::updateScreenSize()
 	return updateInput( screenSize, getRenderSize() );
 }
 
-HRESULT MovementStructs::CommonVsData::compiledShader( const std::vector<uint8_t>& dxbc )
+HRESULT MovementStructs::CommonVsData::compiledShader( const vector<uint8_t>& dxbc )
 {
 	return StaticResources::createLayout( dxbc );
 }

@@ -14,7 +14,7 @@ namespace
 			cb( s ), widthMin( i ), widthMax( ax ), hlslName( n ) { }
 	};
 
-	static const std::array<sTypeMetadata, (size_t)( eVarType::CountTypes )> s_metadata =
+	static const array<sTypeMetadata, (size_t)( eVarType::CountTypes )> s_metadata =
 	{
 		sTypeMetadata{ 4, 1, 4, "float" },
 		sTypeMetadata{ 4, 1, 4, "int" },
@@ -51,7 +51,7 @@ namespace Hlsl
 		return ::bytesCount( vt ) * width;
 	}
 
-	HRESULT appendPacked( const std::vector<Variable> &src, uint16_t effect, uint16_t &startOffset, std::vector<PackedVariable> &dest )
+	HRESULT appendPacked( const vector<Variable> &src, uint16_t effect, uint16_t &startOffset, vector<PackedVariable> &dest )
 	{
 		dest.reserve( dest.size() + src.size() );
 		dest.clear();
@@ -90,7 +90,7 @@ namespace Hlsl
 		return S_OK;
 	}
 
-	void hlslStructure( const std::vector<PackedVariable>& vars, int nEffect, uint16_t startOffset, CStringA& hlsl )
+	void hlslStructure( const vector<PackedVariable>& vars, int nEffect, uint16_t startOffset, CStringA& hlsl )
 	{
 		const char* components = "xyzw";
 		for( const auto& v : vars )

@@ -67,7 +67,7 @@ HRESULT RootEffect::clearRenders()
 HRESULT RootEffect::buildState()
 {
 	// Collect effects state shaders
-	std::vector<EffectStateShader> shaders;
+	vector<EffectStateShader> shaders;
 	UINT stateOffset = 0;
 	HRESULT hr = applyRecursively( [ & ]( EffectBase& e )
 	{

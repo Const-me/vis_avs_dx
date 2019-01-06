@@ -9,7 +9,7 @@ template<class FxDef>
 class EffectRenderer
 {
 public:
-	static constexpr std::array<eShaderKind, 4> shaderKinds = { computeShaderKind<FxDef>(), vertexShaderKind<FxDef>(), geometryShaderKind<FxDef>(), pixelShaderKind<FxDef>() };
+	static constexpr array<eShaderKind, 4> shaderKinds = { computeShaderKind<FxDef>(), vertexShaderKind<FxDef>(), geometryShaderKind<FxDef>(), pixelShaderKind<FxDef>() };
 	// AVS native state
 	using tAvxState = typename FxDef::AvsState;
 	// DX effect's state

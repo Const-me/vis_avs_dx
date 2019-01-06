@@ -26,7 +26,7 @@ inline HRESULT createShader( ByteRange dxbc, CComPtr<ID3D11ComputeShader>& resul
 }
 
 template<class I>
-inline HRESULT createShader( const std::vector<uint8_t>& dxbc, CComPtr<I>& result )
+inline HRESULT createShader( const vector<uint8_t>& dxbc, CComPtr<I>& result )
 {
 	ByteRange r{ dxbc.data(), dxbc.size() };
 	return createShader( r, result );

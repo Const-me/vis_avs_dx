@@ -29,4 +29,4 @@ inline float2 floatSize( const CSize& size )
 	return float2{ (float)size.cx, (float)size.cy };
 }
 
-using uint4 = std::array<uint32_t, 4>;
+using uint4 = array<uint32_t, 4>;

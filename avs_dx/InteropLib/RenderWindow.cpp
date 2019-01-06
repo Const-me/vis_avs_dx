@@ -158,7 +158,7 @@ HRESULT RenderWindow::setupTransition( int trans, float sintrans )
 	values.mask = 0;
 	if( trans == 6 && !m_inTransition )	// 9 random blocks
 	{
-		std::array<uint8_t, 9> blocks;
+		array<uint8_t, 9> blocks;
 		for( int i = 0; i < 9; i++ )
 			blocks[ i ] = i;
 		// They <s>killed Kenny</s> deprecated std::random_shuffle :-(

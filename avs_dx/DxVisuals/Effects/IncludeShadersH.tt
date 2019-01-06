@@ -92,7 +92,7 @@ class VectorDecl: iConstDecl
 		size = node.Attribute( "size" ).Value;
 		vals = node.Attribute( "values" ).Value;
 	}
-	public string member() { return $"std::vector<{tp}> {name};"; }
+	public string member() { return $"vector<{tp}> {name};"; }
 	public void defines( CppBuilder sb )
 	{
 		sb.tl( @"def.set( ""{0}"", (int){1}.size() );", size, name );
@@ -112,7 +112,7 @@ class ArrayDecl: iConstDecl
 		size = node.Attribute( "size" ).Value;
 		vals = node.Attribute( "values" ).Value;
 	}
-	public string member() { return $"std::array<{tp}, {size}> {name};"; }
+	public string member() { return $"array<{tp}, {size}> {name};"; }
 	public void defines( CppBuilder sb )
 	{
 		sb.tl( @"def.set( ""{0}"", {1} );", vals, name );

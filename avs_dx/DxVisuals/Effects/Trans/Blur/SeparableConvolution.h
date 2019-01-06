@@ -38,7 +38,7 @@ class SeparableConvolution: public ResizeHandler
 	};
 
 	using PassShader = Shader<PassShaderData>;
-	std::array<PassShader, 2> m_shaders;
+	array<PassShader, 2> m_shaders;
 	static HRESULT updateShader( PassShader& s, Binder& binder, const ShaderParams& params );
 
 	void destroy();

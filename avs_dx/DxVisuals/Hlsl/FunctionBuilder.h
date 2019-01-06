@@ -9,7 +9,7 @@ namespace Hlsl
 	public:
 		void print( const char* pszFormat, ... );
 
-		void print( const std::array<uint32_t, 4>& uint4 );
+		void print( const array<uint32_t, 4>& uint4 );
 
 		HRESULT uintConstants( const char* constantName, const int* arr, int count );
 

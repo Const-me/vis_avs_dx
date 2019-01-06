@@ -50,7 +50,7 @@ static const D3D11_INPUT_ELEMENT_DESC layoutDesc[ 2 ] =
 	{ "COLOR",       0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 };
 
-HRESULT MovingParticleStructs::VsData::compiledShader( const std::vector<uint8_t>& dxbc )
+HRESULT MovingParticleStructs::VsData::compiledShader( const vector<uint8_t>& dxbc )
 {
 	CHECK( StaticResources::cacheInputLayout( layoutDesc, layoutDesc, 2, dxbc ) );
 	return S_OK;

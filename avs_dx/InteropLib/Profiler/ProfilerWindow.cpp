@@ -59,7 +59,7 @@ bool isProfilerOpen()
 	return g_profiler.IsWindow();
 }
 
-bool updateProfilerGui( uint32_t frame, std::vector<sProfilerEntry>& entries )
+bool updateProfilerGui( uint32_t frame, vector<sProfilerEntry>& entries )
 {
 	if( !isProfilerOpen() )
 		return false;
@@ -68,7 +68,7 @@ bool updateProfilerGui( uint32_t frame, std::vector<sProfilerEntry>& entries )
 	return true;
 }
 
-void ProfilerWindow::update( uint32_t frame, std::vector<sProfilerEntry>& entries )
+void ProfilerWindow::update( uint32_t frame, vector<sProfilerEntry>& entries )
 {
 	{
 		CSLock __lock( m_cs );

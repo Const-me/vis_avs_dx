@@ -18,7 +18,7 @@ namespace
 		BCRYPT_ALG_HANDLE h = nullptr;
 
 	public:
-		std::vector<uint8_t> hashObjBuffer;
+		vector<uint8_t> hashObjBuffer;
 
 		HRESULT open()
 		{

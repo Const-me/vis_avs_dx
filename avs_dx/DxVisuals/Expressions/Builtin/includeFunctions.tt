@@ -18,7 +18,7 @@ namespace Expressions
 {
 	struct ShaderFunctions
 	{
-		std::vector<uint8_t> buffer;
+		vector<uint8_t> buffer;
 		CAtlMap<CStringA, ShaderFunc> map;
 
 		ShaderFunctions();

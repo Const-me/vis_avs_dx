@@ -21,10 +21,10 @@ namespace msvcrt
 	public:
 		Dll()
 		{
-			hm = LoadLibraryW( L"msvcrt.dll" );
+			hm = GetModuleHandleW( L"msvcrt.dll" );
 			if( nullptr == hm )
 			{
-				logError( getLastHr(), "Load msvcrt.dll" );
+				logError( getLastHr(), "msvcrt.dll wasn't loaded" );
 				__debugbreak();
 			}
 			getProc( fnMalloc, "malloc" );
@@ -48,24 +48,57 @@ namespace msvcrt
 		void( __cdecl *fnDelete )( void* ptr );
 	};
 
-	static const Dll g_dll;
+	const Dll& dll()
+	{
+		static const Dll s_dll;
+		return s_dll;
+	}
 
 	void* malloc( size_t size )
 	{
-		return g_dll.fnMalloc( size );
+		return dll().fnMalloc( size );
 	}
 	void free( void* ptr )
 	{
-		g_dll.fnFree( ptr );
+		return dll().fnFree( ptr );
 	}
-
 	void* operatorNew( size_t size )
 	{
-		return g_dll.fnNew( size );
+		return dll().fnNew( size );
 	}
-
 	void operatorDelete( void* ptr )
 	{
-		g_dll.fnDelete( ptr );
+		dll().fnDelete( ptr );
 	}
 };
+// for EASTL
+void* operator new[]( size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line )
+{
+	return msvcrt::operatorNew( size );
+}
+void* operator new[]( size_t size, size_t alignment, size_t alignmentOffset, const char* pName, int flags, unsigned debugFlags, const char* file, int line )
+{
+	return msvcrt::operatorNew( size );
+}
+void __cdecl eastl::AssertionFailure( char const * )
+{
+	assert( false );
+}
+
+void* operator new[]( size_t size, size_t alignment, size_t alignmentOffset, const char* pName, int flags, unsigned debugFlags, const char* file, int line );
+void* operator new( size_t size )
+{
+	return msvcrt::operatorNew( size );
+}
+void* operator new[]( size_t size )
+{
+	return msvcrt::operatorNew( size );
+}
+void  operator delete  ( void* ptr )
+{
+	msvcrt::operatorDelete( ptr );
+}
+void  operator delete[]( void* ptr )
+{
+	msvcrt::operatorDelete( ptr );
+}

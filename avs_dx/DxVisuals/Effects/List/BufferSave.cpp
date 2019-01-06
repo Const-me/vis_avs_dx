@@ -29,6 +29,8 @@ private:
 
 	DECLARE_EFFECT()
 
+	HRESULT updateParameters( Binder& binder );
+
 	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 
 	AvsState& avs;
@@ -38,6 +40,11 @@ private:
 IMPLEMENT_EFFECT( BufferSave, C_StackClass )
 
 constexpr float div255 = 1.0f / 255.0f;
+
+HRESULT BufferSave::updateParameters( Binder& binder )
+{
+	return m_blend.updateBindings( binder ) ? S_OK : S_FALSE;
+}
 
 HRESULT BufferSave::render( bool isBeat, RenderTargets& rt )
 {

@@ -10,7 +10,7 @@ public:
 	RootEffect( AvsState* pState ) : EffectListBase( pState ){ }
 	const Metadata& metadata() override;
 
-	HRESULT renderRoot( bool isBeat, RenderTargets& rt ) override;
+	HRESULT renderRoot( bool isBeat, RenderTargets& rt );
 
 	HRESULT clearRenders() override;
 

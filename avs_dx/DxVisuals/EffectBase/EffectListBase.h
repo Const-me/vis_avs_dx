@@ -58,6 +58,8 @@ public:
 
 	std::vector<EffectBase*> m_effects;
 
+	virtual HRESULT clearRenders() { return S_FALSE; }
+
 private:
 	EffectProfiler m_profilerStart;
 

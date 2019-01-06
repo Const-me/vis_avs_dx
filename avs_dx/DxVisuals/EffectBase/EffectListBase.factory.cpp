@@ -29,3 +29,11 @@ const EffectBase::Metadata& EffectList::metadata()
 {
 	return s_list;
 }
+
+void clearListRenderers( const C_RBASE* pThis )
+{
+	auto pl = dynamic_cast<EffectListBase*>( getDxEffect( pThis ) );
+	if( nullptr == pl )
+		return;
+	pl->clearRenders();
+}

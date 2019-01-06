@@ -5,6 +5,7 @@
 #include "../InteropLib/interop.h"
 #include "../InteropLib/Utils/shutdown.h"
 #include "effects.h"
+#include "RootEffect.h"
 
 // The critical section that guards renderers, linked from deep inside AVS.
 extern CRITICAL_SECTION g_render_cs;
@@ -60,12 +61,17 @@ HRESULT Transition::prepare( char visdata[ 2 ][ 2 ][ 576 ], int isBeat )
 	return S_OK;
 }
 
+inline RootEffect* getRoot( const C_RBASE *pRBase )
+{
+	return dynamic_cast<RootEffect*> ( getDxEffect( pRBase ) );
+}
+
 HRESULT Transition::renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *pRBase )
 {
 	if( checkShutdown() )
 		return S_FALSE;
 
-	EffectBase* p = getDxEffect( pRBase );
+	RootEffect* p = getRoot( pRBase );
 	if( nullptr == p )
 		return E_POINTER;
 
@@ -107,7 +113,7 @@ HRESULT Transition::renderTransition( char visdata[ 2 ][ 2 ][ 576 ], int isBeat,
 
 		const bool beat = 0 != isBeat;
 
-		EffectBase* p1 = getDxEffect( e1 ), *p2 = getDxEffect( e2 );
+		RootEffect* p1 = getRoot( e1 ), *p2 = getRoot( e2 );
 		if( nullptr == p1 || nullptr == p2 )
 			return E_POINTER;
 

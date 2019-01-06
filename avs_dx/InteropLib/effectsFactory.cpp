@@ -47,12 +47,3 @@ void destroyAllEffects()
 	CSLock __lock( g_effectsLock );
 	g_effects.RemoveAll();
 }
-
-void clearListRenderers( const C_RBASE* pThis )
-{
-	CSLock __lock( g_effectsLock );
-	auto p = g_effects.Lookup( pThis );
-	if( nullptr == p )
-		return;
-	p->m_value->clearRenders();
-}

@@ -1,6 +1,5 @@
 #pragma once
 #include "../EffectImpl.hpp"
-#include <Vfw.h>
 #include "MF/playerApi.h"
 #include "../List/Blender.h"
 #include <Utils/FadeOut.h>
@@ -13,15 +12,6 @@ public:
 		int enabled;
 		char ascName[ MAX_PATH ];
 		int lastWidth, lastHeight;
-		HANDLE hDrawDib;
-		PAVISTREAM PAVIVideo;
-		PGETFRAME PgetFrame;
-		HBITMAP hRetBitmap;
-		HBITMAP hOldBitmap;
-		HDC hDesktopDC;
-		HDC hBitmapDC;
-		LPBITMAPINFOHEADER lpFrame;
-		BITMAPINFO bi;
 		int blend, blendavg, adapt, persist;
 		int loaded, rendering;
 		int lFrameIndex;

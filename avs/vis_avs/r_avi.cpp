@@ -31,11 +31,6 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "resource.h"
 #include "r_defs.h"
 #include "../../avs_dx/DxVisuals/Effects/Video/interop.h"
-#include <vfw.h>
-
-#ifndef LASER
-
-
 
 #define MOD_NAME "Render / AVI"
 #define C_THISCLASS C_AVIClass
@@ -48,7 +43,6 @@ public:
 	void loadAvi( char *name );
 	void closeAvi( void );
 	virtual ~C_THISCLASS();
-	int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
 	virtual char *get_desc() { return MOD_NAME; }
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent );
 	virtual void load_config( unsigned char *data, int len );
@@ -56,15 +50,6 @@ public:
 	int enabled;
 	char ascName[ MAX_PATH ];
 	int lastWidth, lastHeight;
-	HDRAWDIB hDrawDib;
-	PAVISTREAM PAVIVideo;
-	PGETFRAME PgetFrame;
-	HBITMAP hRetBitmap;
-	HBITMAP hOldBitmap;
-	HDC hDesktopDC;
-	HDC hBitmapDC;
-	LPBITMAPINFOHEADER lpFrame;
-	BITMAPINFO bi;
 	int blend, blendavg, adapt, persist;
 	int loaded, rendering;
 	int lFrameIndex;
@@ -73,7 +58,6 @@ public:
 	unsigned int lastspeed;
 	int *old_image, old_image_w, old_image_h;
 };
-
 
 static C_THISCLASS *g_ConfigThis; // global configuration dialog pointer 
 static HINSTANCE g_hDllInstance; // global DLL instance pointer (not needed in this example, but could be useful)
@@ -84,7 +68,6 @@ C_THISCLASS::C_THISCLASS() // set up default configuration
 {
 	// AVIFileInit();
 	// hDrawDib = DrawDibOpen();
-	hDrawDib = nullptr;
 	lastWidth = 0;
 	lastHeight = 0;
 	lFrameIndex = 0;
@@ -106,59 +89,16 @@ C_THISCLASS::C_THISCLASS() // set up default configuration
 C_THISCLASS::~C_THISCLASS()
 {
 	closeAvi();
-	return;
-
-	SelectObject( hBitmapDC, hOldBitmap );
-	DeleteDC( hBitmapDC );
-	ReleaseDC( NULL, hDesktopDC );
-	AVIFileExit();
-	DrawDibClose( hDrawDib );
-	if( old_image ) {
-		GlobalFree( old_image );
-		old_image = NULL;
-		old_image_h = old_image_w = 0;
-	}
 }
 
 void C_THISCLASS::loadAvi( char *name )
 {
 	videoOpen( this, name );
-	return;
-
-	char pathfile[ MAX_PATH ];
-
-	if( loaded ) closeAvi();
-
-	wsprintf( pathfile, "%s\\%s", g_path, name );
-
-	if( AVIStreamOpenFromFile( ( PAVISTREAM FAR * ) &PAVIVideo, pathfile, streamtypeVIDEO, 0, OF_READ | OF_SHARE_EXCLUSIVE, NULL ) != 0 )
-	{
-		//	MessageBox(NULL, "An error occured while trying to open a file. Effect is disabled", "Warning", 0);
-		return;
-	}
-	PgetFrame = AVIStreamGetFrameOpen( PAVIVideo, NULL );
-	length = AVIStreamLength( PAVIVideo );
-	lFrameIndex = 0;
-
-	lpFrame = (LPBITMAPINFOHEADER)AVIStreamGetFrame( PgetFrame, 0 );
-
-	reinit( lastWidth, lastHeight );
-
-	loaded = 1;
 }
 
 void C_THISCLASS::closeAvi( void )
 {
 	videoClose( this );
-	return;
-
-	if( loaded )
-	{
-		while( rendering );
-		loaded = 0;
-		AVIStreamGetFrameClose( PgetFrame );
-		AVIStreamRelease( PAVIVideo );
-	}
 }
 
 #define GET_INT() (data[pos]|(data[pos+1]<<8)|(data[pos+2]<<16)|(data[pos+3]<<24))
@@ -194,128 +134,7 @@ int  C_THISCLASS::save_config( unsigned char *data ) // write configuration to d
 	return pos;
 }
 
-
-void C_THISCLASS::reinit( int w, int h )
-{
-	__debugbreak();
-	if( lastWidth || lastHeight )
-	{
-		SelectObject( hBitmapDC, hOldBitmap );
-		DeleteDC( hBitmapDC );
-		ReleaseDC( NULL, hDesktopDC );
-	}
-
-	hDesktopDC = GetDC( NULL );
-	hRetBitmap = CreateCompatibleBitmap( hDesktopDC, w, h );
-	hBitmapDC = CreateCompatibleDC( hDesktopDC );
-	hOldBitmap = (HBITMAP)SelectObject( hBitmapDC, hRetBitmap );
-	bi.bmiHeader.biSize = sizeof( BITMAPINFOHEADER );
-	bi.bmiHeader.biWidth = w;
-	bi.bmiHeader.biHeight = h;
-	bi.bmiHeader.biPlanes = 1;
-	bi.bmiHeader.biBitCount = 32;
-	bi.bmiHeader.biCompression = BI_RGB;
-	bi.bmiHeader.biSizeImage = 0;
-	bi.bmiHeader.biXPelsPerMeter = 0;
-	bi.bmiHeader.biYPelsPerMeter = 0;
-	bi.bmiHeader.biClrUsed = 0;
-	bi.bmiHeader.biClrImportant = 0;
-}
-
-// render function
-// render should return 0 if it only used framebuffer, or 1 if the new output data is in fbout. this is
-// used when you want to do something that you'd otherwise need to make a copy of the framebuffer.
-// w and h are the width and height of the screen, in pixels.
-// isBeat is 1 if a beat has been detected.
-// visdata is in the format of [spectrum:0,wave:1][channel][band].
-
-int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
-{
-	__debugbreak();
-	int *p, *d;
-	int i, j;
-	static int persistCount = 0;
-
-	if( !enabled || !loaded ) return 0;
-
-	if( h != old_image_h || w != old_image_w ) {
-		if( old_image )
-			GlobalFree( old_image );
-		old_image = (int *)GlobalAlloc( GMEM_FIXED, sizeof( int )*w*h );
-		old_image_h = h; old_image_w = w;
-	}
-
-	if( ( lastspeed + speed ) > GetTickCount() ) {
-		memcpy( fbout, old_image, sizeof( int )*w*h );
-	}
-	else {
-		lastspeed = GetTickCount();
-
-		rendering = 1;
-
-		if( lastWidth != w || lastHeight != h )
-		{
-			lastWidth = w;
-			lastHeight = h;
-			reinit( w, h );
-		}
-		if( isBeat & 0x80000000 ) return 0;
-
-		if( !length ) return 0;
-
-		lFrameIndex %= length;
-		lpFrame = (LPBITMAPINFOHEADER)AVIStreamGetFrame( PgetFrame, lFrameIndex++ );
-		DrawDibDraw( hDrawDib, hBitmapDC, 0, 0, lastWidth, lastHeight, lpFrame,
-			NULL, 0, 0, (int)lpFrame->biWidth, (int)lpFrame->biHeight, 0 );
-		GetDIBits( hBitmapDC, hRetBitmap, 0, h, (void *)fbout, &bi, DIB_RGB_COLORS );
-		rendering = 0;
-		memcpy( old_image, fbout, sizeof( int )*w*h );
-	}
-
-	if( isBeat )
-		persistCount = persist;
-	else
-		if( persistCount > 0 ) persistCount--;
-
-	p = fbout;
-	d = framebuffer + w * ( h - 1 );
-	if( blend || ( adapt && ( isBeat || persistCount ) ) )
-		for( i = 0; i < h; i++ )
-		{
-			for( j = 0; j < w; j++ )
-			{
-				*d = BLEND( *p, *d );
-				d++;
-				p++;
-			}
-			d -= w * 2;
-		}
-	else
-		if( blendavg || adapt )
-			for( i = 0; i < h; i++ )
-			{
-				for( j = 0; j < w; j++ )
-				{
-					*d = BLEND_AVG( *p, *d );
-					d++;
-					p++;
-				}
-				d -= w * 2;
-			}
-		else
-			for( i = 0; i < h; i++ )
-			{
-				memcpy( d, p, w * 4 );
-				p += w;
-				d -= w;
-			}
-
-	return 0;
-}
-
-
 // configuration dialog stuff
-
 static void EnableWindows( HWND hwndDlg )
 {
 	EnableWindow( GetDlgItem( hwndDlg, IDC_PERSIST ), g_ConfigThis->adapt );
@@ -377,7 +196,6 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 	return 0;
 }
 
-
 HWND C_THISCLASS::conf( HINSTANCE hInstance, HWND hwndParent ) // return NULL if no config dialog possible
 {
 	g_ConfigThis = this;
@@ -390,7 +208,3 @@ C_RBASE *R_AVI( char *desc ) // creates a new effect object if desc is NULL, oth
 	if( desc ) { strcpy( desc, MOD_NAME ); return NULL; }
 	return ( C_RBASE * ) new C_THISCLASS();
 }
-
-#else//!LASER
-C_RBASE *R_AVI( char *desc ) { return NULL; }
-#endif

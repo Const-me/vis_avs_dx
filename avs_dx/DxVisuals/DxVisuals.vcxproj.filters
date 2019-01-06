@@ -126,6 +126,9 @@
     <ClInclude Include="Effects\Render\ParticleSystem.hpp" />
     <ClInclude Include="Effects\Render\DotFountain\DotFountain.h" />
     <ClInclude Include="effects.h" />
+    <ClInclude Include="EffectBase\ApeEffectBase.h" />
+    <ClInclude Include="Effects\Trans\ColorMap\ColorMap.h" />
+    <ClInclude Include="Effects\Trans\ColorMap\mapHacks.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -223,6 +226,8 @@
     <ClCompile Include="Effects\Trans\Mipmaps\MipMaps.cpp" />
     <ClCompile Include="Effects\Trans\Mipmaps\Mosaic.cpp" />
     <ClCompile Include="Effects\Render\DotFountain\DotFountain.cpp" />
+    <ClCompile Include="EffectBase\ApeEffectBase.cpp" />
+    <ClCompile Include="Effects\Trans\ColorMap\ColorMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -298,6 +303,7 @@
     <FxCompile Include="Effects\Render\DotFountain\FountainCS.hlsl" />
     <FxCompile Include="Effects\Render\DotFountain\FountainVS.hlsl" />
     <FxCompile Include="Effects\Render\PointSpritePS.hlsl" />
+    <FxCompile Include="Effects\Trans\ColorMap\ColorMapPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

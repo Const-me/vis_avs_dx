@@ -19,6 +19,7 @@ public:
 	{
 		const char* const name;
 		const bool isList;
+		Metadata() = delete;
 		Metadata( const char* n, bool il ) : name( n ), isList( il ) { }
 	};
 

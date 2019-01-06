@@ -37,7 +37,7 @@ class RString;
 class C_RBASE {
 public:
 	C_RBASE() { }
-	virtual ~C_RBASE() { destroyDxEffect( this ); };
+	virtual ~C_RBASE() { };
 	// Was abstract virtual
 	virtual int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h ) { return 0; };
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent ) { return 0; };

@@ -94,6 +94,7 @@
       <OutputFile>C:\Soft\Winamp\Plugins\vis_avs.dll</OutputFile>
       <ImportLibrary>.\Debug\vis_avs.lib</ImportLibrary>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ddraw.lib;vfw32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/WHOLEARCHIVE:DxVisuals.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -138,6 +139,7 @@
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ddraw.lib;vfw32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalOptions>/WHOLEARCHIVE:DxVisuals.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

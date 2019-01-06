@@ -382,7 +382,11 @@ int C_RenderListClass::removeRender( int index, int del )
 {
 	if( index >= 0 && index < num_renders )
 	{
-		if( del&&renders[ index ].render ) delete renders[ index ].render;
+		if( del && renders[ index ].render )
+		{
+			destroyDxEffect( renders[ index ].render );
+			delete renders[ index ].render;
+		}
 		num_renders--;
 		while( index < num_renders )
 		{

@@ -51,10 +51,8 @@ protected:
 	HRESULT updateParameters( Binder& binder ) override
 	{
 		BoolHr hr = renderer.update( binder, *avs, stateData );
-		if( hr.failed() )
+		if( hr.failed() || !hr.value() )
 			return hr;
-		if( !hr.value() )
-			return S_FALSE;
 
 		const CAtlMap<CStringA, CStringA>* pIncludes = &::Hlsl::includes();
 		__if_exists( TStruct::effectIncludes )

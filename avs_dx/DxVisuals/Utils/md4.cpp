@@ -110,3 +110,11 @@ __m128i hashString( const CStringA& str )
 		return _mm_setzero_si128();
 	return result;
 }
+
+__m128i hashBuffer( const void* pv, size_t cb )
+{
+	__m128i result;
+	if( FAILED( md4( pv, cb, &result ) ) )
+		return _mm_setzero_si128();
+	return result;
+}

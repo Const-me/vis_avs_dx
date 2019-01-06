@@ -332,13 +332,18 @@ C_RBASE *C_RLibrary::CreateRenderer( int *which, int *has_r2 )
 		char *p = (char *)*which;
 		for( x = 0; x < NumDLLFuncs; x++ )
 		{
-			if( !DLLFuncs[ x ].createfunc ) break;
-			if( DLLFuncs[ x ].idstring )
+			const DLLInfo& fx = DLLFuncs[ x ];
+			if( !fx.createfunc ) break;
+			if( fx.idstring )
 			{
-				if( !strncmp( p, DLLFuncs[ x ].idstring, 32 ) )
+				if( !strncmp( p, fx.idstring, 32 ) )
 				{
-					*which = (int)DLLFuncs[ x ].idstring;
-					return DLLFuncs[ x ].createfunc( NULL );
+					*which = (int)fx.idstring;
+					C_RBASE *pEffect = fx.createfunc( NULL );
+					if( nullptr == pEffect )
+						return nullptr;
+					createApeEffect( fx.hDllInstance, fx.idstring, pEffect );
+					return pEffect;
 				}
 			}
 		}

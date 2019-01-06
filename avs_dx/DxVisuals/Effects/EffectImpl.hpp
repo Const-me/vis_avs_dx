@@ -51,7 +51,7 @@ private:
 	}
 };
 
-#define DECLARE_EFFECT()		const Metadata& metadata() override;
+#define DECLARE_EFFECT()	const EffectBase::Metadata& metadata() override;
 
 #define IMPLEMENT_EFFECT( DX, NATIVE )                                         \
 class NATIVE;                                                                  \
@@ -61,4 +61,27 @@ template<> HRESULT createDxEffect<NATIVE>( void* pState, const C_RBASE* pThis )\
 };                                                                             \
 const char* const EffectImpl<DX>::s_effectName = #DX;                          \
 static const EffectBase::Metadata s_metadada{ EffectImpl<DX>::s_effectName, false };  \
+const EffectBase::Metadata& DX::metadata(){ return s_metadada; }
+
+template<class TEffect>
+class ApeEffectImpl : public EffectImpl<TEffect>
+{
+public:
+	ApeEffectImpl( C_RBASE* pNative ) : EffectImpl<TEffect>( pNative )
+	{ }
+
+	~ApeEffectImpl() override = default;
+
+	static inline HRESULT create( C_RBASE* pThis )
+	{
+		using tImpl = ApeEffectImpl<TEffect>;
+		std::unique_ptr<tImpl> res = std::make_unique<tImpl>( pThis );
+		addNewEffect( pThis, std::move( res ) );
+		return S_OK;
+	}
+};
+
+#define IMPLEMENT_APE_EFFECT( DX, name, ape )                                                  \
+const char* const EffectImpl<DX>::s_effectName = name;                                         \
+static const ApeEffectBase::Metadata s_metadada { name, L##ape, &ApeEffectImpl<DX>::create };  \
 const EffectBase::Metadata& DX::metadata(){ return s_metadada; }

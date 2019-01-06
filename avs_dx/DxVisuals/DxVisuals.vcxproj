@@ -97,11 +97,16 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Effects\Trans\ColorMap\ColorMap.cpp" />
+    <ClCompile Include="EffectBase\ApeEffectBase.cpp" />
     <ClCompile Include="Effects\Render\DotFountain\DotFountain.cpp" />
+    <ClInclude Include="Effects\Trans\ColorMap\ColorMap.h" />
+    <ClInclude Include="EffectBase\ApeEffectBase.h" />
     <ClInclude Include="effects.h" />
     <ClInclude Include="Effects\Render\DotFountain\DotFountain.h" />
     <ClInclude Include="Effects\Render\MovingParticle\MovingParticle.h" />
     <ClInclude Include="Effects\Render\ParticleSystem.hpp" />
+    <ClInclude Include="Effects\Trans\ColorMap\mapHacks.h" />
     <ClInclude Include="Effects\Trans\Mipmaps\MipMaps.h" />
     <ClInclude Include="Effects\Trans\Mipmaps\Mosaic.h" />
     <ClInclude Include="Effects\Trans\Moves\DynamicDistance.h" />
@@ -445,6 +450,10 @@
     <FxCompile Include="Effects\Trans\ColorFade\ColorFadePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Trans\ColorMap\ColorMapPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="Effects\Trans\ColorReduction\ColorReductionPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>

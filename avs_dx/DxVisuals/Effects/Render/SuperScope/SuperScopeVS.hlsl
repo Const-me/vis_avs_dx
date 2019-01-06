@@ -3,7 +3,7 @@
 
 #ifndef AVS_SHADER
 static const float sampleV = 0.75f;
-static const bool drawLines = false;
+static const uint drawLines = 0;
 #define SHADER_GLOBALS
 #define SHADER_CODE
 #endif

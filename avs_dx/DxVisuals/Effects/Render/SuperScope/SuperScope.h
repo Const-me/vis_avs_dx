@@ -75,6 +75,8 @@ public:
 		{
 			return CompiledShader::updateDx( sd.compiler() );
 		}
+
+		HRESULT defines( Hlsl::Defines& def );
 	};
 
 	struct DotRendering

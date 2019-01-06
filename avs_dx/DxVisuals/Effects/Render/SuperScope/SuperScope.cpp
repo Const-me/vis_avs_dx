@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "SuperScope.h"
 
+IMPLEMENT_EFFECT( SuperScope, C_SScopeClass );
+
 bool ScopeBase::AvsState::drawingLines() const
 {
 	return mode > 0;
@@ -39,7 +41,6 @@ namespace
 			addBeatConstant( "b" );
 			addConstantInput( "w", eVarType::u32 );	// screen width in pixels
 			addConstantInput( "h", eVarType::u32 );	// screen height in pixels
-			addConstantInput( "drawingLines", eVarType::u32 );
 
 			addState( "n", 768u );
 
@@ -128,8 +129,17 @@ HRESULT ScopeBase::StateData::defines( Hlsl::Defines& def ) const
 	CHECK( m_fixed.defines( def ) );
 	CHECK( m_dynamic.defines( def ) );
 	def.set( "drawingLines", drawingLines ? "1" : "0" );
-	def.set( "w", screenSize.cx );
-	def.set( "h", screenSize.cy );
+	setExpressionMacro( def, "w", screenSize.cx );
+	setExpressionMacro( def, "h", screenSize.cy );
+	return S_OK;
+}
+
+HRESULT ScopeBase::VsData::defines( Hlsl::Defines& def )
+{
+	CHECK( __super::defines( def ) );
+	const CSize screenSize = getRenderSize();
+	setExpressionMacro( def, "w", screenSize.cx );
+	setExpressionMacro( def, "h", screenSize.cy );
 	return S_OK;
 }
 
@@ -137,11 +147,9 @@ HRESULT ScopeBase::VsData::updateAvs( const AvsState& avs )
 {
 	BoolHr res;
 	res.updateValue( sampleV, avs.sampleV() );
-	res.updateValue( drawLines, avs.drawingLines() );
+	res.updateValue<uint32_t>( drawLines, avs.drawingLines() );
 	return res;
 }
-
-IMPLEMENT_EFFECT( SuperScope, C_SScopeClass );
 
 HRESULT SuperScope::render( bool isBeat, RenderTargets& rt )
 {

@@ -39,7 +39,6 @@ protected:
 public:
 	C_UnknClass();
 	virtual ~C_UnknClass();
-	virtual int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent );
 	virtual void load_config( unsigned char *data, int len );
 	virtual int  save_config( unsigned char *data );

@@ -42,7 +42,6 @@ protected:
 public:
 	C_THISCLASS();
 	virtual ~C_THISCLASS();
-	virtual int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
 	virtual char *get_desc() { return MOD_NAME; }
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent );
 	virtual void load_config( unsigned char *data, int len );
@@ -69,15 +68,11 @@ int  C_THISCLASS::save_config( unsigned char *data )
 C_THISCLASS::C_THISCLASS()
 {
 	msgdata.assign( "" );
+	createEmptyEffect( this );
 }
 
 C_THISCLASS::~C_THISCLASS()
 {
-}
-
-int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
-{
-	return 0;
 }
 
 C_RBASE *R_Comment( char *desc )
@@ -85,7 +80,6 @@ C_RBASE *R_Comment( char *desc )
 	if( desc ) { strcpy( desc, MOD_NAME ); return NULL; }
 	return ( C_RBASE * ) new C_THISCLASS();
 }
-
 
 static C_THISCLASS *g_this;
 

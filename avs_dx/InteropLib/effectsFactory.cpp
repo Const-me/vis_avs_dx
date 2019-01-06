@@ -14,6 +14,13 @@ void addNewEffect( const C_RBASE *pThis, std::unique_ptr<EffectBase>&& fx )
 	up.swap( fx );
 }
 
+void createEmptyEffect( const C_RBASE* pThis )
+{
+	CSLock __lock( g_effectsLock );
+	auto& up = g_effects[ pThis ];
+	assert( !up.operator bool() );
+}
+
 bool hasDxEffect( const C_RBASE* pThis )
 {
 	CSLock __lock( g_effectsLock );

@@ -8,6 +8,9 @@ class C_RBASE;
 template<class AvsEffect>
 HRESULT createDxEffect( void* pState, const C_RBASE* pThis );
 
+// Empty effects only have icon, they don't render anything.
+void createEmptyEffect( const C_RBASE* pThis );
+
 #define CREATE_DX_EFFECT( firstStateVar ) createDxEffect<std::remove_reference<decltype(*this)>::type>( &firstStateVar, this )
 
 void destroyDxEffect( const C_RBASE* pThis );

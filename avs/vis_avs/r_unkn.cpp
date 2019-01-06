@@ -72,17 +72,14 @@ C_UnknClass::C_UnknClass()
 	configdata_len = 0;
 	id = 0;
 	idString[ 0 ] = 0;
+
+	createEmptyEffect( this );
 }
 
 C_UnknClass::~C_UnknClass()
 {
 	if( configdata ) GlobalFree( configdata );
 	configdata = 0;
-}
-
-int C_UnknClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
-{
-	return 0;
 }
 
 static C_UnknClass *g_this;
@@ -103,7 +100,6 @@ BOOL CALLBACK C_UnknClass::g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 	}
 	return 0;
 }
-
 
 HWND C_UnknClass::conf( HINSTANCE hInstance, HWND hwndParent )
 {

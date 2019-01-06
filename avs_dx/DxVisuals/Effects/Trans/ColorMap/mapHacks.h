@@ -58,7 +58,7 @@ namespace MapHacks
 		return !!ptr[ 0x18 + id * 0x3C ];
 	}
 
-	// Pointer to the color table, BGRA format, 256 elements size.
+	// Pointer to the color table, BGRA format, 256 elements size. Alpha is zero.
 	inline const uint32_t* getTablePointer( const C_RBASE* pEffect, uint8_t id )
 	{
 		const uint8_t* const ptr = (const uint8_t*)pEffect;

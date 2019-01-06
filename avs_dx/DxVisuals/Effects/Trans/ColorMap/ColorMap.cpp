@@ -71,6 +71,8 @@ HRESULT ColorMap::updateTexture( const uint32_t* pData )
 {
 	if( m_mapSrv )
 	{
+		// This happens much less often than once per frame, that's why using D3D11_USAGE_DEFAULT texture with UpdateSubresource.
+		// Dynamic resources are only good when they're indeed dynamic.
 		context->UpdateSubresource( m_mapTexture, 0, nullptr, pData, 0x400, 0x400 );
 		return S_OK;
 	}

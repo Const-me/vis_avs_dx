@@ -44,12 +44,12 @@ HRESULT AddBorder::ensureIndexBuffer()
 		const uint16_t nc = ( i + 1 ) % 4;
 		const uint16_t outerNext = nc * 2;
 		const uint16_t innernext = nc * 2 + 1;
-		ibData[ i * 2 ] = std::array<uint16_t, 3>{outerThis, innerThis, outerNext };
-		ibData[ i * 2 + 1 ] = std::array<uint16_t, 3>{outerNext, innerThis, innernext };
+		ibData[ i * 2 ] = std::array<uint16_t, 3>{ outerThis, innerThis, outerNext };
+		ibData[ i * 2 + 1 ] = std::array<uint16_t, 3>{ outerNext, innerThis, innernext };
 	}
 
 	CD3D11_BUFFER_DESC desc{ sizeof( ibData ), D3D11_BIND_INDEX_BUFFER, D3D11_USAGE_IMMUTABLE };
-	D3D11_SUBRESOURCE_DATA srd{ ibData.data(), 0,0 };
+	D3D11_SUBRESOURCE_DATA srd{ ibData.data(), 0, 0 };
 	CHECK( device->CreateBuffer( &desc, &srd, &m_ib ) );
 
 	return S_OK;

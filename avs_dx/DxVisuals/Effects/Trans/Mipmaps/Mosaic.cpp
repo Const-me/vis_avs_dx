@@ -29,7 +29,7 @@ MosaicStructs::MosaicCb MosaicStructs::AvsState::update( bool isBeat )
 	if( thisQuality >= 100 )
 		return MosaicCb{ screenSize, 0 };
 
-	const float screenSizeScalar = std::max( screenSize.x, screenSize.y );
+	const float screenSizeScalar = eastl::max( screenSize.x, screenSize.y );
 
 	const float cellsLog = lerp( 1, 99, (float)thisQuality, -log2f( screenSizeScalar ), -0.5 );
 	const float cells = screenSizeScalar * exp2f( cellsLog );

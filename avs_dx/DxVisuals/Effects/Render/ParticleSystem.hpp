@@ -43,7 +43,7 @@ public:
 		// Update particles positions with the CS
 		{
 			auto bound = boundResource( renderer.compute().bindParticles, m_buffer.uav() );
-			count = std::min( count, particlesCapacity );
+			count = eastl::min( count, particlesCapacity );
 			dispatch( count );
 			m_profiler.mark();
 		}

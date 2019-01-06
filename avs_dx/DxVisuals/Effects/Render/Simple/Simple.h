@@ -1,7 +1,7 @@
 #pragma once
 #include "../../EffectImpl.hpp"
 #include "../PointSpritesRender.hpp"
-#include <variant>
+#include <EASTL/variant.h>
 using namespace Hlsl::Render::Simple;
 
 // Ironically, because of 3 very different rendering styles, this "Simple" is one of the most complex effects.
@@ -129,7 +129,7 @@ class SimpleLinesFx : public SimpleRenderer<LinesRendering>
 class Simple : public EffectBase1<SimpleBase>
 {
 	eSimpleStyle m_style;
-	std::variant<std::monostate, SimpleSolidFx, SimpleDotsFx, SimpleLinesFx> m_impl;
+	eastl::variant<eastl::monostate, SimpleSolidFx, SimpleDotsFx, SimpleLinesFx> m_impl;
 	iSimpleRenderer* m_pImpl = nullptr;
 
 	bool replaceStyleIfNeeded();

@@ -15,6 +15,11 @@ public:
 	using tStageData = TSourceData;
 
 	Shader() = default;
+	Shader( const Shader& )
+	{
+		// eastl::variant requires objects to be copyable, for no reason.
+		__debugbreak();
+	}
 	Shader( bool unused ) { }
 
 	template<class TAvsState, class TDxEffectState>

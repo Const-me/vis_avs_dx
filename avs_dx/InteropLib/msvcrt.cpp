@@ -80,9 +80,10 @@ void* operator new[]( size_t size, size_t alignment, size_t alignmentOffset, con
 {
 	return msvcrt::operatorNew( size );
 }
-void __cdecl eastl::AssertionFailure( char const * )
+void __cdecl eastl::AssertionFailure( const char *af )
 {
-	assert( false );
+	OutputDebugStringA( af );
+	__debugbreak();
 }
 
 void* operator new[]( size_t size, size_t alignment, size_t alignmentOffset, const char* pName, int flags, unsigned debugFlags, const char* file, int line );

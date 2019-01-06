@@ -12,7 +12,6 @@
 #include "stdafx.h"
 #include "shadersCode.h"
 #include "../Utils/decompressor.h"
-#include <tuple>
 
 namespace
 {

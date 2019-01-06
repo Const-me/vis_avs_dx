@@ -2,7 +2,7 @@
 #include "../../EffectImpl.hpp"
 #include "../../../Expressions/CompiledShader.h"
 #include "../PointSpritesRender.hpp"
-#include <variant>
+#include <EASTL/variant.h>
 using namespace Hlsl::Render::SuperScope;
 
 struct ScopeBase
@@ -94,7 +94,7 @@ public:
 
 class SuperScope : public EffectBase1<ScopeBase>
 {
-	std::variant<DotRendering, LinesRendering> m_render;
+	eastl::variant<DotRendering, LinesRendering> m_render;
 
 public:
 	SuperScope( AvsState *pState ) : EffectBase1( pState ) { }

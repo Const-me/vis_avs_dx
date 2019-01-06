@@ -1,6 +1,6 @@
 #pragma once
 #include "MovementCommon.h"
-#include <variant>
+#include <EASTL/variant.h>
 
 struct StaticMovementStructs: public MovementStructs
 {
@@ -41,7 +41,7 @@ class Movement : public EffectBase1<StaticMovementStructs>, public MovementFx
 	using FuzzifyShader = Shader<FuzzifyPS>;
 	using BlockyOutShader = Shader<BlockyOutPS>;
 
-	std::variant<DynamicShader, FuzzifyShader, BlockyOutShader> m_ps;
+	eastl::variant<DynamicShader, FuzzifyShader, BlockyOutShader> m_ps;
 
 	template<class S>
 	HRESULT updateShader( S& ps, Binder& binder );

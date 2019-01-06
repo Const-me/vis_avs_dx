@@ -56,7 +56,8 @@ HRESULT StaticMovementStructs::StateData::update( AvsState& avs )
 }
 
 Movement::Movement( AvsState *pState ) :
-	tBase( pState )
+	tBase( pState ),
+	m_ps( eastl::in_place<DynamicShader> )
 { }
 
 template<class S>
@@ -77,15 +78,15 @@ HRESULT Movement::updateParameters( Binder& binder )
 	switch( avs->effect )
 	{
 	case 1:
-		if( !std::holds_alternative<FuzzifyShader>( m_ps ) )
+		if( !eastl::holds_alternative<FuzzifyShader>( m_ps ) )
 			m_ps.emplace<FuzzifyShader>();
 		break;
 	case 7:
-		if( !std::holds_alternative<BlockyOutShader>( m_ps ) )
+		if( !eastl::holds_alternative<BlockyOutShader>( m_ps ) )
 			m_ps.emplace<BlockyOutShader>();
 		break;
 	default:
-		if( !std::holds_alternative<DynamicShader>( m_ps ) )
+		if( !eastl::holds_alternative<DynamicShader>( m_ps ) )
 			m_ps.emplace<DynamicShader>();
 		isDynamic = true;
 		break;
@@ -96,7 +97,7 @@ HRESULT Movement::updateParameters( Binder& binder )
 		CHECK( tBase::updateParameters( binder ) );
 	}
 
-	return std::visit( [ & ]( auto& s ) { return updateShader( s, binder ); }, m_ps );
+	return eastl::visit( [ & ]( auto& s ) { return updateShader( s, binder ); }, m_ps );
 }
 
 template<class S>
@@ -124,15 +125,15 @@ HRESULT Movement::render( bool isBeat, RenderTargets& rt )
 	if( 0 == avs->effect )
 		return S_FALSE;
 
-	if( std::holds_alternative<DynamicShader>( m_ps ) )
+	if( eastl::holds_alternative<DynamicShader>( m_ps ) )
 	{
 		if( !renderer.bindShaders( isBeat ) )
 			return S_FALSE;
-		DynamicShader& ps = std::get<DynamicShader>( m_ps );
+		DynamicShader& ps = eastl::get<DynamicShader>( m_ps );
 		if( !ps.bind( isBeat ) )
 			return S_FALSE;
 		const UINT psSamplerSlot = ps.data().bindSampler;
 		return MovementFx::render( rt, avs->subpixel, avs->wrap, psSamplerSlot, avs->blend, avs->rectangular );
 	}
-	return std::visit( [ & ]( auto& s ) { return renderFullscreen( s, rt ); }, m_ps );
+	return eastl::visit( [ & ]( auto& s ) { return renderFullscreen( s, rt ); }, m_ps );
 }

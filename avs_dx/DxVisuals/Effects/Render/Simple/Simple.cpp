@@ -138,7 +138,7 @@ HRESULT SimpleLinesFx::render( bool isBeat, RenderTargets& rt )
 
 Simple::Simple( AvsState *pState ) :
 	EffectBase1( pState ),
-	m_impl( std::monostate{} )
+	m_impl( eastl::monostate{} )
 {
 	replaceStyleIfNeeded();
 }
@@ -148,7 +148,7 @@ bool Simple::replaceStyleIfNeeded()
 	const eSimpleStyle rs = avs->style();
 	switch( rs )
 	{
-#define REPLACE_STYLE( eStyle, tEffect ) case eStyle: if( std::holds_alternative<tEffect>( m_impl ) ) return false; m_pImpl = &m_impl.emplace<tEffect>(); return true
+#define REPLACE_STYLE( eStyle, tEffect ) case eStyle: if( eastl::holds_alternative<tEffect>( m_impl ) ) return false; m_pImpl = &m_impl.emplace<tEffect>(); return true
 
 		REPLACE_STYLE( eSimpleStyle::Dots, SimpleDotsFx );
 		REPLACE_STYLE( eSimpleStyle::Solid, SimpleSolidFx );

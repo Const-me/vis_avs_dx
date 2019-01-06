@@ -163,10 +163,10 @@ HRESULT SuperScope::render( bool isBeat, RenderTargets& rt )
 
 	if( avs->drawingLines() )
 	{
-		if( !std::holds_alternative<LinesRendering>( m_render ) )
+		if( !eastl::holds_alternative<LinesRendering>( m_render ) )
 			m_render.emplace<LinesRendering>();
 
-		LinesRendering& lines = std::get<LinesRendering>( m_render );
+		LinesRendering& lines = eastl::get<LinesRendering>( m_render );
 
 		if( !lines.gs.hasShader() )
 			CHECK( lines.gs.compile( Hlsl::includes(), 0 ) );
@@ -182,10 +182,10 @@ HRESULT SuperScope::render( bool isBeat, RenderTargets& rt )
 	}
 	else
 	{
-		if( !std::holds_alternative<DotRendering>( m_render ) )
+		if( !eastl::holds_alternative<DotRendering>( m_render ) )
 			m_render.emplace<DotRendering>();
 
-		DotRendering& dots = std::get<DotRendering>( m_render );
+		DotRendering& dots = eastl::get<DotRendering>( m_render );
 
 		if( !dots.gs.hasShader() )
 			CHECK( dots.gs.compile( Hlsl::includes(), 0 ) );

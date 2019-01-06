@@ -17,12 +17,5 @@ public:
 
 	using AvsState = C_RBASE;
 
-	ApeEffectBase( C_RBASE * ps ) :
-		m_pNative( ps ) { }
-
 	static HRESULT create( HINSTANCE hDllInstance, const char* nameEffect, C_RBASE* pThis );
-
-protected:
-
-	C_RBASE* const m_pNative;
 };

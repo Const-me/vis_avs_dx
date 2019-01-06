@@ -2,8 +2,9 @@
 #include "../../EffectImpl.hpp"
 #include <EffectBase/ApeEffectBase.h>
 
-class ColorMap: public ApeEffectBase
+class ColorMap : public ApeEffectBase
 {
+	C_RBASE* const m_pNative;
 	__m128i m_hash;
 	CComPtr<ID3D11Texture1D> m_mapTexture;
 	CComPtr<ID3D11ShaderResourceView> m_mapSrv;

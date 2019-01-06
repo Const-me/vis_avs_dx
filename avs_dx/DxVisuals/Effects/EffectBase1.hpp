@@ -4,8 +4,8 @@
 
 // A base class for effects that implements a few required virtual methods by delegating the work to the EffectRenderer template class.
 // This is optional, if you don't need what it offers you can inherit from EffectBase directly.
-template<class TStruct>
-class EffectBase1 : public TStruct, public EffectBase
+template<class TStruct, class TBase = EffectBase>
+class EffectBase1 : public TStruct, public TBase
 {
 public:
 	using tBase = EffectBase1<TStruct>;
@@ -60,7 +60,7 @@ protected:
 			pIncludes = &TStruct::effectIncludes();
 		}
 
-		SILENT_CHECK( renderer.compileShaders( *pIncludes, stateOffset() ) );
+		SILENT_CHECK( renderer.compileShaders( *pIncludes, TBase::stateOffset() ) );
 		return S_OK;
 	}
 };

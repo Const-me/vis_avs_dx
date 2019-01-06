@@ -13,7 +13,7 @@ namespace
 		ApeEffectBase::pfnCreateEffect pfnCreate;
 	};
 
-	static DynamicArray<sApeEffect, 1> s_factories;
+	static DynamicArray<sApeEffect, 2> s_factories;
 
 	HRESULT getModuleFileName( HINSTANCE hDllInstance, CString& result )
 	{

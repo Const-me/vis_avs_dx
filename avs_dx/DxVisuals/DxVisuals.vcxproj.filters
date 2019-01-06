@@ -129,6 +129,8 @@
     <ClInclude Include="EffectBase\ApeEffectBase.h" />
     <ClInclude Include="Effects\Trans\ColorMap\ColorMap.h" />
     <ClInclude Include="Effects\Trans\ColorMap\mapHacks.h" />
+    <ClInclude Include="Effects\Misc\AddBorder\AddBorder.h" />
+    <ClInclude Include="Effects\Misc\AddBorder\borderHacks.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -228,6 +230,7 @@
     <ClCompile Include="Effects\Render\DotFountain\DotFountain.cpp" />
     <ClCompile Include="EffectBase\ApeEffectBase.cpp" />
     <ClCompile Include="Effects\Trans\ColorMap\ColorMap.cpp" />
+    <ClCompile Include="Effects\Misc\AddBorder\AddBorder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -304,6 +307,8 @@
     <FxCompile Include="Effects\Render\DotFountain\FountainVS.hlsl" />
     <FxCompile Include="Effects\Render\PointSpritePS.hlsl" />
     <FxCompile Include="Effects\Trans\ColorMap\ColorMapPS.hlsl" />
+    <FxCompile Include="Effects\Misc\AddBorder\AddBorderVS.hlsl" />
+    <FxCompile Include="Effects\Misc\AddBorder\AddBorderPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

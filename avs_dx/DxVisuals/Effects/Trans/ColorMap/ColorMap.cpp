@@ -11,7 +11,7 @@ const EffectBase::Metadata& ColorMap::metadata(){ return s_metadada; }
 IMPLEMENT_APE_EFFECT( ColorMap, "Color Map", "colormap.ape" );
 
 ColorMap::ColorMap( C_RBASE* pThis ) :
-	ApeEffectBase( pThis )
+	m_pNative( pThis )
 { }
 
 HRESULT ColorMap::updateParameters( Binder& binder )

@@ -74,6 +74,7 @@ HRESULT AddBorder::render( bool isBeat, RenderTargets& rt )
 	omBlend( eBlend::None );
 	iaClearBuffer();
 	context->IASetIndexBuffer( m_ib, DXGI_FORMAT_R16_UINT, 0 );
+	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	context->DrawIndexed( 3 * 4 * 2, 0, 0 );
 	return S_FALSE;
 }

@@ -30,11 +30,13 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _R_DEFS_H_
 #define _R_DEFS_H_
 #include "../../avs_dx/InteropLib/effectsFactory.h"
+#include "../../avs_dx/InteropLib/msvcrt.h"
 
 // base class declaration, compatibility class
 class RString;
 
-class C_RBASE {
+class C_RBASE
+{
 public:
 	C_RBASE() { }
 	virtual ~C_RBASE() { };
@@ -47,6 +49,15 @@ public:
 
 	void load_string( RString &s, unsigned char *data, int &pos, int len );
 	void save_string( unsigned char *data, int &pos, RString &text );
+
+	void* operator new( size_t s )
+	{
+		return msvcrt::operatorNew( s );
+	}
+	void operator delete( void *ptr )
+	{
+		return msvcrt::operatorDelete( ptr );
+	}
 };
 
 class C_RBASE2 : public C_RBASE {

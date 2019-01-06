@@ -82,6 +82,7 @@
     <ClInclude Include="Profiler\ProfilerWindow.h" />
     <ClInclude Include="profilerApi.h" />
     <ClInclude Include="miscGui.h" />
+    <ClInclude Include="msvcrt.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -99,5 +100,6 @@
     <ClCompile Include="Profiler\ProfilerAverages.cpp" />
     <ClCompile Include="effectsFactory.cpp" />
     <ClCompile Include="miscGui.cpp" />
+    <ClCompile Include="msvcrt.cpp" />
   </ItemGroup>
 </Project>

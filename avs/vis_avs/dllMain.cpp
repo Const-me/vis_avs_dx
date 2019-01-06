@@ -1,4 +1,4 @@
-#include <windows.h>
+#include "stdafx.h"
 
 BOOL __stdcall interopLibDllMain( HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved );
 

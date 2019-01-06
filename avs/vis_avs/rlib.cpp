@@ -27,7 +27,7 @@ IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISI
 OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#include <windows.h>
+#include "stdafx.h"
 #include "r_defs.h"
 #include "r_unkn.h"
 #include "r_list.h"
@@ -444,4 +444,3 @@ void *getGlobalBuffer( int w, int h, int n, int do_alloc )
 	}
 	return g_n_buffers[ n ];
 }
-

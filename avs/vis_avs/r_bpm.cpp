@@ -27,15 +27,10 @@ IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISI
 OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#include <windows.h>
-#include <stdlib.h>
+#include "stdafx.h"
 #include <vfw.h>
-#include <commctrl.h>
-#include <stdio.h>
-#include <math.h>
 #include "resource.h"
 #include "r_defs.h"
-#include <stdint.h>
 
 #define MOD_NAME "Misc / Custom BPM"
 #define C_THISCLASS C_BpmClass

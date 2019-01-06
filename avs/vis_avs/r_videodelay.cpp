@@ -31,7 +31,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // copyright tom holden, 2002
 // mail: cfp@myrealbox.com
 
-#include <windows.h>
+#include "stdafx.h"
 #include "resource.h"
 #include "r_defs.h"
 

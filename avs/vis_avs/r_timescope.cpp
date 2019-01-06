@@ -27,10 +27,7 @@ IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISI
 OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#include <windows.h>
-#include <stdlib.h>
-#include <vfw.h>
-#include <commctrl.h>
+#include "stdafx.h"
 #include "resource.h"
 #include "r_defs.h"
 #include <stdio.h>

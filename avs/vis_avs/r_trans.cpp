@@ -30,8 +30,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // alphachannel safe 11/21/99
 #define M_PI 3.14159265358979323846
 
-#include <windows.h>
-#include <commctrl.h>
+#include "stdafx.h"
 #include "r_defs.h"
 #include "resource.h"
 

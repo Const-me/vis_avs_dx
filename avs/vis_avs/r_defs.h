@@ -738,6 +738,4 @@ private:
 
 void doAVSEvalHighLight( HWND hwndDlg, UINT sub, char *data );
 
-#include "laser/laserline.h"
-
 #endif

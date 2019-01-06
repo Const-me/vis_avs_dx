@@ -27,9 +27,11 @@ IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISI
 OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+#include "stdafx.h"
 #include <stdio.h>
 #include <windows.h>
 #include <windowsx.h>
+#include <shellapi.h>
 #include "vis.h"
 #include "draw.h"
 #include "wnd.h"
@@ -465,13 +467,7 @@ int Wnd_Init( struct winampVisModule *this_mod )
 		INI_FILE = (char*)SendMessage( this_mod->hwndParent, WM_WA_IPC, 0, IPC_GETINIFILE );
 #endif
 #define AVS_SECTION "AVS"
-#ifdef LASER
-#undef AVS_SECTION
-#define AVS_SECTION "AVS_L"
-		extern int g_laser_nomessage, g_laser_zones;
-		g_laser_nomessage = GetPrivateProfileInt( AVS_SECTION, "laser_nomessage", 0, INI_FILE );
-		g_laser_zones = GetPrivateProfileInt( AVS_SECTION, "laser_zones", 1, INI_FILE );
-#endif
+
 		need_redock = GetPrivateProfileInt( AVS_SECTION, "cfg_docked", 0, INI_FILE );
 		cfg_cfgwnd_x = GetPrivateProfileInt( AVS_SECTION, "cfg_cfgwnd_x", cfg_cfgwnd_x, INI_FILE );
 		cfg_cfgwnd_y = GetPrivateProfileInt( AVS_SECTION, "cfg_cfgwnd_y", cfg_cfgwnd_y, INI_FILE );

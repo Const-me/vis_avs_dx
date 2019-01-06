@@ -27,10 +27,7 @@ IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISI
 OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#include <windows.h>
-#include <commctrl.h>
-#include <math.h>
-#include <stdio.h>
+#include "stdafx.h"
 #include "draw.h"
 #include "wnd.h"
 #include "r_defs.h"
@@ -719,6 +716,3 @@ int refineBeat( int isBeat )
 
 	return ( ( cfg_smartbeat && !cfg_smartbeatonlysticky ) || ( cfg_smartbeat && cfg_smartbeatonlysticky && sticked ) ) ? ( predictionBpm ? 0 : isBeat ) : isBeat;
 }
-
-
-

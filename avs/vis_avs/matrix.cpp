@@ -27,8 +27,7 @@ IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISI
 OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#include <windows.h>
-#include <math.h>
+#include "stdafx.h"
 #include "r_defs.h"
 
 void matrixRotate( float matrix[], char m, float Deg ) {

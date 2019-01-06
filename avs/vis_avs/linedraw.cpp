@@ -27,9 +27,8 @@ IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISI
 OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#include <windows.h>
+#include "stdafx.h"
 #include "r_defs.h"
-#include <math.h>
 
 #define SWAP(x,y,temp) ( temp ) = ( x ); ( x ) = ( y ); ( y ) = ( temp )
 #define ABS(x) (( x ) < 0 ? - ( x ) : ( x ))

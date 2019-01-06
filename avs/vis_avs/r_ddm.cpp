@@ -27,17 +27,15 @@ IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISI
 OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#define M_PI 3.14159265358979323846
-
-#include <windows.h>
-#include <commctrl.h>
-#include <math.h>
+#include "stdafx.h"
 #include "r_defs.h"
 #include "resource.h"
 #include "avs_eelif.h"
 
 #include "timing.h"
 #include <atlbase.h>
+
+#define M_PI 3.14159265358979323846
 using CSLock = CComCritSecLock<CComAutoCriticalSection>;
 
 #ifndef LASER

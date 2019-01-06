@@ -62,14 +62,14 @@
       <MinimalRebuild>false</MinimalRebuild>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AdditionalIncludeDirectories>evallib/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;AVS_DX;_DEBUG;WA2_EMBED;WIN32;_WINDOWS;_USRDLL;VIS_PL_EXPORTS;NSEEL_LOOPFUNC_SUPPORT;AVS_MEGABUF_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;WA2_EMBED;WIN32;_WINDOWS;_USRDLL;VIS_PL_EXPORTS;NSEEL_LOOPFUNC_SUPPORT;AVS_MEGABUF_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
-      <PrecompiledHeaderOutputFile>.\Debug\vis_avs.pch</PrecompiledHeaderOutputFile>
       <ObjectFileName>.\Debug\</ObjectFileName>
       <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -105,15 +105,15 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <WarningLevel>Level3</WarningLevel>
       <AdditionalIncludeDirectories>evallib/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;AVS_DX;NDEBUG;WA2_EMBED;WIN32;_WINDOWS;_USRDLL;VIS_PL_EXPORTS;NSEEL_LOOPFUNC_SUPPORT;AVS_MEGABUF_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WA2_EMBED;WIN32;_WINDOWS;_USRDLL;VIS_PL_EXPORTS;NSEEL_LOOPFUNC_SUPPORT;AVS_MEGABUF_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
-      <PrecompiledHeaderOutputFile>.\Release\vis_avs.pch</PrecompiledHeaderOutputFile>
       <ObjectFileName>.\Release\</ObjectFileName>
       <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -146,15 +146,6 @@
     <ClCompile Include="bpm.cpp" />
     <ClCompile Include="cfgwin.cpp" />
     <ClCompile Include="dllMain.cpp" />
-    <ClCompile Include="laser\laser.cpp" />
-    <ClCompile Include="laser\laserline.cpp" />
-    <ClCompile Include="laser\ld32.c" />
-    <ClCompile Include="laser\linelist.cpp" />
-    <ClCompile Include="laser\rl_beathold.cpp" />
-    <ClCompile Include="laser\rl_bren.cpp" />
-    <ClCompile Include="laser\rl_cones.cpp" />
-    <ClCompile Include="laser\rl_line.cpp" />
-    <ClCompile Include="laser\rl_trans.cpp" />
     <ClCompile Include="linedraw.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="matrix.cpp" />
@@ -214,7 +205,14 @@
     <ClCompile Include="r_videodelay.cpp" />
     <ClCompile Include="r_water.cpp" />
     <ClCompile Include="r_waterbump.cpp" />
-    <ClCompile Include="TIMING.C" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="TIMING.C">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="undo.cpp" />
     <ClCompile Include="util.cpp" />
     <ClCompile Include="wnd.cpp" />
@@ -228,9 +226,6 @@
     <ClInclude Include="bpm.h" />
     <ClInclude Include="cfgwnd.h" />
     <ClInclude Include="draw.h" />
-    <ClInclude Include="laser\laserline.h" />
-    <ClInclude Include="laser\Ld32.h" />
-    <ClInclude Include="laser\linelist.h" />
     <ClInclude Include="render.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="rlib.h" />
@@ -238,6 +233,7 @@
     <ClInclude Include="r_list.h" />
     <ClInclude Include="r_transition.h" />
     <ClInclude Include="r_unkn.h" />
+    <ClInclude Include="stdafx.h" />
     <ClInclude Include="TIMING.H" />
     <ClInclude Include="undo.h" />
     <ClInclude Include="wnd.h" />

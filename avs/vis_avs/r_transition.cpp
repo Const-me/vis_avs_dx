@@ -27,10 +27,7 @@ IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISI
 OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#include <windows.h>
-#include <stdio.h>
-#include <commctrl.h>
-#include <process.h>
+#include "stdafx.h"
 #include "draw.h"
 #include "resource.h"
 #include "cfgwnd.h"
@@ -38,7 +35,6 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "r_unkn.h"
 #include "r_transition.h"
 #include "render.h"
-#include <math.h>
 extern char *scanstr_back( char *str, char *toscan, char *defval );
 
 static const char *transitionmodes[] =

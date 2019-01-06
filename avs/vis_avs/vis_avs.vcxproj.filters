@@ -14,12 +14,6 @@
     <Filter Include="Source Files\Render utils">
       <UniqueIdentifier>{db02aecd-76a8-4cf6-ba15-40fccb5bc5c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\laser">
-      <UniqueIdentifier>{bbd47be8-6b43-44b4-ba1b-4434e72ec787}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\laser\laser renders">
-      <UniqueIdentifier>{2b76191c-1482-4794-b103-464205899b1d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{45f1b433-7b81-4da6-876d-3951b5ad7bb4}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl</Extensions>
@@ -200,33 +194,6 @@
     <ClCompile Include="util.cpp">
       <Filter>Source Files\Render utils</Filter>
     </ClCompile>
-    <ClCompile Include="laser\rl_beathold.cpp">
-      <Filter>Source Files\laser\laser renders</Filter>
-    </ClCompile>
-    <ClCompile Include="laser\rl_bren.cpp">
-      <Filter>Source Files\laser\laser renders</Filter>
-    </ClCompile>
-    <ClCompile Include="laser\rl_cones.cpp">
-      <Filter>Source Files\laser\laser renders</Filter>
-    </ClCompile>
-    <ClCompile Include="laser\rl_line.cpp">
-      <Filter>Source Files\laser\laser renders</Filter>
-    </ClCompile>
-    <ClCompile Include="laser\rl_trans.cpp">
-      <Filter>Source Files\laser\laser renders</Filter>
-    </ClCompile>
-    <ClCompile Include="laser\laser.cpp">
-      <Filter>Source Files\laser</Filter>
-    </ClCompile>
-    <ClCompile Include="laser\laserline.cpp">
-      <Filter>Source Files\laser</Filter>
-    </ClCompile>
-    <ClCompile Include="laser\ld32.c">
-      <Filter>Source Files\laser</Filter>
-    </ClCompile>
-    <ClCompile Include="laser\linelist.cpp">
-      <Filter>Source Files\laser</Filter>
-    </ClCompile>
     <ClCompile Include="bpm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -254,6 +221,9 @@
     <ClCompile Include="dllMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="avs_eelif.h">
@@ -279,15 +249,6 @@
     </ClInclude>
     <ClInclude Include="r_unkn.h">
       <Filter>Source Files\Render utils</Filter>
-    </ClInclude>
-    <ClInclude Include="laser\laserline.h">
-      <Filter>Source Files\laser</Filter>
-    </ClInclude>
-    <ClInclude Include="laser\Ld32.h">
-      <Filter>Source Files\laser</Filter>
-    </ClInclude>
-    <ClInclude Include="laser\linelist.h">
-      <Filter>Source Files\laser</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Source Files</Filter>
@@ -317,6 +278,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="wnd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -114,6 +114,7 @@
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>

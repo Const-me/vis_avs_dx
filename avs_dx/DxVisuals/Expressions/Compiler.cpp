@@ -240,7 +240,7 @@ void Compiler::buildFragmentHlsl()
 		if( !isVar )
 			continue;
 
-		code.AppendFormat( "		%s %s;\r\n", hlslName( m_symbols.vars.type( i ) ), cstr( m_symbols.vars.name( i ) ) );
+		code.AppendFormat( "		%s %s = 0;\r\n", hlslName( m_symbols.vars.type( i ) ), cstr( m_symbols.vars.name( i ) ) );
 	}
 
 	m_fragmentBeat = ( m_symbols.vars.getBeatMacro() >= 0 ) && ( 0 != ( m_varUsage[ m_symbols.vars.getBeatMacro() ] & 0b11000000 ) );

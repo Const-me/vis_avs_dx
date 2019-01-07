@@ -85,6 +85,21 @@ inline float getosc( float band, float width, uint channel )
     return res / (float) count;
 }
 
+inline uint band( float a, float b )
+{
+    return ( a != 0.0 && b != 0.0 ) ? 1 : 0;
+}
+
+inline uint bor( float a, float b )
+{
+    return ( a != 0.0 || b != 0.0 ) ? 1 : 0;
+}
+
+inline uint bnot( float a )
+{
+    return ( a == 0.0 ) ? 1 : 0;
+}
+
 [numthreads( 1, 1, 1 )]
 void main( uint3 DTid : SV_DispatchThreadID )
 {

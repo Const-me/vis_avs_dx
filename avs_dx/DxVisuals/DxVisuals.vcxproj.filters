@@ -249,6 +249,7 @@
     <ClInclude Include="Utils\EASTL\vector_set.h" />
     <ClInclude Include="Utils\EASTL\version.h" />
     <ClInclude Include="Utils\EASTL\weak_ptr.h" />
+    <ClInclude Include="Expressions\Tree\VarUseFlags.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

@@ -1,5 +1,6 @@
 #pragma once
 #include "../SymbolTable/SymbolTable.h"
+#include "VarUseFlags.h"
 
 namespace Expressions
 {
@@ -126,6 +127,6 @@ namespace Expressions
 
 		// Gather data on how variables are used by this expression tree. The values are from eVarAccess enum, they're written to the vector with bitwise OR.
 		// nBlock bust be between 0 and 3, the values are shifted left by (nExpressionBlock<<2)
-		void getVariablesUsage( vector<uint8_t>& usage, uint8_t nExpressionBlock ) const;
+		void getVariablesUsage( vector<VarUseFlags>& usage, uint8_t nExpressionBlock ) const;
 	};
 }

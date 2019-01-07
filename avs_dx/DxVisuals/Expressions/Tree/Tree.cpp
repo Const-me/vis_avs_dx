@@ -59,11 +59,10 @@ bool Tree::transformDoubleFuncs()
 	return any;
 }
 
-void Tree::getVariablesUsage( vector<uint8_t>& usage, uint8_t nExpressionBlock ) const
+void Tree::getVariablesUsage( vector<VarUseFlags>& usage, uint8_t nExpressionBlock ) const
 {
-	usage.resize( symbols.vars.size(), 0 );
+	usage.resize( symbols.vars.size() );
 	assert( nExpressionBlock < 4 );
-	const uint8_t shift = nExpressionBlock * 2;
 
 	const int size = m_nodes.size();
 	for( int i = 0; i < size; i++ )
@@ -74,7 +73,7 @@ void Tree::getVariablesUsage( vector<uint8_t>& usage, uint8_t nExpressionBlock )
 			i++;
 			const Node& n2 = m_nodes[ i ];
 			if( n2.node == eNode::Var )
-				usage[ n2.id ] |= (uint8_t)eVarAccess::Write << shift;
+				usage[ n2.id ].addAccessBit( eVarAccess::Write, nExpressionBlock );
 			else
 				logWarning( "assign() is used with left-hand side that's not a variable." );
 			continue;
@@ -82,6 +81,6 @@ void Tree::getVariablesUsage( vector<uint8_t>& usage, uint8_t nExpressionBlock )
 
 		if( n.node != eNode::Var )
 			continue;
-		usage[ n.id ] |= (uint8_t)eVarAccess::Read << shift;
+		usage[ n.id ].addAccessBit( eVarAccess::Read, nExpressionBlock );
 	}
 }

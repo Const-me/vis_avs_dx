@@ -115,6 +115,7 @@
     <ClInclude Include="Effects\Trans\Mipmaps\Mosaic.h" />
     <ClInclude Include="Effects\Trans\Moves\DynamicDistance.h" />
     <ClInclude Include="Effects\Trans\ColorFade\ColorFade.h" />
+    <ClInclude Include="Expressions\Tree\VarUseFlags.h" />
     <ClInclude Include="Resources\dynamicBuffers.h" />
     <ClInclude Include="Effects\EffectProfiler.h" />
     <ClInclude Include="Effects\Trans\Blur\SeparableConvolution.h" />

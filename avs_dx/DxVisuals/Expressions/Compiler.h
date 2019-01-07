@@ -51,7 +51,7 @@ namespace Expressions
 		SymbolTable m_symbols;
 		Tree m_tree;
 
-		vector<uint8_t> m_varUsage;
+		vector<VarUseFlags> m_varUsage;
 		CStringA m_dynStateLoad, m_dynStateStore;
 		
 		int m_stateSize;

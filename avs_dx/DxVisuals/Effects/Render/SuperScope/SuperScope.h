@@ -1,5 +1,5 @@
 #pragma once
-#include "../../EffectImpl.hpp"
+#include <Effects/Common/EffectImpl.hpp>
 #include "../../../Expressions/CompiledShader.h"
 #include "../PointSpritesRender.hpp"
 #include <EASTL/variant.h>

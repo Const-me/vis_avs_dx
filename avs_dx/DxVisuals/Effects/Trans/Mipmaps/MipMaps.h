@@ -1,7 +1,7 @@
 #pragma once
 #include <Utils/resizeHandler.h>
 #include <Resources/RenderTarget.h>
-#include <Effects/EffectProfiler.h>
+#include <Effects/Common/EffectProfiler.h>
 
 class MipMaps : public ResizeHandler
 {

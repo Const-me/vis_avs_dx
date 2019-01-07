@@ -1,5 +1,5 @@
 #pragma once
-#include "EffectBase/EffectListBase.h"
+#include "Effects/Common/EffectListBase.h"
 #include "Resources/RenderTargets.h"
 #include "Resources/EffectsState.h"
 #include "Render/StateShaders.h"

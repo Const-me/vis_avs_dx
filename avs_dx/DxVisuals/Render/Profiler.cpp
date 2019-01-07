@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Profiler.h"
-#include "../EffectBase/EffectBase.h"
+#include <Effects/Common/EffectBase.h>
 #include <Utils/PerfMeasure.h>
 
 constexpr bool busyWaiting = false;

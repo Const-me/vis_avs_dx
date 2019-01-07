@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "../../EffectImpl.hpp"
+#include <Effects/Common/EffectImpl.hpp>
 #include <Resources/dynamicBuffers.h>
 #include <Utils/LinearTransition.hpp>
 

@@ -1,15 +1,15 @@
 #pragma once
-#include "../EffectBase/EffectBase.h"
+#include "EffectBase.h"
 #include "../Render/EffectRenderer.hpp"
 #include "../Resources/RenderTargets.h"
 #include "../Resources/staticResources.h"
 #include "../Resources/StructureBuffer.h"
-#include "shadersCode.h"
+#include "../shadersCode.h"
 #include "../Hlsl/Defines.h"
 #include "EffectBase1.hpp"
 using Hlsl::Defines;
 
-#include "includeDefs.h"
+#include "../includeDefs.h"
 #include <Interop/effectsFactory.h>
 #include "ShaderUpdatesSimple.hpp"
 #include "EffectProfiler.h"

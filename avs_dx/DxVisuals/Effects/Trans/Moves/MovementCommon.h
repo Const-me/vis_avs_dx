@@ -1,6 +1,6 @@
 #pragma once
 #pragma once
-#include <Effects/EffectImpl.hpp>
+#include <Effects/Common/EffectImpl.hpp>
 #include <Expressions/CompiledShader.h>
 #include "GridMesh.h"
 #include "Sampler.h"

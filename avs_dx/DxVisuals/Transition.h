@@ -2,7 +2,7 @@
 #include "iTransition.h"
 #include <Utils/resizeHandler.h>
 #include "Resources/RenderTargets.h"
-#include "Effects/EffectProfiler.h"
+#include <Effects/Common/EffectProfiler.h>
 
 class Transition:
 	public ResizeHandler,

@@ -1,5 +1,5 @@
 #pragma once
-#include "../../EffectImpl.hpp"
+#include <Effects/Common/EffectImpl.hpp>
 #include "../PointSpritesRender.hpp"
 #include <EASTL/variant.h>
 using namespace Hlsl::Render::Simple;

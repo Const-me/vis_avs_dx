@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "../../EffectImpl.hpp"
+#include <Effects/Common/EffectImpl.hpp>
 #include <../../avs/vis_avs/resource.h>
 
 struct ChannelShiftStructs

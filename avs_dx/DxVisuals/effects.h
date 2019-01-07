@@ -1,6 +1,6 @@
 #pragma once
 // Interface for DxVisuals code to access the effects
-#include "EffectBase/EffectBase.h"
+#include "Effects/Common/EffectBase.h"
 
 class C_RBASE;
 

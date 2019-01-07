@@ -100,12 +100,12 @@
   <ItemGroup>
     <ClCompile Include="Effects\Misc\AddBorder\AddBorder.cpp" />
     <ClCompile Include="Effects\Trans\ColorMap\ColorMap.cpp" />
-    <ClCompile Include="EffectBase\ApeEffectBase.cpp" />
+    <ClCompile Include="Effects\Common\ApeEffectBase.cpp" />
     <ClCompile Include="Effects\Render\DotFountain\DotFountain.cpp" />
     <ClInclude Include="Effects\Misc\AddBorder\AddBorder.h" />
     <ClInclude Include="Effects\Misc\AddBorder\borderHacks.hpp" />
     <ClInclude Include="Effects\Trans\ColorMap\ColorMap.h" />
-    <ClInclude Include="EffectBase\ApeEffectBase.h" />
+    <ClInclude Include="Effects\Common\ApeEffectBase.h" />
     <ClInclude Include="effects.h" />
     <ClInclude Include="Effects\Render\DotFountain\DotFountain.h" />
     <ClInclude Include="Effects\Render\MovingParticle\MovingParticle.h" />
@@ -155,11 +155,11 @@
     <ClInclude Include="Interop\windowProc.h" />
     <ClInclude Include="Interop\wtl.h" />
     <ClInclude Include="Resources\dynamicBuffers.h" />
-    <ClInclude Include="Effects\EffectProfiler.h" />
+    <ClInclude Include="Effects\Common\EffectProfiler.h" />
     <ClInclude Include="Effects\Trans\Blur\SeparableConvolution.h" />
     <ClInclude Include="Effects\Render\Picture\interop.h" />
     <ClInclude Include="Effects\Render\Picture\PictureEffect.h" />
-    <ClInclude Include="Effects\ShaderUpdatesSimple.hpp" />
+    <ClInclude Include="Effects\Common\ShaderUpdatesSimple.hpp" />
     <ClInclude Include="Effects\Trans\Blur\KernelValues.h" />
     <ClInclude Include="Effects\Trans\Moves\GridMesh.tesselate.hpp" />
     <ClInclude Include="Effects\Trans\Moves\Sampler.h" />
@@ -342,8 +342,8 @@
     <ClInclude Include="Effects\includeDefs.h" />
     <ClInclude Include="Expressions\Compiler.h" />
     <ClInclude Include="Effects\List\EffectList.h" />
-    <ClInclude Include="Effects\EffectBase1.hpp" />
-    <ClInclude Include="Effects\EffectImpl.hpp" />
+    <ClInclude Include="Effects\Common\EffectBase1.hpp" />
+    <ClInclude Include="Effects\Common\EffectImpl.hpp" />
     <ClInclude Include="RootEffect.h" />
     <ClInclude Include="Effects\Render\PointSpritesRender.hpp" />
     <ClInclude Include="Expressions\varEnums.h" />
@@ -379,9 +379,9 @@
     <ClInclude Include="Utils\DirectXErrors\formatMessage.hpp" />
     <ClInclude Include="Utils\logger.h" />
     <ClInclude Include="Hlsl\compile.h" />
-    <ClInclude Include="EffectBase\EffectBase.h" />
+    <ClInclude Include="Effects\Common\EffectBase.h" />
     <ClInclude Include="Hlsl\Defines.h" />
-    <ClInclude Include="EffectBase\EffectListBase.h" />
+    <ClInclude Include="Effects\Common\EffectListBase.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Hlsl\Variable.h" />
@@ -424,7 +424,7 @@
     <ClCompile Include="Effects\Trans\Blur\BlurEffect.cpp" />
     <ClCompile Include="Effects\Trans\Blur\SeparableConvolution.cpp" />
     <ClCompile Include="Effects\Trans\Blitter.cpp" />
-    <ClCompile Include="EffectBase\EffectBase.cpp" />
+    <ClCompile Include="Effects\Common\EffectBase.cpp" />
     <ClCompile Include="Effects\Render\Picture\PictureEffect.cpp" />
     <ClCompile Include="Effects\Trans\Blur\KernelValues.cpp" />
     <ClCompile Include="Effects\Trans\Brightness\Brightness.cpp" />
@@ -477,7 +477,7 @@
     <ClCompile Include="Utils\decompressor.cpp" />
     <ClCompile Include="Expressions\parse.cpp" />
     <ClCompile Include="Expressions\Compiler.cpp" />
-    <ClCompile Include="EffectBase\EffectListBase.factory.cpp" />
+    <ClCompile Include="Effects\Common\EffectListBase.factory.cpp" />
     <ClCompile Include="RootEffect.cpp" />
     <ClCompile Include="Expressions\varEnums.cpp" />
     <ClCompile Include="Hlsl\Defines.cpp" />
@@ -496,7 +496,7 @@
     <ClCompile Include="Effects\Trans\Moves\DynamicMovement.cpp" />
     <ClCompile Include="Hlsl\FunctionBuilder.cpp" />
     <ClCompile Include="Hlsl\compile.cpp" />
-    <ClCompile Include="EffectBase\EffectListBase.cpp" />
+    <ClCompile Include="Effects\Common\EffectListBase.cpp" />
     <ClCompile Include="Resources\RenderTarget.cpp" />
     <ClCompile Include="Resources\SourceData.cpp" />
     <ClCompile Include="Resources\staticResources.cpp" />

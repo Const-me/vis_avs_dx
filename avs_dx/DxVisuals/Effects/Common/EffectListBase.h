@@ -1,5 +1,5 @@
 #pragma once
-#include "../Effects/EffectImpl.hpp"
+#include "EffectImpl.hpp"
 
 class RootEffect;
 

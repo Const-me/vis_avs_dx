@@ -1,6 +1,6 @@
 #pragma once
 #if GPU_PROFILE
-#include "../Render/Profiler.h"
+#include <Render/Profiler.h>
 #else
 struct DisabledEffectProfiler
 {

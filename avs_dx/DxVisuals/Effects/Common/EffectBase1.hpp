@@ -1,5 +1,5 @@
 #pragma once
-#include "../EffectBase/EffectBase.h"
+#include "EffectBase.h"
 #include "../Render/EffectRenderer.hpp"
 
 // A base class for effects that implements a few required virtual methods by delegating the work to the EffectRenderer template class.

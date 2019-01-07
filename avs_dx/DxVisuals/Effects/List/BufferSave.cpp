@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "../EffectImpl.hpp"
+#include <Effects/Common/EffectImpl.hpp>
 #include "Blender.h"
 
 class BufferSave : public EffectBase

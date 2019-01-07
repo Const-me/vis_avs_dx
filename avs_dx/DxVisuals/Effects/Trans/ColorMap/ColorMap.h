@@ -1,6 +1,6 @@
 #pragma once
-#include "../../EffectImpl.hpp"
-#include <EffectBase/ApeEffectBase.h>
+#include <Effects/Common/EffectImpl.hpp>
+#include <Effects/Common/ApeEffectBase.h>
 
 class ColorMap : public ApeEffectBase
 {

@@ -1,5 +1,5 @@
 #pragma once
-#include "../../EffectImpl.hpp"
+#include <Effects/Common/EffectImpl.hpp>
 #include "../ParticleSystem.hpp"
 using namespace Hlsl::Render::DotFountain;
 

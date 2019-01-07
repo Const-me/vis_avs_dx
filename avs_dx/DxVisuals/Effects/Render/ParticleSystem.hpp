@@ -1,6 +1,6 @@
 #pragma once
-#include "../EffectBase1.hpp"
-#include "../EffectProfiler.h"
+#include <Effects/Common/EffectImpl.hpp>
+#include <Effects/Common/EffectProfiler.h>
 #include "PointSpritesRender.hpp"
 
 class ParticleSystemBase

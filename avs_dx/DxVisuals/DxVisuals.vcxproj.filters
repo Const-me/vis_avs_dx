@@ -16,9 +16,6 @@
     <ClInclude Include="Resources\staticResources.h" />
     <ClInclude Include="Resources\SourceData.h" />
     <ClInclude Include="Utils\preciseTickCount.h" />
-    <ClInclude Include="EffectBase\EffectBase.h" />
-    <ClInclude Include="Effects\EffectImpl.hpp" />
-    <ClInclude Include="EffectBase\EffectListBase.h" />
     <ClInclude Include="Resources\EffectsState.h" />
     <ClInclude Include="Render\Stage.h" />
     <ClInclude Include="Hlsl\Defines.h" />
@@ -37,7 +34,6 @@
     <ClInclude Include="Resources\bindResource.h" />
     <ClInclude Include="Expressions\variableTypes.h" />
     <ClInclude Include="Effects\Render\PointSpritesRender.hpp" />
-    <ClInclude Include="Effects\EffectBase1.hpp" />
     <ClInclude Include="Expressions\Compiler.h" />
     <ClInclude Include="Effects\includeDefs.h" />
     <ClInclude Include="Expressions\Prototype.h" />
@@ -101,7 +97,6 @@
     <ClInclude Include="Utils\DXTK\XboxDDSTextureLoader.h" />
     <ClInclude Include="Utils\meshoptimizer\meshoptimizer.h" />
     <ClInclude Include="Resources\GlobalBuffers.h" />
-    <ClInclude Include="Effects\ShaderUpdatesSimple.hpp" />
     <ClInclude Include="Render\SimpleShaderTypes.hpp" />
     <ClInclude Include="Effects\Trans\Moves\DynamicMovement.h" />
     <ClInclude Include="Effects\Trans\Moves\GridMesh.h" />
@@ -114,7 +109,6 @@
     <ClInclude Include="Effects\Trans\Blur\SeparableConvolution.h" />
     <ClInclude Include="Utils\PerfMeasure.h" />
     <ClInclude Include="Render\Profiler.h" />
-    <ClInclude Include="Effects\EffectProfiler.h" />
     <ClInclude Include="Utils\DynamicArray.hpp" />
     <ClInclude Include="Effects\Trans\ColorFade\ColorFade.h" />
     <ClInclude Include="Effects\Trans\Moves\DynamicDistance.h" />
@@ -126,7 +120,6 @@
     <ClInclude Include="Effects\Render\ParticleSystem.hpp" />
     <ClInclude Include="Effects\Render\DotFountain\DotFountain.h" />
     <ClInclude Include="effects.h" />
-    <ClInclude Include="EffectBase\ApeEffectBase.h" />
     <ClInclude Include="Effects\Trans\ColorMap\ColorMap.h" />
     <ClInclude Include="Effects\Trans\ColorMap\mapHacks.h" />
     <ClInclude Include="Effects\Misc\AddBorder\AddBorder.h" />
@@ -288,6 +281,13 @@
     <ClInclude Include="Interop\Utils\dbgSetThreadName.h" />
     <ClInclude Include="Interop\Utils\shutdown.h" />
     <ClInclude Include="Interop\wtl.h" />
+    <ClInclude Include="Effects\Common\ApeEffectBase.h" />
+    <ClInclude Include="Effects\Common\EffectBase.h" />
+    <ClInclude Include="Effects\Common\EffectListBase.h" />
+    <ClInclude Include="Effects\Common\EffectBase1.hpp" />
+    <ClInclude Include="Effects\Common\EffectImpl.hpp" />
+    <ClInclude Include="Effects\Common\EffectProfiler.h" />
+    <ClInclude Include="Effects\Common\ShaderUpdatesSimple.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -301,7 +301,6 @@
     <ClCompile Include="Resources\staticResources.cpp" />
     <ClCompile Include="Resources\SourceData.cpp" />
     <ClCompile Include="Utils\preciseTickCount.cpp" />
-    <ClCompile Include="EffectBase\EffectListBase.cpp" />
     <ClCompile Include="Resources\EffectsState.cpp" />
     <ClCompile Include="Hlsl\Defines.cpp" />
     <ClCompile Include="Effects\Render\Simple\Simple.cpp" />
@@ -311,7 +310,6 @@
     <ClCompile Include="Render\StateShaders.cpp" />
     <ClCompile Include="Hlsl\compile.cpp" />
     <ClCompile Include="Utils\MiscUtils.cpp" />
-    <ClCompile Include="EffectBase\EffectListBase.factory.cpp" />
     <ClCompile Include="Expressions\Compiler.cpp" />
     <ClCompile Include="Expressions\Prototype.cpp" />
     <ClCompile Include="Resources\RenderTargets.cpp" />
@@ -336,7 +334,6 @@
     <ClCompile Include="Effects\List\Blender.cpp" />
     <ClCompile Include="Effects\List\EffectList.cpp" />
     <ClCompile Include="Utils\resizeHandler.cpp" />
-    <ClCompile Include="EffectBase\EffectBase.cpp" />
     <ClCompile Include="Render\ShaderBase.cpp" />
     <ClCompile Include="Utils\md4.cpp" />
     <ClCompile Include="Effects\Video\VideoEffect.cpp" />
@@ -385,7 +382,6 @@
     <ClCompile Include="Effects\Trans\Mipmaps\MipMaps.cpp" />
     <ClCompile Include="Effects\Trans\Mipmaps\Mosaic.cpp" />
     <ClCompile Include="Effects\Render\DotFountain\DotFountain.cpp" />
-    <ClCompile Include="EffectBase\ApeEffectBase.cpp" />
     <ClCompile Include="Effects\Trans\ColorMap\ColorMap.cpp" />
     <ClCompile Include="Effects\Misc\AddBorder\AddBorder.cpp" />
     <ClCompile Include="Interop\avsUtils.cpp" />
@@ -404,6 +400,10 @@
     <ClCompile Include="Interop\Profiler\ProfilerWindow.cpp" />
     <ClCompile Include="Interop\Utils\dbgSetThreadName.cpp" />
     <ClCompile Include="Interop\Utils\shutdown-impl.cpp" />
+    <ClCompile Include="Effects\Common\ApeEffectBase.cpp" />
+    <ClCompile Include="Effects\Common\EffectBase.cpp" />
+    <ClCompile Include="Effects\Common\EffectListBase.cpp" />
+    <ClCompile Include="Effects\Common\EffectListBase.factory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

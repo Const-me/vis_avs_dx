@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "DynamicMovement.h"
-#include <../InteropLib/interop.h>
+#include <Interop/interop.h>
 
 IMPLEMENT_EFFECT( DynamicMovement, C_DMoveClass )
 using namespace Expressions;

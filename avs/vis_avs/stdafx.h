@@ -29,6 +29,7 @@ inline int max( int a, int b )
 #include <EASTL/vector.h>
 using eastl::vector;
 
+#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS
 #include <atlstr.h>
 
 inline HRESULT getLastHr() { return HRESULT_FROM_WIN32( GetLastError() ); }

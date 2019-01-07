@@ -45,13 +45,13 @@
     <OutDir>C:\Soft\Winamp\Plugins\</OutDir>
     <IntDir>.\Debug\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)avs_dx\DxVisuals\Utils;$(SolutionDir)avs_dx\InteropLib;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)avs_dx\DxVisuals;$(SolutionDir)avs_dx\DxVisuals\Utils;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>C:\Soft\Winamp\Plugins\</OutDir>
     <IntDir>.\Release\</IntDir>
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)avs_dx\DxVisuals\Utils;$(SolutionDir)avs_dx\InteropLib;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)avs_dx\DxVisuals;$(SolutionDir)avs_dx\DxVisuals\Utils;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -265,9 +265,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\avs_dx\DxVisuals\DxVisuals.vcxproj">
       <Project>{32301408-2a47-4539-9b8e-6378b7ff4169}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\avs_dx\InteropLib\InteropLib.vcxproj">
-      <Project>{a90c771b-e993-478a-820a-166757609b62}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

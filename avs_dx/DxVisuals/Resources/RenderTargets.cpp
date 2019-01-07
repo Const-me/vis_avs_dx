@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "RenderTargets.h"
 #include "staticResources.h"
-#include <../InteropLib/interop.h>
+#include <Interop/interop.h>
 #include <Render/Binder.h>
 
 inline void unbindTarget()

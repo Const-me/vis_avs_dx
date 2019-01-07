@@ -7,6 +7,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 // Windows headers
 #include <windows.h>
+#include <versionhelpers.h>
 
 // Direct3D
 #include <d3d11.h>
@@ -17,6 +18,7 @@ using DirectX::SimpleMath::Vector4;
 
 // ATL
 #define _WINDLL
+#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS
 #include <atltypes.h>
 #include <atlcoll.h>
 #include <atlstr.h>
@@ -35,8 +37,7 @@ using eastl::make_unique;
 
 #include <mfobjects.h>
 
-#include "../InteropLib/device.h"
-
+#include "Interop/device.h"
 #include "Utils/logger.h"
 
 #include "Utils/MiscUtils.h"

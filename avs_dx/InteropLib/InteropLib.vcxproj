@@ -90,68 +90,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="avsUtils.h" />
-    <ClInclude Include="ConsoleLogger.h" />
-    <ClInclude Include="Utils\dbgSetThreadName.h" />
-    <ClInclude Include="device.h" />
-    <ClInclude Include="deviceCreation.h" />
-    <ClInclude Include="enumDisplays.h" />
-    <ClInclude Include="drawDx.h" />
-    <ClInclude Include="effectsFactory.h" />
-    <ClInclude Include="interop.h" />
-    <ClInclude Include="miscGui.h" />
-    <ClInclude Include="msvcrt.h" />
-    <ClInclude Include="Profiler\ProfilerAverages.h" />
-    <ClInclude Include="profilerApi.h" />
-    <ClInclude Include="Profiler\ProfilerWindow.h" />
-    <ClInclude Include="RenderWindow.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Utils\shutdown.h" />
-    <ClInclude Include="Utils\WTL\atlapp.h" />
-    <ClInclude Include="Utils\WTL\atlcrack.h" />
-    <ClInclude Include="Utils\WTL\atlctrls.h" />
-    <ClInclude Include="Utils\WTL\atlctrlw.h" />
-    <ClInclude Include="Utils\WTL\atlctrlx.h" />
-    <ClInclude Include="Utils\WTL\atlddx.h" />
-    <ClInclude Include="Utils\WTL\atldlgs.h" />
-    <ClInclude Include="Utils\WTL\atldwm.h" />
-    <ClInclude Include="Utils\WTL\atlfind.h" />
-    <ClInclude Include="Utils\WTL\atlframe.h" />
-    <ClInclude Include="Utils\WTL\atlgdi.h" />
-    <ClInclude Include="Utils\WTL\atlmisc.h" />
-    <ClInclude Include="Utils\WTL\atlprint.h" />
-    <ClInclude Include="Utils\WTL\atlres.h" />
-    <ClInclude Include="Utils\WTL\atlribbon.h" />
-    <ClInclude Include="Utils\WTL\atlscrl.h" />
-    <ClInclude Include="Utils\WTL\atlsplit.h" />
-    <ClInclude Include="Utils\WTL\atltheme.h" />
-    <ClInclude Include="Utils\WTL\atluser.h" />
-    <ClInclude Include="Utils\WTL\atlwinx.h" />
-    <ClInclude Include="windowProc.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="avsUtils.cpp" />
-    <ClCompile Include="ConsoleLogger.cpp" />
-    <ClCompile Include="Utils\dbgSetThreadName.cpp" />
-    <ClCompile Include="deviceCreation.cpp" />
-    <ClCompile Include="effectsFactory.cpp" />
-    <ClCompile Include="enumDisplays.cpp" />
-    <ClCompile Include="draw.cpp" />
-    <ClCompile Include="miscGui.cpp" />
-    <ClCompile Include="module.cpp" />
-    <ClCompile Include="msvcrt.cpp" />
-    <ClCompile Include="nseel-shims.cpp" />
-    <ClCompile Include="Profiler\ProfilerAverages.cpp" />
-    <ClCompile Include="Profiler\ProfilerWindow.cpp" />
-    <ClCompile Include="RenderWindow.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Utils\shutdown.cpp" />
-    <ClCompile Include="WindowImpl.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\DxVisuals\DxVisuals.vcxproj">
       <Project>{32301408-2a47-4539-9b8e-6378b7ff4169}</Project>
     </ProjectReference>

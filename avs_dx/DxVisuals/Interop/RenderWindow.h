@@ -1,4 +1,5 @@
 #pragma once
+#include "wtl.h"
 class RenderTarget;
 
 class RenderWindow

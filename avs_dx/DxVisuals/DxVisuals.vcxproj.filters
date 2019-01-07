@@ -250,6 +250,44 @@
     <ClInclude Include="Utils\EASTL\version.h" />
     <ClInclude Include="Utils\EASTL\weak_ptr.h" />
     <ClInclude Include="Expressions\Tree\VarUseFlags.h" />
+    <ClInclude Include="Interop\avsUtils.h" />
+    <ClInclude Include="Interop\ConsoleLogger.h" />
+    <ClInclude Include="Interop\device.h" />
+    <ClInclude Include="Interop\deviceCreation.h" />
+    <ClInclude Include="Interop\drawDx.h" />
+    <ClInclude Include="Interop\effectsFactory.h" />
+    <ClInclude Include="Interop\enumDisplays.h" />
+    <ClInclude Include="Interop\interop.h" />
+    <ClInclude Include="Interop\miscGui.h" />
+    <ClInclude Include="Interop\msvcrt.h" />
+    <ClInclude Include="Interop\profilerApi.h" />
+    <ClInclude Include="Interop\RenderWindow.h" />
+    <ClInclude Include="Interop\windowProc.h" />
+    <ClInclude Include="Interop\Profiler\ProfilerAverages.h" />
+    <ClInclude Include="Interop\Profiler\ProfilerWindow.h" />
+    <ClInclude Include="Interop\Utils\WTL\atlapp.h" />
+    <ClInclude Include="Interop\Utils\WTL\atlcrack.h" />
+    <ClInclude Include="Interop\Utils\WTL\atlctrls.h" />
+    <ClInclude Include="Interop\Utils\WTL\atlctrlw.h" />
+    <ClInclude Include="Interop\Utils\WTL\atlctrlx.h" />
+    <ClInclude Include="Interop\Utils\WTL\atlddx.h" />
+    <ClInclude Include="Interop\Utils\WTL\atldlgs.h" />
+    <ClInclude Include="Interop\Utils\WTL\atldwm.h" />
+    <ClInclude Include="Interop\Utils\WTL\atlfind.h" />
+    <ClInclude Include="Interop\Utils\WTL\atlframe.h" />
+    <ClInclude Include="Interop\Utils\WTL\atlgdi.h" />
+    <ClInclude Include="Interop\Utils\WTL\atlmisc.h" />
+    <ClInclude Include="Interop\Utils\WTL\atlprint.h" />
+    <ClInclude Include="Interop\Utils\WTL\atlres.h" />
+    <ClInclude Include="Interop\Utils\WTL\atlribbon.h" />
+    <ClInclude Include="Interop\Utils\WTL\atlscrl.h" />
+    <ClInclude Include="Interop\Utils\WTL\atlsplit.h" />
+    <ClInclude Include="Interop\Utils\WTL\atltheme.h" />
+    <ClInclude Include="Interop\Utils\WTL\atluser.h" />
+    <ClInclude Include="Interop\Utils\WTL\atlwinx.h" />
+    <ClInclude Include="Interop\Utils\dbgSetThreadName.h" />
+    <ClInclude Include="Interop\Utils\shutdown.h" />
+    <ClInclude Include="Interop\wtl.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -350,6 +388,22 @@
     <ClCompile Include="EffectBase\ApeEffectBase.cpp" />
     <ClCompile Include="Effects\Trans\ColorMap\ColorMap.cpp" />
     <ClCompile Include="Effects\Misc\AddBorder\AddBorder.cpp" />
+    <ClCompile Include="Interop\avsUtils.cpp" />
+    <ClCompile Include="Interop\ConsoleLogger.cpp" />
+    <ClCompile Include="Interop\deviceCreation.cpp" />
+    <ClCompile Include="Interop\draw.cpp" />
+    <ClCompile Include="Interop\effectsFactory.cpp" />
+    <ClCompile Include="Interop\enumDisplays.cpp" />
+    <ClCompile Include="Interop\miscGui.cpp" />
+    <ClCompile Include="Interop\module.cpp" />
+    <ClCompile Include="Interop\msvcrt.cpp" />
+    <ClCompile Include="Interop\nseel-shims.cpp" />
+    <ClCompile Include="Interop\RenderWindow.cpp" />
+    <ClCompile Include="Interop\WindowImpl.cpp" />
+    <ClCompile Include="Interop\Profiler\ProfilerAverages.cpp" />
+    <ClCompile Include="Interop\Profiler\ProfilerWindow.cpp" />
+    <ClCompile Include="Interop\Utils\dbgSetThreadName.cpp" />
+    <ClCompile Include="Interop\Utils\shutdown-impl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

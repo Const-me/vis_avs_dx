@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "../../avs/vis_avs/draw.h"
 #include "drawDx.h"
+#include "Utils/WTL/atlapp.h"
 #include "Utils/WTL/atlctrls.h"
 #include "enumDisplays.h"
 #include "interop.h"

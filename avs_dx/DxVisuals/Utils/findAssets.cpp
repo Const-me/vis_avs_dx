@@ -1,7 +1,6 @@
 #include "stdafx.h"
-#include <../InteropLib/Utils/WTL/atlapp.h>
-#include <../InteropLib/Utils/WTL/atlmisc.h>
-#include <../InteropLib/Utils/WTL/atlctrls.h>
+#include <Interop/wtl.h>
+#include <Interop/Utils/WTL/atlmisc.h>
 #include <atlpath.h>
 #include <shobjidl.h>
 #include <shlguid.h>
@@ -77,7 +76,7 @@ int initAssetsCombobox( HWND wndDialog, HWND wndComboBox, char *selectedName, pf
 		}
 
 		CStringW w = ff.GetFileName();
-		CStringA a = w.operator LPCTSTR();
+		CStringA a{ w.operator LPCTSTR() };
 		const int ind = SendMessageA( wndComboBox, CB_ADDSTRING, 0, (LPARAM)cstr( a ) );
 		if( a == selectedName )
 			cb.SetCurSel( ind );

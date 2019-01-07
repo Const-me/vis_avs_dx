@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "ApeEffectBase.h"
-#include <../InteropLib/effectsFactory.h>
+#include <Interop/effectsFactory.h>
 #include <Utils/DynamicArray.hpp>
 #include <atlpath.h>
 

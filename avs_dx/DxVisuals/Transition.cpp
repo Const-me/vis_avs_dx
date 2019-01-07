@@ -2,8 +2,8 @@
 #include "Transition.h"
 #include "Resources/staticResources.h"
 #include <Utils/resizeHandler.h>
-#include "../InteropLib/interop.h"
-#include "../InteropLib/Utils/shutdown.h"
+#include <Interop/interop.h>
+#include <Interop/Utils/shutdown.h>
 #include "effects.h"
 #include "RootEffect.h"
 

@@ -35,7 +35,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "r_unkn.h"
 #include "r_transition.h"
 #include "render.h"
-#include <Utils/dbgSetThreadName.h>
+#include <Interop/Utils/dbgSetThreadName.h>
 extern char *scanstr_back( char *str, char *toscan, char *defval );
 
 static const char *transitionmodes[] =

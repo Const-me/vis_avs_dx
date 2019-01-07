@@ -29,9 +29,9 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #ifndef _R_DEFS_H_
 #define _R_DEFS_H_
-#include <effectsFactory.h>
-#include <msvcrt.h>
-#include <logger.h>
+#include <Interop/effectsFactory.h>
+#include <Interop/msvcrt.h>
+#include <Utils/logger.h>
 
 // base class declaration, compatibility class
 class RString;

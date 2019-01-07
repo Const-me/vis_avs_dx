@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "DynamicDistance.h"
-#include <../InteropLib/interop.h>
+#include <Interop/interop.h>
 
 IMPLEMENT_EFFECT( DynamicDistance, C_PulseClass )
 using namespace Expressions;

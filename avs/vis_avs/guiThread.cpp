@@ -9,7 +9,7 @@
 #include "render.h"
 #include "main.h"
 #include "VIS.H"
-#include <Utils/dbgSetThreadName.h>
+#include <Interop/Utils/dbgSetThreadName.h>
 
 constexpr DWORD msQuitTimeout = 1000;
 

@@ -43,7 +43,8 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <multimon.h>
 
 #include "avs_eelif.h"
-#include "../../avs_dx/InteropLib/avsUtils.h"
+#include <Interop/avsUtils.h>
+#include <Interop/windowProc.h>
 
 #ifdef WA3_COMPONENT
 #include "wasabicfg.h"
@@ -59,8 +60,6 @@ char g_title[ 2048 ];
 #include "wa_ipc.h"
 #include "ff_ipc.h"
 #endif
-
-#include "../../avs_dx/InteropLib/windowProc.h"
 
 #define ID_VIS_NEXT                     40382
 #define ID_VIS_PREV                     40383

@@ -10,7 +10,7 @@
 using Hlsl::Defines;
 
 #include "includeDefs.h"
-#include "../InteropLib/effectsFactory.h"
+#include <Interop/effectsFactory.h>
 #include "ShaderUpdatesSimple.hpp"
 #include "EffectProfiler.h"
 #include "../effects.h"

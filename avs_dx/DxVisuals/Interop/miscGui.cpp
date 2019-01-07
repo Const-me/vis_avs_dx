@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "miscGui.h"
-#include "Utils/WTL/atlctrls.h"
+#include "wtl.h"
 #include <../../avs/vis_avs/resource.h>
 
 extern HINSTANCE g_hInstance;

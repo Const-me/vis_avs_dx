@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "RootEffect.h"
 #include "Resources/staticResources.h"
-#include "../InteropLib/interop.h"
+#include <Interop/interop.h>
 #include "Render/Binder.h"
 #include "Render/StateShaders.h"
 

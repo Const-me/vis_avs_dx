@@ -39,10 +39,10 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "bpm.h"
 #include "avs_eelif.h"
 #include "undo.h"
-#include "../../avs_dx/InteropLib/drawDx.h"
-#include "../../avs_dx/InteropLib/ConsoleLogger.h"
-#include "../../avs_dx/InteropLib/profilerApi.h"
-#include "../../avs_dx/InteropLib/miscGui.h"
+#include <Interop/drawDx.h>
+#include <Interop/ConsoleLogger.h>
+#include <Interop/profilerApi.h>
+#include <Interop/miscGui.h>
 
 static void _do_add( HWND hwnd, HTREEITEM h, C_RenderListClass *list );
 static int treeview_hack;

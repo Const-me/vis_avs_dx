@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "RenderTarget.h"
-#include "../../InteropLib/interop.h"
+#include <Interop/interop.h>
 #include <Render/Binder.h>
 
 HRESULT RenderTarget::create( const CSize& size, bool unorderedAccess )

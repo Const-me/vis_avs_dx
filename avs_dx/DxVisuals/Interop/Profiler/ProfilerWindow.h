@@ -1,7 +1,7 @@
 #pragma once
 #include "../profilerApi.h"
-#include <Utils/WTL/atlctrls.h>
 #include "ProfilerAverages.h"
+#include "../wtl.h"
 
 class ProfilerWindow : public CWindowImpl<ProfilerWindow, CWindow, CFrameWinTraits>
 {

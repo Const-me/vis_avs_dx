@@ -45,7 +45,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "../studio/studio/api.h"
 #endif
 #include "avs_eelif.h"
-#include <Utils/dbgSetThreadName.h>
+#include <Interop/Utils/dbgSetThreadName.h>
 
 extern void GetClientRect_adj( HWND hwnd, RECT *r );
 

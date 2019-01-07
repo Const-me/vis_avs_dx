@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "MipMaps.h"
-#include <../InteropLib/interop.h>
+#include <Interop/interop.h>
 #include <Render/Binder.h>
 
 void MipMaps::destroy()

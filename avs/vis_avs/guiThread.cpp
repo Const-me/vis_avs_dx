@@ -110,7 +110,6 @@ namespace guiThread
 			// MessageBox(NULL,"error waiting for thread to quit","a",MB_TASKMODAL);
 			TerminateThread( g_hThread, 0 );
 		}
-
 		CfgWnd_Destroy();
 		Render_Quit( this_mod->hDllInstance );
 		Wnd_Quit();

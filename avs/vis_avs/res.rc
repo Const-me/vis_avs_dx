@@ -1320,6 +1320,20 @@ BEGIN
     CTEXT           "(c) Tom Holden, 2002",IDC_STATIC,6,36,120,8
 END
 
+IDD_ABOUT_DX DIALOGEX 0, 0, 205, 105
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About DirectX Port"
+FONT 10, "Microsoft Sans Serif", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "Close",IDOK,77,84,50,14
+    LTEXT           "Copyright © 2018-2019 Konstantin.",IDC_STATIC,7,7,108,8
+    CONTROL         "<a href=""http://const.me"">http://const.me</a>",IDC_SYSLINK1,
+                    "SysLink",WS_TABSTOP,7,20,60,10
+    LTEXT           "Special thanks to Baldur Karlsson, without his renderdoc.org this wouldn’t be possible. At least not by a single person spending 1 month on development.",IDC_STATIC,7,35,191,27
+    CONTROL         IDB_FLAG_UA,IDC_STATIC,"Static",SS_BITMAP | SS_REALSIZEIMAGE,7,88,16,10
+    CONTROL         IDB_FLAG_ME,IDC_STATIC,"Static",SS_BITMAP | SS_REALSIZEIMAGE,179,89,19,9
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1633,6 +1647,14 @@ BEGIN
         RIGHTMARGIN, 216
         BOTTOMMARGIN, 191
     END
+
+    IDD_ABOUT_DX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 198
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 98
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -1696,6 +1718,7 @@ BEGIN
     POPUP "&Help",                          65535,MFT_STRING | MFT_RIGHTJUSTIFY,MFS_ENABLED
     BEGIN
         MENUITEM "&About...",                   IDM_ABOUT,MFT_STRING,MFS_ENABLED
+        MENUITEM "About DirectX Port...",       IDM_ABOUT_D3D,MFT_STRING,MFS_ENABLED
     END
 END
 
@@ -2090,6 +2113,11 @@ BEGIN
     0
 END
 
+IDD_ABOUT_DX AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -2101,6 +2129,16 @@ END
 IDI_DX                  ICON                    "dxIcon.ico"
 
 IDI_NODX                ICON                    "naIcon.ico"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_FLAG_UA             BITMAP                  "ua.bmp"
+
+IDB_FLAG_ME             BITMAP                  "me.bmp"
 
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////

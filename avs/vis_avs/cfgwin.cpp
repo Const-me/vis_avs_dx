@@ -59,6 +59,7 @@ int config_prompt_save_preset = 1, config_reuseonresize = 1;
 //int g_preset_dirty;
 
 extern BOOL CALLBACK aboutProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
+extern BOOL __stdcall aboutProcDx( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
 extern BOOL CALLBACK DlgProc_Bpm( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
 extern int readyToLoadPreset( HWND parent, int isnew );
 
@@ -1231,6 +1232,9 @@ static BOOL CALLBACK dlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 			return 0;
 		case IDM_ABOUT:
 			DialogBox( g_hInstance, MAKEINTRESOURCE( IDD_DIALOG2 ), hwndDlg, aboutProc );
+			return 0;
+		case IDM_ABOUT_D3D:
+			DialogBox( g_hInstance, MAKEINTRESOURCE( IDD_ABOUT_DX ), hwndDlg, aboutProcDx );
 			return 0;
 		case IDM_DISPLAY:
 		case IDM_FULLSCREEN:

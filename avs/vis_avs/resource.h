@@ -79,8 +79,11 @@
 #define IDD_CFG_MULTIDELAY              171
 #define IDD_CFG_VIDEODELAY              172
 #define IDI_DX                          172
+#define IDD_ABOUT_DX                    173
 #define IDI_ICON1                       174
 #define IDI_NODX                        174
+#define IDB_FLAG_UA                     175
+#define IDB_FLAG_ME                     176
 #define IDC_EFFECTS                     1000
 #define IDC_ENABLED                     1001
 #define IDC_FBCLEAR                     1002
@@ -396,6 +399,7 @@
 #define IDC_STATIC_TRANS_NONE           1207
 #define IDC_THREADS                     1208
 #define IDC_THREADSBORDER               1209
+#define IDC_SYSLINK1                    1210
 #define IDM_DISPLAY                     40001
 #define IDM_PRESETS                     40002
 #define IDM_TRANS                       40003
@@ -408,14 +412,17 @@
 #define IDM_REDO                        40010
 #define ID_SETTINGS_GPUPROFILER         40011
 #define IDM_SETTINGS_PROFILER           40012
+#define ID_HELP_ABOUTDIRECT3DPORT       40013
+#define ID_HELP_ABOUT_D3D               40014
+#define IDM_ABOUT_D3D                   40015
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        175
-#define _APS_NEXT_COMMAND_VALUE         40013
-#define _APS_NEXT_CONTROL_VALUE         1210
+#define _APS_NEXT_RESOURCE_VALUE        177
+#define _APS_NEXT_COMMAND_VALUE         40016
+#define _APS_NEXT_CONTROL_VALUE         1213
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

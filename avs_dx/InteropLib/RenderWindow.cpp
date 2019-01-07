@@ -120,7 +120,16 @@ LRESULT RenderWindow::wmPresent( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 
 HRESULT RenderWindow::doPresent()
 {
-	CHECK( swapChain->Present( 1, 0 ) );
+	HRESULT hr = swapChain->Present( 1, 0 );
+	if( SUCCEEDED( hr ) )
+		return S_OK;
+	if( DXGI_ERROR_DEVICE_REMOVED == hr )
+	{
+		HRESULT hr2 = device->GetDeviceRemovedReason();
+		if( FAILED( hr2 ) )
+			hr = hr2;
+	}
+	logError( hr, "IDXGISwapChain::Present failed" );
 	// CHECK( m_output->WaitForVBlank() );
 	return S_OK;
 }

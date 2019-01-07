@@ -86,7 +86,7 @@ unsigned int WINAPI C_RenderTransitionClass::m_initThread( LPVOID p )
 	srand( ft.dwLowDateTime | ft.dwHighDateTime^GetCurrentThreadId() );
 	if( cfg_transitions2 & 32 )
 	{
-		extern HANDLE g_hThread;
+		extern CHandle g_hThread;
 		int d = GetThreadPriority( g_hThread );
 		if( d == THREAD_PRIORITY_TIME_CRITICAL ) d = THREAD_PRIORITY_HIGHEST;
 		else if( d == THREAD_PRIORITY_HIGHEST ) d = THREAD_PRIORITY_ABOVE_NORMAL;
@@ -103,10 +103,8 @@ unsigned int WINAPI C_RenderTransitionClass::m_initThread( LPVOID p )
 
 	_this->_dotransitionflag = 2;
 
-	_endthreadex( 0 );
 	return 0;
 }
-
 
 int C_RenderTransitionClass::LoadPreset( char *file, int which, C_UndoItem *item )
 {

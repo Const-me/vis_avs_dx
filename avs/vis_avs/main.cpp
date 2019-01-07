@@ -61,14 +61,14 @@ char *verstr =
 " v2.81d"
 ;
 
-unsigned int WINAPI RenderThread( LPVOID a );
+DWORD WINAPI RenderThread( LPVOID a );
 
 static void config( struct winampVisModule *this_mod );
 static int init( struct winampVisModule *this_mod );
 static int render( struct winampVisModule *this_mod );
 static void quit( struct winampVisModule *this_mod );
 
-HANDLE g_hThread;
+CHandle g_hThread;
 volatile int g_ThreadQuit;
 
 #ifndef WA3_COMPONENT
@@ -253,35 +253,6 @@ static int init( struct winampVisModule *this_mod )
 	g_visdata_pstat = 1;
 
 	return FAILED( guiThread::start( this_mod ) ) ? 1 : 0;
-
-	/* AVS_EEL_IF_init();
-
-	if( Wnd_Init( this_mod ) ) return 1;
-
-	{
-		int x;
-		for( x = 0; x < 256; x++ )
-		{
-			double a = log( x*60.0 / 255.0 + 1.0 ) / log( 60.0 );
-			int t = (int)( a*255.0 );
-			if( t < 0 )t = 0;
-			if( t > 255 )t = 255;
-			g_logtab[ x ] = (unsigned char)t;
-		}
-	}
-
-	initBpm();
-
-	Render_Init( g_hInstance );
-
-	CfgWnd_Create( this_mod );
-
-	g_hThread = (HANDLE)_beginthreadex( NULL, 0, RenderThread, 0, 0, (unsigned int *)&id );
-	main_setRenderThreadPriority();
-	SetForegroundWindow( g_hwnd );
-	SetFocus( g_hwnd );
-
-	return 0; */
 }
 
 static int render( struct winampVisModule *this_mod )
@@ -362,35 +333,6 @@ static void quit( struct winampVisModule *this_mod )
 	{
 		guiThread::stop();
 
-		/*DS( "Waitin for thread to quit\n" );
-		shutdownThread();
-
-		g_ThreadQuit = 1;
-		if( WaitForSingleObject( g_hThread, 10000 ) != WAIT_OBJECT_0 )
-		{
-			DS( "Terminated thread (BAD!)\n" );
-			//MessageBox(NULL,"error waiting for thread to quit","a",MB_TASKMODAL);
-			TerminateThread( g_hThread, 0 );
-		}
-
-		DS( "Thread done... calling ddraw_quit\n" );
-		DDraw_Quit();
-
-		DS( "Calling cfgwnd_destroy\n" );
-		CfgWnd_Destroy();
-		DS( "Calling render_quit\n" );
-		Render_Quit( this_mod->hDllInstance );
-
-		DS( "Calling wnd_quit\n" );
-		Wnd_Quit();
-
-		DS( "closing thread handle\n" );
-		CloseHandle( g_hThread );
-		g_hThread = NULL;
-
-		DS( "calling eel quit\n" );
-		AVS_EEL_IF_quit(); */
-
 		DS( "cleaning up critsections\n" );
 #ifndef WA3_COMPONENT
 		DeleteCriticalSection( &g_cs );
@@ -401,10 +343,6 @@ static void quit( struct winampVisModule *this_mod )
 		C_RenderListClass::smp_cleanupthreads();
 	}
 #undef DS
-#if 0//syntax highlighting
-	if( hRich ) FreeLibrary( hRich );
-	hRich = 0;
-#endif
 }
 
 #ifdef WA3_COMPONENT
@@ -431,7 +369,7 @@ void quit3( void )
 
 #define FPS_NF 64
 
-unsigned int __stdcall RenderThread( LPVOID a )
+DWORD __stdcall RenderThread( LPVOID a )
 {
 	int framedata[ FPS_NF ] = { 0, };
 	int framedata_pos = 0;
@@ -547,11 +485,8 @@ unsigned int __stdcall RenderThread( LPVOID a )
 				framedata_pos++;
 				if( framedata_pos >= sizeof( framedata ) / sizeof( framedata[ 0 ] ) ) framedata_pos = 0;
 			}
-			// int fs = DDraw_IsFullScreen();
-			// int sv = ( fs ? ( cfg_speed >> 8 ) : cfg_speed ) & 0xff;
-			// Sleep( min( max( sv, 1 ), 100 ) );
+			// Old AVS slept here, new one doesn't because vsync is now handled by present.
 		}
 	}
-	_endthreadex( 0 );
 	return 0;
 }

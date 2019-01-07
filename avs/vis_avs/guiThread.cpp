@@ -16,7 +16,7 @@ constexpr DWORD msQuitTimeout = 1000;
 #define FAIL_LAST_WIN32( msg )  {  const HRESULT __hr = getLastHr(); if( FAILED( __hr ) ) { logError( __hr, msg ); return __hr; }  }
 
 extern unsigned char g_logtab[ 256 ];
-extern HANDLE g_hThread;
+extern CHandle g_hThread;
 extern volatile int g_ThreadQuit;
 
 HRESULT shutdownThread();
@@ -90,7 +90,7 @@ namespace guiThread
 		CfgWnd_Create( this_mod );
 
 		DWORD tid;
-		g_hThread = (HANDLE)_beginthreadex( NULL, 0, RenderThread, 0, 0, (unsigned int *)&tid );
+		g_hThread.Attach( CreateThread( nullptr, 0, RenderThread, 0, 0, &tid ) );
 		if( !g_hThread )
 			return getLastHr();
 
@@ -114,6 +114,7 @@ namespace guiThread
 			// MessageBox(NULL,"error waiting for thread to quit","a",MB_TASKMODAL);
 			TerminateThread( g_hThread, 0 );
 		}
+		g_hThread.Close();
 		CfgWnd_Destroy();
 		Render_Quit( this_mod->hDllInstance );
 		Wnd_Quit();

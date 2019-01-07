@@ -5,7 +5,7 @@ namespace Expressions
 	enum eVarExtraFlag : uint16_t
 	{
 		None = 0,
-		// The variable is fragment output, however state shader also writes to this.
+		// The variable is fragment output, but state shader also writes to this.
 		FragmentOutWrittenInState = 0x8000,
 	};
 
@@ -23,11 +23,13 @@ namespace Expressions
 		void addAccessBit( eVarAccess a, uint8_t e )
 		{
 			assert( e < 4 );
+			assert( (uint16_t)a < 4 );
 			m_data |= ( (uint8_t)a ) << ( e * 2 );
 		}
 
 		void setLocation( eVarLocation loc )
 		{
+			assert( (uint16_t)loc < 16 );
 			m_data &= 0xF0FF;
 			m_data |= ( ( (uint16_t)loc ) << 8 );
 		}

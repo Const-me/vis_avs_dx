@@ -265,7 +265,7 @@ class Compressor
 	{
 		CppBuilder sb = new CppBuilder();
 		sb.setTabs( 1 );
-		sb.tl( "const uint8_t src[] = " );
+		sb.tl( "static const uint8_t src[] = " );
 		byte[] orig = origBuffer.ToArray();
 		byte[] compressed = compressBuffer( orig );
 		printBytes( sb, compressed );

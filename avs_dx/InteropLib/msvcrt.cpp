@@ -27,8 +27,8 @@ namespace msvcrt
 				logError( getLastHr(), "msvcrt.dll wasn't loaded" );
 				__debugbreak();
 			}
-			getProc( fnMalloc, "malloc" );
-			getProc( fnFree, "free" );
+			// getProc( fnMalloc, "malloc" );
+			// getProc( fnFree, "free" );
 			getProc( fnNew, "??2@YAPAXI@Z" );
 			getProc( fnDelete, "??3@YAXPAX@Z" );
 		}
@@ -42,8 +42,8 @@ namespace msvcrt
 			}
 		}
 
-		void* ( __cdecl *fnMalloc )( size_t size );
-		void( __cdecl *fnFree )( void* ptr );
+		// void* ( __cdecl *fnMalloc )( size_t size );
+		// void( __cdecl *fnFree )( void* ptr );
 		void* ( __cdecl *fnNew )( size_t size );
 		void( __cdecl *fnDelete )( void* ptr );
 	};
@@ -54,14 +54,14 @@ namespace msvcrt
 		return s_dll;
 	}
 
-	void* malloc( size_t size )
+	/* void* malloc( size_t size )
 	{
 		return dll().fnMalloc( size );
 	}
 	void free( void* ptr )
 	{
 		return dll().fnFree( ptr );
-	}
+	} */
 	void* operatorNew( size_t size )
 	{
 		return dll().fnNew( size );

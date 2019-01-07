@@ -172,18 +172,13 @@ int C_RenderTransitionClass::LoadPreset( char *file, int which, C_UndoItem *item
 	return !!r;
 }
 
-#define PI 3.14159265358979323846
-//264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848...
-
 extern int g_rnd_cnt;
-
 int C_RenderTransitionClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
 {
 	iTransition* pTrans = getTransition();
 	if( nullptr == pTrans )
 	{
 		// This happens on shutdown, we first shut down our stuff, like D3D, only then this thread. So the thread may run a few times before quit.
-		Sleep( 1 );
 		return 0;
 	}
 	if( _dotransitionflag || enabled ) g_rnd_cnt = 0;
@@ -247,7 +242,7 @@ int C_RenderTransitionClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, 
 
 	if( n >= 255 ) n = 255;
 
-	float sintrans = (float)( sin( ( (float)n / 255 )*PI - PI / 2 ) / 2 + 0.5 ); // used for smoothing transitions
+	float sintrans = (float)( sin( ( (float)n / 255 ) * M_PI - M_PI / 2 ) / 2 + 0.5 ); // used for smoothing transitions
 	// now sintrans does a smooth curve from 0 to 1
 
 	if( curtrans & 0x8000 )

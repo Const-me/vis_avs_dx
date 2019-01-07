@@ -13,7 +13,7 @@ public:
 		if( WM_NCCREATE == uMsg )
 			m_hWnd = hWnd;
 		MSG_WM_CREATE( wmCreate )
-		MSG_WM_DESTROY( wmDestroy )
+		// MSG_WM_DESTROY( wmDestroy )
 		MSG_WM_SIZE( wmSize )
 		MESSAGE_HANDLER( WM_PRESENT, wmPresent )
 		MESSAGE_HANDLER( WM_TRANSITION, wmTransition )
@@ -27,7 +27,7 @@ private:
 
 	HRESULT createDevice();
 	void destroyDevice();
-	void wmDestroy();
+	// void wmDestroy();
 	HRESULT wmSize( UINT nType, CSize size );
 
 	LRESULT wmPresent( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& handled );

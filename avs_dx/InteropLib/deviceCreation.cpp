@@ -127,13 +127,23 @@ void destroyDevice()
 	dxgiDeviceManager = nullptr;
 
 	dxgiDeviceManager = nullptr;
+
+	if( context )
+	{
+		context->ClearState();
+		context->Flush();
+	}
+
 	context = nullptr;
 
 #ifdef DEBUG
 	if( deviceDebug )
 	{
 		// __debugbreak();
-		deviceDebug->ReportLiveDeviceObjects( D3D11_RLDO_SUMMARY );
+		constexpr D3D11_RLDO_FLAGS rldoFlags = 
+			// D3D11_RLDO_SUMMARY;
+			D3D11_RLDO_DETAIL;
+		deviceDebug->ReportLiveDeviceObjects( rldoFlags );
 		deviceDebug = nullptr;
 	}
 #endif

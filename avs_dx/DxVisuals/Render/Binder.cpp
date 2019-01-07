@@ -65,7 +65,7 @@ bool Binder::reserveInputSlot( UINT& result, eStage pipelineStage, char resource
 	case 'u':
 		return inc( s.uav, result, D3D11_PS_CS_UAV_REGISTER_COUNT );
 	case 'b':
-		return inc( s.cbuffer, result, D3D11_COMMONSHADER_CONSTANT_BUFFER_HW_SLOT_COUNT );
+		return inc( s.cbuffer, result, D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT );
 	case 's':
 		return inc( s.sampler, result, D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT );
 	}

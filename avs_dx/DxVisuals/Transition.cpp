@@ -69,7 +69,10 @@ inline RootEffect* getRoot( const C_RBASE *pRBase )
 HRESULT Transition::renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *pRBase )
 {
 	if( checkShutdown() )
+	{
+		Sleep( 10 );
 		return S_FALSE;
+	}
 
 	RootEffect* p = getRoot( pRBase );
 	if( nullptr == p )
@@ -101,7 +104,10 @@ HRESULT Transition::renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, con
 HRESULT Transition::renderTransition( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *e1, const C_RBASE *e2, int trans, float sintrans )
 {
 	if( checkShutdown() )
+	{
+		Sleep( 10 );
 		return S_FALSE;
+	}
 
 #if GPU_PROFILE
 	gpuProfiler().frameStart();
@@ -144,6 +150,11 @@ Transition* getTransitionInstance()
 
 iTransition* getTransition()
 {
+	if( checkShutdown() )
+	{
+		Sleep( 10 );
+		return nullptr;
+	}
 	return g_transition.get();
 }
 

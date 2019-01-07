@@ -74,7 +74,6 @@ namespace
 			case eState::Running:
 				return false;
 			case eState::WaitingForQuit:
-				Sleep( 10 );
 				return true;
 			case eState::None:
 				m_state = eState::Running;

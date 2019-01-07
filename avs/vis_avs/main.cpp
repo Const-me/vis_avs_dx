@@ -36,6 +36,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "cfgwnd.h"
 #include "resource.h"
 #include "bpm.h"
+#include "guiThread.h"
 
 #include <stdio.h>
 
@@ -48,7 +49,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 extern void GetClientRect_adj( HWND hwnd, RECT *r );
 
-static unsigned char g_logtab[ 256 ];
+unsigned char g_logtab[ 256 ];
 HINSTANCE g_hInstance;
 
 char *verstr =
@@ -60,7 +61,7 @@ char *verstr =
 " v2.81d"
 ;
 
-static unsigned int WINAPI RenderThread( LPVOID a );
+unsigned int WINAPI RenderThread( LPVOID a );
 
 static void config( struct winampVisModule *this_mod );
 static int init( struct winampVisModule *this_mod );
@@ -178,7 +179,6 @@ HINSTANCE hRich;
 
 static int init( struct winampVisModule *this_mod )
 {
-	DWORD id;
 	FILETIME ft;
 #if 0//syntax highlighting
 	if( !hRich ) hRich = LoadLibrary( "RICHED32.dll" );
@@ -212,7 +212,6 @@ static int init( struct winampVisModule *this_mod )
 	}
 #endif
 
-
 #ifdef WA3_COMPONENT
 	strcat( g_path, "\\wacs\\data" );
 #endif
@@ -231,7 +230,9 @@ static int init( struct winampVisModule *this_mod )
 	g_ThreadQuit = 0;
 	g_visdata_pstat = 1;
 
-	AVS_EEL_IF_init();
+	return FAILED( guiThread::start( this_mod ) ) ? 1 : 0;
+
+	/* AVS_EEL_IF_init();
 
 	if( Wnd_Init( this_mod ) ) return 1;
 
@@ -258,7 +259,7 @@ static int init( struct winampVisModule *this_mod )
 	SetForegroundWindow( g_hwnd );
 	SetFocus( g_hwnd );
 
-	return 0;
+	return 0; */
 }
 
 static int render( struct winampVisModule *this_mod )
@@ -331,15 +332,15 @@ static int render( struct winampVisModule *this_mod )
 	return 0;
 }
 
-HRESULT shutdownThread();
-
 static void quit( struct winampVisModule *this_mod )
 {
 #define DS(x) 
 	//MessageBox(this_mod->hwndParent,x,"AVS Debug",MB_OK)
 	if( g_hThread )
 	{
-		DS( "Waitin for thread to quit\n" );
+		guiThread::stop();
+
+		/*DS( "Waitin for thread to quit\n" );
 		shutdownThread();
 
 		g_ThreadQuit = 1;
@@ -349,6 +350,7 @@ static void quit( struct winampVisModule *this_mod )
 			//MessageBox(NULL,"error waiting for thread to quit","a",MB_TASKMODAL);
 			TerminateThread( g_hThread, 0 );
 		}
+
 		DS( "Thread done... calling ddraw_quit\n" );
 		DDraw_Quit();
 
@@ -365,7 +367,7 @@ static void quit( struct winampVisModule *this_mod )
 		g_hThread = NULL;
 
 		DS( "calling eel quit\n" );
-		AVS_EEL_IF_quit();
+		AVS_EEL_IF_quit(); */
 
 		DS( "cleaning up critsections\n" );
 #ifndef WA3_COMPONENT
@@ -407,7 +409,7 @@ void quit3( void )
 
 #define FPS_NF 64
 
-static unsigned int WINAPI RenderThread( LPVOID a )
+unsigned int __stdcall RenderThread( LPVOID a )
 {
 	int framedata[ FPS_NF ] = { 0, };
 	int framedata_pos = 0;

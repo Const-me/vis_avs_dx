@@ -149,6 +149,7 @@
     <ClCompile Include="bpm.cpp" />
     <ClCompile Include="cfgwin.cpp" />
     <ClCompile Include="dllMain.cpp" />
+    <ClCompile Include="guiThread.cpp" />
     <ClCompile Include="linedraw.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="matrix.cpp" />
@@ -229,6 +230,9 @@
     <ClInclude Include="bpm.h" />
     <ClInclude Include="cfgwnd.h" />
     <ClInclude Include="draw.h" />
+    <ClInclude Include="EventSlim.hpp" />
+    <ClInclude Include="guiThread.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="render.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="rlib.h" />

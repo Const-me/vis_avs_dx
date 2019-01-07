@@ -98,7 +98,7 @@ extern HWND g_hwnd;
 extern embedWindowState myWindowState;
 #endif
 
-HINSTANCE g_hDllInstance;
+/* HINSTANCE g_hDllInstance;
 HWND g_hwndParent;
 CHandle hcfgThread;
 DWORD __stdcall cfgwnd_thread( LPVOID p )
@@ -113,7 +113,7 @@ DWORD __stdcall cfgwnd_thread( LPVOID p )
 	assert( nullptr == g_hwndDlg );
 	hcfgThread.Close();
 	return 0;
-}
+} */
 
 static int ExtractWindowsVersion( void )
 {
@@ -154,13 +154,7 @@ void CfgWnd_Create( struct winampVisModule *this_mod )
 		SetForegroundWindow( g_hwndDlg );
 		return;
 	}
-	// CreateDialog( this_mod->hDllInstance, MAKEINTRESOURCE( IDD_DIALOG1 ), this_mod->hwndParent, dlgProc );
-
-	g_hDllInstance = this_mod->hDllInstance;
-	DWORD tid;
-	hcfgThread.Attach( ::CreateThread( nullptr, 0, &cfgwnd_thread, nullptr, 0, &tid ) );
-	if( !hcfgThread )
-		logError( getLastHr(), "Error creating an AVS GUI thread" );
+	CreateDialog( this_mod->hDllInstance, MAKEINTRESOURCE( IDD_DIALOG1 ), this_mod->hwndParent, dlgProc );
 }
 
 void CfgWnd_Destroy( void )
@@ -174,12 +168,12 @@ void CfgWnd_Destroy( void )
 		SendMessage( g_hwndDlg, WM_CLOSE, 0, 0 );
 	}
 	g_hwndDlg = 0;
-	if( hcfgThread )
+	/* if( hcfgThread )
 	{
 		g_hwndDlg = 0;
 		WaitForSingleObject( hcfgThread, INFINITE );
 		hcfgThread.Close();
-	}
+	} */
 }
 
 static void recursiveAddDirList( HMENU menu, UINT *id, char *path, int pathlen )

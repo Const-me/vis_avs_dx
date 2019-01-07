@@ -71,49 +71,30 @@ HRESULT BufferSave::render( bool isBeat, RenderTargets& rt )
 	if( !source.lastWritten() )
 		return S_FALSE;
 
-	eBlendMode mode;
-	float val = 0;
-	switch( avs.blend )
+	/*
+CONTROL         "Replace",IDC_RSTACK_BLEND1,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,12,79,43,10
+CONTROL         "50/50",IDC_RSTACK_BLEND2,"Button",BS_AUTORADIOBUTTON,12,89,35,10
+CONTROL         "Additive",IDC_RSTACK_BLEND3,"Button",BS_AUTORADIOBUTTON,12,99,41,10
+CONTROL         "Every other pixel",IDC_RSTACK_BLEND4,"Button",BS_AUTORADIOBUTTON,12,109,68,10
+CONTROL         "Every other line",IDC_RSTACK_BLEND6,"Button",BS_AUTORADIOBUTTON,12,118,65,10
+CONTROL         "Subtractive 1",IDC_RSTACK_BLEND5,"Button",BS_AUTORADIOBUTTON,12,128,58,10
+CONTROL         "Subtractive 2",IDC_RSTACK_BLEND10,"Button",BS_AUTORADIOBUTTON,12,138,58,10
+CONTROL         "Xor",IDC_RSTACK_BLEND7,"Button",BS_AUTORADIOBUTTON,12,148,27,10
+CONTROL         "Maximum",IDC_RSTACK_BLEND8,"Button",BS_AUTORADIOBUTTON,12,158,45,10
+CONTROL         "Minimum",IDC_RSTACK_BLEND9,"Button",BS_AUTORADIOBUTTON,12,168,43,10
+CONTROL         "Multiply",IDC_RSTACK_BLEND11,"Button",BS_AUTORADIOBUTTON,12,178,39,10
+CONTROL         "Adjustable:",IDC_RSTACK_BLEND12,"Button",BS_AUTORADIOBUTTON,12,188,51,10
+	*/
+
+	constexpr eastl::array<eBlendMode, 12> modes =
 	{
-	case 0:
-	default:
-		mode = eBlendMode::Replace;
-		break;
-	case 1:
-		mode = eBlendMode::Fifty;
-		break;
-	case 2:
-		mode = eBlendMode::Additive;
-		break;
-	case 3:
-		mode = eBlendMode::PixelInterleave;
-		break;
-	case 4:
-		mode = eBlendMode::LineInterleave;
-		break;
-	case 5:
-		mode = eBlendMode::Subtractive1;
-		break;
-	case 6:
-		mode = eBlendMode::Subtractive;
-		break;
-	case 7:
-		mode = eBlendMode::Xor;
-		break;
-	case 8:
-		mode = eBlendMode::Maximum;
-		break;
-	case 9:
-		mode = eBlendMode::Minimum;
-		break;
-	case 10:
-		mode = eBlendMode::Multiply;
-		break;
-	case 11:
-		mode = eBlendMode::Adjustable;
-		val = div255 * (float)avs.adjblend_val;
-		break;
-	}
+		eBlendMode::Replace, eBlendMode::Fifty, eBlendMode::Additive, eBlendMode::PixelInterleave,
+		eBlendMode::Subtractive1, eBlendMode::LineInterleave, eBlendMode::Xor, eBlendMode::Maximum,
+		eBlendMode::Minimum, eBlendMode::Subtractive, eBlendMode::Multiply, eBlendMode::Adjustable
+	};
+	const eBlendMode mode = ( avs.blend >= 0 && avs.blend < (int)modes.size() ) ? modes[ avs.blend ] : eBlendMode::Replace;
+
+	const float val = ( mode == eBlendMode::Adjustable ) ? div255 * (float)avs.adjblend_val : 0;
 
 	return m_blend.blend( source, dest, mode, val );
 }

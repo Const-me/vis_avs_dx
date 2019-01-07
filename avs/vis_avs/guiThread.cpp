@@ -10,6 +10,8 @@
 #include "main.h"
 #include "VIS.H"
 
+constexpr DWORD msQuitTimeout = 1000;
+
 #define CHECK( hr, msg )        {  const HRESULT __hr = ( hr ); if( FAILED( __hr ) ) { logError( __hr, msg ); return __hr; }  }
 #define FAIL_LAST_WIN32( msg )  {  const HRESULT __hr = getLastHr(); if( FAILED( __hr ) ) { logError( __hr, msg ); return __hr; }  }
 
@@ -18,6 +20,8 @@ extern HANDLE g_hThread;
 extern volatile int g_ThreadQuit;
 
 HRESULT shutdownThread();
+
+extern void onRenderThreadShuttingDown( bool renderThread );
 
 namespace guiThread
 {
@@ -114,6 +118,7 @@ namespace guiThread
 		Render_Quit( this_mod->hDllInstance );
 		Wnd_Quit();
 		AVS_EEL_IF_quit();
+		onRenderThreadShuttingDown( false );
 		threadId = 0;
 	}
 
@@ -162,7 +167,7 @@ namespace guiThread
 		if( 0 == threadId )
 			return S_FALSE;
 		PostThreadMessage( threadId, WM_QUIT, 0, 0 );
-		if( WAIT_OBJECT_0 == WaitForSingleObject( hThread, 500 ) )
+		if( WAIT_OBJECT_0 == WaitForSingleObject( hThread, msQuitTimeout ) )
 			return S_OK;
 		const HRESULT hr =  getLastHr();
 		if( hThread )

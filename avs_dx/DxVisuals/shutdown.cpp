@@ -7,14 +7,15 @@
 #include "Transition.h"
 
 // Called on the rendering thread, immediately before shutting down. The GUI thread is waiting for this function to succeed.
-HRESULT onRenderThreadShuttingDown()
+void onRenderThreadShuttingDown( bool renderThread )
 {
 	destroyAllEffects();
 	destroyTransitionInstance();
 	StaticResources::destroy();
-	mfShutdown();
+	if( renderThread )
+		mfShutdown();
 	gpuProfiler().shutdown();
 	destroyDevice();
-	comUninitialize();
-	return S_OK;
+	if( renderThread )
+		comUninitialize();
 }

@@ -80,7 +80,7 @@ namespace
 				m_state = eState::Running;
 				return false;
 			case eState::WaitingForThread:
-				onRenderThreadShuttingDown();
+				onRenderThreadShuttingDown( true );
 				SetEvent( m_threadShutDown );
 				m_state = eState::WaitingForQuit;
 				return true;

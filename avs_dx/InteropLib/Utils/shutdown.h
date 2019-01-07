@@ -4,4 +4,4 @@ bool checkShutdown();
 
 HRESULT shutdownThread();
 
-HRESULT onRenderThreadShuttingDown();
+void onRenderThreadShuttingDown( bool renderThread );

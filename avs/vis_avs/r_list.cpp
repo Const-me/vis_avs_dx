@@ -284,7 +284,7 @@ void C_RenderListClass::unset_n_Context()
 }
 #endif
 
-void C_RenderListClass::smp_cleanupthreads()
+/* void C_RenderListClass::smp_cleanupthreads()
 {
 
 	if( smp_parms.threadTop > 0 )
@@ -304,7 +304,7 @@ void C_RenderListClass::smp_cleanupthreads()
 	if( smp_parms.hQuitHandle ) CloseHandle( smp_parms.hQuitHandle );
 
 	memset( &smp_parms, 0, sizeof( smp_parms ) );
-}
+} */
 
 void C_RenderListClass::freeBuffers()
 {
@@ -821,7 +821,7 @@ int C_RenderListClass::__LoadPresetFromUndo( C_UndoItem &item, int clear )
 
 
 /// smp fun
-
+/*
 void C_RenderListClass::smp_Render( int minthreads, C_RBASE2 *render, char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
 {
 	int x;
@@ -869,3 +869,4 @@ DWORD WINAPI C_RenderListClass::smp_threadProc( LPVOID parm )
 }
 
 C_RenderListClass::_s_smp_parms C_RenderListClass::smp_parms;
+*/

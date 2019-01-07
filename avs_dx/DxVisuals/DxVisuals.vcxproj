@@ -45,11 +45,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(SolutionDir)avs_dx\DxVisuals\Utils;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)avs_dx\InteropLib;$(SolutionDir)avs_dx\DxVisuals\Utils;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(SolutionDir)avs_dx\DxVisuals\Utils;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)avs_dx\InteropLib;$(SolutionDir)avs_dx\DxVisuals\Utils;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

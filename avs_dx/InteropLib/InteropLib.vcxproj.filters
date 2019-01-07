@@ -83,6 +83,7 @@
     <ClInclude Include="profilerApi.h" />
     <ClInclude Include="miscGui.h" />
     <ClInclude Include="msvcrt.h" />
+    <ClInclude Include="Utils\dbgSetThreadName.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -101,5 +102,6 @@
     <ClCompile Include="effectsFactory.cpp" />
     <ClCompile Include="miscGui.cpp" />
     <ClCompile Include="msvcrt.cpp" />
+    <ClCompile Include="Utils\dbgSetThreadName.cpp" />
   </ItemGroup>
 </Project>

@@ -35,6 +35,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "r_unkn.h"
 #include "r_transition.h"
 #include "render.h"
+#include <Utils/dbgSetThreadName.h>
 extern char *scanstr_back( char *str, char *toscan, char *defval );
 
 static const char *transitionmodes[] =
@@ -80,6 +81,8 @@ C_RenderTransitionClass::~C_RenderTransitionClass()
 
 unsigned int WINAPI C_RenderTransitionClass::m_initThread( LPVOID p )
 {
+	dbgSetThreadName( "AVS Transition Thread" );
+
 	C_RenderTransitionClass *_this = (C_RenderTransitionClass*)p;
 	FILETIME ft;
 	GetSystemTimeAsFileTime( &ft );

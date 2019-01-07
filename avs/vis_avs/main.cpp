@@ -44,8 +44,8 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "wasabicfg.h"
 #include "../studio/studio/api.h"
 #endif
-
 #include "avs_eelif.h"
+#include <Utils/dbgSetThreadName.h>
 
 extern void GetClientRect_adj( HWND hwnd, RECT *r );
 
@@ -340,7 +340,7 @@ static void quit( struct winampVisModule *this_mod )
 		DeleteCriticalSection( &g_render_cs );
 
 		DS( "smp_cleanupthreads\n" );
-		C_RenderListClass::smp_cleanupthreads();
+		// C_RenderListClass::smp_cleanupthreads();
 	}
 #undef DS
 }
@@ -371,6 +371,8 @@ void quit3( void )
 
 DWORD __stdcall RenderThread( LPVOID a )
 {
+	dbgSetThreadName( "AVS Render Thread" );
+
 	int framedata[ FPS_NF ] = { 0, };
 	int framedata_pos = 0;
 	int s = 0;

@@ -9,6 +9,7 @@
 #include "render.h"
 #include "main.h"
 #include "VIS.H"
+#include <Utils/dbgSetThreadName.h>
 
 constexpr DWORD msQuitTimeout = 1000;
 
@@ -139,6 +140,8 @@ namespace guiThread
 
 	static HRESULT __stdcall threadProc( winampVisModule * this_mod )
 	{
+		dbgSetThreadName( "AVS GUI Thread" );
+
 		CHECK( startup( this_mod ), "Error initializing AVS thread" );
 		SetEvent( eventThreadReady );
 
@@ -169,7 +172,10 @@ namespace guiThread
 			return S_FALSE;
 		PostThreadMessage( threadId, WM_QUIT, 0, 0 );
 		if( WAIT_OBJECT_0 == WaitForSingleObject( hThread, msQuitTimeout ) )
+		{
+			hThread.Close();
 			return S_OK;
+		}
 		const HRESULT hr =  getLastHr();
 		if( hThread )
 		{

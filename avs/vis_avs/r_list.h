@@ -96,6 +96,7 @@ protected:
 #endif
 
 #define MAX_SMP_THREADS 8
+	/*
 	// smp stuff
 	void smp_Render( int minthreads, C_RBASE2 *render, char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
 	typedef struct
@@ -122,11 +123,11 @@ protected:
 
 
 	static _s_smp_parms smp_parms;
-	static DWORD WINAPI smp_threadProc( LPVOID parm );
+	static DWORD WINAPI smp_threadProc( LPVOID parm );*/
 
 public:
 
-	static void smp_cleanupthreads();
+	// static void smp_cleanupthreads();
 
 	C_RenderListClass( int iroot = 0 );
 	virtual ~C_RenderListClass();

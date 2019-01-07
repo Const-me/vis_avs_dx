@@ -21,11 +21,13 @@ int RenderWindow::wmCreate( LPCREATESTRUCT lpCreateStruct )
 	return 0;
 }
 
-/* void RenderWindow::wmDestroy()
+void RenderWindow::wmDestroy()
 {
 	logShutdown( "RenderWindow::wmDestroy" );
-	destroyDevice();
-} */
+	// destroyDevice();
+	m_cb = nullptr;
+	m_ps = nullptr;
+}
 
 HRESULT RenderWindow::createDevice()
 {

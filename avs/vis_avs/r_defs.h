@@ -31,6 +31,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define _R_DEFS_H_
 #include "../../avs_dx/InteropLib/effectsFactory.h"
 #include "../../avs_dx/InteropLib/msvcrt.h"
+#include "../../avs_dx/DxVisuals/Utils/logger.h"
 
 // base class declaration, compatibility class
 class RString;

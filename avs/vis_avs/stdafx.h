@@ -13,6 +13,7 @@
 #include <math.h>
 #include <stdint.h>
 #include <time.h>
+#include <assert.h>
 
 #include <algorithm>
 // Interop with the AVS code
@@ -25,7 +26,11 @@ inline int max( int a, int b )
 	return std::max( a, b );
 }
 
-#include "r_defs.h"
-
 #include <EASTL/vector.h>
 using eastl::vector;
+
+#include <atlstr.h>
+
+inline HRESULT getLastHr() { return HRESULT_FROM_WIN32( GetLastError() ); }
+
+#include "r_defs.h"

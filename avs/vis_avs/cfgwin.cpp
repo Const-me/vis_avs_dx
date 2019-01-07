@@ -51,8 +51,6 @@ static HTREEITEM g_hroot;
 extern struct winampVisModule *g_mod;
 extern int cfg_cancelfs_on_deactivate;
 
-HWND g_debugwnd;
-
 char g_noeffectstr[] = "No effect/setting selected";
 //extern char *verstr;
 static HWND cur_hwnd;
@@ -91,7 +89,7 @@ char config_pres_subdir[ MAX_PATH ];
 char last_preset[ 2048 ];
 
 static BOOL CALLBACK dlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
-HWND g_hwndDlg;
+HWND g_hwndDlg = nullptr;
 
 extern HWND g_hwnd;
 
@@ -100,22 +98,23 @@ extern HWND g_hwnd;
 extern embedWindowState myWindowState;
 #endif
 
-/*
 HINSTANCE g_hDllInstance;
 HWND g_hwndParent;
-HANDLE hcfgThread;
-DWORD WINAPI cfgwnd_thread(LPVOID p)
+CHandle hcfgThread;
+DWORD __stdcall cfgwnd_thread( LPVOID p )
 {
-	g_hwndDlg=CreateDialog(g_hDllInstance,MAKEINTRESOURCE(IDD_DIALOG1),NULL,dlgProc);
-  while (1)
-  {
-	MSG msg;
-	if (!GetMessage(&msg,NULL,0,0)) break;
-	if (!IsDialogMessage(g_hwndDlg,&msg)) DispatchMessage(&msg);
-  }
-  return 0;
+	g_hwndDlg = CreateDialog( g_hDllInstance, MAKEINTRESOURCE( IDD_DIALOG1 ), NULL, dlgProc );
+	while( 1 )
+	{
+		MSG msg;
+		if( !GetMessage( &msg, NULL, 0, 0 ) ) break;
+		if( !IsDialogMessage( g_hwndDlg, &msg ) ) DispatchMessage( &msg );
+	}
+	assert( nullptr == g_hwndDlg );
+	hcfgThread.Close();
+	return 0;
 }
-*/
+
 static int ExtractWindowsVersion( void )
 {
 	int dwVersion, dwWindowsMajorVersion, dwWindowsMinorVersion, WindowsType, dwBuild;
@@ -149,7 +148,19 @@ static int ExtractWindowsVersion( void )
 
 void CfgWnd_Create( struct winampVisModule *this_mod )
 {
-	CreateDialog( this_mod->hDllInstance, MAKEINTRESOURCE( IDD_DIALOG1 ), this_mod->hwndParent, dlgProc );
+	if( g_hwndDlg )
+	{
+		ShowWindow( g_hwndDlg, SW_RESTORE );
+		SetForegroundWindow( g_hwndDlg );
+		return;
+	}
+	// CreateDialog( this_mod->hDllInstance, MAKEINTRESOURCE( IDD_DIALOG1 ), this_mod->hwndParent, dlgProc );
+
+	g_hDllInstance = this_mod->hDllInstance;
+	DWORD tid;
+	hcfgThread.Attach( ::CreateThread( nullptr, 0, &cfgwnd_thread, nullptr, 0, &tid ) );
+	if( !hcfgThread )
+		logError( getLastHr(), "Error creating an AVS GUI thread" );
 }
 
 void CfgWnd_Destroy( void )
@@ -160,20 +171,15 @@ void CfgWnd_Destroy( void )
 		GetWindowRect( g_hwndDlg, &r );
 		cfg_cfgwnd_x = r.left;
 		cfg_cfgwnd_y = r.top;
-		DestroyWindow( g_hwndDlg );
+		SendMessage( g_hwndDlg, WM_CLOSE, 0, 0 );
 	}
 	g_hwndDlg = 0;
-	if( g_debugwnd ) DestroyWindow( g_debugwnd );
-	/*
-	if (hcfgThread)
+	if( hcfgThread )
 	{
-		SendMessage(g_hwndDlg,WM_USER+6,0,0);
-		g_hwndDlg=0;
-	  WaitForSingleObject(hcfgThread,INFINITE);
-	  CloseHandle(hcfgThread);
-	  hcfgThread=0;
+		g_hwndDlg = 0;
+		WaitForSingleObject( hcfgThread, INFINITE );
+		hcfgThread.Close();
 	}
-	*/
 }
 
 static void recursiveAddDirList( HMENU menu, UINT *id, char *path, int pathlen )
@@ -887,6 +893,8 @@ static BOOL CALLBACK dlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 		}
 		return 0;
 	case WM_DESTROY:
+		PostQuitMessage( 0 );
+		g_hwndDlg = nullptr;
 		return 0;
 	case WM_INITDIALOG:
 	{

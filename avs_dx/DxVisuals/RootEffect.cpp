@@ -54,6 +54,7 @@ HRESULT RootEffect::renderRoot( bool isBeat, RenderTargets& rt, bool rebindResou
 		bindResources();
 
 	CHECK( render( isBeat, rt ) );
+	CHECK( completedRendering() );
 
 	return S_OK;
 }

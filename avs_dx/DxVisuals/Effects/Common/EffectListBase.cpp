@@ -102,8 +102,6 @@ HRESULT EffectListBase::render( bool isBeat, RenderTargets& rt )
 			return hr;
 		} );
 	}
-
-	completedRendering();
 	return hr;
 }
 

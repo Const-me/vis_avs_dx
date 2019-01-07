@@ -417,6 +417,7 @@
     <ClCompile Include="Interop\Utils\dbgSetThreadName.cpp" />
     <ClCompile Include="Interop\Utils\shutdown-impl.cpp" />
     <ClCompile Include="Interop\WindowImpl.cpp" />
+    <ClCompile Include="Render\Profiler.frame.cpp" />
     <ClCompile Include="Resources\dynamicBuffers.cpp" />
     <ClCompile Include="Effects\List\BufferSave.cpp" />
     <ClCompile Include="Effects\Misc\ClearScreen.cpp" />

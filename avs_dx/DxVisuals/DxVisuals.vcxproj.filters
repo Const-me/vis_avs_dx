@@ -404,6 +404,7 @@
     <ClCompile Include="Effects\Common\EffectBase.cpp" />
     <ClCompile Include="Effects\Common\EffectListBase.cpp" />
     <ClCompile Include="Effects\Common\EffectListBase.factory.cpp" />
+    <ClCompile Include="Render\Profiler.frame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

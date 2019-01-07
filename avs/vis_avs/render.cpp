@@ -127,9 +127,17 @@ void Render_Quit( HINSTANCE hDllInstance )
 		g_render_effects->__SavePreset( INI_FILE );
 	}
 
-	if( g_render_effects ) delete g_render_effects;
+	if( g_render_effects )
+	{
+		destroyDxEffect( g_render_effects );
+		delete g_render_effects;
+	}
 	g_render_effects = NULL;
-	if( g_render_effects2 ) delete g_render_effects2;
+	if( g_render_effects2 )
+	{
+		destroyDxEffect( g_render_effects2 );
+		delete g_render_effects2;
+	}
 	g_render_effects2 = NULL;
 
 	if( g_render_library ) delete g_render_library;

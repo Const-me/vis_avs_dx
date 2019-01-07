@@ -8,6 +8,8 @@ CAtlMap<const void*, unique_ptr<EffectBase>> g_effects{ 17, 0.75f, 0.05f, 1.25f,
 
 void addNewEffect( const C_RBASE *pThis, unique_ptr<EffectBase>&& fx )
 {
+	assert( nullptr != pThis );
+
 	CSLock __lock( g_effectsLock );
 	auto& up = g_effects[ pThis ];
 	assert( !up.operator bool() );
@@ -16,6 +18,8 @@ void addNewEffect( const C_RBASE *pThis, unique_ptr<EffectBase>&& fx )
 
 void createEmptyEffect( const C_RBASE* pThis )
 {
+	assert( nullptr != pThis );
+
 	CSLock __lock( g_effectsLock );
 	auto& up = g_effects[ pThis ];
 	assert( !up.operator bool() );
@@ -23,22 +27,32 @@ void createEmptyEffect( const C_RBASE* pThis )
 
 bool hasDxEffect( const C_RBASE* pThis )
 {
+	if( nullptr == pThis )
+		return false;
+
 	CSLock __lock( g_effectsLock );
 	return nullptr != g_effects.Lookup( pThis );
 }
 
 void destroyDxEffect( const C_RBASE* pThis )
 {
+	if( nullptr == pThis )
+		return;
+
 	CSLock __lock( g_effectsLock );
 	g_effects.RemoveKey( pThis );
 }
 
 EffectBase* getDxEffect( const C_RBASE* pThis )
 {
+	if( nullptr == pThis )
+		return nullptr;
+
 	CSLock __lock( g_effectsLock );
 	auto p = g_effects.Lookup( pThis );
 	if( nullptr == p )
 		return nullptr;
+
 	return p->m_value.get();
 }
 

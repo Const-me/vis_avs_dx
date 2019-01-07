@@ -1384,6 +1384,7 @@ static BOOL CALLBACK dlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 						}
 						else
 						{
+							destroyDxEffect( r );
 							delete r;
 							ren.render = NULL;
 						}

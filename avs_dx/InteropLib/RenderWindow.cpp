@@ -130,7 +130,8 @@ HRESULT RenderWindow::doPresent()
 			hr = hr2;
 	}
 	logError( hr, "IDXGISwapChain::Present failed" );
-	// CHECK( m_output->WaitForVBlank() );
+	// When it fails, very likely the condition's stable. No point in failing at 200Hz, 4Hz failure rate should be enough.
+	Sleep( 250 );
 	return S_OK;
 }
 

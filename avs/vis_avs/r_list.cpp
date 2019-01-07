@@ -408,6 +408,7 @@ void C_RenderListClass::clearRenders( void )
 	{
 		for( x = 0; x < num_renders; x++ )
 		{
+			destroyDxEffect( renders[ x ].render );
 			delete renders[ x ].render;
 		}
 		GlobalFree( (HGLOBAL)renders );

@@ -52,7 +52,7 @@ HRESULT Tree::appendAssignment( const CStringA& nseel, int begin, int equals, in
 		node.source = "assign";
 #endif
 		node.id = eInternalFunc::Assign;
-		pushNode( ec, std::move( node ) );
+		pushNode( ec, eastl::move( node ) );
 
 		ExpressionContext argContext;
 		pushExpression( nseel, argContext, begin, equals );
@@ -97,7 +97,7 @@ void Tree::pushExpression( const CStringA& expr, ExpressionContext& ec, int begi
 	nn.source = expr.Mid( begin, end - begin );
 #endif
 	nn.length = end - begin;
-	pushNode( ec, std::move( nn ) );
+	pushNode( ec, eastl::move( nn ) );
 }
 
 void Tree::pushCode( const CStringA& expr, ExpressionContext& ec, int begin, int end )
@@ -113,7 +113,7 @@ void Tree::pushCode( const CStringA& expr, ExpressionContext& ec, int begin, int
 	for( int i = begin; i < end; i++ )
 		m_codez.push_back( expr[ i ] );
 
-	pushNode( ec, std::move( nn ) );
+	pushNode( ec, eastl::move( nn ) );
 }
 
 void Tree::pushMacro( const CStringA& expr, ExpressionContext& ec, int begin, int end )
@@ -154,7 +154,7 @@ void Tree::pushVar( const CStringA& expr, ExpressionContext& ec, int begin, int 
 #endif
 	nn.id = symbols.vars.lookup( expr.Mid( begin, end - begin ), nn.vt );
 	nn.length = end - begin;
-	pushNode( ec, std::move( nn ) );
+	pushNode( ec, eastl::move( nn ) );
 }
 
 void Tree::pushFunc( const CStringA& expr, ExpressionContext& ec, int begin, int end )
@@ -170,7 +170,7 @@ void Tree::pushFunc( const CStringA& expr, ExpressionContext& ec, int begin, int
 		logError( "Unknown function %s", cstr( name ) );
 		throw std::invalid_argument( "Unknown function" );
 	}
-	pushNode( ec, std::move( nn ) );
+	pushNode( ec, eastl::move( nn ) );
 }
 
 namespace

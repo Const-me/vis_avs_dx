@@ -125,5 +125,5 @@ vector<D3D_SHADER_MACRO> Defines::data() const
 
 	macros.emplace_back( D3D_SHADER_MACRO{ nullptr, nullptr } );
 
-	return std::move( macros );
+	return eastl::move( macros );
 }

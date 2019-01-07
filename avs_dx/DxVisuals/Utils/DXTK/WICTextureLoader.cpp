@@ -495,7 +495,7 @@ namespace
         auto rowPitch = static_cast<size_t>(rowBytes);
         auto imageSize = static_cast<size_t>(numBytes);
 
-        std::unique_ptr<uint8_t[]> temp(new (std::nothrow) uint8_t[imageSize]);
+        unique_ptr<uint8_t[]> temp(new (std::nothrow) uint8_t[imageSize]);
         if (!temp)
             return E_OUTOFMEMORY;
 

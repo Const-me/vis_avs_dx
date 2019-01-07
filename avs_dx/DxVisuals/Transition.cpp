@@ -26,9 +26,9 @@ const CStringA& getRenderSizeString()
 	return g_renderSizeString;
 }
 
-void createTransition( std::unique_ptr<iTransition>& up )
+void createTransition( unique_ptr<iTransition>& up )
 {
-	up = std::make_unique<Transition>();
+	up = make_unique<Transition>();
 }
 
 Transition::Transition() :
@@ -135,7 +135,7 @@ HRESULT Transition::renderTransition( char visdata[ 2 ][ 2 ][ 576 ], int isBeat,
 
 namespace
 {
-	std::unique_ptr<Transition> g_transition;
+	unique_ptr<Transition> g_transition;
 }
 Transition* getTransitionInstance()
 {
@@ -151,7 +151,7 @@ bool createTransitionInstance()
 {
 	if( g_transition )
 		return false;
-	g_transition = std::make_unique<Transition>();
+	g_transition = make_unique<Transition>();
 	return true;
 }
 

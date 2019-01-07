@@ -35,8 +35,8 @@ public:
 	static inline HRESULT create( void* pState, const C_RBASE* pThis )
 	{
 		using tImpl = EffectImpl<TEffect>;
-		std::unique_ptr<tImpl> res = std::make_unique<tImpl>( pState );
-		addNewEffect( pThis, std::move( res ) );
+		unique_ptr<tImpl> res = make_unique<tImpl>( pState );
+		addNewEffect( pThis, eastl::move( res ) );
 		return S_OK;
 	}
 
@@ -75,8 +75,8 @@ public:
 	static inline HRESULT create( C_RBASE* pThis )
 	{
 		using tImpl = ApeEffectImpl<TEffect>;
-		std::unique_ptr<tImpl> res = std::make_unique<tImpl>( pThis );
-		addNewEffect( pThis, std::move( res ) );
+		unique_ptr<tImpl> res = make_unique<tImpl>( pThis );
+		addNewEffect( pThis, eastl::move( res ) );
 		return S_OK;
 	}
 };

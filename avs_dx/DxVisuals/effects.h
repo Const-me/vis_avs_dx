@@ -4,7 +4,7 @@
 
 class C_RBASE;
 
-void addNewEffect( const C_RBASE* pRBase, std::unique_ptr<EffectBase>&& fx );
+void addNewEffect( const C_RBASE* pRBase, unique_ptr<EffectBase>&& fx );
 
 EffectBase* getDxEffect( const C_RBASE* pRBase );
 

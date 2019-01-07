@@ -81,5 +81,5 @@ HRESULT RenderTarget::createUav()
 BoundSrv<eStage::Pixel> RenderTarget::psView() const
 {
 	assert( nullptr != m_srv );
-	return std::move( BoundSrv<eStage::Pixel>{ Binder::psPrevFrame, m_srv } );
+	return eastl::move( BoundSrv<eStage::Pixel>{ Binder::psPrevFrame, m_srv } );
 }

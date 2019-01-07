@@ -43,7 +43,7 @@ vector<uint8_t> decompressBytes( const uint8_t* src, int compressedLength, int o
 	vector<uint8_t> result;
 	result.resize( (size_t)origLength );
 	Decompressor::instance().decompress( src, compressedLength, result.data(), origLength );
-	return std::move( result );
+	return eastl::move( result );
 }
 
 CStringA decompressString( const uint8_t* src, int compressedLength, int origLength )
@@ -51,5 +51,5 @@ CStringA decompressString( const uint8_t* src, int compressedLength, int origLen
 	CStringA result;
 	Decompressor::instance().decompress( src, compressedLength, result.GetBufferSetLength( origLength + 1 ), origLength );
 	result.ReleaseBuffer( origLength );
-	return std::move( result );
+	return eastl::move( result );
 }

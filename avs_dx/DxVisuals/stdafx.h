@@ -23,12 +23,14 @@ using DirectX::SimpleMath::Vector4;
 
 // C++
 #include <stdint.h>
-#include <memory>
 #include <algorithm>
 #include <EASTL/vector.h>
 #include <EASTL/array.h>
+#include <EASTL/unique_ptr.h>
 using eastl::vector;
 using eastl::array;
+using eastl::unique_ptr;
+using eastl::make_unique;
 #include <functional>
 
 #include <mfobjects.h>

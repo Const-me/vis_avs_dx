@@ -124,12 +124,12 @@ inline void bindSampler( UINT slot, ID3D11SamplerState* s = nullptr )
 template<eStage stage = eStage::Pixel>
 inline BoundSrv<stage> boundResource( UINT slot, ID3D11ShaderResourceView* srv )
 {
-	return std::move( BoundSrv<stage>{ slot, srv } );
+	return eastl::move( BoundSrv<stage>{ slot, srv } );
 }
 
 using BoundUav = DxUtils::BoundResource<eStage::Compute, DxUtils::UavResource>;
 
 inline BoundUav boundResource( UINT slot, ID3D11UnorderedAccessView* uav )
 {
-	return std::move( BoundUav{ slot, uav } );
+	return eastl::move( BoundUav{ slot, uav } );
 }

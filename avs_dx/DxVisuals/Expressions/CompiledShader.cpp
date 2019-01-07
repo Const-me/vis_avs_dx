@@ -23,7 +23,7 @@ namespace
 		res[ 0 ] = hlsl.Left( sg );
 		res[ 1 ] = hlsl.Mid( sge, mc - sge );
 		res[ 2 ] = hlsl.Mid( mce );
-		return std::move( res );
+		return eastl::move( res );
 	}
 }
 

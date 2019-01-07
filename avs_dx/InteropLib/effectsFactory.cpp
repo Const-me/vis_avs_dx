@@ -4,9 +4,9 @@
 
 CComAutoCriticalSection g_effectsLock;
 
-CAtlMap<const void*, std::unique_ptr<EffectBase>> g_effects{ 17, 0.75f, 0.05f, 1.25f, 32 };	// It has very few items: we don't care about RAM but want to minimize rehashes and collisions.
+CAtlMap<const void*, unique_ptr<EffectBase>> g_effects{ 17, 0.75f, 0.05f, 1.25f, 32 };	// It has very few items: we don't care about RAM but want to minimize rehashes and collisions.
 
-void addNewEffect( const C_RBASE *pThis, std::unique_ptr<EffectBase>&& fx )
+void addNewEffect( const C_RBASE *pThis, unique_ptr<EffectBase>&& fx )
 {
 	CSLock __lock( g_effectsLock );
 	auto& up = g_effects[ pThis ];

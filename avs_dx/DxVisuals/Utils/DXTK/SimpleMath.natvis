@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+	<Type Name="DirectX::SimpleMath::Quaternion">
+		<DisplayString>[ { x }, { y }, { z }, { w } ]</DisplayString>
+	</Type>
+	<Type Name="DirectX::SimpleMath::Vector4">
+		<DisplayString>[ { x }, { y }, { z }, { w } ]</DisplayString>
+	</Type>
+	<Type Name="DirectX::SimpleMath::Plane">
+		<DisplayString>[ { x }, { y }, { z }, { w } ]</DisplayString>
+	</Type>
+	<Type Name="DirectX::SimpleMath::Vector3">
+		<DisplayString>[ { x }, { y }, { z } ]</DisplayString>
+	</Type>
+	<Type Name="DirectX::SimpleMath::Vector2">
+		<DisplayString>[ { x }, { y } ]</DisplayString>
+	</Type>
+</AutoVisualizer>

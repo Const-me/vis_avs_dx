@@ -288,6 +288,7 @@
     <ClInclude Include="Effects\Common\EffectImpl.hpp" />
     <ClInclude Include="Effects\Common\EffectProfiler.h" />
     <ClInclude Include="Effects\Common\ShaderUpdatesSimple.hpp" />
+    <ClInclude Include="Interop\Profiler\TableData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -405,6 +406,7 @@
     <ClCompile Include="Effects\Common\EffectListBase.cpp" />
     <ClCompile Include="Effects\Common\EffectListBase.factory.cpp" />
     <ClCompile Include="Render\Profiler.frame.cpp" />
+    <ClCompile Include="Interop\Profiler\TableData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -489,5 +491,9 @@
     <CustomBuild Include="Effects\IncludeShadersH.tt" />
     <CustomBuild Include="Expressions\Builtin\includeFunctions.tt" />
     <CustomBuild Include="Effects\Trans\Blur\KernelValues.tt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="Utils\EASTL\EASTL.natvis" />
+    <Natvis Include="Utils\DXTK\SimpleMath.natvis" />
   </ItemGroup>
 </Project>

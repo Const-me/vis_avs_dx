@@ -168,6 +168,7 @@
     <ClInclude Include="Render\Profiler.h" />
     <ClInclude Include="Render\SimpleShaderTypes.hpp" />
     <ClInclude Include="Resources\GlobalBuffers.h" />
+    <ClInclude Include="Interop\Profiler\TableData.h" />
     <ClInclude Include="Utils\DXTK\Audio.h" />
     <ClInclude Include="Utils\DXTK\CommonStates.h" />
     <ClInclude Include="Utils\DXTK\DDSTextureLoader.h" />
@@ -440,6 +441,7 @@
     <ClCompile Include="Effects\Trans\Moves\MovementCommon.cpp" />
     <ClCompile Include="Render\Profiler.cpp" />
     <ClCompile Include="Resources\GlobalBuffers.cpp" />
+    <ClCompile Include="Interop\Profiler\TableData.cpp" />
     <ClCompile Include="Utils\DXTK\SimpleMath.cpp" />
     <ClCompile Include="Utils\DXTK\WICTextureLoader.cpp" />
     <ClCompile Include="Utils\findAssets.cpp" />
@@ -789,6 +791,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Effects\Trans\Blur\LinearConvolution.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="Utils\DXTK\SimpleMath.natvis" />
+    <Natvis Include="Utils\EASTL\EASTL.natvis" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

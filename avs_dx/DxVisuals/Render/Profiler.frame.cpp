@@ -2,6 +2,7 @@
 #include "Profiler.h"
 
 constexpr bool busyWaiting = false;
+constexpr bool writeGpuCounterFrequency = false;
 
 inline void waitForData()
 {
@@ -91,7 +92,19 @@ HRESULT Profiler::FrameData::report( uint32_t frame, vector<sProfilerEntry> &res
 	D3D11_QUERY_DATA_TIMESTAMP_DISJOINT tsDisjoint;
 	CHECK( context->GetData( disjoint, &tsDisjoint, sizeof( tsDisjoint ), 0 ) );
 	if( tsDisjoint.Disjoint )
+	{
+		logWarning( "Error collecting perf.data, something strange happened, maybe thermal throttling or power throttling or power state change." );
 		return S_FALSE;
+	}
+
+	result.clear();
+
+	if( writeGpuCounterFrequency )
+	{
+		// On 1080 Ti it's 1GHz stable, boring, that's why disabled.
+		const float GHz = (float)( (double)tsDisjoint.Frequency * 1E-9 );
+		result.emplace_back( sProfilerEntry{ nullptr, 0, "GHz", GHz } );
+	}
 
 	const float msMul = (float)( 1000.0 / tsDisjoint.Frequency );
 	uint64_t tsPrev;
@@ -104,7 +117,6 @@ HRESULT Profiler::FrameData::report( uint32_t frame, vector<sProfilerEntry> &res
 		tsPrev = ts;
 	};
 
-	result.clear();
 	uint64_t tsCurr;
 	for( auto e : effects )
 	{

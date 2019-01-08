@@ -45,11 +45,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)avs_dx\DxVisuals\Utils;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)avs_dx\DxVisuals;$(SolutionDir)avs_dx\DxVisuals\Utils;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)avs_dx\DxVisuals\Utils;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)avs_dx\DxVisuals;$(SolutionDir)avs_dx\DxVisuals\Utils;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -106,9 +106,6 @@
   <ItemGroup>
     <ProjectReference Include="..\DxVisuals\DxVisuals.vcxproj">
       <Project>{32301408-2a47-4539-9b8e-6378b7ff4169}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\InteropLib\InteropLib.vcxproj">
-      <Project>{a90c771b-e993-478a-820a-166757609b62}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

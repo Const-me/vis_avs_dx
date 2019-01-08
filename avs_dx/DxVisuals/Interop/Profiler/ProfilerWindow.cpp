@@ -31,7 +31,54 @@ int ProfilerWindow::wmCreate( LPCREATESTRUCT lpCreateStruct )
 	if( !m_backgroundBrush )
 		m_backgroundBrush.CreateSolidBrush( GetSysColor( COLOR_WINDOW ) );
 
+	CMenuHandle menu = GetSystemMenu( FALSE );
+
+	MENUITEMINFO mi = {};
+	mi.cbSize = sizeof( mi );
+	mi.fMask = MIIM_TYPE;
+	mi.fType = MFT_SEPARATOR;
+	menu.InsertMenuItem( 0, TRUE, &mi );
+
+	mi.fMask = MIIM_TYPE | MIIM_DATA | MIIM_ID;
+	mi.fType = MFT_STRING;
+	mi.wID = menuSaveLog;
+	CString s = L"Log to file";
+	mi.dwTypeData = s.GetBuffer();
+	mi.cch = s.GetLength();
+	menu.InsertMenuItem( 0, TRUE, &mi );
+	s.ReleaseBuffer();
+
 	return TRUE;
+}
+
+void ProfilerWindow::wmSysCommand( UINT nID, CPoint point )
+{
+	if( nID != menuSaveLog )
+	{
+		SetMsgHandled( FALSE );
+		return;
+	}
+
+	CMenuHandle menu = GetSystemMenu( FALSE );
+	if( m_file.writing() )
+	{
+		if( m_file.stop( m_hWnd ) )
+			menu.CheckMenuItem( menuSaveLog, MF_UNCHECKED );
+	}
+	else
+		if( m_file.start( m_hWnd ) )
+			menu.CheckMenuItem( menuSaveLog, MF_CHECKED );
+}
+
+void ProfilerWindow::vmClose()
+{
+	if( m_file.writing() )
+	{
+		m_file.stop( m_hWnd );
+		CMenuHandle menu = GetSystemMenu( FALSE );
+		menu.CheckMenuItem( menuSaveLog, MF_UNCHECKED );
+	}
+	SetMsgHandled( FALSE );
 }
 
 void ProfilerWindow::wmGetMinMaxInfo( LPMINMAXINFO lpMMI )
@@ -106,6 +153,7 @@ LRESULT ProfilerWindow::wmUpdate( UINT, WPARAM, LPARAM, BOOL )
 	CSLock __lock( m_cs );
 
 	m_averages.update( m_entries );
+	m_file.add( m_frame, m_entries );
 
 	m_text = L"";
 	CStringW str;

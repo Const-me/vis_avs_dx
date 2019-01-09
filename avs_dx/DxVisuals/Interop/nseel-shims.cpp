@@ -1,19 +1,13 @@
 #include "stdafx.h"
 #include "../../avs/vis_avs/avs_eelif.h"
 
-char last_error_string[ 1024 ];
 int g_log_errors;
-CRITICAL_SECTION g_eval_cs;
 
 void AVS_EEL_IF_init()
-{
-	InitializeCriticalSection( &g_eval_cs );
-}
+{ }
 
 void AVS_EEL_IF_quit()
-{
-	DeleteCriticalSection( &g_eval_cs );
-}
+{ }
 
 int AVS_EEL_IF_Compile( int context, char *code ) { return 0; }
 void AVS_EEL_IF_Execute( void *handle, char visdata[ 2 ][ 2 ][ 576 ] ) { }

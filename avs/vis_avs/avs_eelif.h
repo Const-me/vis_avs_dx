@@ -42,7 +42,6 @@ int AVS_EEL_IF_Compile( int context, char *code );
 void AVS_EEL_IF_Execute( void *handle, char visdata[ 2 ][ 2 ][ 576 ] );
 void AVS_EEL_IF_resetvars( NSEEL_VMCTX ctx );
 void AVS_EEL_IF_VM_free( NSEEL_VMCTX ctx );
-extern char last_error_string[ 1024 ];
 extern int g_log_errors;
 
 // our old-style interface

@@ -31,8 +31,6 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "r_defs.h"
 #include "resource.h"
 #include "avs_eelif.h"
-
-#include "timing.h"
 #include <atlbase.h>
 
 using CSLock = CComCritSecLock<CComAutoCriticalSection>;

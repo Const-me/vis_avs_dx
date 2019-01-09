@@ -33,8 +33,6 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "resource.h"
 #include "r_stack.h"
 
-#include "timing.h"
-
 #ifndef LASER
 
 #define MOD_NAME "Misc / Buffer Save"

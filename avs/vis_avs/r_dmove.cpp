@@ -33,8 +33,6 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "avs_eelif.h"
 #include "r_list.h"
 
-#include "timing.h"
-
 #if 0 
 static void __docheck( int xp, int yp, int m_lastw, int m_lasth, int d_x, int d_y )
 {

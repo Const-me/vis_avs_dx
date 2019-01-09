@@ -215,10 +215,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TIMING.C">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="undo.cpp" />
     <ClCompile Include="util.cpp" />
     <ClCompile Include="wnd.cpp" />
@@ -242,7 +238,6 @@
     <ClInclude Include="r_unkn.h" />
     <ClInclude Include="SourceBuffer.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="TIMING.H" />
     <ClInclude Include="undo.h" />
     <ClInclude Include="wnd.h" />
   </ItemGroup>

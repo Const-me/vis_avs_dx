@@ -29,7 +29,6 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "stdafx.h"
 #include "render.h"
-#include "timing.h"
 #include "undo.h"
 #include "wnd.h"
 #include "wa_ipc.h"
@@ -50,7 +49,6 @@ int const mmx_blend4_zero = 0;
 
 void Render_Init( HINSTANCE hDllInstance )
 {
-	timingInit();
 	{
 		int i, j;
 		for( j = 0; j < 256; j++ )
@@ -118,11 +116,4 @@ void Render_Quit( HINSTANCE hDllInstance )
 
 	if( g_render_library ) delete g_render_library;
 	g_render_library = NULL;
-
-	timingPrint();
-#ifdef LASER
-	if( g_laser_linelist ) delete g_laser_linelist;
-	g_laser_linelist = 0;
-	laser_disconnect();
-#endif
 }

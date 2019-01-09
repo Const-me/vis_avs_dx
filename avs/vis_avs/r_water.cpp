@@ -33,8 +33,6 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "r_defs.h"
 #include "resource.h"
 
-#include "timing.h"
-
 #ifndef LASER
 
 #define C_THISCLASS C_WaterClass
@@ -160,8 +158,6 @@ void C_THISCLASS::smp_render( int this_thread, int max_threads, char visdata[ 2 
 	if( !this_thread ) at_top = 1;
 	if( this_thread >= max_threads - 1 ) at_bottom = 1;
 
-
-	timingEnter( 0 );
 
 	{
 
@@ -456,7 +452,6 @@ void C_THISCLASS::smp_render( int this_thread, int max_threads, char visdata[ 2 
 #ifndef NO_MMX
 	__asm emms;
 #endif
-	timingLeave( 0 );
 }
 
 C_RBASE *R_Water( char *desc )

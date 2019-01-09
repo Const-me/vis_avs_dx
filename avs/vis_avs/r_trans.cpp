@@ -31,8 +31,6 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "stdafx.h"
 #include "r_defs.h"
 #include "resource.h"
-
-#include "timing.h"
 #include "avs_eelif.h"
 #include <math.h>
 #include <Threads/threadsApi.h>

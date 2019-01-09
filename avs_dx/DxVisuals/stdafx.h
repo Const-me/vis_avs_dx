@@ -38,7 +38,7 @@ using eastl::unique_ptr;
 using eastl::make_unique;
 #include <functional>
 
-#include <mfobjects.h>
+#include <mfobjects.h>	// IMFDXGIDeviceManager
 
 #include "Interop/device.h"
 #include "Utils/logger.h"

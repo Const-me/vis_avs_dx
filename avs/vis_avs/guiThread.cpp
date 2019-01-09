@@ -28,11 +28,6 @@ HRESULT GuiThread::startup()
 
 	CfgWnd_Create( this_mod );
 
-	/* DWORD tid;
-	g_hThread.Attach( CreateThread( nullptr, 0, RenderThread, 0, 0, &tid ) );
-	if( !g_hThread )
-		return getLastHr(); */
-
 	SetForegroundWindow( g_hwnd );
 	SetFocus( g_hwnd );
 

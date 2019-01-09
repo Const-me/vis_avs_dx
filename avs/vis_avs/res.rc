@@ -222,7 +222,6 @@ BEGIN
     CONTROL         "color",IDC_OVERLAYCOLOR,"Button",BS_OWNERDRAW | WS_TABSTOP,146,23,40,10
     PUSHBUTTON      "default",IDC_DEFOVERLAYCOLOR,190,23,40,10
     CONTROL         "Set desktop to color",IDC_SETDESKTOPCOLOR,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,146,76,82,11
-    COMBOBOX        IDC_THREAD_PRIORITY,144,138,86,65,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     GROUPBOX        "Windowed settings",IDC_STATIC,0,0,137,104
     LTEXT           "Lower framerate",IDC_STATIC,77,56,53,8
     GROUPBOX        "Alpha blending",IDC_STATIC_ALPHA,0,107,137,49
@@ -231,8 +230,6 @@ BEGIN
     GROUPBOX        "Overlay mode",IDC_STATIC,140,0,93,91
     CONTROL         "Overlay mode",IDC_BKGND_RENDER,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,145,9,82,11
     LTEXT           "Note that the overlay color must be carefully selected at non-32bpp color depths.",IDC_STATIC,148,41,75,33
-    GROUPBOX        "Priority",IDC_STATIC,140,107,93,49
-    LTEXT           "Render thread priority:",IDC_STATIC,145,122,70,8
 END
 
 IDD_CFG_PARTS DIALOGEX 0, 0, 137, 137

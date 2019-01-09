@@ -35,8 +35,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "timing.h"
 #include "avs_eelif.h"
 #include <math.h>
-
-extern CRITICAL_SECTION g_render_cs;
+#include <Threads/threadsApi.h>
 
 #ifndef LASER
 
@@ -317,11 +316,10 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 		if( wParam == 1 )
 		{
 			KillTimer( hwndDlg, 1 );
-			EnterCriticalSection( &g_render_cs );
+			UPDATE_PARAMS();
 			g_this->effect = 32767;
 			g_this->effect_exp.get_from_dlgitem( hwndDlg, IDC_EDIT1 );
 			g_this->effect_exp_ch = 1;
-			LeaveCriticalSection( &g_render_cs );
 		}
 		return 0;
 	case WM_COMMAND:
@@ -353,10 +351,9 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 
 				// always reinit =)
 				{
-					EnterCriticalSection( &g_render_cs );
+					UPDATE_PARAMS();
 					g_this->effect_exp.get_from_dlgitem( hwndDlg, IDC_EDIT1 );
 					g_this->effect_exp_ch = 1;
-					LeaveCriticalSection( &g_render_cs );
 				}
 			}
 			else
@@ -374,10 +371,9 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 					EnableWindow( GetDlgItem( hwndDlg, IDC_LABEL1 ), 1 );
 					CheckDlgButton( hwndDlg, IDC_CHECK3, descriptions[ t ].uses_rect ? BST_CHECKED : 0 );
 
-					EnterCriticalSection( &g_render_cs );
+					UPDATE_PARAMS();
 					g_this->effect_exp.assign( descriptions[ t ].eval_desc );
 					g_this->rectangular = descriptions[ t ].uses_rect;
-					LeaveCriticalSection( &g_render_cs );
 				}
 				else
 				{
@@ -420,11 +416,10 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 			g_this->rectangular = IsDlgButtonChecked( hwndDlg, IDC_CHECK3 ) ? 1 : 0;
 			if( SendDlgItemMessage( hwndDlg, IDC_LIST1, LB_GETCURSEL, 0, 0 ) != sizeof( descriptions ) / sizeof( descriptions[ 0 ] ) )
 			{
-				EnterCriticalSection( &g_render_cs );
+				UPDATE_PARAMS();
 				g_this->effect = 32767;
 				g_this->effect_exp.get_from_dlgitem( hwndDlg, IDC_EDIT1 );
 				g_this->effect_exp_ch = 1;
-				LeaveCriticalSection( &g_render_cs );
 				SendDlgItemMessage( hwndDlg, IDC_LIST1, LB_SETCURSEL, sizeof( descriptions ) / sizeof( descriptions[ 0 ] ), 0 );
 			}
 			else

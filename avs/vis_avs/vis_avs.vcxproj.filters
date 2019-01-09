@@ -292,9 +292,6 @@
     <ClInclude Include="EventSlim.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="main.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SourceBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>

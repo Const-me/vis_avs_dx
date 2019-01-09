@@ -66,9 +66,6 @@ static int init( struct winampVisModule *this_mod );
 static int render( struct winampVisModule *this_mod );
 static void quit( struct winampVisModule *this_mod );
 
-CHandle g_hThread;
-volatile int g_ThreadQuit;
-
 #ifndef WA3_COMPONENT
 SourceBuffer g_sourceBuffer;
 
@@ -165,21 +162,7 @@ static void config( struct winampVisModule *this_mod )
 	}
 }
 
-CRITICAL_SECTION g_render_cs;
 char g_path[ 1024 ];
-
-
-void main_setRenderThreadPriority()
-{
-	int prios[] = {
-	  GetThreadPriority( GetCurrentThread() ),
-	  THREAD_PRIORITY_IDLE,
-	  THREAD_PRIORITY_LOWEST,
-	  THREAD_PRIORITY_NORMAL,
-	  THREAD_PRIORITY_HIGHEST,
-	};
-	SetThreadPriority( g_hThread, prios[ cfg_render_prio ] );
-}
 
 extern void previous_preset( HWND hwnd );
 extern void next_preset( HWND hwnd );
@@ -215,15 +198,6 @@ static int init( struct winampVisModule *this_mod )
 	}
 #endif
 
-#ifndef NO_MMX
-	extern int is_mmx( void );
-	if( !is_mmx() )
-	{
-		MessageBox( this_mod->hwndParent, "NO MMX SUPPORT FOUND - CANNOT RUN AVS - GET THE NON-MMX VERSION.", "AVS ERROR", MB_OK | MB_ICONSTOP );
-		return 1;
-	}
-#endif
-
 #ifdef WA3_COMPONENT
 	strcat( g_path, "\\wacs\\data" );
 #endif
@@ -235,15 +209,13 @@ static int init( struct winampVisModule *this_mod )
 #endif
 	CreateDirectory( g_path, NULL );
 
-	InitializeCriticalSection( &g_render_cs );
-	g_ThreadQuit = 0;
-
 	return FAILED( avsThreadsStart( this_mod ) ) ? 1 : 0;
 }
 
 static int render( struct winampVisModule *this_mod )
 {
-	if( g_ThreadQuit ) return 1;
+	if( avsThreadsShuttingDown() )
+		return 1;
 
 	return g_sourceBuffer.update( this_mod );
 }
@@ -251,20 +223,6 @@ static int render( struct winampVisModule *this_mod )
 static void quit( struct winampVisModule *this_mod )
 {
 	avsThreadsStop();
-	return;
-#define DS(x) 
-	//MessageBox(this_mod->hwndParent,x,"AVS Debug",MB_OK)
-	if( g_hThread )
-	{
-		
-
-		DS( "cleaning up critsections\n" );
-		DeleteCriticalSection( &g_render_cs );
-
-		DS( "smp_cleanupthreads\n" );
-		// C_RenderListClass::smp_cleanupthreads();
-	}
-#undef DS
 }
 
 #ifdef WA3_COMPONENT

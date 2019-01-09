@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "GuiThreadImpl.h"
 #include "Interop/profilerApi.h"
+#include "Interop/ConsoleLogger.h"
 
 void GuiThreadImpl::postMessage( UINT Msg, WPARAM wParam, LPARAM lParam ) const
 {
@@ -38,7 +39,7 @@ HRESULT GuiThreadImpl::run()
 
 GuiThreadImpl::~GuiThreadImpl()
 {
-
+	closeDebugConsole();
 }
 
 bool GuiThreadImpl::handlePostedMessage( const MSG &msg )

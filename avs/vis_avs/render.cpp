@@ -43,24 +43,6 @@ C_RenderListClass *g_render_effects2;
 C_RenderTransitionClass *g_render_transition;
 C_RLibrary *g_render_library;
 
-int is_mmx( void ) {
-	DWORD retval1, retval2;
-	__try {
-		_asm {
-			mov eax, 1		// set up CPUID to return processor version and features
-										//	0 = vendor string, 1 = version info, 2 = cache info
-										_emit 0x0f	// code bytes = 0fh,  0a2h
-										_emit 0xa2
-										mov retval1, eax
-										mov retval2, edx
-		}
-	}
-	__except( EXCEPTION_EXECUTE_HANDLER ) { retval1 = retval2 = 0; }
-	if( !retval1 ) return 0;
-	return ( retval2 & 0x800000 ) ? 1 : 0;
-}
-
-
 unsigned char g_blendtable[ 256 ][ 256 ];
 unsigned int const mmx_blend4_revn[ 2 ] = { 0xff00ff,0xff00ff };//{0x1000100,0x1000100}; <<- this is actually more correct, but we're going for consistency vs. the non-mmx ver-jf
 int const mmx_blendadj_mask[ 2 ] = { 0xff00ff,0xff00ff };
@@ -68,10 +50,6 @@ int const mmx_blend4_zero = 0;
 
 void Render_Init( HINSTANCE hDllInstance )
 {
-#ifdef LASER
-	laser_connect();
-	g_laser_linelist = createLineList();
-#endif
 	timingInit();
 	{
 		int i, j;
@@ -89,12 +67,10 @@ void Render_Init( HINSTANCE hDllInstance )
 	char *p = INI_FILE;
 	strncpy( INI_FILE, (char*)SendMessage( GetWinampHwnd(), WM_WA_IPC, 0, IPC_GETINIFILE ), MAX_PATH );
 	p += strlen( INI_FILE ) - 1;
-	while( p >= INI_FILE && *p != '\\' ) p--;
-#ifdef LASER
-	strcpy( p, "\\plugins\\vis_avs_laser.dat" );
-#else
+	while( p >= INI_FILE && *p != '\\' )
+		p--;
 	strcpy( p, "\\plugins\\vis_avs.dat" );
-#endif
+
 	extern int g_saved_preset_dirty;
 	// clear the undo stack before loading a file.
 	C_UndoStack::clear();

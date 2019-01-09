@@ -26,4 +26,9 @@ public:
 	{
 		InterlockedExchange( &m_ThreadQuit, (LONG)TRUE );
 	}
+
+	bool shouldQuit() const
+	{
+		return 0 != m_ThreadQuit;
+	}
 };

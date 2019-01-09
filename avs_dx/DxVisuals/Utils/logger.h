@@ -3,6 +3,8 @@
 #define DXERR_ATL_STRING
 #include "DirectXErrors/DirectXErrors.h"
 
+#define LOG_SHUTDOWN 1
+
 enum struct eLogLevel : uint8_t
 {
 	Error,
@@ -53,9 +55,11 @@ inline void logDebug( const char* pszFormat, ... )
 
 #undef LOG_MESSAGE_FORMAT
 
-/* inline void logShutdown( const char* what )
+#if LOG_SHUTDOWN
+inline void logShutdown( const char* what )
 {
 	logDebug( "Shutdown\t%i\t%s", GetCurrentThreadId(), what );
-} */
-
+}
+#else
 #define logShutdown(...)
+#endif

@@ -5,7 +5,6 @@
 class AvsThreads
 {
 	winampVisModule *this_mod = nullptr;
-	CComAutoCriticalSection m_csRendering;
 
 	struct ThreadInfo
 	{
@@ -28,21 +27,20 @@ class AvsThreads
 	RenderThreadImpl* m_pRender;
 
 	HRESULT launchBothThreads();
+	volatile bool m_bShuttingDown = false;
 
 public:
 
 	HRESULT start( winampVisModule *this_mod );
 	HRESULT stop();
 
-	CComAutoCriticalSection& csRender() { return m_csRendering; }
-
 	GuiThreadImpl& gui() { return *m_pGui; }
 
 	RenderThreadImpl& render() { return *m_pRender; }
+
+	bool shuttingDown() { return m_bShuttingDown; }
 };
 
 AvsThreads& getThreads();
-
-#define RENDER_LOCK() CSLock __lock{ getThreads().csRender() }
 
 #define g_hwnd getThreads().gui().visual()

@@ -233,7 +233,6 @@
     <ClInclude Include="cfgwnd.h" />
     <ClInclude Include="draw.h" />
     <ClInclude Include="EventSlim.hpp" />
-    <ClInclude Include="main.h" />
     <ClInclude Include="render.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="rlib.h" />

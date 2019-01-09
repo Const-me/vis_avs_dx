@@ -6,9 +6,6 @@
 #include "effects.h"
 #include "RootEffect.h"
 
-// The critical section that guards renderers, linked from deep inside AVS.
-extern CRITICAL_SECTION g_render_cs;
-
 namespace
 {
 	CSize g_renderSize = CSize{ 0, 0 };
@@ -84,7 +81,6 @@ HRESULT Transition::renderSingle( uint16_t visdata[ 2 ][ 2 ][ 576 ], int isBeat,
 
 	m_rendered.mark();
 
-	UnlockExternCs _unlock{ g_render_cs };
 	CHECK( presentSingle( m_targets1.lastWritten() ) );
 
 #if GPU_PROFILE
@@ -116,7 +112,6 @@ HRESULT Transition::renderTransition( uint16_t visdata[ 2 ][ 2 ][ 576 ], int isB
 
 	m_rendered.mark();
 
-	UnlockExternCs _unlock{ g_render_cs };
 	CHECK( presentTransition( m_targets1.lastWritten(), m_targets2.lastWritten(), trans, sintrans ) );
 
 #if GPU_PROFILE

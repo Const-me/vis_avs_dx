@@ -43,6 +43,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Interop/ConsoleLogger.h>
 #include <Interop/profilerApi.h>
 #include <Interop/miscGui.h>
+#include <Threads/threadsApi.h>
 
 static void _do_add( HWND hwnd, HTREEITEM h, C_RenderListClass *list );
 static int treeview_hack;
@@ -84,7 +85,7 @@ int cfg_transitions2 = 4 | 32;
 int cfg_transitions_speed = 8;
 int cfg_transition_mode = 0x8001;
 int cfg_bkgnd_render = 0, cfg_bkgnd_render_color = 0x1F000F;
-int cfg_render_prio = 0;
+// int cfg_render_prio = 0;
 
 char config_pres_subdir[ MAX_PATH ];
 char last_preset[ 2048 ];
@@ -379,12 +380,12 @@ static BOOL CALLBACK DlgProc_Disp( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 	SendDlgItemMessage( hwndDlg, IDC_SLIDER1, TBM_SETRANGEMAX, 0, 80 );
 	SendDlgItemMessage( hwndDlg, IDC_SLIDER1, TBM_SETPOS, 1, cfg_speed & 0xff );
 
-	SendDlgItemMessage( hwndDlg, IDC_THREAD_PRIORITY, CB_ADDSTRING, 0, ( int )"Same as winamp" );
+	/* SendDlgItemMessage( hwndDlg, IDC_THREAD_PRIORITY, CB_ADDSTRING, 0, ( int )"Same as winamp" );
 	SendDlgItemMessage( hwndDlg, IDC_THREAD_PRIORITY, CB_ADDSTRING, 0, ( int )"Idle" );
 	SendDlgItemMessage( hwndDlg, IDC_THREAD_PRIORITY, CB_ADDSTRING, 0, ( int )"Lowest" );
 	SendDlgItemMessage( hwndDlg, IDC_THREAD_PRIORITY, CB_ADDSTRING, 0, ( int )"Normal" );
 	SendDlgItemMessage( hwndDlg, IDC_THREAD_PRIORITY, CB_ADDSTRING, 0, ( int )"Highest" );
-	SendDlgItemMessage( hwndDlg, IDC_THREAD_PRIORITY, CB_SETCURSEL, cfg_render_prio, 0 );
+	SendDlgItemMessage( hwndDlg, IDC_THREAD_PRIORITY, CB_SETCURSEL, cfg_render_prio, 0 ); */
 	return 1;
 	case WM_DRAWITEM:
 	{
@@ -469,11 +470,11 @@ static BOOL CALLBACK DlgProc_Disp( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 				DDraw_Resize( r.right, r.bottom, cfg_fs_d & 2 );
 			}
 			return 0;
-		case IDC_THREAD_PRIORITY:
+		/* case IDC_THREAD_PRIORITY:
 			extern void main_setRenderThreadPriority();
 			cfg_render_prio = SendDlgItemMessage( hwndDlg, IDC_THREAD_PRIORITY, CB_GETCURSEL, 0, 0 );
 			main_setRenderThreadPriority();
-			return 0;
+			return 0; */
 		}
 		return 0;
 	}
@@ -1104,13 +1105,12 @@ static BOOL CALLBACK dlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 					int err = 1;
 					if( a >= 0 )
 					{
-						EnterCriticalSection( &g_render_cs );
+						UPDATE_EFFECTS();
 						err = s->removeRender( a, 0 );
 						if( !err )
 						{
 							d->insertRender( source, b + ( g_dragplaceisbelow & 1 ) );
 						}
-						LeaveCriticalSection( &g_render_cs );
 					}
 					if( err )
 					{
@@ -1433,9 +1433,10 @@ static BOOL CALLBACK dlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 						}
 					}
 
-					EnterCriticalSection( &g_render_cs );
-					parentrender->insertRender( &ren, insert_pos );
-					LeaveCriticalSection( &g_render_cs );
+					{
+						UPDATE_EFFECTS();
+						parentrender->insertRender( &ren, insert_pos );
+					}
 					C_RenderListClass::T_RenderListType *newt = ( C_RenderListClass::T_RenderListType * )GlobalAlloc( GMEM_FIXED, sizeof( C_RenderListClass::T_RenderListType ) );
 					*newt = ren;
 					const int ii = ren.iconIndex();
@@ -1473,10 +1474,9 @@ static BOOL CALLBACK dlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 			HTREEITEM hTreeItem = TreeView_GetSelection( GetDlgItem( hwndDlg, IDC_TREE1 ) );
 			if( hTreeItem == g_hroot )
 			{
+				UPDATE_EFFECTS();
 				CfgWnd_Unpopulate();
-				EnterCriticalSection( &g_render_cs );
 				g_render_effects->clearRenders();
-				LeaveCriticalSection( &g_render_cs );
 				CfgWnd_Populate();
 			}
 			else if( hTreeItem )
@@ -1493,13 +1493,12 @@ static BOOL CALLBACK dlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 						TreeView_GetItem( GetDlgItem( hwndDlg, IDC_TREE1 ), &i2 );
 						C_RenderListClass::T_RenderListType *tparent = ( C_RenderListClass::T_RenderListType * )i2.lParam;
 						parentrender = (C_RenderListClass*)tparent->render;
-						EnterCriticalSection( &g_render_cs );
+						UPDATE_EFFECTS();
 						if( !parentrender->removeRenderFrom( tp, 1 ) )
 						{
 							TreeView_DeleteItem( GetDlgItem( hwndDlg, IDC_TREE1 ), hTreeItem );
 							if( tp ) GlobalFree( (HGLOBAL)tp );
 						}
-						LeaveCriticalSection( &g_render_cs );
 					}
 				}
 			}
@@ -1542,9 +1541,10 @@ static BOOL CALLBACK dlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 							ren.render->load_config( buf, len );
 							GlobalFree( (HGLOBAL)buf );
 						}
-						EnterCriticalSection( &g_render_cs );
-						parentrender->insertRender( &ren, insert_pos );
-						LeaveCriticalSection( &g_render_cs );
+						{
+							UPDATE_EFFECTS();
+							parentrender->insertRender( &ren, insert_pos );
+						}
 
 						C_RenderListClass::T_RenderListType *newt = ( C_RenderListClass::T_RenderListType * )GlobalAlloc( GMEM_FIXED, sizeof( C_RenderListClass::T_RenderListType ) );
 						*newt = ren;

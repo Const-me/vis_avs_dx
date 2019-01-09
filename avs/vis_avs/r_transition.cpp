@@ -36,6 +36,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "r_transition.h"
 #include "render.h"
 #include <Interop/Utils/dbgSetThreadName.h>
+#include <Threads/threadsApi.h>
 extern char *scanstr_back( char *str, char *toscan, char *defval );
 
 static const char *transitionmodes[] =
@@ -87,9 +88,8 @@ unsigned int WINAPI C_RenderTransitionClass::m_initThread( LPVOID p )
 	FILETIME ft;
 	GetSystemTimeAsFileTime( &ft );
 	srand( ft.dwLowDateTime | ft.dwHighDateTime^GetCurrentThreadId() );
-	if( cfg_transitions2 & 32 )
+	/* if( cfg_transitions2 & 32 )
 	{
-		extern CHandle g_hThread;
 		int d = GetThreadPriority( g_hThread );
 		if( d == THREAD_PRIORITY_TIME_CRITICAL ) d = THREAD_PRIORITY_HIGHEST;
 		else if( d == THREAD_PRIORITY_HIGHEST ) d = THREAD_PRIORITY_ABOVE_NORMAL;
@@ -98,7 +98,7 @@ unsigned int WINAPI C_RenderTransitionClass::m_initThread( LPVOID p )
 		else if( d == THREAD_PRIORITY_BELOW_NORMAL ) d = THREAD_PRIORITY_LOWEST;
 		else if( d == THREAD_PRIORITY_LOWEST ) d = THREAD_PRIORITY_IDLE;
 		SetThreadPriority( GetCurrentThread(), d );
-	}
+	} */
 	int *fb = (int *)GlobalAlloc( GPTR, _this->l_w*_this->l_h * sizeof( int ) );
 	char last_visdata[ 2 ][ 2 ][ 576 ] = { 0, };
 	g_render_effects2->render( last_visdata, 0x80000000, fb, fb, _this->l_w, _this->l_h );
@@ -122,8 +122,7 @@ int C_RenderTransitionClass::LoadPreset( char *file, int which, C_UndoItem *item
 		initThread = 0;
 	}
 
-
-	EnterCriticalSection( &g_render_cs );
+	UPDATE_PRESET();
 	if( enabled )
 	{
 		enabled = 0;
@@ -170,8 +169,6 @@ int C_RenderTransitionClass::LoadPreset( char *file, int which, C_UndoItem *item
 		C_UndoStack::saveundo( 1 );
 		C_UndoStack::cleardirty();
 	}
-	LeaveCriticalSection( &g_render_cs );
-
 	return !!r;
 }
 

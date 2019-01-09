@@ -44,7 +44,7 @@ extern int cfg_dont_min_avs;
 extern int cfg_smartbeat, cfg_smartbeatsticky, cfg_smartbeatresetnewsong, cfg_smartbeatonlysticky;
 extern int cfg_transitions, cfg_transitions2, cfg_transitions_speed, cfg_transition_mode;
 extern int cfg_bkgnd_render, cfg_bkgnd_render_color;
-extern int cfg_render_prio;
+// extern int cfg_render_prio;
 
 extern char config_pres_subdir[ MAX_PATH ];
 extern HWND g_hwndDlg;

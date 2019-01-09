@@ -34,8 +34,8 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "r_list.h"
 #include "render.h"
 #include "undo.h"
-
 #include "avs_eelif.h"
+#include <Threads/threadsApi.h>
 
 #define PUT_INT(y) data[pos]=(y)&255; data[pos+1]=(y>>8)&255; data[pos+2]=(y>>16)&255; data[pos+3]=(y>>24)&255
 #define GET_INT() (data[pos]|(data[pos+1]<<8)|(data[pos+2]<<16)|(data[pos+3]<<24))
@@ -697,7 +697,7 @@ char C_RenderListClass::sig_str[] = "Nullsoft AVS Preset 0.2\x1a";
 
 int C_RenderListClass::__SavePreset( char *filename )
 {
-	EnterCriticalSection( &g_render_cs );
+	UPDATE_PRESET();
 	unsigned char *data = (unsigned char *)GlobalAlloc( GPTR, 1124 * 1024 );
 	int success = -1;
 	if( data )
@@ -720,13 +720,12 @@ int C_RenderListClass::__SavePreset( char *filename )
 		else success = 1;
 		GlobalFree( (HGLOBAL)data );
 	}
-	LeaveCriticalSection( &g_render_cs );
 	return success;
 }
 
 int C_RenderListClass::__LoadPreset( char *filename, int clear )
 {
-	EnterCriticalSection( &g_render_cs );
+	UPDATE_PRESET();
 	unsigned char *data = (unsigned char *)GlobalAlloc( GPTR, 1024 * 1024 );
 	int success = 1;
 	if( clear ) clearRenders();
@@ -758,13 +757,12 @@ int C_RenderListClass::__LoadPreset( char *filename, int clear )
 		GlobalFree( (HGLOBAL)data );
 	}
 	//  else MessageBox(NULL,"Error laoding preset: MALLOC",filename,MB_OK);
-	LeaveCriticalSection( &g_render_cs );
 	return success;
 }
 
 int C_RenderListClass::__SavePresetToUndo( C_UndoItem &item )
 {
-	EnterCriticalSection( &g_render_cs );
+	UPDATE_PRESET();
 	unsigned char *data = (unsigned char *)GlobalAlloc( GPTR, 1124 * 1024 );
 	int success = -1;
 	if( data )
@@ -783,13 +781,12 @@ int C_RenderListClass::__SavePresetToUndo( C_UndoItem &item )
 		else success = 1;
 		GlobalFree( (HGLOBAL)data );
 	}
-	LeaveCriticalSection( &g_render_cs );
 	return success;
 }
 
 int C_RenderListClass::__LoadPresetFromUndo( C_UndoItem &item, int clear )
 {
-	EnterCriticalSection( &g_render_cs );
+	UPDATE_PRESET();
 	unsigned char *data = (unsigned char *)GlobalAlloc( GPTR, 1024 * 1024 );
 	int success = 1;
 	if( clear ) clearRenders();
@@ -814,12 +811,8 @@ int C_RenderListClass::__LoadPresetFromUndo( C_UndoItem &item, int clear )
 		}
 		GlobalFree( (HGLOBAL)data );
 	}
-	LeaveCriticalSection( &g_render_cs );
 	return success;
 }
-
-
-
 
 /// smp fun
 /*

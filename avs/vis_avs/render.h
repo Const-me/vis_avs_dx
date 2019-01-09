@@ -39,5 +39,3 @@ extern C_RenderListClass *g_render_effects;
 extern C_RenderListClass *g_render_effects2;
 extern C_RenderTransitionClass *g_render_transition;
 extern C_RLibrary *g_render_library;
-
-extern CRITICAL_SECTION g_render_cs;

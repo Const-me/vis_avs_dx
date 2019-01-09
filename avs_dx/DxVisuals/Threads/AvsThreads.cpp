@@ -31,7 +31,7 @@ HRESULT AvsThreads::threadMain2( ThreadBase& tb, ThreadBase **ppDest )
 	}
 
 	{
-		CSLock __lock( m_csRendering );
+		CSLock __lock( renderLock );
 		*ppDest = &tb;
 	}
 
@@ -40,7 +40,7 @@ HRESULT AvsThreads::threadMain2( ThreadBase& tb, ThreadBase **ppDest )
 	const HRESULT hr = tb.run();
 
 	{
-		CSLock __lock( m_csRendering );
+		CSLock __lock( renderLock );
 		*ppDest = nullptr;
 	}
 	return hr;
@@ -104,6 +104,7 @@ HRESULT AvsThreads::launchBothThreads()
 
 HRESULT AvsThreads::start( winampVisModule *pMod )
 {
+	m_bShuttingDown = false;
 	this_mod = pMod;
 	{
 		const HRESULT hr = launchBothThreads();
@@ -117,11 +118,12 @@ HRESULT AvsThreads::start( winampVisModule *pMod )
 
 HRESULT AvsThreads::stop()
 {
+	m_bShuttingDown = true;
 	BoolHr result;
 	auto st = [ &result, this ]( ThreadBase** ppThread, CHandle& h )
 	{
 		{
-			CSLock __lock( m_csRendering );
+			CSLock __lock( renderLock );
 			if( nullptr == *ppThread )
 				return;
 			( *ppThread )->postQuitmessage();

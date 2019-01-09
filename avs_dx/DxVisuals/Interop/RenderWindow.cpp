@@ -11,8 +11,6 @@
 #include <random>
 #include "profilerApi.h"
 
-CComAutoCriticalSection renderLock;
-
 constexpr UINT msPresentTimeout = 250;
 
 RenderWindow* RenderWindow::s_pInstance = nullptr;
@@ -271,6 +269,7 @@ LRESULT RenderWindow::wmTransition( UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 
 LRESULT RenderWindow::wmShutdown( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& handled )
 {
+	logShutdown( "RenderWindow::wmShutdown" );
 	HRESULT* pResult = (HRESULT*)lParam;
 	profilerClose();
 	DestroyWindow(m_hWnd);

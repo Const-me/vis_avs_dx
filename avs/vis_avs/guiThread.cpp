@@ -4,7 +4,6 @@
 #include "avs_eelif.h"
 #include "bpm.h"
 #include "render.h"
-#include "main.h"
 #include "VIS.H"
 #include "SourceBuffer.h"
 #include <Threads/GuiThread.h>
@@ -12,7 +11,6 @@
 #define CHECK( hr, msg )        {  const HRESULT __hr = ( hr ); if( FAILED( __hr ) ) { logError( __hr, msg ); return __hr; }  }
 #define FAIL_LAST_WIN32( msg )  {  const HRESULT __hr = getLastHr(); if( FAILED( __hr ) ) { logError( __hr, msg ); return __hr; }  }
 
-extern CHandle g_hThread;
 extern SourceBuffer g_sourceBuffer;
 
 HRESULT GuiThread::startup()
@@ -35,7 +33,6 @@ HRESULT GuiThread::startup()
 	if( !g_hThread )
 		return getLastHr(); */
 
-	main_setRenderThreadPriority();
 	SetForegroundWindow( g_hwnd );
 	SetFocus( g_hwnd );
 

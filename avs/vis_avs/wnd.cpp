@@ -66,7 +66,6 @@ char g_title[ 2048 ];
 #define ID_VIS_RANDOM                   40384
 
 struct winampVisModule *g_mod;
-extern volatile int g_ThreadQuit;
 extern int /*g_preset_dirty,*/ config_prompt_save_preset, config_reuseonresize;
 int g_saved_preset_dirty;
 extern int cfg_cancelfs_on_deactivate;
@@ -499,7 +498,7 @@ int Wnd_Init( struct winampVisModule *this_mod )
 		cfg_transition_mode = GetPrivateProfileInt( AVS_SECTION, "cfg_transitions_mode", cfg_transition_mode, INI_FILE );
 		cfg_bkgnd_render = GetPrivateProfileInt( AVS_SECTION, "cfg_bkgnd_render", cfg_bkgnd_render, INI_FILE );
 		cfg_bkgnd_render_color = GetPrivateProfileInt( AVS_SECTION, "cfg_bkgnd_render_color", cfg_bkgnd_render_color, INI_FILE );
-		cfg_render_prio = GetPrivateProfileInt( AVS_SECTION, "cfg_render_prio", cfg_render_prio, INI_FILE );
+		// cfg_render_prio = GetPrivateProfileInt( AVS_SECTION, "cfg_render_prio", cfg_render_prio, INI_FILE );
 		g_saved_preset_dirty = GetPrivateProfileInt( AVS_SECTION, "g_preset_dirty", C_UndoStack::isdirty(), INI_FILE );
 		config_prompt_save_preset = GetPrivateProfileInt( AVS_SECTION, "cfg_prompt_save_preset", config_prompt_save_preset, INI_FILE );
 		config_reuseonresize = GetPrivateProfileInt( AVS_SECTION, "cfg_reuseonresize", config_reuseonresize, INI_FILE );
@@ -662,7 +661,7 @@ void Wnd_Quit( void )
 		WriteInt( "cfg_transitions_mode", cfg_transition_mode );
 		WriteInt( "cfg_bkgnd_render", cfg_bkgnd_render );
 		WriteInt( "cfg_bkgnd_render_color", cfg_bkgnd_render_color );
-		WriteInt( "cfg_render_prio", cfg_render_prio );
+		// WriteInt( "cfg_render_prio", cfg_render_prio );
 		WriteInt( "g_preset_dirty", C_UndoStack::isdirty() );
 		WriteInt( "cfg_prompt_save_preset", config_prompt_save_preset );
 		WritePrivateProfileString( AVS_SECTION, "last_preset_name", last_preset, INI_FILE );
@@ -1573,13 +1572,12 @@ static LRESULT CALLBACK WndProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 		DeleteObject( hFrameDC );
 		DeleteObject( hFrameBitmap );
 #endif
-		g_ThreadQuit = 1;
-#ifndef WA3_COMPONENT
+/* #ifndef WA3_COMPONENT
 		if( !g_minimized )
 		{
 			PostQuitMessage( 0 );
 		}
-#endif
+#endif */
 		return 0;
 	case WM_MOVE:
 		if( !DDraw_IsFullScreen() && !inWharf )

@@ -34,30 +34,6 @@ void iaSetBuffer( ID3D11Buffer* vb, UINT vbStride, ID3D11Buffer* ib, DXGI_FORMAT
 
 void iaClearBuffer();
 
-class LockExternCs
-{
-	CRITICAL_SECTION& m_cs;
-
-public:
-	LockExternCs() = delete;
-	LockExternCs( const LockExternCs& that ) = delete;
-
-	LockExternCs( CRITICAL_SECTION& cs );
-	~LockExternCs();
-};
-
-class UnlockExternCs
-{
-	CRITICAL_SECTION& m_cs;
-
-public:
-	UnlockExternCs() = delete;
-	UnlockExternCs( const LockExternCs& that ) = delete;
-
-	UnlockExternCs( CRITICAL_SECTION& cs );
-	~UnlockExternCs();
-};
-
 void setMacro( vector<std::pair<CStringA, CStringA>> &macros, const CStringA& key, const CStringA& value );
 
 enum struct eBlend : uint8_t

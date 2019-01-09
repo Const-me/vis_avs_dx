@@ -10,6 +10,7 @@ class RenderWindow
 	static constexpr UINT WM_TRANSITION = WM_PRESENT + 1;
 	static constexpr UINT WM_SHUTDOWN = WM_PRESENT + 2;
 	static RenderWindow* s_pInstance;
+
 public:
 	RenderWindow();
 	~RenderWindow();

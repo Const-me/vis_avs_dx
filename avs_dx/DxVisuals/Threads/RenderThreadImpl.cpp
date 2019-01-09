@@ -15,7 +15,9 @@ RenderThreadImpl::RenderThreadImpl( winampVisModule * pModule ) :
 
 RenderThreadImpl::~RenderThreadImpl()
 {
-	// getThreads().render()
+	logShutdown( "~RenderThreadImpl #1" );
+	RenderWindow::instance().shutdown();
+	logShutdown( "~RenderThreadImpl, #2" );
 
 	destroyAllEffects();
 	destroyTransitionInstance();
@@ -24,6 +26,8 @@ RenderThreadImpl::~RenderThreadImpl()
 	gpuProfiler().shutdown();
 	destroyDevice();
 	comUninitialize();
+
+	logShutdown( "~RenderThreadImpl #3" );
 }
 
 HRESULT RenderThreadImpl::initialize()
@@ -33,7 +37,7 @@ HRESULT RenderThreadImpl::initialize()
 
 HRESULT RenderThreadImpl::run()
 {
-	while( 0 == m_ThreadQuit )
+	while( !shouldQuit() )
 		RenderThread::renderFrame();
 	return S_OK;
 }

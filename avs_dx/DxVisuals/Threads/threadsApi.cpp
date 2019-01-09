@@ -12,7 +12,14 @@ HRESULT avsThreadsStop()
 	return getThreads().stop();
 }
 
+bool avsThreadsShuttingDown()
+{
+	return getThreads().shuttingDown();
+}
+
 GuiThread& getGuiThread()
 {
 	return getThreads().gui();
 }
+
+CComAutoCriticalSection renderLock;

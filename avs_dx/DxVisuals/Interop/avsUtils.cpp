@@ -9,7 +9,6 @@ CStringA getPrivateProfileString( const char* lpAppName, const char* lpKeyName, 
 	return res;
 }
 
-constexpr HRESULT E_TIMEOUT = HRESULT_FROM_WIN32( ERROR_TIMEOUT );
 constexpr int MSGF_SLEEPMSG = 0x5300;
 
 HRESULT msgWaitForSingleObject( HANDLE h, DWORD ms )

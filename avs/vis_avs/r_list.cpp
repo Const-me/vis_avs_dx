@@ -53,11 +53,11 @@ void C_RenderListClass::load_config_code( unsigned char *data, int len )
 		load_string( effect_exp[ 0 ], data, pos, len );
 		load_string( effect_exp[ 1 ], data, pos, len );
 	}
-
 }
 
 void C_RenderListClass::load_config( unsigned char *data, int len )
 {
+	UPDATE_PARAMS();
 	int pos = 0, ext;
 	if( pos < len ) { mode = data[ pos++ ]; }
 	if( mode & 0x80 )
@@ -204,28 +204,12 @@ int  C_RenderListClass::save_config_ex( unsigned char *data, int rootsave )
 
 C_RenderListClass::C_RenderListClass( int iroot )
 {
-	AVS_EEL_INITINST();
-	isstart = 0;
-#ifndef LASER
-	nsaved = 0;
-	memset( nbw_save, 0, sizeof( nbw_save ) );
-	memset( nbw_save2, 0, sizeof( nbw_save2 ) );
-	memset( nbh_save, 0, sizeof( nbh_save ) );
-	memset( nbh_save2, 0, sizeof( nbh_save2 ) );
-	memset( nb_save, 0, sizeof( nb_save ) );
-	memset( nb_save2, 0, sizeof( nb_save2 ) );
-#endif
 	inblendval = 128;
 	outblendval = 128;
 	ininvert = 0;
 
-	InitializeCriticalSection( &rcs );
 	use_code = 0;
 	inited = 0;
-	need_recompile = 1;
-	memset( codehandle, 0, sizeof( codehandle ) );
-	var_beat = 0;
-
 
 	effect_exp[ 0 ].assign( "" );
 	effect_exp[ 1 ].assign( "" );
@@ -242,47 +226,11 @@ C_RenderListClass::C_RenderListClass( int iroot )
 	beat_render = 0;
 	beat_render_frames = 1;
 	fake_enabled = 0;
-#ifdef LASER
-	if( !iroot ) line_save = createLineList();
-	else line_save = NULL;
-#endif
 	CREATE_DX_EFFECT( thisfb );
 }
 
 extern int g_n_buffers_w[ NBUF ], g_n_buffers_h[ NBUF ];
 extern void *g_n_buffers[ NBUF ];
-
-#ifndef LASER
-void C_RenderListClass::set_n_Context()
-{
-	if( !isroot ) return;
-	if( nsaved ) return;
-	nsaved = 1;
-	memcpy( nbw_save2, g_n_buffers_w, sizeof( nbw_save2 ) );
-	memcpy( nbh_save2, g_n_buffers_h, sizeof( nbh_save2 ) );
-	memcpy( nb_save2, g_n_buffers, sizeof( nb_save2 ) );
-
-	memcpy( g_n_buffers_w, nbw_save, sizeof( nbw_save ) );
-	memcpy( g_n_buffers_h, nbh_save, sizeof( nbh_save ) );
-	memcpy( g_n_buffers, nb_save, sizeof( nb_save ) );
-}
-
-void C_RenderListClass::unset_n_Context()
-{
-	if( !isroot ) return;
-	if( !nsaved ) return;
-	nsaved = 0;
-
-	memcpy( nbw_save, g_n_buffers_w, sizeof( nbw_save ) );
-	memcpy( nbh_save, g_n_buffers_h, sizeof( nbh_save ) );
-	memcpy( nb_save, g_n_buffers, sizeof( nb_save ) );
-
-	memcpy( g_n_buffers_w, nbw_save2, sizeof( nbw_save2 ) );
-	memcpy( g_n_buffers_h, nbh_save2, sizeof( nbh_save2 ) );
-	memcpy( g_n_buffers, nb_save2, sizeof( nb_save2 ) );
-
-}
-#endif
 
 /* void C_RenderListClass::smp_cleanupthreads()
 {
@@ -306,21 +254,6 @@ void C_RenderListClass::unset_n_Context()
 	memset( &smp_parms, 0, sizeof( smp_parms ) );
 } */
 
-void C_RenderListClass::freeBuffers()
-{
-#ifndef LASER
-	if( isroot )
-	{
-		int x;
-		for( x = 0; x < NBUF; x++ )
-		{
-			if( nb_save[ x ] ) GlobalFree( nb_save[ x ] );
-			nb_save[ x ] = NULL;
-			nbw_save[ x ] = nbh_save[ x ] = 0;
-		}
-	}
-#endif
-}
 
 C_RenderListClass::~C_RenderListClass()
 {
@@ -328,18 +261,6 @@ C_RenderListClass::~C_RenderListClass()
 	if( line_save ) delete line_save;
 #endif
 	clearRenders();
-
-	// free nb_save
-	freeBuffers();
-
-	int x;
-	for( x = 0; x < 2; x++ )
-	{
-		freeCode( codehandle[ x ] );
-		codehandle[ x ] = 0;
-	}
-	AVS_EEL_QUITINST();
-	DeleteCriticalSection( &rcs );
 }
 
 static int __inline depthof( int c, int i )
@@ -567,11 +488,8 @@ BOOL CALLBACK C_RenderListClass::g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wPar
 			}
 			if( g_this->clearfb() ) CheckDlgButton( hwndDlg, IDC_CHECK1, BST_CHECKED );
 #endif
-			g_this->isstart = 1;
 			SetDlgItemText( hwndDlg, IDC_EDIT4, g_this->effect_exp[ 0 ].get() );
 			SetDlgItemText( hwndDlg, IDC_EDIT5, g_this->effect_exp[ 1 ].get() );
-			g_this->isstart = 0;
-
 
 			if( ( ( g_this->mode & 2 ) ^ 2 ) )
 				CheckDlgButton( hwndDlg, IDC_CHECK2, BST_CHECKED );
@@ -588,14 +506,11 @@ BOOL CALLBACK C_RenderListClass::g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wPar
 		{
 		case IDC_EDIT4:
 		case IDC_EDIT5:
-			if( !g_this->isstart && HIWORD( wParam ) == EN_CHANGE )
+			if( HIWORD( wParam ) == EN_CHANGE )
 			{
-				EnterCriticalSection( &g_this->rcs );
+				UPDATE_PARAMS();
 				g_this->effect_exp[ 0 ].get_from_dlgitem( hwndDlg, IDC_EDIT4 );
 				g_this->effect_exp[ 1 ].get_from_dlgitem( hwndDlg, IDC_EDIT5 );
-				g_this->need_recompile = 1;
-				if( LOWORD( wParam ) == IDC_EDIT4 ) g_this->inited = 0;
-				LeaveCriticalSection( &g_this->rcs );
 			}
 			break;
 		case IDC_COMBO1:

@@ -68,32 +68,10 @@ protected:
 	RString effect_exp[ 2 ];
 
 	int inited;
-	int codehandle[ 4 ];
-	int need_recompile;
-	CRITICAL_SECTION rcs;
-
-	int AVS_EEL_CONTEXTNAME;
-	double *var_beat, *var_alphain, *var_alphaout, *var_enabled, *var_clear, *var_w, *var_h;
-	int isstart;
-
 	int mode;
 
 	int beat_render, beat_render_frames;
 	int fake_enabled;
-
-#ifdef LASER
-	C_LineListBase *line_save;
-#else
-	void set_n_Context();
-	void unset_n_Context();
-
-	int nbw_save[ NBUF ], nbh_save[ NBUF ]; // these are our framebuffers
-	void *nb_save[ NBUF ];
-
-	int nbw_save2[ NBUF ], nbh_save2[ NBUF ]; // this are temp space for saving the global ones
-	void *nb_save2[ NBUF ];
-	int nsaved;
-#endif
 
 #define MAX_SMP_THREADS 8
 	/*
@@ -145,7 +123,6 @@ public:
 	int insertRender( T_RenderListType *r, int index ); // return -1 on failure, actual position on success
 	int insertRenderBefore( T_RenderListType *r, T_RenderListType *before ); // return -1 on failure, actual position on success
 	void clearRenders( void );
-	void freeBuffers();
 
 	int __SavePreset( char *filename );
 	int __LoadPreset( char *filename, int clear );

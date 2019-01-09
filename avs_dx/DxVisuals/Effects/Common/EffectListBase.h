@@ -35,14 +35,7 @@ public:
 		RString effect_exp[ 2 ];
 
 		int inited;
-		int codehandle[ 4 ];
 		int need_recompile;
-		CRITICAL_SECTION rcs;
-
-		int AVS_EEL_CONTEXTNAME;
-		double *var_beat, *var_alphain, *var_alphaout, *var_enabled, *var_clear, *var_w, *var_h;
-		int isstart;
-
 		int mode;
 
 		int beat_render, beat_render_frames;

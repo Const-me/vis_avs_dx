@@ -219,10 +219,7 @@ int C_RenderTransitionClass::render( uint16_t visdata[ 2 ][ 2 ][ 576 ], int isBe
 		l_w = w;
 		l_h = h;
 		if( !initThread && g_render_effects2->getNumRenders() )
-		{
 			g_render_effects2->clearRenders();
-			g_render_effects2->freeBuffers();
-		}
 		// return g_render_effects->render( visdata, isBeat, framebuffer, fbout, w, h );
 		pTrans->renderSingle( visdata, isBeat, g_render_effects );
 		return 0;
@@ -488,7 +485,6 @@ int C_RenderTransitionClass::render( uint16_t visdata[ 2 ][ 2 ][ 576 ], int isBe
 		enabled = 0;
 		start_time = 0;
 		g_render_effects2->clearRenders();
-		g_render_effects2->freeBuffers();
 	}
 	return 0;
 }

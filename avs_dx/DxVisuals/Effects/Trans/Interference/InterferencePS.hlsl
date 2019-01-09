@@ -46,5 +46,5 @@ float4 main( float4 screenSpace : SV_Position ) : SV_Target
             res += alpha * read( p );
         }
     }
-    return float4( res, 1 );
+    return float4( saturate( res ), 1 );
 }

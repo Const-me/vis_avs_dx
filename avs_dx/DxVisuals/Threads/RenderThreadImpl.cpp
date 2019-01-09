@@ -35,9 +35,15 @@ HRESULT RenderThreadImpl::initialize()
 	return RenderThread::startup();
 }
 
+CSize getRenderSize();
+
 HRESULT RenderThreadImpl::run()
 {
 	while( !shouldQuit() )
+	{
 		RenderThread::renderFrame();
+		const float fps = m_fps.update();
+		RenderThread::updateStats( getRenderSize(), fps );
+	}
 	return S_OK;
 }

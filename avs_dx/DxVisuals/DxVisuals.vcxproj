@@ -116,6 +116,7 @@
     <ClInclude Include="Effects\Trans\Moves\DynamicDistance.h" />
     <ClInclude Include="Effects\Trans\ColorFade\ColorFade.h" />
     <ClInclude Include="Expressions\Tree\VarUseFlags.h" />
+    <ClInclude Include="Utils\FpsCalc.h" />
     <ClInclude Include="Interop\avsUtils.h" />
     <ClInclude Include="Interop\ConsoleLogger.h" />
     <ClInclude Include="Interop\device.h" />
@@ -408,6 +409,7 @@
     <ClCompile Include="Effects\Trans\ColorReduction\ColorReduction.cpp" />
     <ClCompile Include="Effects\Trans\Invert\Invert.cpp" />
     <ClCompile Include="Effects\Trans\Multiplier\Multiplier.cpp" />
+    <ClCompile Include="Utils\FpsCalc.cpp" />
     <ClCompile Include="Interop\avsUtils.cpp" />
     <ClCompile Include="Interop\ConsoleLogger.cpp" />
     <ClCompile Include="Interop\deviceCreation.cpp" />

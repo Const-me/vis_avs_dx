@@ -1,4 +1,5 @@
 #pragma once
+#include <atltypes.h>
 #include "ThreadBase.h"
 
 class RenderThread : public ThreadBase
@@ -11,4 +12,6 @@ protected:
 	HRESULT startup();
 
 	void renderFrame();
+
+	void updateStats( const CSize &framePixels, float fps );
 };

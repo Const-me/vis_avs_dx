@@ -66,7 +66,8 @@ extern int readyToLoadPreset( HWND parent, int isnew );
 
 extern char *extension( char *fn );
 
-int g_dlg_fps, g_dlg_w, g_dlg_h;
+float g_dlg_fps;
+int g_dlg_w, g_dlg_h;
 
 int cfg_cfgwnd_x = 50, cfg_cfgwnd_y = 50, cfg_cfgwnd_open = 0;
 
@@ -928,7 +929,10 @@ static BOOL CALLBACK dlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 			while( *tp ) tp++;
 			while( tp >= last_preset && *tp != '\\' ) tp--;
 			tp++;
-			wsprintf( s, "%d.%d FPS @ %dx%d%s%s", g_dlg_fps / 10, g_dlg_fps % 10, g_dlg_w, g_dlg_h, *tp ? " - " : ".", tp );
+			// wsprintf( s, "%d.%d FPS @ %dx%d%s%s", g_dlg_fps / 10, g_dlg_fps % 10, g_dlg_w, g_dlg_h, *tp ? " - " : ".", tp );
+			// wsprintf can't print floats.
+
+			sprintf( s, "%.3f FPS @ %ix%i%s%s", g_dlg_fps, g_dlg_w, g_dlg_h, *tp ? " - " : ".", tp );
 			tp = s;
 			while( *tp ) tp++;
 			while( tp > s && *tp != '.' && *tp != '-' ) tp--;

@@ -295,6 +295,7 @@
     <ClInclude Include="Threads\GuiThread.h" />
     <ClInclude Include="Threads\RenderThread.h" />
     <ClInclude Include="Threads\RenderThreadImpl.h" />
+    <ClInclude Include="Utils\FpsCalc.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -415,6 +416,7 @@
     <ClCompile Include="Threads\threadsApi.cpp" />
     <ClCompile Include="Threads\GuiThreadImpl.cpp" />
     <ClCompile Include="Threads\RenderThreadImpl.cpp" />
+    <ClCompile Include="Utils\FpsCalc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

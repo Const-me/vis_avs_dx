@@ -262,3 +262,13 @@ void RenderThread::renderFrame()
 	g_sourceBuffer.copy( vis_data, beat );
 	g_render_transition->render( vis_data, beat, nullptr, nullptr, 0, 0 );
 }
+
+void RenderThread::updateStats( const CSize &framePixels, float fps )
+{
+	extern float g_dlg_fps;
+	extern int g_dlg_w, g_dlg_h;
+
+	g_dlg_fps = fps;
+	g_dlg_w = framePixels.cx;
+	g_dlg_h = framePixels.cy;
+}

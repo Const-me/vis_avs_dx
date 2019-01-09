@@ -43,5 +43,3 @@ public:
 };
 
 AvsThreads& getThreads();
-
-#define g_hwnd getThreads().gui().visual()

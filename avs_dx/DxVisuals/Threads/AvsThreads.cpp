@@ -95,7 +95,7 @@ HRESULT AvsThreads::launchBothThreads()
 
 	CHECK( m_gui.launch( &AvsThreads::threadMain<GuiThreadImpl>, (ThreadBase**)&m_pGui, evtLaunched ), "Error launching GUI thread" );
 
-	CHECK( m_render.launch( &AvsThreads::threadMain<RenderThreadImpl>, (ThreadBase**)&m_pRender, evtLaunched ), "Error launching GUI thread" );
+	CHECK( m_render.launch( &AvsThreads::threadMain<RenderThreadImpl>, (ThreadBase**)&m_pRender, evtLaunched ), "Error launching rendering thread" );
 
 	evtLaunched.Close();
 
@@ -109,8 +109,10 @@ HRESULT AvsThreads::start( winampVisModule *pMod )
 	{
 		const HRESULT hr = launchBothThreads();
 		if( FAILED( hr ) )
+		{
 			stop();
-		return hr;
+			return hr;
+		}
 	}
 
 	return S_OK;
@@ -122,6 +124,8 @@ HRESULT AvsThreads::stop()
 	BoolHr result;
 	auto st = [ &result, this ]( ThreadBase** ppThread, CHandle& h )
 	{
+		if( !h )
+			return;
 		{
 			CSLock __lock( renderLock );
 			if( nullptr == *ppThread )
@@ -130,8 +134,8 @@ HRESULT AvsThreads::stop()
 		}
 		assert( h );
 		result.combine( msgWaitForSingleObject( h, INFINITE ) );
+		assert( nullptr == *ppThread );
 		h.Close();
-		result = S_OK;
 	};
 
 	st( (ThreadBase**)&m_pRender, m_render.hThread );

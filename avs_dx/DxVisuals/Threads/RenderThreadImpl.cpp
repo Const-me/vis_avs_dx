@@ -16,6 +16,9 @@ RenderThreadImpl::RenderThreadImpl( winampVisModule * pModule ) :
 RenderThreadImpl::~RenderThreadImpl()
 {
 	logShutdown( "~RenderThreadImpl #1" );
+	// This will call the GUI thread to destroy rendering and profiler windows, so we can cleanup D3D device and associated resources.
+	// Some resources, notably the video engine, have thread affinity, they must be released before MfShutdown() and CoUninitialize() calls.
+	// Besides, we want to be sure the GUI thread will no longer present these frames, doing that after resources are released would prolly crash Winamp.
 	RenderWindow::instance().shutdown();
 	logShutdown( "~RenderThreadImpl, #2" );
 

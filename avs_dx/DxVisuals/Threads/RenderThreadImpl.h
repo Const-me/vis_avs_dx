@@ -24,7 +24,7 @@ private:
 
 public:
 
-	void postQuitmessage() override
+	void postQuitMessage() override
 	{
 		InterlockedExchange( &m_ThreadQuit, (LONG)TRUE );
 	}

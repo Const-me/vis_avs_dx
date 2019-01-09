@@ -126,7 +126,7 @@ HRESULT AvsThreads::stop()
 			CSLock __lock( renderLock );
 			if( nullptr == *ppThread )
 				return;
-			( *ppThread )->postQuitmessage();
+			( *ppThread )->postQuitMessage();
 		}
 		assert( h );
 		result.combine( msgWaitForSingleObject( h, INFINITE ) );

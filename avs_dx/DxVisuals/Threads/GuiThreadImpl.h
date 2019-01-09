@@ -25,7 +25,7 @@ private:
 
 	void postMessage( UINT Msg, WPARAM wParam = 0, LPARAM lParam = 0 ) const;
 
-	void postQuitmessage() override
+	void postQuitMessage() override
 	{
 		postMessage( WM_QUIT );
 	}

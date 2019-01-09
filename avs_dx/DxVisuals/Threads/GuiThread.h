@@ -1,14 +1,14 @@
 #pragma once
 #include "ThreadBase.h"
 
-// Implemented in vis_avs.dll: linker is awesome.
+// Implemented in vis_avs.dll, linker is awesome.
+// But physically, this class lives on the stack of the GUI thread, i.e. destructor will destroy all that stuff.
 class GuiThread: public ThreadBase
 {
 	HWND m_hwnd = nullptr;
 	HWND m_hwndDlg = nullptr;
 
 public:
-
 	GuiThread( winampVisModule * pModule ) :
 		ThreadBase( pModule ) { }
 

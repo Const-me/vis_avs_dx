@@ -21,5 +21,5 @@ public:
 
 	const uint32_t threadId;
 
-	virtual void postQuitmessage() = 0;
+	virtual void postQuitMessage() = 0;
 };

@@ -2,6 +2,7 @@
 #include "GuiThreadImpl.h"
 #include "RenderThreadImpl.h"
 
+// The main class implementing 2 main threads used by AVS, GUI threads who owns all windows and runs a message pump, and rendering thread.
 class AvsThreads
 {
 	winampVisModule *this_mod = nullptr;

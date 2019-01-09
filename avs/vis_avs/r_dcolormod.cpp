@@ -45,23 +45,12 @@ protected:
 public:
 	C_THISCLASS();
 	virtual ~C_THISCLASS();
-	int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
 	virtual char *get_desc() { return MOD_NAME; }
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent );
 	virtual void load_config( unsigned char *data, int len );
 	virtual int  save_config( unsigned char *data );
 	RString effect_exp[ 4 ];
-
 	int m_recompute;
-
-	int m_tab_valid;
-	unsigned char m_tab[ 768 ];
-	int AVS_EEL_CONTEXTNAME;
-	double *var_r, *var_g, *var_b, *var_beat;
-	int inited;
-	int codehandle[ 4 ];
-	int need_recompile;
-	CRITICAL_SECTION rcs;
 };
 
 #define PUT_INT(y) data[pos]=(y)&255; data[pos+1]=(y>>8)&255; data[pos+2]=(y>>16)&255; data[pos+3]=(y>>24)&255
@@ -109,113 +98,19 @@ int  C_THISCLASS::save_config( unsigned char *data )
 	return pos;
 }
 
-
-
 C_THISCLASS::C_THISCLASS()
 {
-	AVS_EEL_INITINST();
-	InitializeCriticalSection( &rcs );
-	need_recompile = 1;
 	m_recompute = 1;
-	memset( codehandle, 0, sizeof( codehandle ) );
 	effect_exp[ 0 ].assign( "" );
 	effect_exp[ 1 ].assign( "" );
 	effect_exp[ 2 ].assign( "" );
 	effect_exp[ 3 ].assign( "" );
 
-	var_beat = 0;
-	m_tab_valid = 0;
-
 	CREATE_DX_EFFECT( effect_exp );
 }
 
 C_THISCLASS::~C_THISCLASS()
-{
-	int x;
-	for( x = 0; x < 4; x++ )
-	{
-		freeCode( codehandle[ x ] );
-		codehandle[ x ] = 0;
-	}
-	AVS_EEL_QUITINST();
-
-	DeleteCriticalSection( &rcs );
-}
-
-
-int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
-{
-	__debugbreak();
-	return 0;
-
-	if( need_recompile )
-	{
-		EnterCriticalSection( &rcs );
-		if( !var_beat || g_reset_vars_on_recompile )
-		{
-			clearVars();
-			var_r = registerVar( "red" );
-			var_g = registerVar( "green" );
-			var_b = registerVar( "blue" );
-			var_beat = registerVar( "beat" );
-			inited = 0;
-		}
-		need_recompile = 0;
-		int x;
-		for( x = 0; x < 4; x++ )
-		{
-			freeCode( codehandle[ x ] );
-			codehandle[ x ] = compileCode( effect_exp[ x ].get() );
-		}
-		LeaveCriticalSection( &rcs );
-	}
-	if( isBeat & 0x80000000 ) return 0;
-
-	*var_beat = isBeat ? 1.0 : 0.0;
-
-	if( codehandle[ 3 ] && !inited ) { executeCode( codehandle[ 3 ], visdata ); inited = 1; }
-	executeCode( codehandle[ 1 ], visdata );
-
-	if( isBeat ) executeCode( codehandle[ 2 ], visdata );
-
-	if( m_recompute || !m_tab_valid )
-	{
-		int x;
-		unsigned char *t = m_tab;
-		for( x = 0; x < 256; x++ )
-		{
-			*var_r = *var_b = *var_g = x / 255.0;
-			executeCode( codehandle[ 0 ], visdata );
-			int r = (int)( *var_r*255.0 + 0.5 );
-			int g = (int)( *var_g*255.0 + 0.5 );
-			int b = (int)( *var_b*255.0 + 0.5 );
-			if( r < 0 ) r = 0;
-			else if( r > 255 )r = 255;
-			if( g < 0 ) g = 0;
-			else if( g > 255 )g = 255;
-			if( b < 0 ) b = 0;
-			else if( b > 255 )b = 255;
-			t[ 512 ] = r;
-			t[ 256 ] = g;
-			t[ 0 ] = b;
-			t++;
-		}
-		m_tab_valid = 1;
-	}
-
-	unsigned char *fb = (unsigned char *)framebuffer;
-	int l = w * h;
-	while( l-- )
-	{
-		fb[ 0 ] = m_tab[ fb[ 0 ] ];
-		fb[ 1 ] = m_tab[ (int)fb[ 1 ] + 256 ];
-		fb[ 2 ] = m_tab[ (int)fb[ 2 ] + 512 ];
-		fb += 4;
-	}
-
-
-	return 0;
-}
+{ }
 
 C_RBASE *R_DColorMod( char *desc )
 {
@@ -329,22 +224,17 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 		{
 			if( LOWORD( wParam ) == IDC_EDIT1 || LOWORD( wParam ) == IDC_EDIT2 || LOWORD( wParam ) == IDC_EDIT3 || LOWORD( wParam ) == IDC_EDIT4 )
 			{
-				EnterCriticalSection( &g_this->rcs );
+				UPDATE_PARAMS();
 				g_this->effect_exp[ 0 ].get_from_dlgitem( hwndDlg, IDC_EDIT1 );
 				g_this->effect_exp[ 1 ].get_from_dlgitem( hwndDlg, IDC_EDIT2 );
 				g_this->effect_exp[ 2 ].get_from_dlgitem( hwndDlg, IDC_EDIT3 );
 				g_this->effect_exp[ 3 ].get_from_dlgitem( hwndDlg, IDC_EDIT4 );
-				g_this->need_recompile = 1;
-				if( LOWORD( wParam ) == IDC_EDIT4 ) g_this->inited = 0;
-				g_this->m_tab_valid = 0;
-				LeaveCriticalSection( &g_this->rcs );
 			}
 		}
 		return 0;
 	}
 	return 0;
 }
-
 
 HWND C_THISCLASS::conf( HINSTANCE hInstance, HWND hwndParent )
 {

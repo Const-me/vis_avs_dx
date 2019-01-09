@@ -100,6 +100,8 @@ C_THISCLASS::C_THISCLASS() // set up default configuration
 	status = 2;
 	speed = ( float )0.2;
 	a = (float)rotation / 255 * (float)PI * 2;
+
+	CREATE_DX_EFFECT( enabled );
 }
 
 void C_THISCLASS::PUT_FLOAT( float f, unsigned char *data, int pos )

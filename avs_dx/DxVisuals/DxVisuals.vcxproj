@@ -116,6 +116,7 @@
     <ClInclude Include="Effects\Trans\Moves\DynamicDistance.h" />
     <ClInclude Include="Effects\Trans\ColorFade\ColorFade.h" />
     <ClInclude Include="Expressions\Tree\VarUseFlags.h" />
+    <ClInclude Include="Effects\Trans\Interference\Interference.h" />
     <ClInclude Include="Utils\FpsCalc.h" />
     <ClInclude Include="Interop\avsUtils.h" />
     <ClInclude Include="Interop\ConsoleLogger.h" />
@@ -409,6 +410,7 @@
     <ClCompile Include="Effects\Trans\ColorReduction\ColorReduction.cpp" />
     <ClCompile Include="Effects\Trans\Invert\Invert.cpp" />
     <ClCompile Include="Effects\Trans\Multiplier\Multiplier.cpp" />
+    <ClCompile Include="Effects\Trans\Interference\Interference.cpp" />
     <ClCompile Include="Utils\FpsCalc.cpp" />
     <ClCompile Include="Interop\avsUtils.cpp" />
     <ClCompile Include="Interop\ConsoleLogger.cpp" />
@@ -654,6 +656,10 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="Effects\Trans\ColorReduction\ColorReductionPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Trans\Interference\InterferencePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>

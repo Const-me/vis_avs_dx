@@ -39,8 +39,6 @@ private:
 
 IMPLEMENT_EFFECT( BufferSave, C_StackClass )
 
-constexpr float div255 = 1.0f / 255.0f;
-
 HRESULT BufferSave::updateParameters( Binder& binder )
 {
 	return m_blend.updateBindings( binder ) ? S_OK : S_FALSE;

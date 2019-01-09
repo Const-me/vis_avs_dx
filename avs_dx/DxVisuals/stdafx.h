@@ -5,6 +5,8 @@
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 #define _CRT_SECURE_NO_WARNINGS
+#define _USE_MATH_DEFINES
+
 // Windows headers
 #include <windows.h>
 #include <versionhelpers.h>
@@ -24,6 +26,7 @@ using DirectX::SimpleMath::Vector4;
 #include <atlstr.h>
 
 // C++
+#include <math.h>
 #include <stdint.h>
 #include <algorithm>
 #include <EASTL/vector.h>
@@ -47,3 +50,5 @@ using eastl::make_unique;
 using CSLock = CComCritSecLock<CComAutoCriticalSection>;
 
 #define GPU_PROFILE 1
+
+constexpr float div255 = (float)( 1.0 / 255.0 );

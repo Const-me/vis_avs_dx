@@ -6,8 +6,6 @@ eBlendMode EffectList::blendin() const
 	return (eBlendMode)( ( avs->mode >> 8 ) & 31 );
 }
 
-constexpr float div255 = 1.0f / 255.0f;
-
 float EffectList::inblendval() const
 {
 	return div255 * avs->inblendval;

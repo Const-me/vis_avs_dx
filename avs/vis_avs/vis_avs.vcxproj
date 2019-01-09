@@ -46,12 +46,14 @@
     <IntDir>.\Debug\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)avs_dx\DxVisuals;$(SolutionDir)avs_dx\DxVisuals\Utils;$(IncludePath)</IncludePath>
+    <TargetName>vis_avs_dx</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>C:\Soft\Winamp\Plugins\</OutDir>
     <IntDir>.\Release\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)avs_dx\DxVisuals;$(SolutionDir)avs_dx\DxVisuals\Utils;$(IncludePath)</IncludePath>
+    <TargetName>vis_avs_dx</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -93,7 +95,7 @@
       <LinkDLL>true</LinkDLL>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <OutputFile>C:\Soft\Winamp\Plugins\vis_avs.dll</OutputFile>
+      <OutputFile>C:\Soft\Winamp\Plugins\vis_avs_dx.dll</OutputFile>
       <ImportLibrary>.\Debug\vis_avs.lib</ImportLibrary>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ddraw.lib;vfw32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/WHOLEARCHIVE:DxVisuals.lib %(AdditionalOptions)</AdditionalOptions>
@@ -137,7 +139,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <LinkDLL>true</LinkDLL>
       <SubSystem>Windows</SubSystem>
-      <OutputFile>C:\Soft\Winamp\Plugins\vis_avs.dll</OutputFile>
+      <OutputFile>C:\Soft\Winamp\Plugins\vis_avs_dx.dll</OutputFile>
       <ImportLibrary>.\Release\vis_avs.lib</ImportLibrary>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ddraw.lib;vfw32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>

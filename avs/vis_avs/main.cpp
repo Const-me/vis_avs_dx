@@ -50,16 +50,7 @@ extern void GetClientRect_adj( HWND hwnd, RECT *r );
 
 HINSTANCE g_hInstance;
 
-char *verstr =
-#ifndef LASER
-"Advanced Visualization Studio"
-#else
-"AVS/Laser"
-#endif
-" v2.81d"
-;
-
-// DWORD WINAPI RenderThread( LPVOID a );
+char *verstr = "Advanced Visualization Studio, DirectX Port";
 
 static void config( struct winampVisModule *this_mod );
 static int init( struct winampVisModule *this_mod );
@@ -83,11 +74,7 @@ static winampVisModule *getModule( int which )
 {
 	static winampVisModule mod =
 	{
-#ifdef LASER
-		"Advanced Visualization Studio/Laser",
-#else
-		"Advanced Visualization Studio",
-#endif
+		"Advanced Visualization Studio DirectX",
 		NULL,	// hwndParent
 		NULL,	// hDllInstance
 		0,		// sRate

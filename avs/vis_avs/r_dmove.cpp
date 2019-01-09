@@ -60,35 +60,16 @@ protected:
 public:
 	C_THISCLASS();
 	virtual ~C_THISCLASS();
-	int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
 
 	virtual char *get_desc() { return MOD_NAME; }
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent );
 	virtual void load_config( unsigned char *data, int len );
 	virtual int  save_config( unsigned char *data );
-	RString effect_exp[ 4 ];
 
-	int m_lastw, m_lasth;
-	int m_lastxres, m_lastyres, m_xres, m_yres;
-	int *m_wmul;
-	int *m_tab;
-	int AVS_EEL_CONTEXTNAME;
-	double *var_d, *var_b, *var_r, *var_x, *var_y, *var_w, *var_h, *var_alpha;
-	int inited;
-	int codehandle[ 4 ];
-	int need_recompile;
+	RString effect_exp[ 4 ];
+	int m_xres, m_yres;
 	int buffern;
 	int subpixel, rectcoords, blend, wrap, nomove;
-	CRITICAL_SECTION rcs;
-
-
-	// smp stuff
-	int __subpixel, __rectcoords, __blend, __wrap, __nomove;
-	int w_adj;
-	int h_adj;
-	int XRES;
-	int YRES;
-
 };
 
 #define PUT_INT(y) data[pos]=(y)&255; data[pos+1]=(y>>8)&255; data[pos+2]=(y>>16)&255; data[pos+3]=(y>>24)&255
@@ -154,22 +135,13 @@ int  C_THISCLASS::save_config( unsigned char *data )
 
 C_THISCLASS::C_THISCLASS()
 {
-	AVS_EEL_INITINST();
-	InitializeCriticalSection( &rcs );
-	need_recompile = 1;
-	memset( codehandle, 0, sizeof( codehandle ) );
-	m_lasth = m_lastw = 0;
-	m_wmul = 0;
-	m_tab = 0;
 	effect_exp[ 0 ].assign( "" );
 	effect_exp[ 1 ].assign( "" );
 	effect_exp[ 2 ].assign( "" );
 	effect_exp[ 3 ].assign( "" );
 
-	m_lastxres = m_lastyres = 0;
 	m_xres = 16;
 	m_yres = 16;
-	var_b = 0;
 	subpixel = 1;
 	rectcoords = 0;
 	blend = 0;
@@ -181,27 +153,7 @@ C_THISCLASS::C_THISCLASS()
 }
 
 C_THISCLASS::~C_THISCLASS()
-{
-	int x;
-	for( x = 0; x < 4; x++ )
-	{
-		freeCode( codehandle[ x ] );
-		codehandle[ x ] = 0;
-	}
-	AVS_EEL_QUITINST();
-	if( m_wmul ) GlobalFree( m_wmul );
-	if( m_tab ) GlobalFree( m_tab );
-
-	m_tab = 0;
-	m_wmul = 0;
-	DeleteCriticalSection( &rcs );
-}
-
-int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
-{
-	__debugbreak();
-	return 0;
-}
+{ }
 
 C_RBASE *R_DMove( char *desc )
 {
@@ -370,14 +322,11 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 
 			if( LOWORD( wParam ) == IDC_EDIT1 || LOWORD( wParam ) == IDC_EDIT2 || LOWORD( wParam ) == IDC_EDIT3 || LOWORD( wParam ) == IDC_EDIT4 )
 			{
-				EnterCriticalSection( &g_this->rcs );
+				UPDATE_PARAMS();
 				g_this->effect_exp[ 0 ].get_from_dlgitem( hwndDlg, IDC_EDIT1 );
 				g_this->effect_exp[ 1 ].get_from_dlgitem( hwndDlg, IDC_EDIT2 );
 				g_this->effect_exp[ 2 ].get_from_dlgitem( hwndDlg, IDC_EDIT3 );
 				g_this->effect_exp[ 3 ].get_from_dlgitem( hwndDlg, IDC_EDIT4 );
-				g_this->need_recompile = 1;
-				if( LOWORD( wParam ) == IDC_EDIT4 ) g_this->inited = 0;
-				LeaveCriticalSection( &g_this->rcs );
 			}
 		}
 		return 0;

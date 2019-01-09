@@ -35,3 +35,5 @@ using eastl::vector;
 inline HRESULT getLastHr() { return HRESULT_FROM_WIN32( GetLastError() ); }
 
 #include "r_defs.h"
+
+#include <Threads/threadsApi.h>

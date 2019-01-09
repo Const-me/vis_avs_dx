@@ -30,7 +30,11 @@ HRESULT RootEffect::renderRoot( bool isBeat, RenderTargets& rt, bool rebindResou
 
 	// Run a state update shader
 	if( !m_stateShaders.bind( isBeat ) )
+	{
+		if( rt.lastWritten() && clearfb() )
+			rt.lastWritten().clear();
 		return S_FALSE;
+	}
 
 	bindGlobalResource( 2 );
 	bindUav( 0, m_state.uav() );

@@ -35,7 +35,6 @@ public:
 		RString effect_exp[ 2 ];
 
 		int inited;
-		int need_recompile;
 		int mode;
 
 		int beat_render, beat_render_frames;

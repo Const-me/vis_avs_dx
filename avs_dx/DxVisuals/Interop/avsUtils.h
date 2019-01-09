@@ -2,6 +2,7 @@
 #include "drawDx.h"
 #include "../DxVisuals/Utils/logger.h"
 
+// A wrapper around GetPrivateProfileStringA that returns CString
 CStringA getPrivateProfileString( const char* lpAppName, const char* lpKeyName, const char* lpFileName );
 
 // Same as WaitForSingleObject but processes windows messages while it waits.

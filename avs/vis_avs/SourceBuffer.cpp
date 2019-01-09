@@ -34,6 +34,8 @@ namespace
 		for( ; src < srcEnd; src++ )
 		{
 			const __m128i v = loadu_all( src );
+			// Unpacking with 0 would result in x->x*256, transforms 0xFF into 0xFF00.
+			// We want 0xFFFF, that's why unpacking with itself. Extremely fast with SSE2, and maps full range of bytes into full range of uint16_t.
 			store_all( dest, unpacklo_epi8( v, v ) );
 			dest++;
 			store_all( dest, unpackhi_epi8( v, v ) );
@@ -100,7 +102,6 @@ int SourceBuffer::update( struct winampVisModule *this_mod )
 			beat_peak2 = lt[ 0 ];
 		}
 		else beat_peak2 = ( beat_peak2 * 14 ) / 16;
-
 	}
 	b = refineBeat( avs_beat );
 	if( b )

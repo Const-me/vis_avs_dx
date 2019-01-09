@@ -289,9 +289,6 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="guiThread.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="EventSlim.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

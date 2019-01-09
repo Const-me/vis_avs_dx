@@ -35,7 +35,6 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "vis.h"
 #include "cfgwnd.h"
 #include "resource.h"
-#include "guiThread.h"
 #include <stdio.h>
 #include <shellapi.h>
 
@@ -44,7 +43,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "../studio/studio/api.h"
 #endif
 #include "avs_eelif.h"
-#include <Interop/Utils/dbgSetThreadName.h>
+#include <Threads/threadsApi.h>
 #include "SourceBuffer.h"
 
 extern void GetClientRect_adj( HWND hwnd, RECT *r );
@@ -60,7 +59,7 @@ char *verstr =
 " v2.81d"
 ;
 
-DWORD WINAPI RenderThread( LPVOID a );
+// DWORD WINAPI RenderThread( LPVOID a );
 
 static void config( struct winampVisModule *this_mod );
 static int init( struct winampVisModule *this_mod );
@@ -239,7 +238,7 @@ static int init( struct winampVisModule *this_mod )
 	InitializeCriticalSection( &g_render_cs );
 	g_ThreadQuit = 0;
 
-	return FAILED( guiThread::start( this_mod ) ) ? 1 : 0;
+	return FAILED( avsThreadsStart( this_mod ) ) ? 1 : 0;
 }
 
 static int render( struct winampVisModule *this_mod )
@@ -251,11 +250,13 @@ static int render( struct winampVisModule *this_mod )
 
 static void quit( struct winampVisModule *this_mod )
 {
+	avsThreadsStop();
+	return;
 #define DS(x) 
 	//MessageBox(this_mod->hwndParent,x,"AVS Debug",MB_OK)
 	if( g_hThread )
 	{
-		guiThread::stop();
+		
 
 		DS( "cleaning up critsections\n" );
 		DeleteCriticalSection( &g_render_cs );
@@ -288,124 +289,18 @@ void quit3( void )
 }
 #endif
 
-#define FPS_NF 64
-
-DWORD __stdcall RenderThread( LPVOID a )
+HRESULT RenderThread::startup()
 {
-	dbgSetThreadName( "AVS Render Thread" );
-
-	int framedata[ FPS_NF ] = { 0, };
-	int framedata_pos = 0;
-	int s = 0;
-	alignas( 16 ) uint16_t vis_data[ 2 ][ 2 ][ 576 ];
 	FILETIME ft;
 	GetSystemTimeAsFileTime( &ft );
-	srand( ft.dwLowDateTime | ft.dwHighDateTime^GetCurrentThreadId() );
-	while( !g_ThreadQuit )
-	{
-		int w, h, *fb = NULL, *fb2 = NULL;
-		bool beat = false;
-#ifdef WA3_COMPONENT
-		char visdata[ 576 * 2 * 2 ];
-		int ret = api->core_getVisData( 0, visdata, sizeof( visdata ) );
+	srand( ft.dwLowDateTime ^ ft.dwHighDateTime ^ GetCurrentThreadId() );
+	return S_OK;
+}
 
-		if( !ret )
-		{
-			memset( &vis_data[ 0 ][ 0 ][ 0 ], 0, 576 * 2 * 2 );
-			beat = 0;
-		}
-		else
-		{
-			int x;
-			unsigned char *v = (unsigned char *)visdata;
-			for( x = 0; x < 576 * 2; x++ )
-				vis_data[ 0 ][ 0 ][ x ] = g_logtab[ *v++ ];
-			for( x = 0; x < 576 * 2; x++ )
-				( (unsigned char *)vis_data[ 1 ][ 0 ] )[ x ] = *v++;
-
-			v = (unsigned char *)visdata + 1152;
-			{
-				int lt[ 2 ] = { 0,0 };
-				int ch;
-				for( ch = 0; ch < 2; ch++ )
-				{
-					for( x = 0; x < 576; x++ )
-					{
-						int r = *v++ ^ 128;
-						r -= 128;
-						if( r < 0 )r = -r;
-						lt[ ch ] += r;
-					}
-				}
-				lt[ 0 ] = max( lt[ 0 ], lt[ 1 ] );
-
-				beat_peak1 = ( beat_peak1 * 125 + beat_peak2 * 3 ) / 128;
-				beat_cnt++;
-
-				if( lt[ 0 ] >= ( beat_peak1 * 34 ) / 32 && lt[ 0 ] > ( 576 * 16 ) )
-				{
-					if( beat_cnt > 0 )
-					{
-						beat_cnt = 0;
-						beat = 1;
-					}
-					beat_peak1 = ( lt[ 0 ] + beat_peak1_peak ) / 2;
-					beat_peak1_peak = lt[ 0 ];
-				}
-				else if( lt[ 0 ] > beat_peak2 )
-				{
-					beat_peak2 = lt[ 0 ];
-				}
-				else beat_peak2 = ( beat_peak2 * 14 ) / 16;
-
-			}
-			//     EnterCriticalSection(&g_title_cs);
-			beat = refineBeat( beat );
-			//      LeaveCriticalSection(&g_title_cs);
-		}
-
-
-#else
-		g_sourceBuffer.copy( vis_data, beat );
-#endif
-
-		if( !g_ThreadQuit )
-		{
-			if( IsWindow( g_hwnd ) && !g_in_destroy ) DDraw_Enter( &w, &h, &fb, &fb2 );
-			else break;
-			// if( fb && fb2 )
-			{
-				extern int g_dlg_w, g_dlg_h, g_dlg_fps;
-#ifdef LASER
-				g_laser_linelist->ClearLineList();
-#endif
-
-				EnterCriticalSection( &g_render_cs );
-				int t = g_render_transition->render( vis_data, beat, s ? fb2 : fb, s ? fb : fb2, w, h );
-				LeaveCriticalSection( &g_render_cs );
-				if( t & 1 ) s ^= 1;
-
-#ifdef LASER
-				s = 0;
-				memset( fb, 0, w*h * sizeof( int ) );
-				LineDrawList( g_laser_linelist, fb, w, h );
-#endif
-				if( IsWindow( g_hwnd ) ) DDraw_Exit( s );
-
-				int lastt = framedata[ framedata_pos ];
-				int thist = GetTickCount();
-				framedata[ framedata_pos ] = thist;
-				g_dlg_w = w;
-				g_dlg_h = h;
-				if( lastt )
-				{
-					g_dlg_fps = MulDiv( sizeof( framedata ) / sizeof( framedata[ 0 ] ), 10000, thist - lastt );
-				}
-				framedata_pos++;
-				if( framedata_pos >= sizeof( framedata ) / sizeof( framedata[ 0 ] ) ) framedata_pos = 0;
-			}
-			// Old AVS slept here, new one doesn't because vsync is now handled by present.
-		}
-	}
-	return 0;
+void RenderThread::renderFrame()
+{
+	alignas( 16 ) uint16_t vis_data[ 2 ][ 2 ][ 576 ];
+	bool beat = false;
+	g_sourceBuffer.copy( vis_data, beat );
+	g_render_transition->render( vis_data, beat, nullptr, nullptr, 0, 0 );
 }

@@ -29,6 +29,8 @@ public:
 
 	HRESULT create();
 
+	bool isWindow();
+
 private:
 	int wmCreate( LPCREATESTRUCT lpCreateStruct );
 	void wmDestroy();

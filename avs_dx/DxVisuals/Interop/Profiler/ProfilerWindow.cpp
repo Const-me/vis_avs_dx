@@ -265,3 +265,10 @@ void profilerClose()
 		return;
 	g_profiler.DestroyWindow();
 }
+
+bool ProfilerWindow::isWindow()
+{
+	if( nullptr == m_hWnd )
+		return false;
+	return IsWindow();
+}

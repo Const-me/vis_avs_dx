@@ -131,7 +131,6 @@
     <ClInclude Include="Interop\Profiler\ProfilerWindow.h" />
     <ClInclude Include="Interop\RenderWindow.h" />
     <ClInclude Include="Interop\Utils\dbgSetThreadName.h" />
-    <ClInclude Include="Interop\Utils\shutdown.h" />
     <ClInclude Include="Interop\Utils\WTL\atlapp.h" />
     <ClInclude Include="Interop\Utils\WTL\atlcrack.h" />
     <ClInclude Include="Interop\Utils\WTL\atlctrls.h" />
@@ -169,6 +168,13 @@
     <ClInclude Include="Render\SimpleShaderTypes.hpp" />
     <ClInclude Include="Resources\GlobalBuffers.h" />
     <ClInclude Include="Interop\Profiler\TableData.h" />
+    <ClInclude Include="Threads\GuiThread.h" />
+    <ClInclude Include="Threads\GuiThreadImpl.h" />
+    <ClInclude Include="Threads\RenderThread.h" />
+    <ClInclude Include="Threads\RenderThreadImpl.h" />
+    <ClInclude Include="Threads\ThreadBase.h" />
+    <ClInclude Include="Threads\AvsThreads.h" />
+    <ClInclude Include="Threads\threadsApi.h" />
     <ClInclude Include="Utils\DXTK\Audio.h" />
     <ClInclude Include="Utils\DXTK\CommonStates.h" />
     <ClInclude Include="Utils\DXTK\DDSTextureLoader.h" />
@@ -416,7 +422,6 @@
     <ClCompile Include="Interop\Profiler\ProfilerWindow.cpp" />
     <ClCompile Include="Interop\RenderWindow.cpp" />
     <ClCompile Include="Interop\Utils\dbgSetThreadName.cpp" />
-    <ClCompile Include="Interop\Utils\shutdown-impl.cpp" />
     <ClCompile Include="Interop\WindowImpl.cpp" />
     <ClCompile Include="Render\Profiler.frame.cpp" />
     <ClCompile Include="Resources\dynamicBuffers.cpp" />
@@ -442,10 +447,13 @@
     <ClCompile Include="Render\Profiler.cpp" />
     <ClCompile Include="Resources\GlobalBuffers.cpp" />
     <ClCompile Include="Interop\Profiler\TableData.cpp" />
+    <ClCompile Include="Threads\GuiThreadImpl.cpp" />
+    <ClCompile Include="Threads\RenderThreadImpl.cpp" />
+    <ClCompile Include="Threads\AvsThreads.cpp" />
+    <ClCompile Include="Threads\threadsApi.cpp" />
     <ClCompile Include="Utils\DXTK\SimpleMath.cpp" />
     <ClCompile Include="Utils\DXTK\WICTextureLoader.cpp" />
     <ClCompile Include="Utils\findAssets.cpp" />
-    <ClCompile Include="shutdown.cpp" />
     <ClCompile Include="Effects\List\Blender.cpp" />
     <ClCompile Include="Effects\List\EffectList.cpp" />
     <ClCompile Include="Effects\Video\MF\FrameTexture.cpp" />

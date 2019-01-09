@@ -3,7 +3,6 @@
 #include "Resources/staticResources.h"
 #include <Utils/resizeHandler.h>
 #include <Interop/interop.h>
-#include <Interop/Utils/shutdown.h>
 #include "effects.h"
 #include "RootEffect.h"
 
@@ -68,12 +67,6 @@ inline RootEffect* getRoot( const C_RBASE *pRBase )
 
 HRESULT Transition::renderSingle( uint16_t visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *pRBase )
 {
-	if( checkShutdown() )
-	{
-		Sleep( 10 );
-		return S_FALSE;
-	}
-
 	RootEffect* p = getRoot( pRBase );
 	if( nullptr == p )
 		return E_POINTER;
@@ -103,12 +96,6 @@ HRESULT Transition::renderSingle( uint16_t visdata[ 2 ][ 2 ][ 576 ], int isBeat,
 
 HRESULT Transition::renderTransition( uint16_t visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *e1, const C_RBASE *e2, int trans, float sintrans )
 {
-	if( checkShutdown() )
-	{
-		Sleep( 10 );
-		return S_FALSE;
-	}
-
 #if GPU_PROFILE
 	gpuProfiler().frameStart();
 #endif
@@ -150,11 +137,6 @@ Transition* getTransitionInstance()
 
 iTransition* getTransition()
 {
-	if( checkShutdown() )
-	{
-		Sleep( 10 );
-		return nullptr;
-	}
 	return g_transition.get();
 }
 

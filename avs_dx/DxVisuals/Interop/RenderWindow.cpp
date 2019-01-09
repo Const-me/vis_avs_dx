@@ -9,10 +9,30 @@
 #include "../DxVisuals/Resources/dynamicBuffers.h"
 #include <algorithm> 
 #include <random>
+#include "profilerApi.h"
 
 CComAutoCriticalSection renderLock;
 
 constexpr UINT msPresentTimeout = 250;
+
+RenderWindow* RenderWindow::s_pInstance = nullptr;
+
+RenderWindow::RenderWindow()
+{
+	assert( nullptr == s_pInstance );
+	s_pInstance = this;
+}
+RenderWindow::~RenderWindow()
+{
+	assert( nullptr != s_pInstance );
+	s_pInstance = nullptr;
+}
+
+RenderWindow& RenderWindow::instance()
+{
+	assert( nullptr != s_pInstance );
+	return *s_pInstance;
+}
 
 int RenderWindow::wmCreate( LPCREATESTRUCT lpCreateStruct )
 {
@@ -247,4 +267,26 @@ LRESULT RenderWindow::wmTransition( UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 	HRESULT* pResult = (HRESULT*)lParam;
 	*pResult = doPresent();
 	return TRUE;
+}
+
+LRESULT RenderWindow::wmShutdown( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& handled )
+{
+	HRESULT* pResult = (HRESULT*)lParam;
+	profilerClose();
+	DestroyWindow(m_hWnd);
+	assert( m_hWnd == nullptr );
+	*pResult = S_OK;
+	return TRUE;
+}
+
+bool RenderWindow::isWindow()
+{
+	if( nullptr == m_hWnd )
+		return false;
+	return ::IsWindow( m_hWnd );
+}
+
+HRESULT RenderWindow::shutdown()
+{
+	return sendMessageTimeout( WM_SHUTDOWN, nullptr );
 }

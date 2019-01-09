@@ -8,16 +8,24 @@ class RenderWindow
 	// Direct3D 11 is essentially single threaded, that's why using this workaround.
 	static constexpr UINT WM_PRESENT = WM_USER + 1337;
 	static constexpr UINT WM_TRANSITION = WM_PRESENT + 1;
-
+	static constexpr UINT WM_SHUTDOWN = WM_PRESENT + 2;
+	static RenderWindow* s_pInstance;
 public:
+	RenderWindow();
+	~RenderWindow();
+	static RenderWindow& instance();
+
 	BEGIN_MSG_MAP_EX( RenderWindow )
 		if( WM_NCCREATE == uMsg )
 			m_hWnd = hWnd;
+		else if( WM_NCDESTROY == uMsg )
+			m_hWnd = nullptr;
 		MSG_WM_CREATE( wmCreate )
 		MSG_WM_DESTROY( wmDestroy )
 		MSG_WM_SIZE( wmSize )
 		MESSAGE_HANDLER( WM_PRESENT, wmPresent )
 		MESSAGE_HANDLER( WM_TRANSITION, wmTransition )
+		MESSAGE_HANDLER( WM_SHUTDOWN, wmShutdown )
 	END_MSG_MAP()
 
 private:
@@ -33,6 +41,7 @@ private:
 
 	LRESULT wmPresent( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& handled );
 	LRESULT wmTransition( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& handled );
+	LRESULT wmShutdown( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& handled );
 
 	HRESULT sendMessageTimeout( UINT wm, const void* wParam );
 
@@ -51,6 +60,9 @@ private:
 	void drawTransition();
 
 public:
+
+	bool isWindow();
+	HRESULT shutdown();
 
 	HRESULT presentSingle( const RenderTarget& src );
 

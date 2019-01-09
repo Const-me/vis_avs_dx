@@ -210,7 +210,8 @@ int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebu
 		a += angle;
 	}
 
-	unsigned char *bt = g_blendtable[ _alpha ];
+	// unsigned char *bt = g_blendtable[ _alpha ];
+	unsigned char *bt = nullptr;
 
 	int *outp = fbout;
 	for( y = 0; y < h; y++ )

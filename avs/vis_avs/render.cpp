@@ -42,20 +42,8 @@ C_RenderListClass *g_render_effects2;
 C_RenderTransitionClass *g_render_transition;
 C_RLibrary *g_render_library;
 
-unsigned char g_blendtable[ 256 ][ 256 ];
-unsigned int const mmx_blend4_revn[ 2 ] = { 0xff00ff,0xff00ff };//{0x1000100,0x1000100}; <<- this is actually more correct, but we're going for consistency vs. the non-mmx ver-jf
-int const mmx_blendadj_mask[ 2 ] = { 0xff00ff,0xff00ff };
-int const mmx_blend4_zero = 0;
-
 void Render_Init( HINSTANCE hDllInstance )
 {
-	{
-		int i, j;
-		for( j = 0; j < 256; j++ )
-			for( i = 0; i < 256; i++ )
-				g_blendtable[ i ][ j ] = (unsigned char)( ( i / 255.0 ) * (float)j );
-	}
-
 	g_render_library = new C_RLibrary();
 	g_render_effects = new C_RenderListClass( 1 );
 	g_render_effects2 = new C_RenderListClass( 1 );

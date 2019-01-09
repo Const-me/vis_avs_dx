@@ -10,15 +10,16 @@
 #include "main.h"
 #include "VIS.H"
 #include <Interop/Utils/dbgSetThreadName.h>
+#include "SourceBuffer.h"
 
 constexpr DWORD msQuitTimeout = 1000;
 
 #define CHECK( hr, msg )        {  const HRESULT __hr = ( hr ); if( FAILED( __hr ) ) { logError( __hr, msg ); return __hr; }  }
 #define FAIL_LAST_WIN32( msg )  {  const HRESULT __hr = getLastHr(); if( FAILED( __hr ) ) { logError( __hr, msg ); return __hr; }  }
 
-extern unsigned char g_logtab[ 256 ];
 extern CHandle g_hThread;
 extern volatile int g_ThreadQuit;
+extern SourceBuffer g_sourceBuffer;
 
 HRESULT shutdownThread();
 
@@ -72,17 +73,7 @@ namespace guiThread
 		if( Wnd_Init( this_mod ) )
 			return E_FAIL;
 
-		{
-			int x;
-			for( x = 0; x < 256; x++ )
-			{
-				double a = log( x*60.0 / 255.0 + 1.0 ) / log( 60.0 );
-				int t = (int)( a*255.0 );
-				if( t < 0 )t = 0;
-				if( t > 255 )t = 255;
-				g_logtab[ x ] = (unsigned char)t;
-			}
-		}
+		g_sourceBuffer.buildLogTable();
 
 		initBpm();
 

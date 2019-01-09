@@ -46,10 +46,10 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif
 #include "avs_eelif.h"
 #include <Interop/Utils/dbgSetThreadName.h>
+#include "SourceBuffer.h"
 
 extern void GetClientRect_adj( HWND hwnd, RECT *r );
 
-unsigned char g_logtab[ 256 ];
 HINSTANCE g_hInstance;
 
 char *verstr =
@@ -72,13 +72,7 @@ CHandle g_hThread;
 volatile int g_ThreadQuit;
 
 #ifndef WA3_COMPONENT
-static CRITICAL_SECTION g_cs;
-#endif
-
-static unsigned char g_visdata[ 2 ][ 2 ][ 576 ];
-static int g_visdata_pstat;
-
-#ifndef WA3_COMPONENT
+SourceBuffer g_sourceBuffer;
 
 static winampVisModule *getModule( int which );
 static winampVisHeader hdr = { VIS_HDRVER, verstr, getModule };
@@ -174,10 +168,8 @@ static void config( struct winampVisModule *this_mod )
 }
 
 CRITICAL_SECTION g_render_cs;
-static int g_is_beat;
 char g_path[ 1024 ];
 
-int beat_peak1, beat_peak2, beat_cnt, beat_peak1_peak;
 
 void main_setRenderThreadPriority()
 {
@@ -245,84 +237,17 @@ static int init( struct winampVisModule *this_mod )
 #endif
 	CreateDirectory( g_path, NULL );
 
-#ifndef WA3_COMPONENT
-	InitializeCriticalSection( &g_cs );
-#endif
 	InitializeCriticalSection( &g_render_cs );
 	g_ThreadQuit = 0;
-	g_visdata_pstat = 1;
 
 	return FAILED( guiThread::start( this_mod ) ) ? 1 : 0;
 }
 
 static int render( struct winampVisModule *this_mod )
 {
-#ifndef WA3_COMPONENT
-	int x, avs_beat = 0, b;
 	if( g_ThreadQuit ) return 1;
-	EnterCriticalSection( &g_cs );
-	if( g_ThreadQuit )
-	{
-		LeaveCriticalSection( &g_cs );
-		return 1;
-	}
-	if( g_visdata_pstat )
-		for( x = 0; x < 576 * 2; x++ )
-			g_visdata[ 0 ][ 0 ][ x ] = g_logtab[ (unsigned char)this_mod->spectrumData[ 0 ][ x ] ];
-	else
-	{
-		for( x = 0; x < 576 * 2; x++ )
-		{
-			int t = g_logtab[ (unsigned char)this_mod->spectrumData[ 0 ][ x ] ];
-			if( g_visdata[ 0 ][ 0 ][ x ] < t )
-				g_visdata[ 0 ][ 0 ][ x ] = t;
-		}
-	}
-	memcpy( &g_visdata[ 1 ][ 0 ][ 0 ], this_mod->waveformData, 576 * 2 );
-	{
-		int lt[ 2 ] = { 0,0 };
-		int x;
-		int ch;
-		for( ch = 0; ch < 2; ch++ )
-		{
-			unsigned char *f = (unsigned char*)&this_mod->waveformData[ ch ][ 0 ];
-			for( x = 0; x < 576; x++ )
-			{
-				int r = *f++ ^ 128;
-				r -= 128;
-				if( r < 0 )r = -r;
-				lt[ ch ] += r;
-			}
-		}
-		lt[ 0 ] = max( lt[ 0 ], lt[ 1 ] );
 
-		beat_peak1 = ( beat_peak1 * 125 + beat_peak2 * 3 ) / 128;
-
-		beat_cnt++;
-
-		if( lt[ 0 ] >= ( beat_peak1 * 34 ) / 32 && lt[ 0 ] > ( 576 * 16 ) )
-		{
-			if( beat_cnt > 0 )
-			{
-				beat_cnt = 0;
-				avs_beat = 1;
-			}
-			beat_peak1 = ( lt[ 0 ] + beat_peak1_peak ) / 2;
-			beat_peak1_peak = lt[ 0 ];
-		}
-		else if( lt[ 0 ] > beat_peak2 )
-		{
-			beat_peak2 = lt[ 0 ];
-		}
-		else beat_peak2 = ( beat_peak2 * 14 ) / 16;
-
-	}
-	b = refineBeat( avs_beat );
-	if( b ) g_is_beat = 1;
-	g_visdata_pstat = 0;
-	LeaveCriticalSection( &g_cs );
-#endif
-	return 0;
+	return g_sourceBuffer.update( this_mod );
 }
 
 static void quit( struct winampVisModule *this_mod )
@@ -334,9 +259,6 @@ static void quit( struct winampVisModule *this_mod )
 		guiThread::stop();
 
 		DS( "cleaning up critsections\n" );
-#ifndef WA3_COMPONENT
-		DeleteCriticalSection( &g_cs );
-#endif
 		DeleteCriticalSection( &g_render_cs );
 
 		DS( "smp_cleanupthreads\n" );
@@ -382,7 +304,8 @@ DWORD __stdcall RenderThread( LPVOID a )
 	srand( ft.dwLowDateTime | ft.dwHighDateTime^GetCurrentThreadId() );
 	while( !g_ThreadQuit )
 	{
-		int w, h, *fb = NULL, *fb2 = NULL, beat = 0;
+		int w, h, *fb = NULL, *fb2 = NULL;
+		bool beat = false;
 #ifdef WA3_COMPONENT
 		char visdata[ 576 * 2 * 2 ];
 		int ret = api->core_getVisData( 0, visdata, sizeof( visdata ) );
@@ -444,12 +367,7 @@ DWORD __stdcall RenderThread( LPVOID a )
 
 
 #else
-		EnterCriticalSection( &g_cs );
-		memcpy( &vis_data[ 0 ][ 0 ][ 0 ], &g_visdata[ 0 ][ 0 ][ 0 ], 576 * 2 * 2 );
-		g_visdata_pstat = 1;
-		beat = g_is_beat;
-		g_is_beat = 0;
-		LeaveCriticalSection( &g_cs );
+		g_sourceBuffer.copy( vis_data, beat );
 #endif
 
 		if( !g_ThreadQuit )

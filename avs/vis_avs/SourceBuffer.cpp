@@ -2,6 +2,9 @@
 #include "SourceBuffer.h"
 #include "VIS.H"
 #include "bpm.h"
+#include <Utils/Intrinsics/sse2.hpp>
+using namespace Intrinsics::Sse;
+
 using CSLock = CComCritSecLock<CComAutoCriticalSection>;
 
 void SourceBuffer::buildLogTable()
@@ -9,11 +12,33 @@ void SourceBuffer::buildLogTable()
 	int x;
 	for( x = 0; x < 256; x++ )
 	{
-		double a = log( x*60.0 / 255.0 + 1.0 ) / log( 60.0 );
-		int t = (int)( a*255.0 );
-		if( t < 0 )t = 0;
-		if( t > 255 )t = 255;
-		g_logtab[ x ] = (unsigned char)t;
+		double a = log( x * 60.0 / 255.0 + 1.0 ) / log( 60.0 );
+		int t = (int)( a * 65535.0 );
+		if( t < 0 )
+			t = 0;
+		if( t > 0xFFFF )
+			t = 0xFFFF;
+		g_logtab[ x ] = (uint16_t)t;
+	}
+}
+
+namespace
+{
+	void copyWaveformData( uint16_t destBuffer[ 2 ][ 2 ][ 576 ], const unsigned char sourceBuffer[ 2 ][ 576 ] )
+	{
+		const __m128i* src = ( const __m128i* )( &sourceBuffer[ 0 ][ 0 ] );
+		__m128i* dest = ( __m128i* )( &destBuffer[ 1 ][ 0 ][ 0 ] );
+
+		const __m128i* const srcEnd = src + ( 2 * 576 / 16 );
+
+		for( ; src < srcEnd; src++ )
+		{
+			const __m128i v = loadu_all( src );
+			store_all( dest, unpacklo_epi8( v, v ) );
+			dest++;
+			store_all( dest, unpackhi_epi8( v, v ) );
+			dest++;
+		}
 	}
 }
 
@@ -35,7 +60,10 @@ int SourceBuffer::update( struct winampVisModule *this_mod )
 				g_visdata[ 0 ][ 0 ][ x ] = t;
 		}
 	}
-	memcpy( &g_visdata[ 1 ][ 0 ][ 0 ], this_mod->waveformData, 576 * 2 );
+
+	// memcpy( &g_visdata[ 1 ][ 0 ][ 0 ], this_mod->waveformData, 576 * 2 );
+	copyWaveformData( g_visdata, this_mod->waveformData );
+
 	{
 		int lt[ 2 ] = { 0,0 };
 		int x;
@@ -81,10 +109,10 @@ int SourceBuffer::update( struct winampVisModule *this_mod )
 	return 0;
 }
 
-void SourceBuffer::copy( char vis_data[ 2 ][ 2 ][ 576 ], bool& beat )
+void SourceBuffer::copy( uint16_t vis_data[ 2 ][ 2 ][ 576 ], bool& beat )
 {
 	CSLock __lock( m_cs );
-	memcpy( &vis_data[ 0 ][ 0 ][ 0 ], &g_visdata[ 0 ][ 0 ][ 0 ], 576 * 2 * 2 );
+	memcpy( &vis_data[ 0 ][ 0 ][ 0 ], &g_visdata[ 0 ][ 0 ][ 0 ], 576 * 2 * 2 * 2 );
 	g_visdata_pstat = true;
 	beat = g_is_beat;
 	g_is_beat = false;

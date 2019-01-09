@@ -7,9 +7,9 @@ class iTransition
 public:
 	virtual ~iTransition() { }
 
-	virtual HRESULT renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *pRBase ) = 0;
+	virtual HRESULT renderSingle( uint16_t visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *pRBase ) = 0;
 
-	virtual HRESULT renderTransition( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *e1, const C_RBASE *e2, int trans, float sintrans ) = 0;
+	virtual HRESULT renderTransition( uint16_t visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *e1, const C_RBASE *e2, int trans, float sintrans ) = 0;
 };
 
 bool createTransitionInstance();

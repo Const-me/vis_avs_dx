@@ -21,13 +21,13 @@ public:
 
 	~Transition() override;
 
-	HRESULT renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *pRBase ) override;
+	HRESULT renderSingle( uint16_t visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *pRBase ) override;
 
-	HRESULT renderTransition( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *e1, const C_RBASE *e2, int trans, float sintrans ) override;
+	HRESULT renderTransition( uint16_t visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *e1, const C_RBASE *e2, int trans, float sintrans ) override;
 
 private:
 
-	HRESULT prepare( char visdata[ 2 ][ 2 ][ 576 ], int isBeat );
+	HRESULT prepare( uint16_t visdata[ 2 ][ 2 ][ 576 ], int isBeat );
 	CD3D11_VIEWPORT m_viewport;
 
 	EffectProfiler m_prepared, m_rendered;

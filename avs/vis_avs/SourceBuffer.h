@@ -3,11 +3,10 @@
 
 class SourceBuffer
 {
+	alignas( 16 ) eastl::array<uint16_t, 0x100> g_logtab;
+	alignas( 16 ) uint16_t g_visdata[ 2 ][ 2 ][ 576 ];
+
 	CComAutoCriticalSection m_cs;
-
-	eastl::array<uint8_t, 0x100> g_logtab;
-
-	uint8_t g_visdata[ 2 ][ 2 ][ 576 ];
 	bool g_visdata_pstat = true;
 	bool g_is_beat;
 
@@ -19,5 +18,5 @@ public:
 
 	int update( struct winampVisModule *this_mod );
 
-	void copy( char vis_data[ 2 ][ 2 ][ 576 ], bool& beat );
+	void copy( uint16_t vis_data[ 2 ][ 2 ][ 576 ], bool& beat );
 };

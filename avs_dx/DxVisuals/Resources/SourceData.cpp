@@ -11,13 +11,13 @@ HRESULT SourceData::create()
 {
 	static_assert( sizeof( sConstantBuffer ) % 16 == 0 );
 
-	CD3D11_TEXTURE2D_DESC texDesc{ DXGI_FORMAT_R8_TYPELESS, bands, 4, 1, 1, D3D11_BIND_SHADER_RESOURCE, D3D11_USAGE_DYNAMIC, D3D11_CPU_ACCESS_WRITE };
+	CD3D11_TEXTURE2D_DESC texDesc{ DXGI_FORMAT_R16_TYPELESS, bands, 4, 1, 1, D3D11_BIND_SHADER_RESOURCE, D3D11_USAGE_DYNAMIC, D3D11_CPU_ACCESS_WRITE };
 	CHECK( device->CreateTexture2D( &texDesc, nullptr, &m_texture ) );
 
-	CD3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{ D3D11_SRV_DIMENSION_TEXTURE2D, DXGI_FORMAT_R8_SNORM };
+	CD3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{ D3D11_SRV_DIMENSION_TEXTURE2D, DXGI_FORMAT_R16_SNORM };
 	CHECK( device->CreateShaderResourceView( m_texture, &srvDesc, &m_srvSigned ) );
 
-	srvDesc.Format = DXGI_FORMAT_R8_UNORM;
+	srvDesc.Format = DXGI_FORMAT_R16_UNORM;
 	CHECK( device->CreateShaderResourceView( m_texture, &srvDesc, &m_srvUnsigned ) );
 
 	CD3D11_BUFFER_DESC bufferDesc{ sizeof( sConstantBuffer ), D3D11_BIND_CONSTANT_BUFFER, D3D11_USAGE_DYNAMIC, D3D11_CPU_ACCESS_WRITE };
@@ -36,15 +36,15 @@ void SourceData::destroy()
 	m_currentFrame = 0;
 }
 
-HRESULT SourceData::update( char visdata[ 2 ][ 2 ][ bands ], int isBeat )
+HRESULT SourceData::update( uint16_t visdata[ 2 ][ 2 ][ bands ], int isBeat )
 {
 	D3D11_MAPPED_SUBRESOURCE mapped;
 
 	{
 		CHECK( context->Map( m_texture, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped ) );
-		const char* src = &visdata[ 0 ][ 0 ][ 0 ];
+		const uint16_t* src = &visdata[ 0 ][ 0 ][ 0 ];
 		uint8_t* dest = (uint8_t*)mapped.pData;
-		CHECK( MFCopyImage( dest, mapped.RowPitch, (const BYTE*)src, bands, bands, 4 ) );
+		CHECK( MFCopyImage( dest, mapped.RowPitch, (const BYTE*)src, bands * 2, bands * 2, 4 ) );
 		context->Unmap( m_texture, 0 );
 	}
 

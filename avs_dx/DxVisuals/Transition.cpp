@@ -41,7 +41,7 @@ Transition::~Transition()
 	logShutdown( "~Transition" );
 }
 
-HRESULT Transition::prepare( char visdata[ 2 ][ 2 ][ 576 ], int isBeat )
+HRESULT Transition::prepare( uint16_t visdata[ 2 ][ 2 ][ 576 ], int isBeat )
 {
 	// Upload visualization data to GPU
 	CHECK( StaticResources::sourceData.update( visdata, isBeat ) );
@@ -66,7 +66,7 @@ inline RootEffect* getRoot( const C_RBASE *pRBase )
 	return dynamic_cast<RootEffect*> ( getDxEffect( pRBase ) );
 }
 
-HRESULT Transition::renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *pRBase )
+HRESULT Transition::renderSingle( uint16_t visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *pRBase )
 {
 	if( checkShutdown() )
 	{
@@ -101,7 +101,7 @@ HRESULT Transition::renderSingle( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, con
 	return S_OK;
 }
 
-HRESULT Transition::renderTransition( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *e1, const C_RBASE *e2, int trans, float sintrans )
+HRESULT Transition::renderTransition( uint16_t visdata[ 2 ][ 2 ][ 576 ], int isBeat, const C_RBASE *e1, const C_RBASE *e2, int trans, float sintrans )
 {
 	if( checkShutdown() )
 	{

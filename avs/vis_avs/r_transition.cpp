@@ -176,7 +176,7 @@ int C_RenderTransitionClass::LoadPreset( char *file, int which, C_UndoItem *item
 }
 
 extern int g_rnd_cnt;
-int C_RenderTransitionClass::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
+int C_RenderTransitionClass::render( uint16_t visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
 {
 	iTransition* pTrans = getTransition();
 	if( nullptr == pTrans )

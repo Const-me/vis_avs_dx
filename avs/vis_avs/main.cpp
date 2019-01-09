@@ -35,7 +35,6 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "vis.h"
 #include "cfgwnd.h"
 #include "resource.h"
-#include "bpm.h"
 #include "guiThread.h"
 #include <stdio.h>
 #include <shellapi.h>
@@ -298,7 +297,7 @@ DWORD __stdcall RenderThread( LPVOID a )
 	int framedata[ FPS_NF ] = { 0, };
 	int framedata_pos = 0;
 	int s = 0;
-	char vis_data[ 2 ][ 2 ][ 576 ];
+	alignas( 16 ) uint16_t vis_data[ 2 ][ 2 ][ 576 ];
 	FILETIME ft;
 	GetSystemTimeAsFileTime( &ft );
 	srand( ft.dwLowDateTime | ft.dwHighDateTime^GetCurrentThreadId() );

@@ -310,6 +310,7 @@
     <ClInclude Include="Utils\EABase\int128.h" />
     <ClInclude Include="Utils\EABase\nullptr.h" />
     <ClInclude Include="Utils\EABase\version.h" />
+    <ClInclude Include="Resources\BlendModes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -437,6 +438,7 @@
     <ClCompile Include="Effects\Trans\Convolution\convolutionHacks.cpp" />
     <ClCompile Include="Utils\EABase\EastlWindows.cpp" />
     <ClCompile Include="Effects\Misc\SetRenderMode.cpp" />
+    <ClCompile Include="Resources\BlendModes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

@@ -35,11 +35,42 @@ HRESULT EffectList::updateParameters( Binder& binder )
 	return hr;
 }
 
+class SavedContext
+{
+	const int savedBlendMode;
+	GlobalBuffers& savedBuffers;
+
+	static void swapBuffers( GlobalBuffers& a, GlobalBuffers& b )
+	{
+		constexpr size_t cb = sizeof( GlobalBuffers );
+		array<uint8_t, cb> tmp;
+		CopyMemory( tmp.data(), &a, cb );	// tmp = a
+		CopyMemory( &a, &b, cb );			// a = b
+		CopyMemory( &b, tmp.data(), cb );	// b = tmp
+	}
+
+public:
+	SavedContext( GlobalBuffers& buffers ) :
+		savedBuffers( buffers ),
+		savedBlendMode( g_line_blend_mode )
+	{
+		swapBuffers( savedBuffers, StaticResources::globalBuffers );
+	}
+
+	~SavedContext()
+	{
+		g_line_blend_mode = savedBlendMode;
+		swapBuffers( savedBuffers, StaticResources::globalBuffers );
+	}
+};
+
 HRESULT EffectList::render( bool isBeat, RenderTargets& rt )
 {
 	const int enabled = ( avs->mode & 2 ) ^ 2;
 	if( !enabled )
 		return S_FALSE;
+
+	SavedContext __context{ m_savedGlobalBuffers };
 
 	const eBlendMode blendIn = blendin();
 	const bool clearBuffer = clearfb();

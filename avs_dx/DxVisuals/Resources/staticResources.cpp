@@ -108,6 +108,7 @@ namespace StaticResources
 
 		sourceData.destroy();
 		globalBuffers.destroy();
+		globalBlendModes.destroy();
 	}
 
 	CComPtr<ID3D11VertexShader> fullScreenTriangle;
@@ -128,6 +129,7 @@ namespace StaticResources
 
 	SourceData sourceData;
 	GlobalBuffers globalBuffers;
+	BlendModes globalBlendModes;
 
 	HRESULT createLayout( const vector<uint8_t>& dxbc )
 	{

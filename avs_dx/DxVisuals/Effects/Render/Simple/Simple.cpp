@@ -178,6 +178,7 @@ HRESULT Simple::updateParameters( Binder& binder )
 
 HRESULT Simple::render( bool isBeat, RenderTargets& rt )
 {
-	omBlend( eBlend::Premultiplied );
+	StaticResources::globalBlendModes.setupBlending();
+
 	return m_pImpl->render( isBeat, rt );
 }

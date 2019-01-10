@@ -1,6 +1,7 @@
 #pragma once
 #include "SourceData.h"
 #include "GlobalBuffers.h"
+#include "BlendModes.h"
 
 namespace StaticResources
 {
@@ -27,6 +28,7 @@ namespace StaticResources
 	extern SourceData sourceData;
 
 	extern GlobalBuffers globalBuffers;
+	extern BlendModes globalBlendModes;
 
 	// The rest of the layouts are created on demand and go to a hash map.
 	HRESULT cacheInputLayout( const void* key, const D3D11_INPUT_ELEMENT_DESC *desc, UINT count, const vector<uint8_t>& dxbc );

@@ -425,7 +425,7 @@ void Wnd_GoFullScreen( HWND hwnd )
 	}
 }
 
-static char *INI_FILE;
+static const char *INI_FILE;
 
 static LRESULT CALLBACK WndProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
 
@@ -451,19 +451,7 @@ int Wnd_Init( struct winampVisModule *this_mod )
 			//	return 1;
 	}
 	{
-#ifdef WA3_COMPONENT
-		INI_FILE = reinterpret_cast<char *>( calloc( WA_MAX_PATH, sizeof( char ) ) );
-		char *p = INI_FILE;
-		GetModuleFileName( NULL, INI_FILE, sizeof( INI_FILE ) );
-		if( p[ 0 ] ) while( p[ 1 ] ) p++;
-		while( p >= INI_FILE && *p != '.' ) p--;
-		*++p = 'i';
-		*++p = 'n';
-		*++p = 'i';
-		*++p = 0;
-#else
-		INI_FILE = (char*)SendMessage( this_mod->hwndParent, WM_WA_IPC, 0, IPC_GETINIFILE );
-#endif
+		INI_FILE = getWinampIniPath();
 #define AVS_SECTION "AVS"
 
 		need_redock = GetPrivateProfileInt( AVS_SECTION, "cfg_docked", 0, INI_FILE );

@@ -42,6 +42,12 @@ C_RenderListClass *g_render_effects2;
 C_RenderTransitionClass *g_render_transition;
 C_RLibrary *g_render_library;
 
+static void copyWinampIniPath( char buffer[ MAX_PATH ] )
+{
+	const CStringA& waip = getWinampIniPath();
+	strncpy_s( buffer, MAX_PATH, waip, (size_t)waip.GetLength() );
+}
+
 void Render_Init( HINSTANCE hDllInstance )
 {
 	g_render_library = new C_RLibrary();
@@ -51,8 +57,9 @@ void Render_Init( HINSTANCE hDllInstance )
 
 	char INI_FILE[ MAX_PATH ];
 	char *p = INI_FILE;
-	strncpy( INI_FILE, (char*)SendMessage( GetWinampHwnd(), WM_WA_IPC, 0, IPC_GETINIFILE ), MAX_PATH );
+	copyWinampIniPath( INI_FILE );
 	p += strlen( INI_FILE ) - 1;
+
 	while( p >= INI_FILE && *p != '\\' )
 		p--;
 	strcpy( p, "\\plugins\\vis_avs.dat" );
@@ -77,15 +84,10 @@ void Render_Quit( HINSTANCE hDllInstance )
 	{
 		char INI_FILE[ MAX_PATH ];
 		char *p = INI_FILE;
-		strncpy( INI_FILE, (char*)SendMessage( GetWinampHwnd(), WM_WA_IPC, 0, IPC_GETINIFILE ), MAX_PATH );
+		copyWinampIniPath( INI_FILE );
 		p += strlen( INI_FILE ) - 1;
 		while( p >= INI_FILE && *p != '\\' ) p--;
-#ifdef LASER
-		strcpy( p, "\\plugins\\vis_avs_laser.dat" );
-#else
 		strcpy( p, "\\plugins\\vis_avs.dat" );
-#endif
-
 		g_render_effects->__SavePreset( INI_FILE );
 	}
 

@@ -171,12 +171,6 @@ void CfgWnd_Destroy( void )
 		SendMessage( g_hwndDlg, WM_CLOSE, 0, 0 );
 	}
 	g_hwndDlg = 0;
-	/* if( hcfgThread )
-	{
-		g_hwndDlg = 0;
-		WaitForSingleObject( hcfgThread, INFINITE );
-		hcfgThread.Close();
-	} */
 }
 
 static void recursiveAddDirList( HMENU menu, UINT *id, char *path, int pathlen )

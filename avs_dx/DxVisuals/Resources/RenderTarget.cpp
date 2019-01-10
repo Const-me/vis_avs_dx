@@ -5,7 +5,7 @@
 
 HRESULT RenderTarget::create( const CSize& size, bool rt, bool unorderedAccess )
 {
-	CD3D11_TEXTURE2D_DESC texDesc{ format, (UINT)size.cx, (UINT)size.cy, 1, 1, D3D11_BIND_SHADER_RESOURCE };
+	CD3D11_TEXTURE2D_DESC texDesc{ DXGI_FORMAT_R10G10B10A2_TYPELESS, (UINT)size.cx, (UINT)size.cy, 1, 1, D3D11_BIND_SHADER_RESOURCE };
 	if( rt )
 		texDesc.BindFlags |= D3D11_BIND_RENDER_TARGET;
 	if( unorderedAccess )
@@ -14,11 +14,11 @@ HRESULT RenderTarget::create( const CSize& size, bool rt, bool unorderedAccess )
 
 	if( rt )
 	{
-		CD3D11_RENDER_TARGET_VIEW_DESC rtvDesc{ D3D11_RTV_DIMENSION_TEXTURE2D, format };
+		CD3D11_RENDER_TARGET_VIEW_DESC rtvDesc{ D3D11_RTV_DIMENSION_TEXTURE2D, DXGI_FORMAT_R10G10B10A2_UNORM };
 		CHECK( device->CreateRenderTargetView( m_tex, &rtvDesc, &m_rtv ) );
 	}
 
-	CD3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{ D3D11_SRV_DIMENSION_TEXTURE2D, format };
+	CD3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{ D3D11_SRV_DIMENSION_TEXTURE2D, DXGI_FORMAT_R10G10B10A2_UNORM };
 	CHECK( device->CreateShaderResourceView( m_tex, &srvDesc, &m_srv ) );
 
 	return S_OK;
@@ -33,6 +33,7 @@ HRESULT RenderTarget::create()
 void RenderTarget::destroy()
 {
 	m_rtv = nullptr;
+	m_rtvInteger = nullptr;
 	m_srv = nullptr;
 	m_tex = nullptr;
 	m_uav = nullptr;
@@ -60,9 +61,33 @@ void RenderTarget::clear( const Vector3& color )
 	clear( v4 );
 }
 
+ID3D11RenderTargetView* RenderTarget::getIntegerRt()
+{
+	if( m_rtvInteger )
+		return m_rtvInteger;
+	static bool failed = false;
+	if( failed )
+		return m_rtv;
+
+	CD3D11_RENDER_TARGET_VIEW_DESC rtvDesc{ D3D11_RTV_DIMENSION_TEXTURE2D, DXGI_FORMAT_R10G10B10A2_UINT };
+	const HRESULT hr = device->CreateRenderTargetView( m_tex, &rtvDesc, &m_rtvInteger );
+	if( FAILED( hr ) )
+	{
+		failed = true;
+		return m_rtv;
+	}
+	return m_rtvInteger;
+}
+
 void RenderTarget::bindTarget()
 {
-	ID3D11RenderTargetView* v = m_rtv;
+	ID3D11RenderTargetView* const v = m_rtv;
+	context->OMSetRenderTargets( 1, &v, nullptr );
+}
+
+void RenderTarget::bindTargetForLogicOp()
+{
+	ID3D11RenderTargetView* const v = getIntegerRt();
 	context->OMSetRenderTargets( 1, &v, nullptr );
 }
 

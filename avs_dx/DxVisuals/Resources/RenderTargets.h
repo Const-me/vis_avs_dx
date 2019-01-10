@@ -22,6 +22,8 @@ public:
 	// Bind last written RT for output, optionally clear. This does not advance to the next target.
 	HRESULT writeToLast( bool clear = false );
 
+	HRESULT writeToLastWithLogicOp();
+
 	// Bind last written RT for input, advance to the next target, bind next one for output. Optionally clear the output.
 	HRESULT writeToNext( BoundPsResource& bound, bool clearNext = false );
 

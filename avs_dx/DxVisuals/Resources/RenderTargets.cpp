@@ -23,6 +23,15 @@ HRESULT RenderTargets::writeToLast( bool clear )
 	return S_OK;
 }
 
+HRESULT RenderTargets::writeToLastWithLogicOp()
+{
+	RenderTarget& t = m_targets[ m_lastTarget ];
+	if( !t )
+		CHECK( t.create() );
+	t.bindTargetForLogicOp();
+	return S_OK;
+}
+
 HRESULT RenderTargets::writeToNext( BoundPsResource& bound, bool clearNext )
 {
 	unbindTarget();

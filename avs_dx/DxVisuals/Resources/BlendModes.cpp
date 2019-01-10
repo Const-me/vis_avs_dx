@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "BlendModes.h"
+#include "RenderTargets.h"
 
 extern int g_line_blend_mode;
 
@@ -15,9 +16,12 @@ float BlendModes::getLineWidth()
 	return (float)( v * 0xFF );
 }
 
-bool BlendModes::setupBlending()
+bool BlendModes::setupBlending( RenderTargets& rt )
 {
 	const int mode = g_line_blend_mode & 0xFF;
+
+	if( mode != 8 )
+		rt.writeToLast( false );
 
 	switch( mode )
 	{
@@ -42,7 +46,13 @@ bool BlendModes::setupBlending()
 		omCustomBlend( adjastableBlendValue() );
 		return true;
 	case 8:
-		return setXorBlend();
+		if( setXorBlend() )
+		{
+			rt.writeToLastWithLogicOp();
+			return true;
+		}
+		rt.writeToLast( false );
+		return false;
 	case 9:
 		return setCustom( eCustom::Minimum );
 	}

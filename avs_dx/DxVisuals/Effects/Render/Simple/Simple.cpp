@@ -76,8 +76,6 @@ HRESULT DotsRendering::VsData::updateAvs( const AvsState& avs )
 HRESULT SimpleDotsFx::render( bool isBeat, RenderTargets& rt )
 {
 	const UINT pointsCount = vertex().pointsCount;
-
-	CHECK( rt.writeToLast( false ) );
 	if( !bindShaders( isBeat ) )
 		return S_FALSE;
 
@@ -102,10 +100,8 @@ HRESULT SolidRendering::PsData::updateAvs( const AvsState& avs )
 
 HRESULT SimpleSolidFx::render( bool isBeat, RenderTargets& rt )
 {
-	CHECK( rt.writeToLast( false ) );
 	if( !bindShaders( isBeat ) )
 		return S_FALSE;
-
 	iaClearBuffer();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP );
 	context->Draw( 4, 0 );
@@ -124,10 +120,8 @@ HRESULT LinesRendering::VsData::updateAvs( const AvsState& avs )
 
 HRESULT SimpleLinesFx::render( bool isBeat, RenderTargets& rt )
 {
-	CHECK( rt.writeToLast( false ) );
 	if( !bindShaders( isBeat ) )
 		return S_FALSE;
-
 	iaClearBuffer();
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_LINESTRIP_ADJ );
 	context->Draw( vertex().pointsCount + 2, 0 );
@@ -178,7 +172,7 @@ HRESULT Simple::updateParameters( Binder& binder )
 
 HRESULT Simple::render( bool isBeat, RenderTargets& rt )
 {
-	StaticResources::globalBlendModes.setupBlending();
+	StaticResources::globalBlendModes.setupBlending( rt );
 
 	return m_pImpl->render( isBeat, rt );
 }

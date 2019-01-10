@@ -153,10 +153,7 @@ HRESULT ScopeBase::VsData::updateAvs( const AvsState& avs )
 
 HRESULT SuperScope::render( bool isBeat, RenderTargets& rt )
 {
-	// omBlend( eBlend::Premultiplied );
-	StaticResources::globalBlendModes.setupBlending();
-
-	CHECK( rt.writeToLast( false ) );
+	StaticResources::globalBlendModes.setupBlending( rt );
 	if( !renderer.bindShaders( isBeat ) )
 		return S_FALSE;
 	iaClearBuffer();

@@ -5,8 +5,11 @@ class RenderTarget
 {
 	CComPtr<ID3D11Texture2D> m_tex;
 	CComPtr<ID3D11RenderTargetView> m_rtv;
+	CComPtr<ID3D11RenderTargetView> m_rtvInteger;
 	CComPtr<ID3D11ShaderResourceView> m_srv;
 	CComPtr<ID3D11UnorderedAccessView> m_uav;
+
+	ID3D11RenderTargetView* getIntegerRt();
 
 public:
 
@@ -30,6 +33,7 @@ public:
 
 	// Bind the write only render target view of the texture
 	void bindTarget();
+	void bindTargetForLogicOp();
 
 	void copyTo( const RenderTarget& that ) const;
 

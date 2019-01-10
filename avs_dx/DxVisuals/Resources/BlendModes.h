@@ -1,5 +1,6 @@
 #pragma once
 #include <d3d11_1.h>
+class RenderTargets;
 
 class BlendModes
 {
@@ -26,7 +27,7 @@ public:
 
 	void destroy();
 
-	bool setupBlending();
+	bool setupBlending( RenderTargets& rt );
 
 	static float getLineWidth();
 };

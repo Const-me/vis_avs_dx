@@ -29,6 +29,7 @@ using DirectX::SimpleMath::Vector4;
 #include <math.h>
 #include <stdint.h>
 #include <algorithm>
+#define EASTL_USER_DEFINED_ALLOCATOR
 #include <EASTL/vector.h>
 #include <EASTL/array.h>
 #include <EASTL/unique_ptr.h>

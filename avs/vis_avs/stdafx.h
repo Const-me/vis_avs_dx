@@ -26,6 +26,7 @@ inline int max( int a, int b )
 	return std::max( a, b );
 }
 
+#define EASTL_USER_DEFINED_ALLOCATOR
 #include <EASTL/vector.h>
 using eastl::vector;
 

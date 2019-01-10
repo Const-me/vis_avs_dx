@@ -416,6 +416,7 @@
     <ClCompile Include="Effects\Trans\Multiplier\Multiplier.cpp" />
     <ClCompile Include="Effects\Trans\Interference\Interference.cpp" />
     <ClCompile Include="Effects\Trans\Water\Water.cpp" />
+    <ClCompile Include="Utils\EABase\eastlGlobals.cpp" />
     <ClCompile Include="Utils\FpsCalc.cpp" />
     <ClCompile Include="Interop\avsUtils.cpp" />
     <ClCompile Include="Interop\ConsoleLogger.cpp" />

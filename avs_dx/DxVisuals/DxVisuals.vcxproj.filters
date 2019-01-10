@@ -424,6 +424,7 @@
     <ClCompile Include="Effects\Trans\Water\Water.cpp" />
     <ClCompile Include="Effects\Trans\Convolution\Convolution.cpp" />
     <ClCompile Include="Effects\Trans\Convolution\convolutionHacks.cpp" />
+    <ClCompile Include="Utils\EABase\eastlGlobals.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

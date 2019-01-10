@@ -161,6 +161,12 @@ HINSTANCE hRich;
 
 static int init( struct winampVisModule *this_mod )
 {
+	if( !msvcrt::startup() )
+	{
+		MessageBox( this_mod->hwndParent, "Unable to initialize AVS, msvcrt.dll missing or incompatible.", "AVS ERROR", MB_OK | MB_ICONSTOP );
+		return 1;
+	}
+
 	FILETIME ft;
 #if 0//syntax highlighting
 	if( !hRich ) hRich = LoadLibrary( "RICHED32.dll" );

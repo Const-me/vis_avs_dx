@@ -8,33 +8,45 @@ namespace msvcrt
 		HMODULE hm = nullptr;
 
 		template<class T>
-		inline void getProc( T& fn, const char* lpProcName )
+		inline bool getProc( T& fn, const char* lpProcName )
 		{
 			fn = (T)GetProcAddress( hm, lpProcName );
 			if( nullptr == fn )
 			{
-				logError( "%s not found in msvcrt.dll", lpProcName );
-				__debugbreak();
+				char buff[ 64 ];
+				sprintf_s( buff, "%s not found in msvcrt.dll\n", lpProcName );
+				OutputDebugStringA( buff );
+				return false;
 			}
+			return true;
 		}
 
 	public:
+
 		Dll()
 		{
-			hm = GetModuleHandleW( L"msvcrt.dll" );
+			hm = LoadLibraryA( "msvcrt.dll" );
 			if( nullptr == hm )
 			{
-				logError( getLastHr(), "msvcrt.dll wasn't loaded" );
-				__debugbreak();
+				const HRESULT hr = getLastHr();
+				char buff[ 64 ];
+				sprintf_s( buff, "msvcrt.dll wasn't loaded, error 0x%08X\n", hr );
+				OutputDebugStringA( buff );
+				return;
 			}
-			// getProc( fnMalloc, "malloc" );
-			// getProc( fnFree, "free" );
 			getProc( fnNew, "??2@YAPAXI@Z" );
 			getProc( fnDelete, "??3@YAXPAX@Z" );
 		}
 
+		bool startup() const
+		{
+			return hm && fnNew && fnDelete;
+		}
+
 		~Dll()
 		{
+			fnNew = nullptr;
+			fnDelete = nullptr;
 			if( hm )
 			{
 				FreeLibrary( hm );
@@ -42,10 +54,8 @@ namespace msvcrt
 			}
 		}
 
-		// void* ( __cdecl *fnMalloc )( size_t size );
-		// void( __cdecl *fnFree )( void* ptr );
-		void* ( __cdecl *fnNew )( size_t size );
-		void( __cdecl *fnDelete )( void* ptr );
+		void* ( __cdecl *fnNew )( size_t size ) = nullptr;
+		void( __cdecl *fnDelete )( void* ptr ) = nullptr;
 	};
 
 	const Dll& dll()
@@ -54,14 +64,6 @@ namespace msvcrt
 		return s_dll;
 	}
 
-	/* void* malloc( size_t size )
-	{
-		return dll().fnMalloc( size );
-	}
-	void free( void* ptr )
-	{
-		return dll().fnFree( ptr );
-	} */
 	void* operatorNew( size_t size )
 	{
 		return dll().fnNew( size );
@@ -70,36 +72,9 @@ namespace msvcrt
 	{
 		dll().fnDelete( ptr );
 	}
-};
-// for EASTL
-void* operator new[]( size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line )
-{
-	return msvcrt::operatorNew( size );
-}
-void* operator new[]( size_t size, size_t alignment, size_t alignmentOffset, const char* pName, int flags, unsigned debugFlags, const char* file, int line )
-{
-	return msvcrt::operatorNew( size );
-}
-void __cdecl eastl::AssertionFailure( const char *af )
-{
-	OutputDebugStringA( af );
-	__debugbreak();
-}
 
-void* operator new[]( size_t size, size_t alignment, size_t alignmentOffset, const char* pName, int flags, unsigned debugFlags, const char* file, int line );
-void* operator new( size_t size )
-{
-	return msvcrt::operatorNew( size );
-}
-void* operator new[]( size_t size )
-{
-	return msvcrt::operatorNew( size );
-}
-void  operator delete  ( void* ptr )
-{
-	msvcrt::operatorDelete( ptr );
-}
-void  operator delete[]( void* ptr )
-{
-	msvcrt::operatorDelete( ptr );
-}
+	bool startup()
+	{
+		return dll().startup();
+	}
+};

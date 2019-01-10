@@ -39,6 +39,20 @@ namespace Hlsl
 			}
 			set( key, str );
 		}
+
+		template<size_t size>
+		void set( const CStringA &key, const array<float, size>& arr )
+		{
+			CStringA str;
+			str.Preallocate( 128 );
+			for( float value : arr )
+			{
+				if( str.GetLength() > 0 )
+					str += ", ";
+				str.AppendFormat( "%g", value );
+			}
+			set( key, str );
+		}
 		
 		// Add macro with value like "float2( 0, 1 )" 
 		void set( const CStringA &key, const float2& value );

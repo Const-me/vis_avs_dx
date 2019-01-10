@@ -98,10 +98,14 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Effects\Trans\Convolution\convolutionHacks.cpp" />
+    <ClCompile Include="Effects\Trans\Convolution\Convolution.cpp" />
     <ClCompile Include="Effects\Misc\AddBorder\AddBorder.cpp" />
     <ClCompile Include="Effects\Trans\ColorMap\ColorMap.cpp" />
     <ClCompile Include="Effects\Common\ApeEffectBase.cpp" />
     <ClCompile Include="Effects\Render\DotFountain\DotFountain.cpp" />
+    <ClInclude Include="Effects\Trans\Convolution\convolutionHacks.h" />
+    <ClInclude Include="Effects\Trans\Convolution\Convolution.h" />
     <ClInclude Include="Effects\Misc\AddBorder\AddBorder.h" />
     <ClInclude Include="Effects\Misc\AddBorder\borderHacks.hpp" />
     <ClInclude Include="Effects\Trans\ColorMap\ColorMap.h" />
@@ -659,6 +663,10 @@
     <FxCompile Include="Effects\Trans\ColorReduction\ColorReductionPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Trans\Convolution\ConvolutionCS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
     </FxCompile>
     <FxCompile Include="Effects\Trans\Interference\InterferencePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>

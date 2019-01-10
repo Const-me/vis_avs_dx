@@ -37,6 +37,8 @@ public:
 	{
 		return m_lastTarget;
 	}
+
+	HRESULT computeToNext( UINT readSlot, BoundSrv<eStage::Compute>& boundRead, UINT writeSlot, BoundUav& boundWrite );
 };
 
 // Same as above but also automatically destroys itself when rendering window is resized.

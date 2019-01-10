@@ -62,3 +62,31 @@ HRESULT RenderTargets::blendToNext( BoundPsResource& bound )
 	bound.swap( tRead.psView() );
 	return S_OK;
 }
+
+HRESULT RenderTargets::computeToNext( UINT readSlot, BoundSrv<eStage::Compute>& boundRead, UINT writeSlot, BoundUav& boundWrite )
+{
+	unbindTarget();
+	RenderTarget& tRead = m_targets[ m_lastTarget ];
+
+	if( tRead )
+	{
+		m_lastTarget ^= 1;
+		RenderTarget& tWrite = m_targets[ m_lastTarget ];
+
+		if( !tWrite )
+			CHECK( tWrite.create() );
+		CHECK( tWrite.createUav() );
+
+		boundRead.swap( BoundSrv<eStage::Compute>{ readSlot, tRead.srv() } );
+		boundWrite.swap( BoundUav{ writeSlot, tWrite.uav() } );
+	}
+	else
+	{
+		CHECK( tRead.create() );
+		CHECK( tRead.createUav() );
+
+		boundRead.swap( BoundSrv<eStage::Compute>{ readSlot, StaticResources::blackTexture } );
+		boundWrite.swap( BoundUav{ writeSlot, tRead.uav() } );
+	}
+	return S_OK;
+}

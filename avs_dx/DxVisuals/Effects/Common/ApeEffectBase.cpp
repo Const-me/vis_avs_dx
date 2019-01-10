@@ -4,6 +4,8 @@
 #include <Utils/DynamicArray.hpp>
 #include <atlpath.h>
 
+constexpr uint8_t apeEffectsCount = 3;
+
 namespace
 {
 	struct sApeEffect
@@ -13,7 +15,7 @@ namespace
 		ApeEffectBase::pfnCreateEffect pfnCreate;
 	};
 
-	static DynamicArray<sApeEffect, 2> s_factories;
+	static DynamicArray<sApeEffect, apeEffectsCount> s_factories;
 
 	HRESULT getModuleFileName( HINSTANCE hDllInstance, CString& result )
 	{

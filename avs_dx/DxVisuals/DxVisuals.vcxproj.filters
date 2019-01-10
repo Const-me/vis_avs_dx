@@ -297,6 +297,8 @@
     <ClInclude Include="Threads\RenderThreadImpl.h" />
     <ClInclude Include="Utils\FpsCalc.h" />
     <ClInclude Include="Effects\Trans\Interference\Interference.h" />
+    <ClInclude Include="Effects\Trans\Convolution\Convolution.h" />
+    <ClInclude Include="Effects\Trans\Convolution\convolutionHacks.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -420,6 +422,8 @@
     <ClCompile Include="Utils\FpsCalc.cpp" />
     <ClCompile Include="Effects\Trans\Interference\Interference.cpp" />
     <ClCompile Include="Effects\Trans\Water\Water.cpp" />
+    <ClCompile Include="Effects\Trans\Convolution\Convolution.cpp" />
+    <ClCompile Include="Effects\Trans\Convolution\convolutionHacks.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -500,6 +504,7 @@
     <FxCompile Include="Effects\Misc\AddBorder\AddBorderPS.hlsl" />
     <FxCompile Include="Effects\Trans\Interference\InterferencePS.hlsl" />
     <FxCompile Include="Effects\Trans\Water\WaterPS.hlsl" />
+    <FxCompile Include="Effects\Trans\Convolution\ConvolutionCS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

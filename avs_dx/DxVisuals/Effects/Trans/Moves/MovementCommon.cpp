@@ -42,3 +42,28 @@ HRESULT MovementFx::render( RenderTargets& rt, bool bilinear, bool wrap, UINT sa
 	CHECK( m_mesh.draw( rectCoords ) );
 	return S_OK;
 }
+
+HRESULT MovementFx::render( RenderTargets& rt, bool bilinear, bool wrap, UINT samplerSlot, bool blend, bool rectCoords, int sourceBuffer )
+{
+	if( 0 == sourceBuffer )
+		return render( rt, bilinear, wrap, samplerSlot, blend, rectCoords );
+
+	CHECK( m_sampler.update( bilinear, wrap ) );
+	BIND_PS_SAMPLER( samplerSlot, m_sampler );
+	RenderTarget& src = StaticResources::globalBuffers[ sourceBuffer - 1 ].lastWritten();
+
+	CHECK( rt.writeToLast( false ) );
+
+	auto sourceSrv = src.srv();
+	if( nullptr == sourceSrv )
+		sourceSrv = StaticResources::blackTexture;
+	BoundPsResource bound{ 3, sourceSrv };
+
+	if( blend )
+		omCustomBlend( 0.5f );
+	else
+		omBlend( eBlend::None );
+
+	CHECK( m_mesh.draw( rectCoords ) );
+	return S_OK;
+}

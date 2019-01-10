@@ -20,6 +20,7 @@ public:
 private:
 	EffectsState m_state;
 	StateShaders m_stateShaders;
+	GlobalBuffers m_savedGlobalBuffers;
 
 	HRESULT buildState();
 };

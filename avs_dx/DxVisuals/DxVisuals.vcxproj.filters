@@ -311,6 +311,7 @@
     <ClInclude Include="Utils\EABase\nullptr.h" />
     <ClInclude Include="Utils\EABase\version.h" />
     <ClInclude Include="Resources\BlendModes.h" />
+    <ClInclude Include="Effects\List\SavedContext.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

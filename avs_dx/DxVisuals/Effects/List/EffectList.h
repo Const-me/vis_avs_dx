@@ -13,8 +13,6 @@ class EffectList : public EffectListBase
 	eBlendMode blendout() const;
 	float outblendval() const;
 
-	GlobalBuffers m_savedGlobalBuffers;
-
 public:
 
 	EffectList( AvsState* pState ) : EffectListBase( pState ) { }

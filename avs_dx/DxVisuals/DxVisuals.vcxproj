@@ -106,6 +106,7 @@
     <ClCompile Include="Effects\Trans\ColorMap\ColorMap.cpp" />
     <ClCompile Include="Effects\Common\ApeEffectBase.cpp" />
     <ClCompile Include="Effects\Render\DotFountain\DotFountain.cpp" />
+    <ClInclude Include="Effects\List\SavedContext.hpp" />
     <ClInclude Include="Resources\BlendModes.h" />
     <ClInclude Include="Effects\Trans\Convolution\convolutionHacks.h" />
     <ClInclude Include="Effects\Trans\Convolution\Convolution.h" />

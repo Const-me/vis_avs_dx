@@ -26,7 +26,7 @@ bool BlendModes::setupBlending( RenderTargets& rt )
 	switch( mode )
 	{
 	case 0:
-		omBlend( eBlend::None );
+		omBlend( eBlend::Premultiplied );
 		return true;
 	case 1:
 		omBlend( eBlend::Add );
@@ -117,15 +117,18 @@ bool BlendModes::setCustom( eCustom mode )
 	switch( mode )
 	{
 	case eCustom::Maximum:
+		rt.SrcBlend = D3D11_BLEND_SRC_ALPHA;
 		rt.BlendOp = D3D11_BLEND_OP_MAX;
 		break;
 	case eCustom::Minimum:
 		rt.BlendOp = D3D11_BLEND_OP_MIN;
 		break;
 	case eCustom::Sub1:
+		rt.SrcBlend = D3D11_BLEND_SRC_ALPHA;
 		rt.BlendOp = D3D11_BLEND_OP_SUBTRACT;
 		break;
 	case eCustom::Sub2:
+		rt.DestBlend = D3D11_BLEND_SRC_ALPHA;
 		rt.BlendOp = D3D11_BLEND_OP_REV_SUBTRACT;
 		break;
 	case eCustom::Multiply:

@@ -4,6 +4,7 @@
 #include <Interop/interop.h>
 #include "Render/Binder.h"
 #include "Render/StateShaders.h"
+#include "Effects/List/SavedContext.hpp"
 
 HRESULT RootEffect::renderRoot( bool isBeat, RenderTargets& rt, bool rebindResources )
 {
@@ -19,6 +20,9 @@ HRESULT RootEffect::renderRoot( bool isBeat, RenderTargets& rt, bool rebindResou
 		CHECK( buildState() );
 		paramsChanged = true;
 	}
+
+	SavedContext __context{ m_savedGlobalBuffers };
+	g_line_blend_mode = 0;
 	
 	{
 		Binder binder;

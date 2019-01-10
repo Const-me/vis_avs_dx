@@ -2,6 +2,7 @@
 #include "GuiThreadImpl.h"
 #include "Interop/profilerApi.h"
 #include "Interop/ConsoleLogger.h"
+#include <Interop/deviceCreation.h>
 
 void GuiThreadImpl::postMessage( UINT Msg, WPARAM wParam, LPARAM lParam ) const
 {
@@ -39,6 +40,7 @@ HRESULT GuiThreadImpl::run()
 
 GuiThreadImpl::~GuiThreadImpl()
 {
+	destroyDevice();
 	closeDebugConsole();
 }
 

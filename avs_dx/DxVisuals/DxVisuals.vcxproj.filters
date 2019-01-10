@@ -436,6 +436,7 @@
     <ClCompile Include="Effects\Trans\Convolution\Convolution.cpp" />
     <ClCompile Include="Effects\Trans\Convolution\convolutionHacks.cpp" />
     <ClCompile Include="Utils\EABase\EastlWindows.cpp" />
+    <ClCompile Include="Effects\Misc\SetRenderMode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

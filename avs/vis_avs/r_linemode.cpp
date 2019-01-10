@@ -31,33 +31,30 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "r_defs.h"
 #include "resource.h"
 
-#ifndef LASER
-
 int g_line_blend_mode;
 
 static char *line_blendmodes[] =
 {
-  "Replace",
-  "Additive",
-  "Maximum Blend",
-  "50/50 Blend",
-  "Subtractive Blend 1",
-  "Subtractive Blend 2",
-  "Multiply Blend",
+	"Replace",
+	"Additive",
+	"Maximum Blend",
+	"50/50 Blend",
+	"Subtractive Blend 1",
+	"Subtractive Blend 2",
+	"Multiply Blend",
 	"Adjustable Blend",
-  "XOR",
-  "Minimum Blend",
+	"XOR",
+	"Minimum Blend",
 };
 
 #define C_THISCLASS C_LineModeClass
 #define MOD_NAME "Misc / Set render mode"
 
-class C_THISCLASS : public C_RBASE {
-protected:
+class C_THISCLASS : public C_RBASE
+{
 public:
 	C_THISCLASS();
 	virtual ~C_THISCLASS();
-	virtual int render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h );
 	virtual char *get_desc() { return MOD_NAME; }
 	virtual HWND conf( HINSTANCE hInstance, HWND hwndParent );
 	virtual void load_config( unsigned char *data, int len );
@@ -80,32 +77,20 @@ int  C_THISCLASS::save_config( unsigned char *data )
 	return pos;
 }
 
-
 C_THISCLASS::C_THISCLASS()
 {
 	newmode = 0x80010000;
+	CREATE_DX_EFFECT( newmode );
 }
 
 C_THISCLASS::~C_THISCLASS()
-{
-}
-
-int C_THISCLASS::render( char visdata[ 2 ][ 2 ][ 576 ], int isBeat, int *framebuffer, int *fbout, int w, int h )
-{
-	if( isBeat & 0x80000000 ) return 0;
-	if( newmode & 0x80000000 )
-	{
-		g_line_blend_mode = newmode & 0x7fffffff;
-	}
-	return 0;
-}
+{ }
 
 C_RBASE *R_LineMode( char *desc )
 {
 	if( desc ) { strcpy( desc, MOD_NAME ); return NULL; }
 	return ( C_RBASE * ) new C_THISCLASS();
 }
-
 
 static C_THISCLASS *g_this;
 
@@ -172,15 +157,8 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 	return 0;
 }
 
-
 HWND C_THISCLASS::conf( HINSTANCE hInstance, HWND hwndParent )
 {
 	g_this = this;
 	return CreateDialog( hInstance, MAKEINTRESOURCE( IDD_CFG_LINEMODE ), hwndParent, g_DlgProc );
 }
-#else
-C_RBASE *R_LineMode( char *desc )
-{
-	return NULL;
-}
-#endif

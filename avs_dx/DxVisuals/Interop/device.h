@@ -9,3 +9,5 @@ extern CComPtr<IMFDXGIDeviceManager> dxgiDeviceManager;
 
 // Size of D3D window in pixels.
 CSize getCurrentRenderSize();
+
+D3D_FEATURE_LEVEL getFeatureLevel();

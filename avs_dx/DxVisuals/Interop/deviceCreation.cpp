@@ -41,6 +41,8 @@ namespace
 	}
 }
 
+static D3D_FEATURE_LEVEL s_featureLevel;
+
 HRESULT createDevice( HWND hWndOutput )
 {
 	UINT deviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_VIDEO_SUPPORT;
@@ -48,7 +50,7 @@ HRESULT createDevice( HWND hWndOutput )
 	deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-	const D3D_FEATURE_LEVEL fl = D3D_FEATURE_LEVEL_11_0;
+	const D3D_FEATURE_LEVEL featureLevels[ 2 ] = { D3D_FEATURE_LEVEL_11_1, D3D_FEATURE_LEVEL_11_0 };
 
 	DXGI_SWAP_CHAIN_DESC scd = {};
 	scd.BufferCount = buffersCount();
@@ -74,11 +76,11 @@ HRESULT createDevice( HWND hWndOutput )
 	if( IsWindows8OrGreater() )
 	{
 		bool haveVideo = true;
-		if( FAILED( D3D11CreateDeviceAndSwapChain( nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, deviceFlags, &fl, 1, D3D11_SDK_VERSION, &scd, &swapChain, &device, nullptr, &context ) ) )
+		if( FAILED( D3D11CreateDeviceAndSwapChain( nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, deviceFlags, featureLevels, 2, D3D11_SDK_VERSION, &scd, &swapChain, &device, &s_featureLevel, &context ) ) )
 		{
 			haveVideo = false;
 			deviceFlags &= ~D3D11_CREATE_DEVICE_VIDEO_SUPPORT;
-			CHECK( D3D11CreateDeviceAndSwapChain( nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, deviceFlags, &fl, 1, D3D11_SDK_VERSION, &scd, &swapChain, &device, nullptr, &context ) );
+			CHECK( D3D11CreateDeviceAndSwapChain( nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, deviceFlags, featureLevels, 2, D3D11_SDK_VERSION, &scd, &swapChain, &device, &s_featureLevel, &context ) );
 		}
 
 		if( haveVideo )
@@ -96,7 +98,7 @@ HRESULT createDevice( HWND hWndOutput )
 	else
 	{
 		deviceFlags &= ~D3D11_CREATE_DEVICE_VIDEO_SUPPORT;
-		CHECK( D3D11CreateDeviceAndSwapChain( nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, deviceFlags, &fl, 1, D3D11_SDK_VERSION, &scd, &swapChain, &device, nullptr, &context ) );
+		CHECK( D3D11CreateDeviceAndSwapChain( nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, deviceFlags, featureLevels, 2, D3D11_SDK_VERSION, &scd, &swapChain, &device, &s_featureLevel, &context ) );
 	}
 
 #ifdef DEBUG
@@ -115,8 +117,16 @@ HRESULT createDevice( HWND hWndOutput )
 
 	CHECK( device->CreateRenderTargetView( pBB, nullptr, &renderTargetView ) );
 
-	logDebug( "Created device + swap chain" );
+	if( s_featureLevel < D3D_FEATURE_LEVEL_11_1 )
+		logWarning( "Created device + swap chain, however your GPU doesn't support D3D 11.1. XOR lines blending is not implemented for 11.0." );
+	else
+		logDebug( "Created device + swap chain, feature level %i.%i", (int)s_featureLevel >> 12, ( (int)s_featureLevel & 0xF00 ) >> 8 );
 	return S_OK;
+}
+
+D3D_FEATURE_LEVEL getFeatureLevel()
+{
+	return s_featureLevel;
 }
 
 void destroyDevice()
@@ -140,7 +150,7 @@ void destroyDevice()
 	if( deviceDebug )
 	{
 		// __debugbreak();
-		constexpr D3D11_RLDO_FLAGS rldoFlags = 
+		constexpr D3D11_RLDO_FLAGS rldoFlags =
 			// D3D11_RLDO_SUMMARY;
 			D3D11_RLDO_DETAIL;
 		deviceDebug->ReportLiveDeviceObjects( rldoFlags );

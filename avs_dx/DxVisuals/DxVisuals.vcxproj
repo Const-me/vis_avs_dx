@@ -98,6 +98,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Effects\Misc\SetRenderMode.cpp" />
     <ClCompile Include="Effects\Trans\Convolution\convolutionHacks.cpp" />
     <ClCompile Include="Effects\Trans\Convolution\Convolution.cpp" />
     <ClCompile Include="Effects\Misc\AddBorder\AddBorder.cpp" />

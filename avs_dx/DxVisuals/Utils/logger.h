@@ -3,7 +3,7 @@
 #define DXERR_ATL_STRING
 #include "DirectXErrors/DirectXErrors.h"
 
-#define LOG_SHUTDOWN 1
+#define LOG_SHUTDOWN 0
 
 enum struct eLogLevel : uint8_t
 {

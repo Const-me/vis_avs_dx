@@ -299,6 +299,17 @@
     <ClInclude Include="Effects\Trans\Interference\Interference.h" />
     <ClInclude Include="Effects\Trans\Convolution\Convolution.h" />
     <ClInclude Include="Effects\Trans\Convolution\convolutionHacks.h" />
+    <ClInclude Include="Utils\EABase\config\eacompiler.h" />
+    <ClInclude Include="Utils\EABase\config\eacompilertraits.h" />
+    <ClInclude Include="Utils\EABase\config\eaplatform.h" />
+    <ClInclude Include="Utils\EABase\eabase.h" />
+    <ClInclude Include="Utils\EABase\eahave.h" />
+    <ClInclude Include="Utils\EABase\earesult.h" />
+    <ClInclude Include="Utils\EABase\eastdarg.h" />
+    <ClInclude Include="Utils\EABase\eaunits.h" />
+    <ClInclude Include="Utils\EABase\int128.h" />
+    <ClInclude Include="Utils\EABase\nullptr.h" />
+    <ClInclude Include="Utils\EABase\version.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -424,7 +435,7 @@
     <ClCompile Include="Effects\Trans\Water\Water.cpp" />
     <ClCompile Include="Effects\Trans\Convolution\Convolution.cpp" />
     <ClCompile Include="Effects\Trans\Convolution\convolutionHacks.cpp" />
-    <ClCompile Include="Utils\EABase\eastlGlobals.cpp" />
+    <ClCompile Include="Utils\EABase\EastlWindows.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

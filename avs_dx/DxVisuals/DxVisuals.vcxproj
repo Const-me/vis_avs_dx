@@ -121,6 +121,17 @@
     <ClInclude Include="Effects\Trans\ColorFade\ColorFade.h" />
     <ClInclude Include="Expressions\Tree\VarUseFlags.h" />
     <ClInclude Include="Effects\Trans\Interference\Interference.h" />
+    <ClInclude Include="Utils\EABase\config\eacompiler.h" />
+    <ClInclude Include="Utils\EABase\config\eacompilertraits.h" />
+    <ClInclude Include="Utils\EABase\config\eaplatform.h" />
+    <ClInclude Include="Utils\EABase\eabase.h" />
+    <ClInclude Include="Utils\EABase\eahave.h" />
+    <ClInclude Include="Utils\EABase\earesult.h" />
+    <ClInclude Include="Utils\EABase\eastdarg.h" />
+    <ClInclude Include="Utils\EABase\eaunits.h" />
+    <ClInclude Include="Utils\EABase\int128.h" />
+    <ClInclude Include="Utils\EABase\nullptr.h" />
+    <ClInclude Include="Utils\EABase\version.h" />
     <ClInclude Include="Utils\FpsCalc.h" />
     <ClInclude Include="Interop\avsUtils.h" />
     <ClInclude Include="Interop\ConsoleLogger.h" />
@@ -416,7 +427,7 @@
     <ClCompile Include="Effects\Trans\Multiplier\Multiplier.cpp" />
     <ClCompile Include="Effects\Trans\Interference\Interference.cpp" />
     <ClCompile Include="Effects\Trans\Water\Water.cpp" />
-    <ClCompile Include="Utils\EABase\eastlGlobals.cpp" />
+    <ClCompile Include="Utils\EABase\EastlWindows.cpp" />
     <ClCompile Include="Utils\FpsCalc.cpp" />
     <ClCompile Include="Interop\avsUtils.cpp" />
     <ClCompile Include="Interop\ConsoleLogger.cpp" />

@@ -164,8 +164,31 @@ Logger& logger()
 	return s_logger;
 }
 
+#ifdef DEBUG
+const char* levelString( eLogLevel lvl )
+{
+	switch( lvl )
+	{
+	case eLogLevel::Error:
+		return "[error] ";
+	case eLogLevel::Warning:
+		return "[warning] ";
+	case eLogLevel::Info:
+		return "[info] ";
+	case eLogLevel::Debug:
+		return "";
+	}
+	return "[BS] ";
+}
+#endif
+
 void logMessage( eLogLevel lvl, const CStringA& msg )
 {
+#ifdef DEBUG
+	char buffer[ 1024 ];
+	sprintf_s( buffer, "%s%s\r\n", levelString( lvl ), cstr( msg ) );
+	OutputDebugStringA( buffer );
+#endif
 	logger().add( lvl, msg );
 }
 

@@ -36,6 +36,7 @@ HRESULT GuiThread::startup()
 
 void GuiThread::shutdown()
 {
+	logShutdown( "GuiThread::shutdown" );
 	CfgWnd_Destroy();
 	Render_Quit( this_mod->hDllInstance );
 	Wnd_Quit();

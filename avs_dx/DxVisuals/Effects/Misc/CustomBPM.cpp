@@ -24,7 +24,7 @@ private:
 	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 };
 
-IMPLEMENT_EFFECT( CustomBPM, C_BpmClass );
+IMPLEMENT_EFFECT( CustomBPM, C_BpmClass )
 
 #define SET_BEAT		0x10000000
 #define CLR_BEAT		0x20000000

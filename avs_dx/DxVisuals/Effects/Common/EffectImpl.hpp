@@ -81,7 +81,7 @@ public:
 	}
 };
 
-#define IMPLEMENT_APE_EFFECT( DX, name, ape )                                                  \
-const char* const EffectImpl<DX>::s_effectName = name;                                         \
-static const ApeEffectBase::Metadata s_metadada { name, L##ape, &ApeEffectImpl<DX>::create };  \
+#define IMPLEMENT_APE_EFFECT( DX, name, ape )                                               \
+const char* const EffectImpl<DX>::s_effectName = name;                                      \
+static const ApeEffectBase::Metadata s_metadada { name, ape, &ApeEffectImpl<DX>::create };  \
 const EffectBase::Metadata& DX::metadata(){ return s_metadada; }

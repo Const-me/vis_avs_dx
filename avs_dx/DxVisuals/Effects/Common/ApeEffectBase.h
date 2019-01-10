@@ -12,7 +12,7 @@ public:
 	struct Metadata: public EffectBase::Metadata
 	{
 		Metadata() = delete;
-		Metadata( const char* name, LPCTSTR apeName, pfnCreateEffect classFactory );
+		Metadata( const char* name, const char* apeName, pfnCreateEffect classFactory );
 	};
 
 	using AvsState = C_RBASE;

@@ -10,17 +10,17 @@ namespace
 {
 	struct sApeEffect
 	{
-		const wchar_t* ape;
+		const char* ape;
 		const char* name;
 		ApeEffectBase::pfnCreateEffect pfnCreate;
 	};
 
 	static DynamicArray<sApeEffect, apeEffectsCount> s_factories;
 
-	HRESULT getModuleFileName( HINSTANCE hDllInstance, CString& result )
+	HRESULT getModuleFileName( HINSTANCE hDllInstance, CStringA& result )
 	{
-		CPath dllPath;
-		const DWORD ret = GetModuleFileNameW( hDllInstance, dllPath.m_strPath.GetBufferSetLength( MAX_PATH ), MAX_PATH );
+		CPathA dllPath;
+		const DWORD ret = GetModuleFileNameA( hDllInstance, dllPath.m_strPath.GetBufferSetLength( MAX_PATH ), MAX_PATH );
 		if( 0 == ret )
 		{
 			dllPath.m_strPath.ReleaseBuffer();
@@ -35,8 +35,8 @@ namespace
 	}
 }
 
-ApeEffectBase::Metadata::Metadata( const char* name, LPCTSTR apeName, pfnCreateEffect classFactory ) :
-	EffectBase::Metadata( name, false )
+ApeEffectBase::Metadata::Metadata( const char* name, const char* apeName, pfnCreateEffect classFactory ) :
+	EffectBase::Metadata( apeName, false )
 {
 	// __debugbreak();
 	sApeEffect fx{ apeName, name, classFactory };
@@ -45,7 +45,7 @@ ApeEffectBase::Metadata::Metadata( const char* name, LPCTSTR apeName, pfnCreateE
 
 HRESULT ApeEffectBase::create( HINSTANCE hDllInstance, const char* nameEffect, C_RBASE* pThis )
 {
-	CString nameDll;
+	CStringA nameDll;
 	CHECK( getModuleFileName( hDllInstance, nameDll ) );
 
 	for( const sApeEffect &f : s_factories )

@@ -1,5 +1,21 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "preprocess.h"
+
+inline bool isBullshitCharacter( char c )
+{
+	// Stupid '¤' character, some presets use as a comment. Have no idea how that ancient lex/bison stack handled that.
+	// For extra safety, skipping any abnormal characters. The HLSL compiler doesn't like them too much anyway, fails with quite understandable "invalid character" error.
+
+	// https://en.wikipedia.org/wiki/ASCII
+	if( (uint8_t)c >= 0x7F )
+		return true;	// negative = Latin-1 Supplement, 0x7F = "DEL" control character
+
+	if( c >= ' ' )
+		return false;	// Good part of ASCII, space is 0x20
+
+	// Control characters, allow only tabs and newlines.
+	return c != '\r' && c != '\n' && c != '\t';
+}
 
 void Expressions::preprocess( CStringA& nseel )
 {
@@ -111,6 +127,24 @@ void Expressions::preprocess( CStringA& nseel )
 				// Closed
 				continue;
 			}
+		}
+
+		if( isBullshitCharacter( c ) )
+		{
+			ctx.exclude();
+			if( ctx.advance() )
+				return;
+			while( true )
+			{
+				const char cn = ctx.peek();
+				if( cn == ';' || cn == '\r' || cn == '\n' )
+					break;
+				if( ctx.advance() )
+					return;
+			}
+			if( ctx.advance() )
+				return;
+			continue;
 		}
 
 		if( c == ' ' || c == '\t' || c == '\r' || c == '\n' )

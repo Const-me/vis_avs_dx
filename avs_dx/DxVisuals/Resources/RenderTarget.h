@@ -15,13 +15,13 @@ public:
 	// DXGI_FORMAT_R8G8B8A8_UNORM;
 
 	HRESULT create();
-	HRESULT create( const CSize& size, bool unorderedAccess );
+	HRESULT create( const CSize& size, bool rt, bool unorderedAccess );
 
 	void destroy();
 
 	operator bool() const
 	{
-		return nullptr != m_rtv && nullptr != m_srv;
+		return nullptr != m_tex;
 	}
 
 	void clear( const Vector4& color );

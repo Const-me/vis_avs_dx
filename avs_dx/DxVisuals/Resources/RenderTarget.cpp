@@ -3,15 +3,20 @@
 #include <Interop/interop.h>
 #include <Render/Binder.h>
 
-HRESULT RenderTarget::create( const CSize& size, bool unorderedAccess )
+HRESULT RenderTarget::create( const CSize& size, bool rt, bool unorderedAccess )
 {
-	CD3D11_TEXTURE2D_DESC texDesc{ format, (UINT)size.cx, (UINT)size.cy, 1, 1, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET };
+	CD3D11_TEXTURE2D_DESC texDesc{ format, (UINT)size.cx, (UINT)size.cy, 1, 1, D3D11_BIND_SHADER_RESOURCE };
+	if( rt )
+		texDesc.BindFlags |= D3D11_BIND_RENDER_TARGET;
 	if( unorderedAccess )
 		texDesc.BindFlags |= D3D11_BIND_UNORDERED_ACCESS;
 	CHECK( device->CreateTexture2D( &texDesc, nullptr, &m_tex ) );
 
-	CD3D11_RENDER_TARGET_VIEW_DESC rtvDesc{ D3D11_RTV_DIMENSION_TEXTURE2D, format };
-	CHECK( device->CreateRenderTargetView( m_tex, &rtvDesc, &m_rtv ) );
+	if( rt )
+	{
+		CD3D11_RENDER_TARGET_VIEW_DESC rtvDesc{ D3D11_RTV_DIMENSION_TEXTURE2D, format };
+		CHECK( device->CreateRenderTargetView( m_tex, &rtvDesc, &m_rtv ) );
+	}
 
 	CD3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{ D3D11_SRV_DIMENSION_TEXTURE2D, format };
 	CHECK( device->CreateShaderResourceView( m_tex, &srvDesc, &m_srv ) );
@@ -22,7 +27,7 @@ HRESULT RenderTarget::create( const CSize& size, bool unorderedAccess )
 HRESULT RenderTarget::create()
 {
 	const CSize size = getRenderSize();
-	return create( size, true );
+	return create( size, true, true );
 }
 
 void RenderTarget::destroy()
@@ -40,11 +45,11 @@ void RenderTarget::clear( const Vector4& color )
 
 void RenderTarget::clear()
 {
-/* #ifdef DEBUG
-	clear( Vector4{ 1, 1, 1, 1 } * 0.25f );
-#else
-	clear( Vector4::Zero );
-#endif */
+	/* #ifdef DEBUG
+		clear( Vector4{ 1, 1, 1, 1 } * 0.25f );
+	#else
+		clear( Vector4::Zero );
+	#endif */
 	clear( Vector4::Zero );
 }
 

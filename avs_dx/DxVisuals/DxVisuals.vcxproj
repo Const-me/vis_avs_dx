@@ -411,6 +411,7 @@
     <ClCompile Include="Effects\Trans\Invert\Invert.cpp" />
     <ClCompile Include="Effects\Trans\Multiplier\Multiplier.cpp" />
     <ClCompile Include="Effects\Trans\Interference\Interference.cpp" />
+    <ClCompile Include="Effects\Trans\Water\Water.cpp" />
     <ClCompile Include="Utils\FpsCalc.cpp" />
     <ClCompile Include="Interop\avsUtils.cpp" />
     <ClCompile Include="Interop\ConsoleLogger.cpp" />
@@ -704,6 +705,10 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="Effects\Trans\UniqueTone\UniqueTonePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Trans\Water\WaterPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>

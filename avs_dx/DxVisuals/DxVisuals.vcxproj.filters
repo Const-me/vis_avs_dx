@@ -419,6 +419,7 @@
     <ClCompile Include="Threads\RenderThreadImpl.cpp" />
     <ClCompile Include="Utils\FpsCalc.cpp" />
     <ClCompile Include="Effects\Trans\Interference\Interference.cpp" />
+    <ClCompile Include="Effects\Trans\Water\Water.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -498,6 +499,7 @@
     <FxCompile Include="Effects\Misc\AddBorder\AddBorderVS.hlsl" />
     <FxCompile Include="Effects\Misc\AddBorder\AddBorderPS.hlsl" />
     <FxCompile Include="Effects\Trans\Interference\InterferencePS.hlsl" />
+    <FxCompile Include="Effects\Trans\Water\WaterPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

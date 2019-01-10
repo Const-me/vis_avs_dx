@@ -521,6 +521,7 @@
     <FxCompile Include="Effects\Trans\Interference\InterferencePS.hlsl" />
     <FxCompile Include="Effects\Trans\Water\WaterPS.hlsl" />
     <FxCompile Include="Effects\Trans\Convolution\ConvolutionCS.hlsl" />
+    <FxCompile Include="Effects\Trans\ColorModifier\ColorModifierCS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

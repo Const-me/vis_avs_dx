@@ -51,7 +51,7 @@ void RenderTarget::clear()
 	#else
 		clear( Vector4::Zero );
 	#endif */
-	clear( Vector4::Zero );
+	clear( Vector4{ 0, 0, 0, 1 } );
 }
 
 void RenderTarget::clear( const Vector3& color )

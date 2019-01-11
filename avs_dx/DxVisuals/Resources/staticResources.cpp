@@ -34,15 +34,10 @@ namespace StaticResources
 
 			// https://stackoverflow.com/a/18972920/126995
 			rt.BlendEnable = TRUE;
-			rt.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+			rt.SrcBlend = D3D11_BLEND_ONE;	// Already premultiplied
 			rt.BlendOp = D3D11_BLEND_OP_ADD;
 			rt.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-
-			rt.SrcBlendAlpha = D3D11_BLEND_INV_DEST_ALPHA;
-			rt.BlendOpAlpha = D3D11_BLEND_OP_ADD;
-			rt.DestBlendAlpha = D3D11_BLEND_ONE;
-
-			rt.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+			rt.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_RED | D3D11_COLOR_WRITE_ENABLE_GREEN | D3D11_COLOR_WRITE_ENABLE_BLUE;
 			CHECK( device->CreateBlendState( &blendDesc, &blendPremultipliedAlpha ) );
 
 			rt.DestBlend = D3D11_BLEND_ONE;

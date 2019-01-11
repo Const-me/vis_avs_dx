@@ -583,6 +583,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Effects\Trans\Blur\KernelValues.cpp</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Effects\Trans\Blur\KernelValues.cpp</Outputs>
     </CustomBuild>
+    <None Include="Effects\LinesUtils.hlsli" />
     <None Include="Expressions\Builtin\includeFunctions.t4" />
     <None Include="Render\EffectRenderer.inl" />
     <None Include="Utils\DirectXErrors\data\d2d.inl" />

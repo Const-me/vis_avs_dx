@@ -1,4 +1,4 @@
-#include "FrameGlobalData.hlsli"
+#include "LinesUtils.hlsli"
 #include "Polyline.hlsli"
 
 #ifndef AVS_SHADER
@@ -20,24 +20,6 @@ float distanceSquared( float2 pt, float2 s1, float2 s2 )
         k = saturate( k );
         const float2 proj = s2 * k + s1 * ( 1.0 - k );
         result = lengthSquared( pt - proj );
-    }
-    return result;
-}
-
-inline float4 alphaBlend( float3 rgb, float alpha )
-{
-    float4 result;
-    if( lineModeAllowAlpha )
-        result = float4( rgb * alpha, alpha );
-    else
-    {
-        if( alpha >= 0.5 )
-            result = float4( rgb, 1 );
-        else
-        {
-            result = 0;
-            discard;
-        }
     }
     return result;
 }

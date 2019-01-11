@@ -470,6 +470,7 @@
     <None Include="Effects\FrameGlobalData.hlsli" />
     <None Include="Effects\Render\Starfield\Star.hlsli" />
     <None Include="Effects\Render\DotFountain\Fountain.hlsli" />
+    <None Include="Effects\LinesUtils.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Effects\Render\Simple\SimpleDotsVS.hlsl" />

@@ -33,6 +33,10 @@ HRESULT ColorModifier::createTexture()
 	if( m_uav )
 		return S_FALSE;
 
+	// Apparently, GPUs can't read less than 4 bytes from unstructured buffers.
+	// Even with R16_UINT structured buffer, total size of the data will be 50% larger than R10G10B10A2_UNORM: 1024 pixels in a single texture = 4kb, 1024 16-bit elements per component = 6kb.
+	// The pixel shader is likely RAM bound, i.e. 10 bit packed values are probably faster despite only using 10 out of 32 bits and throwing away the rest of them.
+
 	constexpr DXGI_FORMAT fmt = DXGI_FORMAT_R10G10B10A2_UNORM;
 	CD3D11_TEXTURE1D_DESC td{ fmt, 1024, 1,1,D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS };
 	CHECK( device->CreateTexture1D( &td, nullptr, &m_texture ) );
@@ -61,6 +65,7 @@ HRESULT ColorModifier::render( bool isBeat, RenderTargets& rt )
 		BoundUav bound{ renderer.compute().bindTable, m_uav };
 		context->Dispatch( 4, 1, 1 );
 	}
+	renderer.compute().m_updated = false;
 
 	omBlend( eBlend::None );
 	BoundPsResource boundFrame;

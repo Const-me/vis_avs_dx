@@ -8,6 +8,8 @@ class Picture
 
 public:
 
+	operator bool() const { return nullptr != pic; }
+
 	HRESULT loadResource( int id );
 
 	HRESULT render( const DRAWITEMSTRUCT& ds );

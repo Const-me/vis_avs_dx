@@ -19,10 +19,12 @@ HRESULT Picture::loadResource( int id )
 	if( !stm )
 		return E_FAIL;
 
-	CHECK( OleLoadPicture( stm, 0, FALSE, IID_PPV_ARGS( &pic ) ) );
+	CComPtr<IPicture> p;
+	CHECK( OleLoadPicture( stm, 0, FALSE, IID_PPV_ARGS( &p ) ) );
 
-	CHECK( pic->get_Width( &width ) );
-	CHECK( pic->get_Height( &height ) );
+	CHECK( p->get_Width( &width ) );
+	CHECK( p->get_Height( &height ) );
+	pic.Attach( p.Detach() );
 
 	return S_OK;
 }

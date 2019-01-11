@@ -8,6 +8,7 @@ class StateShaders:
 	__m128i m_hash;
 
 public:
+
 	StateShaders() = default;
 
 	CComPtr<ID3D11ComputeShader> init;

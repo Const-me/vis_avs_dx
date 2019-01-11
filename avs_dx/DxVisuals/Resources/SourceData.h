@@ -20,12 +20,16 @@ class SourceData
 		uint32_t getTickCount;
 		// Time in seconds since last frame
 		float deltaTime;
+
+		BOOL lineModeAllowAlpha;
+		uint32_t zzUnused[ 3 ];
 	};
 
 	CComPtr<ID3D11Buffer> m_cbuffer;
 
+	sConstantBuffer m_constantData;
+
 	uint64_t m_prevQpc;
-	uint32_t m_currentFrame = 0;
 
 public:
 
@@ -42,6 +46,8 @@ public:
 		bindResource<stage>( 1, m_srvSigned );
 		bindConstantBuffer<stage>( 0, m_cbuffer );
 	}
+
+	HRESULT updateLineMode( bool allowAlpha );
 };
 
 enum struct eSource : uint8_t

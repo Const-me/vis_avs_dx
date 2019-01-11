@@ -1,3 +1,4 @@
+#include "FrameGlobalData.fx"
 #include "Polyline.fx"
 
 #ifndef AVS_SHADER
@@ -23,6 +24,24 @@ float distanceSquared( float2 pt, float2 s1, float2 s2 )
     return result;
 }
 
+inline float4 alphaBlend( float3 rgb, float alpha )
+{
+    float4 result;
+    if( lineModeAllowAlpha )
+        result = float4( rgb * alpha, alpha );
+    else
+    {
+        if( alpha >= 0.5 )
+            result = float4( rgb, 1 );
+        else
+        {
+            result = 0;
+            discard;
+        }
+    }
+    return result;
+}
+
 float4 main( sVertex2 vert ) : SV_Target0
 {
     const float dsq = distanceSquared( vert.position.xy, vert.segmentPoints.xy, vert.segmentPoints.zw );
@@ -34,5 +53,7 @@ float4 main( sVertex2 vert ) : SV_Target0
     }
 
     const float mul = -4.158883083 / sizeSq;
-    return vert.color * exp( mul * dsq );
+    const float alpha = exp( mul * dsq );
+
+    return alphaBlend( vert.color.rgb, alpha );
 }

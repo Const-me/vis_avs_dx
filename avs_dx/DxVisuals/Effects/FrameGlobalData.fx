@@ -11,4 +11,7 @@ cbuffer FrameGlobalData : register(b0)
 
 	// Time in seconds since last frame
     float deltaTime : packoffset(c0.w);
+
+	// True if g_line_blend_mode is normal or additive i.e. shaders should output alpha channel. False if it e.g. XOR, so shaders instead should output sharp edges and discard() invisible pixels.
+    bool lineModeAllowAlpha : packoffset(c1.x);
 }

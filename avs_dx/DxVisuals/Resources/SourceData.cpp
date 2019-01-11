@@ -25,6 +25,8 @@ HRESULT SourceData::create()
 
 	m_prevQpc = queryPerformanceCounter();
 
+	ZeroMemory( &m_constantData, sizeof( m_constantData ) );
+
 	return S_OK;
 }
 
@@ -33,13 +35,13 @@ void SourceData::destroy()
 	m_cbuffer = nullptr;
 	m_srvSigned = m_srvUnsigned = nullptr;
 	m_texture = nullptr;
-	m_currentFrame = 0;
 }
 
 HRESULT SourceData::update( uint16_t visdata[ 2 ][ 2 ][ bands ], int isBeat )
 {
 	D3D11_MAPPED_SUBRESOURCE mapped;
 
+	// Update the texture
 	{
 		CHECK( context->Map( m_texture, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped ) );
 		const uint16_t* src = &visdata[ 0 ][ 0 ][ 0 ];
@@ -48,23 +50,36 @@ HRESULT SourceData::update( uint16_t visdata[ 2 ][ 2 ][ bands ], int isBeat )
 		context->Unmap( m_texture, 0 );
 	}
 
+	// Update the constants
 	{
-		CHECK( context->Map( m_cbuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped ) );
-		sConstantBuffer* dest = (sConstantBuffer*)mapped.pData;
-
-		dest->isBeat = isBeat;
-
-		dest->currentFrame = m_currentFrame;
-		m_currentFrame++;
-
-		dest->getTickCount = getPreciseTickCount();
+		m_constantData.isBeat = isBeat;
+		m_constantData.currentFrame++;
+		m_constantData.getTickCount = getPreciseTickCount();
 
 		const uint64_t qpcNow = queryPerformanceCounter();
-		dest->deltaTime = (float)( ( qpcNow - m_prevQpc ) * s_qpcMul );
+		m_constantData.deltaTime = (float)( ( qpcNow - m_prevQpc ) * s_qpcMul );
 		m_prevQpc = qpcNow;
 
+		m_constantData.lineModeAllowAlpha = TRUE;
+
+		CHECK( context->Map( m_cbuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped ) );
+		CopyMemory( mapped.pData, &m_constantData, sizeof( sConstantBuffer ) );
 		context->Unmap( m_cbuffer, 0 );
 	}
 
+	return S_OK;
+}
+
+HRESULT SourceData::updateLineMode( bool allowAlpha )
+{
+	if( allowAlpha == !!m_constantData.lineModeAllowAlpha )
+		return S_FALSE;
+
+	m_constantData.lineModeAllowAlpha = allowAlpha;
+
+	D3D11_MAPPED_SUBRESOURCE mapped;
+	CHECK( context->Map( m_cbuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped ) );
+	CopyMemory( mapped.pData, &m_constantData, sizeof( sConstantBuffer ) );
+	context->Unmap( m_cbuffer, 0 );
 	return S_OK;
 }

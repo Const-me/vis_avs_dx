@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "BlendModes.h"
 #include "RenderTargets.h"
+#include "staticResources.h"
 
 extern int g_line_blend_mode;
 
@@ -21,7 +22,10 @@ bool BlendModes::setupBlending( RenderTargets& rt )
 	const int mode = g_line_blend_mode & 0xFF;
 
 	if( mode != 8 )
+	{
 		rt.writeToLast( false );
+		StaticResources::sourceData.updateLineMode( mode <= 1 );
+	}
 
 	switch( mode )
 	{
@@ -49,8 +53,11 @@ bool BlendModes::setupBlending( RenderTargets& rt )
 		if( setXorBlend() )
 		{
 			rt.writeToLastWithLogicOp();
+			StaticResources::sourceData.updateLineMode( false );
 			return true;
 		}
+		omBlend( eBlend::Premultiplied );
+		StaticResources::sourceData.updateLineMode( true );
 		rt.writeToLast( false );
 		return false;
 	case 9:

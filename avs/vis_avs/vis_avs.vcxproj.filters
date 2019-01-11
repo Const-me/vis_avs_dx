@@ -309,7 +309,7 @@
     <Image Include="avs-selected.png" />
     <Image Include="dxIcon.ico" />
     <Image Include="naIcon.ico" />
-    <Image Include="ua.bmp" />
-    <Image Include="me.bmp" />
+    <Image Include="me.gif" />
+    <Image Include="ua.gif" />
   </ItemGroup>
 </Project>

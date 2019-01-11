@@ -312,6 +312,8 @@
     <ClInclude Include="Utils\EABase\version.h" />
     <ClInclude Include="Resources\BlendModes.h" />
     <ClInclude Include="Effects\List\SavedContext.hpp" />
+    <ClInclude Include="Interop\Utils\Picture.h" />
+    <ClInclude Include="Interop\AboutDialog.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -440,6 +442,8 @@
     <ClCompile Include="Utils\EABase\EastlWindows.cpp" />
     <ClCompile Include="Effects\Misc\SetRenderMode.cpp" />
     <ClCompile Include="Resources\BlendModes.cpp" />
+    <ClCompile Include="Interop\Utils\Picture.cpp" />
+    <ClCompile Include="Interop\AboutDialog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

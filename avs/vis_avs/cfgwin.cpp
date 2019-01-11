@@ -44,6 +44,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Interop/profilerApi.h>
 #include <Interop/miscGui.h>
 #include <Threads/threadsApi.h>
+#include <Interop/AboutDialog.h>
 
 static void _do_add( HWND hwnd, HTREEITEM h, C_RenderListClass *list );
 static int treeview_hack;
@@ -465,11 +466,11 @@ static BOOL CALLBACK DlgProc_Disp( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 				DDraw_Resize( r.right, r.bottom, cfg_fs_d & 2 );
 			}
 			return 0;
-		/* case IDC_THREAD_PRIORITY:
-			extern void main_setRenderThreadPriority();
-			cfg_render_prio = SendDlgItemMessage( hwndDlg, IDC_THREAD_PRIORITY, CB_GETCURSEL, 0, 0 );
-			main_setRenderThreadPriority();
-			return 0; */
+			/* case IDC_THREAD_PRIORITY:
+				extern void main_setRenderThreadPriority();
+				cfg_render_prio = SendDlgItemMessage( hwndDlg, IDC_THREAD_PRIORITY, CB_GETCURSEL, 0, 0 );
+				main_setRenderThreadPriority();
+				return 0; */
 		}
 		return 0;
 	}
@@ -1232,8 +1233,12 @@ static BOOL CALLBACK dlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 			DialogBox( g_hInstance, MAKEINTRESOURCE( IDD_DIALOG2 ), hwndDlg, aboutProc );
 			return 0;
 		case IDM_ABOUT_D3D:
-			DialogBox( g_hInstance, MAKEINTRESOURCE( IDD_ABOUT_DX ), hwndDlg, aboutProcDx );
+			// DialogBox( g_hInstance, MAKEINTRESOURCE( IDD_ABOUT_DX ), hwndDlg, aboutProcDx );
+		{
+			AboutDialog dlg;
+			dlg.DoModal( hwndDlg );
 			return 0;
+		}
 		case IDM_DISPLAY:
 		case IDM_FULLSCREEN:
 		case IDM_PRESETS:

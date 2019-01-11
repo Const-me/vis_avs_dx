@@ -115,28 +115,6 @@ BOOL CALLBACK aboutProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 	return 0;
 }
 
-BOOL __stdcall aboutProcDx( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
-{
-	if( uMsg == WM_COMMAND )
-	{
-		const WORD id = LOWORD( wParam );
-		switch( id )
-		{
-		case IDOK: case IDCANCEL:
-			EndDialog( hwndDlg, 0 );
-		}
-		return FALSE;
-	}
-	if( uMsg == WM_NOTIFY && wParam == IDC_SYSLINK1 )
-	{
-		const NMHDR *pNmh = (const NMHDR *)lParam;
-		if( pNmh->code == NM_CLICK )
-			ShellExecuteW( 0, 0, L"http://const.me/", 0, 0, SW_SHOW );
-		return FALSE;
-	}
-	return FALSE;
-}
-
 static void config( struct winampVisModule *this_mod )
 {
 	if( !g_hwnd || !IsWindow( g_hwnd ) )

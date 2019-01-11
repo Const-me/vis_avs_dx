@@ -81,8 +81,8 @@
 #define IDD_ABOUT_DX                    173
 #define IDI_ICON1                       174
 #define IDI_NODX                        174
-#define IDB_FLAG_UA                     175
-#define IDB_FLAG_ME                     176
+#define IDR_GIF_ME                      177
+#define IDR_GIF_UA                      178
 #define IDC_EFFECTS                     1000
 #define IDC_ENABLED                     1001
 #define IDC_FBCLEAR                     1002
@@ -383,6 +383,8 @@
 #define IDC_THREADS                     1208
 #define IDC_THREADSBORDER               1209
 #define IDC_SYSLINK1                    1210
+#define IDC_FLAG_UA                     1213
+#define IDC_FLAG_ME                     1214
 #define IDM_DISPLAY                     40001
 #define IDM_PRESETS                     40002
 #define IDM_TRANS                       40003
@@ -403,9 +405,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        177
+#define _APS_NEXT_RESOURCE_VALUE        179
 #define _APS_NEXT_COMMAND_VALUE         40016
-#define _APS_NEXT_CONTROL_VALUE         1213
+#define _APS_NEXT_CONTROL_VALUE         1215
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

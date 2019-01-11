@@ -1289,9 +1289,9 @@ BEGIN
     LTEXT           "Copyright © 2018-2019 Konstantin.",IDC_STATIC,7,7,108,8
     CONTROL         "<a href=""http://const.me"">http://const.me</a>",IDC_SYSLINK1,
                     "SysLink",WS_TABSTOP,7,20,60,10
-    LTEXT           "Special thanks to Baldur Karlsson, without his renderdoc.org this wouldn’t be possible. At least not by a single person spending 1 month on development.",IDC_STATIC,7,35,191,27
-    CONTROL         IDB_FLAG_UA,IDC_STATIC,"Static",SS_BITMAP | SS_REALSIZEIMAGE,7,88,16,10
-    CONTROL         IDB_FLAG_ME,IDC_STATIC,"Static",SS_BITMAP | SS_REALSIZEIMAGE,179,89,19,9
+    LTEXT           "Thanks to Baldur Karlsson, without his renderdoc.org this wouldn’t be possible. At least not by a single person spending 1 month on development.",IDC_STATIC,7,35,191,27
+    CONTROL         "",IDC_FLAG_UA,"Static",SS_OWNERDRAW,7,91,7,7
+    CONTROL         "",IDC_FLAG_ME,"Static",SS_OWNERDRAW,191,91,7,7
 END
 
 
@@ -1602,6 +1602,7 @@ BEGIN
 
     IDD_ABOUT_DX, DIALOG
     BEGIN
+        MOCKUP, 0, 50, 0, 0, ".\ua.gif"
         LEFTMARGIN, 7
         RIGHTMARGIN, 198
         TOPMARGIN, 7
@@ -2078,12 +2079,12 @@ IDI_NODX                ICON                    "naIcon.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Bitmap
+// GIF
 //
 
-IDB_FLAG_UA             BITMAP                  "ua.bmp"
+IDR_GIF_ME              GIF                     "me.gif"
 
-IDB_FLAG_ME             BITMAP                  "me.bmp"
+IDR_GIF_UA              GIF                     "ua.gif"
 
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////

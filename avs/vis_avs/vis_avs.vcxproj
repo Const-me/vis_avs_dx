@@ -254,9 +254,9 @@
     <Image Include="avs-normal.png" />
     <Image Include="avs-selected.png" />
     <Image Include="dxIcon.ico" />
-    <Image Include="me.bmp" />
+    <Image Include="me.gif" />
     <Image Include="naIcon.ico" />
-    <Image Include="ua.bmp" />
+    <Image Include="ua.gif" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\avs_dx\DxVisuals\DxVisuals.vcxproj">

@@ -98,6 +98,8 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Interop\AboutDialog.cpp" />
+    <ClCompile Include="Interop\Utils\Picture.cpp" />
     <ClCompile Include="Resources\BlendModes.cpp" />
     <ClCompile Include="Effects\Misc\SetRenderMode.cpp" />
     <ClCompile Include="Effects\Trans\Convolution\convolutionHacks.cpp" />
@@ -106,7 +108,9 @@
     <ClCompile Include="Effects\Trans\ColorMap\ColorMap.cpp" />
     <ClCompile Include="Effects\Common\ApeEffectBase.cpp" />
     <ClCompile Include="Effects\Render\DotFountain\DotFountain.cpp" />
+    <ClInclude Include="Interop\AboutDialog.h" />
     <ClInclude Include="Effects\List\SavedContext.hpp" />
+    <ClInclude Include="Interop\Utils\Picture.h" />
     <ClInclude Include="Resources\BlendModes.h" />
     <ClInclude Include="Effects\Trans\Convolution\convolutionHacks.h" />
     <ClInclude Include="Effects\Trans\Convolution\Convolution.h" />

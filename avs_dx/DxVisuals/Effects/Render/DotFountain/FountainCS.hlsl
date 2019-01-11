@@ -1,5 +1,5 @@
-#include "VisCommon.fx"
-#include "Fountain.fx"
+#include "VisCommon.hlsli"
+#include "Fountain.hlsli"
 #ifndef AVS_SHADER
 #define BIND_PARTICLES u4
 // <macro-resource name="bindParticles" macro="BIND_PARTICLES" type="uav" />
@@ -70,7 +70,7 @@ inline FountainPoint transform( FountainPoint fp )
 void main( uint3 groupIndex : SV_GroupID, uint3 localThread : SV_GroupThreadID, uint3 globalThread : SV_DispatchThreadID )
 {
     const uint gen = groupIndex.x;
-    const uint time = currentFrame % NUM_ROT_HEIGHT; // currentFrame is from the globally accessible cbuffer in FrameGlobalData.fx
+    const uint time = currentFrame % NUM_ROT_HEIGHT; // currentFrame is from the globally accessible cbuffer in FrameGlobalData.hlsli
     const uint id = globalThread.x;
 
     FountainPoint fpOld = particles[ id ];

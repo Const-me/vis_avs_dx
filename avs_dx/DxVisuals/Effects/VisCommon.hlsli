@@ -1,4 +1,4 @@
-#include "FrameGlobalData.fx"
+#include "FrameGlobalData.hlsli"
 
 // Texture of size 576 * 4, signed bytes i.e. DXGI_FORMAT_R8_SNORM
 // First two lines are spectrum, left/right channel, second two lines are wave.

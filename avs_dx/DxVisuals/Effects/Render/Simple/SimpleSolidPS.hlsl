@@ -1,4 +1,4 @@
-#include "VisCommon.fx"
+#include "VisCommon.hlsli"
 #ifndef AVS_SHADER
 static const float sampleV = 0.75f;
 #endif

@@ -1,5 +1,5 @@
-#include "FrameGlobalData.fx"
-#include "Polyline.fx"
+#include "FrameGlobalData.hlsli"
+#include "Polyline.hlsli"
 
 #ifndef AVS_SHADER
 static const float sizeInPixels = 4;

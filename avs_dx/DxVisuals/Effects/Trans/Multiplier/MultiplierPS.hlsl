@@ -1,4 +1,4 @@
-#include "VisCommon.fx"
+#include "VisCommon.hlsli"
 #ifndef AVS_SHADER
 static const uint mode = 0;
 #endif

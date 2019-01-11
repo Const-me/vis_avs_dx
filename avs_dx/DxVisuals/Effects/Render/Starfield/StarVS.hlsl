@@ -1,5 +1,5 @@
-#include "VisCommon.fx"
-#include "Star.fx"
+#include "VisCommon.hlsli"
+#include "Star.hlsli"
 #ifndef AVS_SHADER
 #define BIND_STARS_POSITIONS t4
 // <macro-resource name="bindParticles" macro="BIND_STARS_POSITIONS" />

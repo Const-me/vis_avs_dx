@@ -1,4 +1,4 @@
-#include "VisCommon.fx"
+#include "VisCommon.hlsli"
 #ifndef AVS_SHADER
 #define BIND_CB b3
 // <macro-resource name="bindConstBuffer" macro="BIND_CB" type="cbuffer" />

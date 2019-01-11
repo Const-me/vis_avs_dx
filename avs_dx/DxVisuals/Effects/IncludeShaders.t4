@@ -28,7 +28,7 @@
 			this.name = name;
 			this.parent = parent;
 			fullName = ( null == parent ) ? "Hlsl" : parent.fullName + "::" + name;
-			findFiles( dir, "*.fx", false, ref headers );
+			findFiles( dir, "*.hlsli", false, ref headers );
 			findFiles( dir, "*.hlsl", false, ref sources );
 			List<NamespaceData> subs = new List<NamespaceData>();
 			foreach( var sd in Directory.GetDirectories( dir ) )

@@ -3,7 +3,7 @@
 static const float sizeInPixels = 4;
 #define AVS_RENDER_SIZE float2( 1280, 720 )
 #endif
-#include "Polyline.fx"
+#include "Polyline.hlsli"
 
 // 1.0: always miter, -1.0: never miter, 0.75: default
 #define MITER_LIMIT 0.75

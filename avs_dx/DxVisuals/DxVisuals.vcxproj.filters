@@ -458,18 +458,18 @@
     <None Include="Utils\DirectXErrors\data\wic.inl" />
     <None Include="Utils\DirectXErrors\data\win32.inl" />
     <None Include="Utils\DirectXErrors\data\xaudio.inl" />
-    <None Include="Effects\FrameGlobalData.fx" />
     <None Include="Effects\IncludeShaders.t4" />
     <None Include="Render\EffectRenderer.inl" />
-    <None Include="Effects\VisCommon.fx" />
-    <None Include="Effects\Render\Starfield\Star.fx" />
     <None Include="compress.t4" />
     <None Include="CppBuilder.t4" />
-    <None Include="Effects\Polyline.fx" />
     <None Include="Expressions\Builtin\includeFunctions.t4" />
     <None Include="Utils\DXTK\SimpleMath.inl" />
     <None Include="Effects\Trans\Blur\LinearConvolution.txt" />
-    <None Include="Effects\Render\DotFountain\Fountain.fx" />
+    <None Include="Effects\Polyline.hlsli" />
+    <None Include="Effects\VisCommon.hlsli" />
+    <None Include="Effects\FrameGlobalData.hlsli" />
+    <None Include="Effects\Render\Starfield\Star.hlsli" />
+    <None Include="Effects\Render\DotFountain\Fountain.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Effects\Render\Simple\SimpleDotsVS.hlsl" />

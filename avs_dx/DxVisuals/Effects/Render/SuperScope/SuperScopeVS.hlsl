@@ -1,5 +1,5 @@
-#include "VisCommon.fx"
-#include "Polyline.fx"
+#include "VisCommon.hlsli"
+#include "Polyline.hlsli"
 
 #ifndef AVS_SHADER
 static const float sampleV = 0.75f;

@@ -1,4 +1,4 @@
-#include "VisCommon.fx"
+#include "VisCommon.hlsli"
 #ifndef AVS_SHADER
 static const uint enabled = 1;
 static const float3 color_clip = float3( 0, 0, 0 );

@@ -1,4 +1,4 @@
-#include "FrameGlobalData.fx"
+#include "FrameGlobalData.hlsli"
 #ifndef AVS_SHADER
 #define AVS_PIXEL_PARTICLES 0
 #endif

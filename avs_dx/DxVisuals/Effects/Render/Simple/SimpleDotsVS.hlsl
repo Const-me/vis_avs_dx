@@ -1,4 +1,4 @@
-#include "VisCommon.fx"
+#include "VisCommon.hlsli"
 
 #ifndef AVS_SHADER
 static const float2 y1y2 = float2( -0.5f, 0.5f );

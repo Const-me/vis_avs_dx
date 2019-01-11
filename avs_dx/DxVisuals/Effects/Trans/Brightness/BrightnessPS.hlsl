@@ -1,4 +1,4 @@
-#include "VisCommon.fx"
+#include "VisCommon.hlsli"
 #ifndef AVS_SHADER
 // <macro-resource name="bindPrevFrame" macro="BIND_PREV_FRAME" />
 static const float3 values = float3( 1, 1, 1 );

@@ -4,7 +4,7 @@
 
 IMPLEMENT_EFFECT( DotFountain, C_DotFountainClass )
 
-#include "Fountain.fx"
+#include "Fountain.hlsli"
 
 // Max.limit of the count, the size of the buffers
 constexpr UINT totalParticles = NUM_ROT_DIV * NUM_ROT_HEIGHT;

@@ -1,5 +1,5 @@
-#include "VisCommon.fx"
-#include "Fountain.fx"
+#include "VisCommon.hlsli"
+#include "Fountain.hlsli"
 #ifndef AVS_SHADER
 #define BIND_PARTICLES u4
 // <macro-resource name="bindParticles" macro="BIND_PARTICLES" type="uav" />

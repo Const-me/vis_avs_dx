@@ -8,14 +8,22 @@ class Binder;
 // A shader that's instantiated from a template. Source data is what defines the macros.
 // Source needs to be copyable, needs to have operator==, and needs to have HRESULT defines( Hlsl::Defines &def ); method.
 template<class TSourceData>
-class Shader: public ShaderBase<TSourceData::shaderStage>
+class Shader : public ShaderBase<TSourceData::shaderStage>
 {
 public:
 
 	using tStageData = TSourceData;
 
-	Shader() = default;
-	Shader( const Shader& )
+	Shader( const CAtlMap<CStringA, CStringA>& includes ) :
+		ShaderBase<TSourceData::shaderStage>( includes )
+	{ }
+
+	Shader() :
+		ShaderBase<TSourceData::shaderStage>( Hlsl::includes() )
+	{ }
+
+	Shader( const Shader& ) :
+		ShaderBase<TSourceData::shaderStage>( Hlsl::includes() )
 	{
 		// eastl::variant requires objects to be copyable, for no reason.
 		__debugbreak();
@@ -53,19 +61,11 @@ public:
 		}
 
 		const ShaderTemplate& tmpl = *m_sourceData.shaderTemplate();
-		vector<uint8_t> dxbc;
-		const HRESULT hr = __super::compile( tmpl.name, tmpl.hlsl, inc, def, tmpl.usesBeat, dxbc );
+		const HRESULT hr = __super::compile( tmpl.name, tmpl.hlsl, def, tmpl.usesBeat, &onCompiledShader, &m_sourceData );
 		if( FAILED( hr ) )
 			return hr;
 		if( S_FALSE == hr )
 			return S_FALSE;
-
-		// Invoke optional compiledShader method. Some shaders need that to create input layouts.
-		__if_exists( TSourceData::compiledShader )
-		{
-			CHECK( m_sourceData.compiledShader( ( const vector<uint8_t>& )dxbc ) );
-		}
-
 		return S_OK;
 	}
 
@@ -74,6 +74,15 @@ public:
 	const TSourceData& data() const { return m_sourceData; }
 
 private:
+
+	static void onCompiledShader( void* pThis, const vector<uint8_t>& dxbc )
+	{
+		__if_exists( TSourceData::compiledShader )
+		{
+			TSourceData* ps = (TSourceData*)pThis;
+			ps->compiledShader( dxbc );
+		}
+	}
 
 	TSourceData m_sourceData;
 };

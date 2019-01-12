@@ -70,7 +70,8 @@ protected:
 
 	FacticleFx( typename TStruct::AvsState *pState, UINT cb, UINT n, const char* updateProfilerName ) :
 		EffectBase1<TStruct>( pState ),
-		ParticleSystemBase( TStruct::computeThreadsPerGroup, cb, n, TStruct::effectIncludes(), updateProfilerName )
+		ParticleSystemBase( TStruct::computeThreadsPerGroup, cb, n, TStruct::effectIncludes(), updateProfilerName ),
+		m_initShader( TStruct::effectIncludes() )
 	{ }
 
 	HRESULT updateParameters( Binder& binder ) override

@@ -79,21 +79,26 @@ namespace
 #undef DEFINE_STATIC_SHADER
 
 	// Dynamic shaders are the most complicated
-	template<eStage stage, class TStageStruct>
+	template<class FxDef, eStage stage, class TStageStruct>
 	struct DynamicShaderHelper
 	{
 		using Type = Shader<TStageStruct>;
-		static constexpr bool ctorArg()
+
+		static const CAtlMap<CStringA, CStringA>& ctorArg()
 		{
 			static_assert( stage == TStageStruct::shaderStage );
-			return false;
+			__if_exists( FxDef::effectIncludes )
+			{
+				return FxDef::effectIncludes();
+			}
+			return Hlsl::includes();
 		}
 	};
 
 #define DEFINE_DYNAMIC_SHADER( stage, DataClass )                   \
 	template<class T>                                               \
 	struct ShaderTypeHelper<T, stage, eShaderKind::Dynamic>:        \
-		public DynamicShaderHelper<stage, typename T::DataClass>    \
+		public DynamicShaderHelper<T, stage, typename T::DataClass> \
 	{ };
 
 	DEFINE_DYNAMIC_SHADER( eStage::Compute, CsData )

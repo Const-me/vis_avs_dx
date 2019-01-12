@@ -64,8 +64,11 @@ namespace Hlsl
 		const CAtlMap<CStringA, CStringA>& m_includes;
 
 	public:
+
 		CompilerBase( eStage stage, const CAtlMap<CStringA, CStringA>& inc, Job* pPending, uint8_t capacity );
 		~CompilerBase();
+
+		eStage getStage() const { return m_stage; }
 
 		// Guards pending jobs also the resulting shader. Lock while accessing the pointer where the async compiler puts these shaders.
 		CComAutoCriticalSection& compilerLock() const { return m_cs; }

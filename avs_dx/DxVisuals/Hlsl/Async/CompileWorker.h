@@ -70,13 +70,15 @@ namespace Hlsl
 		// Guards pending jobs also the resulting shader. Lock while accessing the pointer where the async compiler puts these shaders.
 		CComAutoCriticalSection& compilerLock() const { return m_cs; }
 
+		eAsyncStatus asyncStatus() const;
+
 		// Submit a new shader compilation job
 		void submit( const CStringA& hlsl, const Hlsl::Defines& def, const Job* first, uint8_t count );
 
 		// Cancel any in-flight requests, if any.
 		void cancelPending();
 
-		eAsyncStatus asyncStatus() const;
+		void shutdownWorker();
 
 	private:
 
@@ -86,7 +88,7 @@ namespace Hlsl
 		uint32_t m_version = 0;
 		const uint8_t m_capacity;
 		uint8_t m_pendingLaunch = 0, m_pendingCompletion = 0;
-		eAsyncStatus m_status = eAsyncStatus::Empty;
+		volatile eAsyncStatus m_status = eAsyncStatus::Empty;
 		BoolHr m_result;
 		Job* const m_pending;
 

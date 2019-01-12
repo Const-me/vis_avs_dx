@@ -44,6 +44,12 @@ void CompilerBase::submit( const CStringA& hlsl, const Defines& def, const Job* 
 		Worker::launch();
 }
 
+eAsyncStatus CompilerBase::asyncStatus() const
+{
+	// Byte reads are atomic, no need to lock
+	return m_status;
+}
+
 void CompilerBase::cancelPending()
 {
 	CSLock __lock( m_cs );
@@ -51,10 +57,10 @@ void CompilerBase::cancelPending()
 	m_pendingLaunch = 0;
 }
 
-eAsyncStatus CompilerBase::asyncStatus() const
+void CompilerBase::shutdownWorker()
 {
-	// Byte reads are atomic, no need to lock
-	return m_status;
+	cancelPending();
+	__super::shutdownWorker();
 }
 
 struct CompilerBase::ThreadContext

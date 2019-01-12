@@ -10,6 +10,7 @@
 #include <algorithm> 
 #include <random>
 #include "profilerApi.h"
+#include <Threads/AvsThreads.h>
 
 constexpr UINT msPresentTimeout = 250;
 
@@ -169,6 +170,23 @@ HRESULT RenderWindow::sendMessageTimeout( UINT wm, const void* wParam )
 
 HRESULT RenderWindow::presentSingle( const RenderTarget& src )
 {
+	if( m_hWnd == nullptr || !IsWindow( m_hWnd ) )
+	{
+		/* static bool warned = false;
+		if( !warned )
+		{
+			logWarning( "RenderWindow::presentSingle - the AVS window is destroyed" );
+			warned = true;
+			return S_FALSE;
+		}
+		Sleep( 100 );
+		return S_FALSE; */
+		logWarning( "RenderWindow::presentSingle - the AVS window is destroyed, shutting down everything" );
+		getThreads().render().postQuitMessage();
+		getThreads().gui().postQuitMessage();
+		return S_FALSE;
+	}
+
 	return sendMessageTimeout( WM_PRESENT, &src );
 }
 

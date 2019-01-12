@@ -25,11 +25,6 @@ private:
 
 	void postMessage( UINT Msg, WPARAM wParam = 0, LPARAM lParam = 0 ) const;
 
-	void postQuitMessage() override
-	{
-		postMessage( WM_QUIT );
-	}
-
 	bool handlePostedMessage( const MSG &msg );
 
 	RenderWindow m_wndRender;
@@ -38,6 +33,11 @@ private:
 	static constexpr UINT WM_CONFIG_CLOSE = WM_APP + 12;
 
 public:
+
+	void postQuitMessage() override
+	{
+		postMessage( WM_QUIT );
+	}
 
 	// Render thread calls this during shutdown. It wants to shut down D3D context and COM, to do this cleanly the windows must be destroyed first, at least rendering and profiler. Only the owned thread can destroy windows.
 	HRESULT closeWindows();

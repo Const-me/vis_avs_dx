@@ -2,16 +2,13 @@
 #include "PolylineShader.h"
 
 extern int g_line_blend_mode;
-extern int cfg_fs_d;
 
 HRESULT updateThickness( float& val )
 {
 	int width = ( ( g_line_blend_mode >> 16 ) & 0xFF );
 	if( 0 == width )
 		width = 1;
-
-	if( !cfg_fs_d )
-		width *= 4;
+	width *= 2;
 
 	const float res = (float)width;
 	if( res == val )

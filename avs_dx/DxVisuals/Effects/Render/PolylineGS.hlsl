@@ -1,6 +1,6 @@
 #ifndef AVS_SHADER
 // A geometry shader that expands lineadj into triangles.
-static const float sizeInPixels = 4;
+static const float sizeInPixels = 2;
 #define AVS_RENDER_SIZE float2( 1280, 720 )
 #endif
 #include "Polyline.hlsli"

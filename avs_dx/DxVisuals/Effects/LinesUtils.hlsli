@@ -10,6 +10,10 @@ cbuffer FrameGlobalData : register(b0)
 }
 
 static const float alphaCutoffThreshold = 0.666;
+#ifndef smoothAlphaRange
+static const float smoothAlphaRange = 0.111;
+#endif
+static const float zeroAlphaDiscard = 0.001;
 
 inline float4 alphaCutoffBlend( float3 rgb, float alpha )
 {
@@ -28,7 +32,16 @@ inline float4 alphaBlend( float3 rgb, float alpha )
 {
     float4 result;
     if( lineModeAllowAlpha )
-        result = float4( rgb * alpha, alpha );
+    {
+        alpha = smoothstep( alphaCutoffThreshold - smoothAlphaRange, alphaCutoffThreshold + smoothAlphaRange, alpha );
+        if( alpha < zeroAlphaDiscard )
+        {
+            result = 0;
+            discard;
+        }
+		else
+            result = float4( rgb * alpha, alpha );
+    }
     else
         result = alphaCutoffBlend( rgb, alpha );
     return result;

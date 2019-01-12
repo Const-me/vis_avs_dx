@@ -1,10 +1,11 @@
-#include "LinesUtils.hlsli"
 #include "Polyline.hlsli"
 
 #ifndef AVS_SHADER
 static const float sizeInPixels = 4;
 #define AVS_PIXEL_PARTICLES 0
 #endif
+#define smoothAlphaRange  ( 0.333 * 4 / (float)sizeInPixels )
+#include "LinesUtils.hlsli"
 
 // Distance between point and segment
 float distanceSquared( float2 pt, float2 s1, float2 s2 )

@@ -11,6 +11,12 @@ public:
 	using tBase = EffectBase1<TStruct>;
 	using AvsState = typename TStruct::AvsState;
 
+	void setStateOffset( UINT off ) override
+	{
+		__super::setStateOffset( off );
+		renderer.dropDynamicShaders();
+	}
+
 protected:
 
 	typename TStruct::AvsState* const avs;
@@ -53,15 +59,7 @@ protected:
 		BoolHr hr = renderer.update( binder, *avs, stateData );
 		if( hr.failed() || !hr.value() )
 			return hr;
-
-		const CAtlMap<CStringA, CStringA>* pIncludes = &::Hlsl::includes();
-		__if_exists( TStruct::effectIncludes )
-		{
-			pIncludes = &TStruct::effectIncludes();
-		}
-
-		SILENT_CHECK( renderer.compileShaders( *pIncludes, TBase::stateOffset() ) );
-		return S_OK;
+		return renderer.compileShaders( TBase::stateOffset() );
 	}
 };
 

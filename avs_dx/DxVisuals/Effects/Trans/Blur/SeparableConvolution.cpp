@@ -78,7 +78,7 @@ HRESULT SeparableConvolution::updateShader( PassShader& s, Binder& binder, const
 		return res;
 	if( !res.value() )
 		return res;
-	res.combine( s.compile( Hlsl::includes(), 0 ) );
+	res.combine( s.compile( 0 ) );
 	return res;
 }
 

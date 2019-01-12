@@ -50,7 +50,7 @@ HRESULT ChannelShift::render( bool isBeat, RenderTargets& rt )
 		{
 			avs->mode = newMode;
 			CHECK( renderer.pixel().updateAvs( *avs ) );
-			CHECK( renderer.compileShader<eStage::Pixel>( Hlsl::includes(), stateOffset() ) );
+			CHECK( renderer.compileShader<eStage::Pixel>( stateOffset() ) );
 		}
 	}
 

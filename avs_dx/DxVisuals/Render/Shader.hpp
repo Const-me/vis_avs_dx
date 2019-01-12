@@ -47,7 +47,7 @@ public:
 		return hr;
 	}
 
-	HRESULT compile( const CAtlMap<CStringA, CStringA>& inc, UINT stateOffset )
+	HRESULT compile( UINT stateOffset )
 	{
 		if( __super::isFailed() )
 			return S_FALSE;

@@ -168,9 +168,9 @@ HRESULT SuperScope::render( bool isBeat, RenderTargets& rt )
 		LinesRendering& lines = eastl::get<LinesRendering>( m_render );
 
 		if( !lines.gs.hasShader() )
-			CHECK( lines.gs.compile( Hlsl::includes(), 0 ) );
+			CHECK( lines.gs.compile( 0 ) );
 		if( !lines.ps.hasShader() )
-			CHECK( lines.ps.compile( Hlsl::includes(), 0 ) );
+			CHECK( lines.ps.compile( 0 ) );
 		if( !lines.gs.hasShader() || !lines.ps.hasShader() )
 			return S_FALSE;
 
@@ -189,9 +189,9 @@ HRESULT SuperScope::render( bool isBeat, RenderTargets& rt )
 		DotRendering& dots = eastl::get<DotRendering>( m_render );
 
 		if( !dots.gs.hasShader() )
-			CHECK( dots.gs.compile( Hlsl::includes(), 0 ) );
+			CHECK( dots.gs.compile( 0 ) );
 		if( !dots.ps.hasShader() )
-			CHECK( dots.ps.compile( Hlsl::includes(), 0 ) );
+			CHECK( dots.ps.compile( 0 ) );
 		if( !dots.gs.hasShader() || !dots.ps.hasShader() )
 			return S_FALSE;
 

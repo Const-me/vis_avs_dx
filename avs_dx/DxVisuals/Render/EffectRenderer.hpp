@@ -28,11 +28,11 @@ public:
 		return hr;
 	}
 
-	HRESULT compileShaders( const CAtlMap<CStringA, CStringA>& inc, UINT stateOffset )
+	HRESULT compileShaders( UINT stateOffset )
 	{
-		return forEachDynStage( [ & ]( auto& p )
+		return forEachDynStage( [ = ]( auto& p )
 		{
-			return p.compile( inc, stateOffset );
+			return p.compile( stateOffset );
 		} );
 	}
 
@@ -58,11 +58,11 @@ public:
 	}
 
 	template<eStage stage>
-	HRESULT compileShader( const CAtlMap<CStringA, CStringA>& inc, UINT stateOffset )
+	HRESULT compileShader( UINT stateOffset )
 	{
 		constexpr uint8_t i = (uint8_t)stage;
 		static_assert( shaderKinds[ i ] == eShaderKind::Dynamic );
-		return eastl::get<i>( m_shaders ).compile( inc, stateOffset );
+		return eastl::get<i>( m_shaders ).compile( stateOffset );
 	}
 
 	// Bind shaders for all 4 stages. If some are not defined in the effect structure, these shaders will be unbound.
@@ -75,6 +75,15 @@ public:
 			result = result && r;
 		} );
 		return result;
+	}
+
+	void dropDynamicShaders()
+	{
+		forEachDynStage( [ = ]( auto& p )
+		{
+			p.dropShader();
+			return S_FALSE;
+		} );
 	}
 
 private:

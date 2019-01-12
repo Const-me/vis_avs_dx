@@ -68,7 +68,7 @@ HRESULT Movement::updateShader( S& ps, Binder& binder )
 		return hr;
 	if( !hr.value() )
 		return S_FALSE;
-	CHECK( ps.compile( Hlsl::includes(), stateOffset() ) );
+	CHECK( ps.compile( stateOffset() ) );
 	return S_OK;
 }
 

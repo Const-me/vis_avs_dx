@@ -81,7 +81,7 @@ protected:
 		{	
 			BoolHr hrInit = m_initShader.update( binder, nullptr, nullptr );
 			if( hrInit.succeeded() && hrInit.value() )
-				hrInit.combine( m_initShader.compile( TStruct::effectIncludes(), EffectBase::stateOffset() ) );
+				hrInit.combine( m_initShader.compile( EffectBase::stateOffset() ) );
 			hr.combine( hrInit );
 		}
 

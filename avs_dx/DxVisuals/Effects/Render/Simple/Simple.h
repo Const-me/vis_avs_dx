@@ -64,7 +64,7 @@ public:
 	}
 	HRESULT compileShaders( UINT stateOffset ) override
 	{
-		return __super::compileShaders( Hlsl::includes(), stateOffset );
+		return EffectRenderer<FxDef>::compileShaders( stateOffset );
 	}
 };
 

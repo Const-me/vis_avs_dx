@@ -58,7 +58,7 @@ HRESULT ColorMap::render( bool isBeat, RenderTargets& rt )
 		m_ps.dropShader();
 
 	if( !m_ps.hasShader() )
-		CHECK( m_ps.compile( Hlsl::includes(), stateOffset() ) );
+		CHECK( m_ps.compile( stateOffset() ) );
 
 	omBlend( eBlend::None );
 	BoundPsResource boundFrame;

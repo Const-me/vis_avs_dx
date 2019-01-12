@@ -84,5 +84,5 @@ HRESULT Blender::ensureShader( eBlendMode mode, float blendVal )
 		blendShader.data().blendVal = blendVal;
 	}
 
-	return blendShader.compile( Hlsl::includes(), 0 );
+	return blendShader.compile( 0 );
 }

@@ -126,6 +126,8 @@ namespace StaticResources
 	GlobalBuffers globalBuffers;
 	BlendModes globalBlendModes;
 
+	static CComAutoCriticalSection s_layoutsLock;
+
 	HRESULT createLayout( const vector<uint8_t>& dxbc )
 	{
 		if( nullptr != layoutPos2Tc2 )
@@ -136,19 +138,32 @@ namespace StaticResources
 			{ "SV_Position", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "TEXCOORD",    0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
-		CHECK( device->CreateInputLayout( iaDesc, 2, dxbc.data(), dxbc.size(), &layoutPos2Tc2 ) );
+		CComPtr<ID3D11InputLayout> layout;
+		CHECK( device->CreateInputLayout( iaDesc, 2, dxbc.data(), dxbc.size(), &layout ) );
+
+		CSLock __lock{ s_layoutsLock };
+		layoutPos2Tc2 = layout;
 		return S_OK;
 	}
 
 	HRESULT cacheInputLayout( const void* key, const D3D11_INPUT_ELEMENT_DESC *desc, UINT count, const vector<uint8_t>& dxbc )
 	{
-		if( nullptr != s_layoutsCache.Lookup( key ) )
-			return S_FALSE;
+		{
+			CSLock __lock{ s_layoutsLock };
+			if( nullptr != s_layoutsCache.Lookup( key ) )
+				return S_FALSE;
+		}
 
 		CComPtr<ID3D11InputLayout> layout;
 		CHECK( device->CreateInputLayout( desc, count, dxbc.data(), dxbc.size(), &layout ) );
 
-		s_layoutsCache[ key ] = layout;
+		{
+			CSLock __lock{ s_layoutsLock };
+			if( nullptr != s_layoutsCache.Lookup( key ) )
+				return S_FALSE;
+			s_layoutsCache[ key ] = layout;
+		}
+
 		return S_OK;
 	}
 

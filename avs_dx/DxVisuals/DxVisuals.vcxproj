@@ -98,6 +98,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Hlsl\Async\asyncNotifier.cpp" />
     <ClCompile Include="Hlsl\Async\CompileWorker.cpp" />
     <ClCompile Include="Hlsl\Async\Worker.cpp" />
     <ClCompile Include="Interop\AboutDialog.cpp" />
@@ -111,12 +112,14 @@
     <ClCompile Include="Effects\Trans\ColorMap\ColorMap.cpp" />
     <ClCompile Include="Effects\Common\ApeEffectBase.cpp" />
     <ClCompile Include="Effects\Render\DotFountain\DotFountain.cpp" />
+    <ClInclude Include="Hlsl\Async\asyncNotifier.h" />
     <ClInclude Include="Hlsl\Async\CompileWorker.h" />
     <ClInclude Include="Hlsl\Async\Worker.h" />
     <ClInclude Include="Interop\AboutDialog.h" />
     <ClInclude Include="Effects\List\SavedContext.hpp" />
     <ClInclude Include="Interop\Utils\Picture.h" />
     <ClInclude Include="Effects\Render\PolylineShader.h" />
+    <ClInclude Include="Interop\waitCursor.h" />
     <ClInclude Include="Resources\BlendModes.h" />
     <ClInclude Include="Effects\Trans\Convolution\convolutionHacks.h" />
     <ClInclude Include="Effects\Trans\Convolution\Convolution.h" />

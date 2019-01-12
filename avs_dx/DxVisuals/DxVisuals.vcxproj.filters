@@ -318,6 +318,8 @@
     <ClInclude Include="Render\setSizeDefines.h" />
     <ClInclude Include="Hlsl\Compile\compile.h" />
     <ClInclude Include="Effects\Render\PolylineShader.h" />
+    <ClInclude Include="Hlsl\Async\asyncNotifier.h" />
+    <ClInclude Include="Interop\waitCursor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -452,6 +454,7 @@
     <ClCompile Include="Render\setSizeDefines.cpp" />
     <ClCompile Include="Hlsl\Compile\compile.cpp" />
     <ClCompile Include="Effects\Render\PolylineShader.cpp" />
+    <ClCompile Include="Hlsl\Async\asyncNotifier.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

@@ -45,6 +45,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Interop/miscGui.h>
 #include <Threads/threadsApi.h>
 #include <Interop/AboutDialog.h>
+#include <Interop/waitCursor.h>
 
 static void _do_add( HWND hwnd, HTREEITEM h, C_RenderListClass *list );
 static int treeview_hack;
@@ -816,6 +817,12 @@ static BOOL CALLBACK dlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 	switch( uMsg )
 	{
+	case WM_WAIT_CURSOR:
+	{
+		const char* lpCursorName = ( 0 != wParam ) ? IDC_APPSTARTING : IDC_ARROW;
+		SetCursor( LoadCursor( nullptr, lpCursorName ) );
+		break;
+	}
 	case WM_INITMENU:
 		EnableMenuItem( (HMENU)wParam, IDM_UNDO, MF_BYCOMMAND | ( C_UndoStack::can_undo() ? MF_ENABLED : MF_GRAYED ) );
 		EnableMenuItem( (HMENU)wParam, IDM_REDO, MF_BYCOMMAND | ( C_UndoStack::can_redo() ? MF_ENABLED : MF_GRAYED ) );

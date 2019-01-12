@@ -2,6 +2,7 @@
 #include "CompileWorker.h"
 #include "../Compile/compile.h"
 #include <Resources/createShader.hpp>
+#include "asyncNotifier.h"
 
 using namespace Hlsl;
 
@@ -11,6 +12,7 @@ CompilerBase::CompilerBase( eStage stage, const CAtlMap<CStringA, CStringA>& inc
 
 CompilerBase::~CompilerBase()
 {
+	cancelPending();
 	// This is required due to destruction order.
 	// Otherwise, the runtime will destroy this class (including e.g. the critical section), only then call base class destructor which will shut down the background jobs.
 	// May crash accessing the destroyed critical section. May crash with pure virtual call invoking the workCallback() method.
@@ -21,13 +23,17 @@ void CompilerBase::submit( const CStringA& hlsl, const Defines& def, const Job* 
 {
 	assert( count <= m_capacity );
 
+	bool wasRunning;
 	{
 		CSLock __lock( m_cs );
 		m_version++;
+		wasRunning = m_pendingCompletion > 0;
 		m_pendingLaunch = m_pendingCompletion = count;
 		if( count <= 0 )
 		{
 			m_status = eAsyncStatus::Completed;
+			if( wasRunning )
+				notifyJobFinished();
 			return;
 		}
 
@@ -39,6 +45,9 @@ void CompilerBase::submit( const CStringA& hlsl, const Defines& def, const Job* 
 		m_result = false;
 		m_status = eAsyncStatus::Pending;
 	}
+
+	if( !wasRunning )
+		notifyJobStarted();
 
 	for( int i = 0; i < count; i++ )
 		Worker::launch();
@@ -53,8 +62,10 @@ eAsyncStatus CompilerBase::asyncStatus() const
 void CompilerBase::cancelPending()
 {
 	CSLock __lock( m_cs );
+	if( m_pendingCompletion > 0 )
+		notifyJobFinished();
 	m_version++;
-	m_pendingLaunch = 0;
+	m_pendingCompletion = m_pendingLaunch = 0;
 }
 
 void CompilerBase::shutdownWorker()
@@ -137,7 +148,10 @@ void CompilerBase::workCallback()
 		m_pendingCompletion--;
 		m_result.combine( hr );
 		if( 0 == m_pendingCompletion )
+		{
 			m_status = eAsyncStatus::Failed;
+			notifyJobFinished();
+		}
 		return;
 	}
 }
@@ -179,7 +193,10 @@ HRESULT CompilerBase::compileJob( ThreadContext& context )
 	m_pendingCompletion--;
 	m_result.combine( true );
 	if( 0 == m_pendingCompletion )
+	{
 		m_status = m_result.succeeded() ? eAsyncStatus::Completed : eAsyncStatus::Failed;
+		notifyJobFinished();
+	}
 
 	return S_OK;
 }

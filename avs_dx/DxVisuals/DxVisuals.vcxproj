@@ -98,6 +98,8 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Hlsl\Async\CompileWorker.cpp" />
+    <ClCompile Include="Hlsl\Async\Worker.cpp" />
     <ClCompile Include="Interop\AboutDialog.cpp" />
     <ClCompile Include="Interop\Utils\Picture.cpp" />
     <ClCompile Include="Resources\BlendModes.cpp" />
@@ -108,6 +110,8 @@
     <ClCompile Include="Effects\Trans\ColorMap\ColorMap.cpp" />
     <ClCompile Include="Effects\Common\ApeEffectBase.cpp" />
     <ClCompile Include="Effects\Render\DotFountain\DotFountain.cpp" />
+    <ClInclude Include="Hlsl\Async\CompileWorker.h" />
+    <ClInclude Include="Hlsl\Async\Worker.h" />
     <ClInclude Include="Interop\AboutDialog.h" />
     <ClInclude Include="Effects\List\SavedContext.hpp" />
     <ClInclude Include="Interop\Utils\Picture.h" />

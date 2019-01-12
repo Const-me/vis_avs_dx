@@ -314,6 +314,8 @@
     <ClInclude Include="Effects\List\SavedContext.hpp" />
     <ClInclude Include="Interop\Utils\Picture.h" />
     <ClInclude Include="Interop\AboutDialog.h" />
+    <ClInclude Include="Hlsl\Async\Worker.h" />
+    <ClInclude Include="Hlsl\Async\CompileWorker.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -444,6 +446,8 @@
     <ClCompile Include="Resources\BlendModes.cpp" />
     <ClCompile Include="Interop\Utils\Picture.cpp" />
     <ClCompile Include="Interop\AboutDialog.cpp" />
+    <ClCompile Include="Hlsl\Async\Worker.cpp" />
+    <ClCompile Include="Hlsl\Async\CompileWorker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

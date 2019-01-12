@@ -10,6 +10,7 @@
 #include <atltypes.h>
 
 #include <algorithm>
+#define EASTL_USER_DEFINED_ALLOCATOR
 #include <EASTL/vector.h>
 #include <EASTL/array.h>
 using eastl::vector;

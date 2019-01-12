@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "StateShaders.h"
-#include <Hlsl/compile.h>
 #include <Effects/shadersCode.h>
 #include <Resources/createShader.hpp>
 #include <Utils/md4.h>

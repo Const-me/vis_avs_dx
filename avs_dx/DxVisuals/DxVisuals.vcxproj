@@ -415,7 +415,7 @@
     <ClInclude Include="Utils\DirectXErrors\DirectXErrors.h" />
     <ClInclude Include="Utils\DirectXErrors\formatMessage.hpp" />
     <ClInclude Include="Utils\logger.h" />
-    <ClInclude Include="Hlsl\compile.h" />
+    <ClInclude Include="Hlsl\Compile\compile.h" />
     <ClInclude Include="Effects\Common\EffectBase.h" />
     <ClInclude Include="Hlsl\Defines.h" />
     <ClInclude Include="Effects\Common\EffectListBase.h" />
@@ -541,7 +541,7 @@
     <ClCompile Include="Effects\Trans\ColorModifier\ColorModifier.cpp" />
     <ClCompile Include="Effects\Trans\Moves\DynamicMovement.cpp" />
     <ClCompile Include="Hlsl\FunctionBuilder.cpp" />
-    <ClCompile Include="Hlsl\compile.cpp" />
+    <ClCompile Include="Hlsl\Compile\compile.cpp" />
     <ClCompile Include="Effects\Common\EffectListBase.cpp" />
     <ClCompile Include="Resources\RenderTarget.cpp" />
     <ClCompile Include="Resources\SourceData.cpp" />

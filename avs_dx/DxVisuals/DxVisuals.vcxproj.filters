@@ -26,7 +26,6 @@
     <ClInclude Include="Effects\Render\Starfield\Starfield.h" />
     <ClInclude Include="Resources\StructureBuffer.h" />
     <ClInclude Include="Render\StateShaders.h" />
-    <ClInclude Include="Hlsl\compile.h" />
     <ClInclude Include="Hlsl\StateShaderTemplate.h" />
     <ClInclude Include="Hlsl\ShaderTemplate.h" />
     <ClInclude Include="Resources\createShader.hpp" />
@@ -317,6 +316,7 @@
     <ClInclude Include="Hlsl\Async\Worker.h" />
     <ClInclude Include="Hlsl\Async\CompileWorker.h" />
     <ClInclude Include="Render\setSizeDefines.h" />
+    <ClInclude Include="Hlsl\Compile\compile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -337,7 +337,6 @@
     <ClCompile Include="Effects\Render\Starfield\Starfield.cpp" />
     <ClCompile Include="Resources\StructureBuffer.cpp" />
     <ClCompile Include="Render\StateShaders.cpp" />
-    <ClCompile Include="Hlsl\compile.cpp" />
     <ClCompile Include="Utils\MiscUtils.cpp" />
     <ClCompile Include="Expressions\Compiler.cpp" />
     <ClCompile Include="Expressions\Prototype.cpp" />
@@ -450,6 +449,7 @@
     <ClCompile Include="Hlsl\Async\Worker.cpp" />
     <ClCompile Include="Hlsl\Async\CompileWorker.cpp" />
     <ClCompile Include="Render\setSizeDefines.cpp" />
+    <ClCompile Include="Hlsl\Compile\compile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

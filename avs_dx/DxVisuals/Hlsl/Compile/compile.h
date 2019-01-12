@@ -1,6 +1,6 @@
 #pragma once
-#include "../Render/Stage.h"
-#include "Defines.h"
+#include <Render/Stage.h>
+#include "../Defines.h"
 
 namespace Hlsl
 {

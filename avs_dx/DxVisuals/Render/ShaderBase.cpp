@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "ShaderBase.h"
-#include <Hlsl/compile.h>
+#include <Hlsl/Compile/compile.h>
 #include <Resources/createShader.hpp>
 #include "setSizeDefines.h"
 

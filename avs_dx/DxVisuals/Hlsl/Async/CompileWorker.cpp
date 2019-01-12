@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "CompileWorker.h"
-#include "../compile.h"
+#include "../Compile/compile.h"
 #include <Resources/createShader.hpp>
 
 using namespace Hlsl;

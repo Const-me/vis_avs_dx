@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "AboutDialog.h"
+#pragma comment(lib, "Mincore.lib")
 
 class DpiScaler
 {
@@ -49,8 +50,51 @@ public:
 	}
 };
 
+extern HINSTANCE g_hInstance;
+
+HRESULT tryGetVersion( CString& res )
+{
+	// https://stackoverflow.com/a/13942403/126995
+	// https://stackoverflow.com/a/34348748/126995
+	const HMODULE hInst = (HMODULE)g_hInstance;
+
+	const HRSRC hResInfo = FindResource( hInst, MAKEINTRESOURCE( 1 ), RT_VERSION );
+	if( !hResInfo ) return getLastHr();
+
+	const DWORD dwSize = SizeofResource( hInst, hResInfo );
+	if( 0 == dwSize ) return getLastHr();
+
+	const HGLOBAL hResData = LoadResource( hInst, hResInfo );
+	if( nullptr == hResData ) return getLastHr();
+
+	const uint8_t* const ptr = (const uint8_t*)LockResource( hResData );
+	vector<uint8_t> copy;
+	copy.assign( ptr, ptr + dwSize );
+	FreeResource( hResData );
+
+	VS_FIXEDFILEINFO *lpFfi;
+	UINT uLen;
+	if( !VerQueryValue( copy.data(), L"\\", (LPVOID*)&lpFfi, &uLen ) )
+		return E_FAIL;
+
+	DWORD dwFileVersionMS = lpFfi->dwFileVersionMS;
+	DWORD dwFileVersionLS = lpFfi->dwFileVersionLS;
+
+	DWORD dwLeftMost = HIWORD( dwFileVersionMS );
+	DWORD dwSecondLeft = LOWORD( dwFileVersionMS );
+	DWORD dwSecondRight = HIWORD( dwFileVersionLS );
+	DWORD dwRightMost = LOWORD( dwFileVersionLS );
+
+	res.AppendFormat( L", version %i.%i.%i.%i", dwLeftMost, dwSecondLeft, dwSecondRight, dwRightMost );
+	return S_OK;
+}
+
 BOOL AboutDialog::OnInitDialog( CWindow wndFocus, LPARAM lInitParam )
 {
+	CString verStr = L"AVS DirectX";
+	tryGetVersion( verStr );
+	SetDlgItemText( IDC_ABOUT_VERSION, verStr );
+
 	ua.loadResource( IDR_GIF_UA );
 	me.loadResource( IDR_GIF_ME );
 

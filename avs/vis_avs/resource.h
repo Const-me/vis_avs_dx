@@ -385,6 +385,7 @@
 #define IDC_SYSLINK1                    1210
 #define IDC_FLAG_UA                     1213
 #define IDC_FLAG_ME                     1214
+#define IDC_ABOUT_VERSION               1215
 #define IDM_DISPLAY                     40001
 #define IDM_PRESETS                     40002
 #define IDM_TRANS                       40003
@@ -407,7 +408,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        179
 #define _APS_NEXT_COMMAND_VALUE         40016
-#define _APS_NEXT_CONTROL_VALUE         1215
+#define _APS_NEXT_CONTROL_VALUE         1216
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

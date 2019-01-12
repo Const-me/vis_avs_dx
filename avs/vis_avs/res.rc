@@ -1286,12 +1286,13 @@ CAPTION "About DirectX Port"
 FONT 10, "Microsoft Sans Serif", 400, 0, 0x0
 BEGIN
     DEFPUSHBUTTON   "Close",IDOK,77,84,50,14
-    LTEXT           "Copyright © 2018-2019 Konstantin.",IDC_STATIC,7,7,108,8
+    LTEXT           "Copyright © 2018-2019 Konstantin.",IDC_STATIC,7,20,108,8
     CONTROL         "<a href=""http://const.me"">http://const.me</a>",IDC_SYSLINK1,
-                    "SysLink",WS_TABSTOP,7,20,60,10
-    LTEXT           "Thanks to Baldur Karlsson, without his renderdoc.org this wouldn’t be possible. At least not by a single person spending 1 month on development.",IDC_STATIC,7,35,191,27
+                    "SysLink",WS_TABSTOP,7,33,60,10
+    LTEXT           "Thanks to Baldur Karlsson, without his renderdoc.org this wouldn’t be possible. At least not by a single person spending 1 month on development.",IDC_STATIC,7,48,191,27
     CONTROL         "",IDC_FLAG_UA,"Static",SS_OWNERDRAW,7,91,7,7
     CONTROL         "",IDC_FLAG_ME,"Static",SS_OWNERDRAW,191,91,7,7
+    LTEXT           "",IDC_ABOUT_VERSION,7,7,191,8
 END
 
 

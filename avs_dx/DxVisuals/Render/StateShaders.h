@@ -25,11 +25,13 @@ public:
 
 	operator bool() const;
 
-	// Post all 2 or 3 jobs, but only wait for the first one, the init shader
+	// Post all 2 or 3 compilation jobs, but only wait for the first one, the init shader
 	HRESULT compile( const vector<EffectStateShader> &effects, UINT& totalStateSize );
 
+	// Bind the state init shader
 	HRESULT bindInitShader();
 
+	// Bind the state update shader. If it wasn't yet compiled, this method will wait.
 	HRESULT bindUpdateShader( bool isbeat );
 
 protected:

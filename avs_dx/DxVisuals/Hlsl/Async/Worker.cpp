@@ -11,10 +11,10 @@ Worker::Worker()
 
 Worker::~Worker()
 {
-	shutdown();
+	shutdownWorker();
 }
 
-void Worker::shutdown()
+void Worker::shutdownWorker()
 {
 	if( m_work )
 	{

@@ -14,7 +14,7 @@ CompilerBase::~CompilerBase()
 	// This is required due to destruction order.
 	// Otherwise, the runtime will destroy this class (including e.g. the critical section), only then call base class destructor which will shut down the background jobs, very rare crash accessing destroyed critical section.
 	// Pure virtual call crash also possible, invoking the workCallback() method.
-	Worker::shutdown();
+	Worker::shutdownWorker();
 }
 
 void CompilerBase::submit( const CStringA& hlsl, const Defines& def, const Job* first, uint8_t count )
@@ -32,6 +32,8 @@ void CompilerBase::submit( const CStringA& hlsl, const Defines& def, const Job* 
 		}
 
 		eastl::copy_n( first, count, m_pending );
+		for( int i = 0; i < count; i++ )
+			m_pending[ i ].version = m_version;
 		m_hlsl = hlsl;
 		m_defines = def;
 		m_result = false;
@@ -46,6 +48,7 @@ void CompilerBase::cancelPending()
 {
 	CSLock __lock( m_cs );
 	m_version++;
+	m_pendingLaunch = 0;
 }
 
 eAsyncStatus CompilerBase::asyncStatus() const
@@ -60,7 +63,6 @@ struct CompilerBase::ThreadContext
 	CStringA hlsl;
 	vector<uint8_t> dxbc;
 	Job job;
-	uint32_t version;
 
 	void initialize( const CompilerBase& compiler, const Job& j )
 	{
@@ -68,7 +70,6 @@ struct CompilerBase::ThreadContext
 		hlsl = compiler.m_hlsl;
 		dxbc.clear();
 		job = j;
-		version = compiler.m_version;
 	}
 };
 
@@ -105,6 +106,8 @@ void CompilerBase::workCallback()
 		const uint8_t index = m_pendingLaunch - 1;
 		m_pendingLaunch--;
 		context.initialize( *this, m_pending[ index ] );
+		if( context.job.version != m_version )
+			return;
 	}
 
 	const HRESULT hr = compileJob( context );
@@ -112,7 +115,7 @@ void CompilerBase::workCallback()
 	if( FAILED( hr ) )
 	{
 		CSLock __lock( m_cs );
-		if( m_version != context.version )
+		if( m_version != context.job.version )
 			return;
 
 		for( IUnknown** pp : context.job.results )
@@ -151,7 +154,7 @@ HRESULT CompilerBase::compileJob( ThreadContext& context )
 
 	CSLock __lock( m_cs );
 
-	if( m_version != context.version )
+	if( m_version != context.job.version )
 		return S_FALSE;	// New shader version already requested, ignore this result
 
 	// Replace shaders in the destination

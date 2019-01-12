@@ -17,16 +17,18 @@ namespace Hlsl
 
 	using pfnCompiledShader = void( *)( void* pContext, const vector<uint8_t>& dxbc );
 
+	// The shader compilation job for background threads.
 	struct Job
 	{
 		const char* name = nullptr;
 
+		// Modify input defines before the compilation. This is what makes multiple jobs submitted to a singe CompilerBase::submit call produce different results.
 		pfnSetExtraDefines fnExtraDefines = nullptr;
 
 		// When finished, the compiler will replace both pointers (if non-null) with the newly compiler shader
 		array<IUnknown**, 2> results = {};
 
-		// Optional callback to invoke after the shader is compiled, receives DXBC bytecode. Used for creation of input layouts.
+		// Optional callback to invoke after the shader is compiled, receives DXBC bytecode. Used for creation of input layouts. The callback is invoked on a background thread, must be thread safe.
 		pfnCompiledShader fnCompiledShader = nullptr;
 		void* compiledShaderContext = nullptr;
 
@@ -50,6 +52,9 @@ namespace Hlsl
 			results[ 1 ] = (IUnknown**)pp2;
 			fnExtraDefines = def;
 		}
+
+		// This field is ignored in the input data, used internally by the implementation.
+		uint32_t version = 0;
 	};
 
 	// Non-template base class to help with compilation time and binary size
@@ -60,9 +65,6 @@ namespace Hlsl
 
 	public:
 		CompilerBase( eStage stage, const CAtlMap<CStringA, CStringA>& inc, Job* pPending, uint8_t capacity );
-		CompilerBase( const Worker& ) = delete;
-		CompilerBase( Worker&& ) = delete;
-
 		~CompilerBase();
 
 		// Guards pending jobs also the resulting shader. Lock while accessing the pointer where the async compiler puts these shaders.
@@ -71,7 +73,7 @@ namespace Hlsl
 		// Submit a new shader compilation job
 		void submit( const CStringA& hlsl, const Hlsl::Defines& def, const Job* first, uint8_t count );
 
-		// Cancel any in-flight requests, if any. It doesn't currently cancel anything just bumps version so the pending results are discarded.
+		// Cancel any in-flight requests, if any.
 		void cancelPending();
 
 		eAsyncStatus asyncStatus() const;
@@ -95,6 +97,7 @@ namespace Hlsl
 		HRESULT compileJob( ThreadContext& context );
 	};
 
+	// A shader compiler that supports up to `count` in-flight jobs.
 	template<uint8_t count>
 	class CompileWorker : public CompilerBase
 	{

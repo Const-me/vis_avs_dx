@@ -123,7 +123,7 @@ StateShaders::StateShaders() :
 
 StateShaders::~StateShaders()
 {
-	m_updateCompiler.shutdown();
+	m_updateCompiler.shutdownWorker();
 	unsubscribeHandler( this );
 }
 

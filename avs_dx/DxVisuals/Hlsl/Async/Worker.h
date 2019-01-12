@@ -16,16 +16,19 @@ namespace Hlsl
 		Worker( Worker&& ) = delete;
 		~Worker();
 
-		// Cancel jobs that weren't yet started, block caller thread wait for any pending callbacks to complete, and shutdown the async worker
-		void shutdown();
+		// Cancel jobs that weren't yet started, block caller thread wait for any in-flight callbacks to complete, and shutdown the worker
+		void shutdownWorker();
 
+		// Start the background work. 
+		// You can post a work object one or more times (up to MAXULONG) without waiting for prior callbacks to complete. The callbacks will execute in parallel. To improve efficiency, the thread pool may throttle the threads.
 		void launch();
 
-		// Block caller thread and wait until all pending callbacks complete, if any
+		// Block caller thread and wait until all in-flight callbacks (if any) fail or complete
 		void join();
 
 	protected:
 
+		// This abstract method will be called on the thread pool's threads, possibly multiple times in parallel.
 		virtual void workCallback() = 0;
 	};
 }

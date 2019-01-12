@@ -36,9 +36,9 @@ void Worker::join()
 		WaitForThreadpoolWorkCallbacks( m_work, FALSE );
 }
 
-void __stdcall Worker::callbackStatic( TP_CALLBACK_INSTANCE *Instance, void* pv, PTP_WORK Work )
+void __stdcall Worker::callbackStatic( PTP_CALLBACK_INSTANCE callbackInstance, void* pv, PTP_WORK Work )
 {
-	// CallbackMayRunLong( Instance );
+	// CallbackMayRunLong( callbackInstance );
 	Worker* pWorker = (Worker*)pv;
 	pWorker->workCallback();
 }

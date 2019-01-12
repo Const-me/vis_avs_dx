@@ -12,9 +12,9 @@ CompilerBase::CompilerBase( eStage stage, const CAtlMap<CStringA, CStringA>& inc
 CompilerBase::~CompilerBase()
 {
 	// This is required due to destruction order.
-	// Otherwise, the runtime will destroy this class (including e.g. the critical section), only then call base class destructor which will shut down the background jobs, very rare crash accessing destroyed critical section.
-	// Pure virtual call crash also possible, invoking the workCallback() method.
-	Worker::shutdownWorker();
+	// Otherwise, the runtime will destroy this class (including e.g. the critical section), only then call base class destructor which will shut down the background jobs.
+	// May crash accessing the destroyed critical section. May crash with pure virtual call invoking the workCallback() method.
+	shutdownWorker();
 }
 
 void CompilerBase::submit( const CStringA& hlsl, const Defines& def, const Job* first, uint8_t count )
@@ -118,6 +118,7 @@ void CompilerBase::workCallback()
 		if( m_version != context.job.version )
 			return;
 
+		// Release the destination shaders
 		for( IUnknown** pp : context.job.results )
 		{
 			if( nullptr == pp || nullptr == *pp )
@@ -157,7 +158,7 @@ HRESULT CompilerBase::compileJob( ThreadContext& context )
 	if( m_version != context.job.version )
 		return S_FALSE;	// New shader version already requested, ignore this result
 
-	// Replace shaders in the destination
+	// Replace the destination shaders
 	for( IUnknown** pp : context.job.results )
 	{
 		if( nullptr == pp )

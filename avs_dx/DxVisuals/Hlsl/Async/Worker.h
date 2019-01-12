@@ -2,12 +2,12 @@
 
 namespace Hlsl
 {
-	// Utility class that wraps Vista+ thread pool API into something more C++ friendly
+	// Utility class that wraps Vista+ thread pool API into something more C++
 	class Worker
 	{
 		PTP_WORK m_work = nullptr;
 
-		static void __stdcall callbackStatic( TP_CALLBACK_INSTANCE *Instance, void* pv, PTP_WORK Work );
+		static void __stdcall callbackStatic( PTP_CALLBACK_INSTANCE callbackInstance, void* pv, PTP_WORK Work );
 
 	public:
 
@@ -16,7 +16,7 @@ namespace Hlsl
 		Worker( Worker&& ) = delete;
 		~Worker();
 
-		// Cancel jobs that weren't yet started, block caller thread wait for any in-flight callbacks to complete, and shutdown the worker
+		// Cancel jobs that weren't yet started, block caller thread waiting for any in-flight callbacks to complete, and shutdown the worker
 		void shutdownWorker();
 
 		// Start the background work. 

@@ -25,7 +25,7 @@ namespace Hlsl
 		// Modify input defines before the compilation. This is what makes multiple jobs submitted to a singe CompilerBase::submit call produce different results.
 		pfnSetExtraDefines fnExtraDefines = nullptr;
 
-		// When finished, the compiler will replace both pointers (if non-null) with the newly compiler shader
+		// When finished, the compiler will replace both pointers (if non-null) with the newly compiled shader
 		array<IUnknown**, 2> results = {};
 
 		// Optional callback to invoke after the shader is compiled, receives DXBC bytecode. Used for creation of input layouts. The callback is invoked on a background thread, must be thread safe.

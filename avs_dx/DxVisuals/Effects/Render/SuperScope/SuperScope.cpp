@@ -174,8 +174,10 @@ HRESULT SuperScope::render( bool isBeat, RenderTargets& rt )
 		if( !lines.gs.hasShader() || !lines.ps.hasShader() )
 			return S_FALSE;
 
-		bindShader<eStage::Geometry>( lines.gs.ptr( false ) );
-		bindShader<eStage::Pixel>( lines.ps.ptr( false ) );
+		if( !lines.gs.bind() )
+			return S_FALSE;
+		if( !lines.ps.bind() )
+			return S_FALSE;
 		context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_LINESTRIP_ADJ );
 		context->DrawInstancedIndirect( stateBuffer(), argsOffset );
 	}
@@ -193,8 +195,10 @@ HRESULT SuperScope::render( bool isBeat, RenderTargets& rt )
 		if( !dots.gs.hasShader() || !dots.ps.hasShader() )
 			return S_FALSE;
 
-		bindShader<eStage::Geometry>( dots.gs.ptr( false ) );
-		bindShader<eStage::Pixel>( dots.ps.ptr( false ) );
+		if( !dots.gs.bind() )
+			return S_FALSE;
+		if( !dots.ps.bind() )
+			return S_FALSE;
 		context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_POINTLIST );
 		context->DrawInstancedIndirect( stateBuffer(), argsOffset );
 	}

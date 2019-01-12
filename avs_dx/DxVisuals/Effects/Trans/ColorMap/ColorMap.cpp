@@ -64,8 +64,10 @@ HRESULT ColorMap::render( bool isBeat, RenderTargets& rt )
 	BoundPsResource boundFrame;
 	CHECK( rt.writeToNext( boundFrame ) );
 
-	setShaders( StaticResources::fullScreenTriangle, nullptr, m_ps.ptr( false ) );
-	drawFullscreenTriangle( false );
+	if( !m_ps.bind() )
+		return S_FALSE;
+
+	drawFullscreenTriangle( true );
 	return S_OK;
 }
 

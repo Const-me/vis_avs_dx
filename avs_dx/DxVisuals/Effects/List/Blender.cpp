@@ -47,10 +47,9 @@ HRESULT Blender::blend( RenderTargets& source, RenderTargets& dest, eBlendMode m
 	if( mode == eBlendMode::Buffer )
 		return E_NOTIMPL;
 
-	// Do the custom blending
 	CHECK( ensureShader( mode, blendVal ) );
-
-	setShaders( StaticResources::fullScreenTriangle, nullptr, blendShader.ptr( false ) );
+	if( !blendShader.bind() )
+		return S_FALSE;
 
 	const UINT bindSource = blendShader.data().source;
 	BoundPsResource boundDest;
@@ -59,24 +58,31 @@ HRESULT Blender::blend( RenderTargets& source, RenderTargets& dest, eBlendMode m
 	auto bound = boundResource<eStage::Pixel>( bindSource, src ? src.srv() : StaticResources::blackTexture.operator ->() );
 
 	omBlend( eBlend::None );
-	blendShader.bind( false );
-	drawFullscreenTriangle();
+	drawFullscreenTriangle( true );
 	return S_OK;
 }
 
 HRESULT Blender::ensureShader( eBlendMode mode, float blendVal )
 {
-	if( blendShader.hasShader() )
+	if( blendShader.data().blend == (uint8_t)mode && blendShader.data().blendVal == blendVal )
 	{
-		if( blendShader.data().blend == (uint8_t)mode && blendShader.data().blendVal == blendVal )
+		// The parameters have not changed
+		const eShaderState ss = blendShader.getState();
+		switch( ss )
+		{
+		case eShaderState::Good:
+			return S_OK;
+		case eShaderState::Failed:
+			return E_FAIL;
+		case eShaderState::Pending:
 			return S_FALSE;
-
-		blendShader.dropShader();
+		}
+	}
+	else
+	{
+		blendShader.data().blend = (uint8_t)mode;
+		blendShader.data().blendVal = blendVal;
 	}
 
-	blendShader.data().blend = (uint8_t)mode;
-	blendShader.data().blendVal = blendVal;
-
-	CHECK( blendShader.compile( Hlsl::includes(), 0 ) );
-	return S_OK;
+	return blendShader.compile( Hlsl::includes(), 0 );
 }

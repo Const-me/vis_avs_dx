@@ -4,20 +4,21 @@
 #include <Utils/resizeHandler.h>
 #include <Hlsl/Async/CompileWorker.h>
 
+enum struct eShaderState : uint8_t
+{
+	Constructed,
+	Updated,
+	Pending,
+	Failed,
+	Good,
+};
+
 // Non-template base class to save a couple kilobytes of code size.
 class ShaderBase2 : public iResizeHandler
 {
 protected:
 
-	enum struct eShaderState : uint8_t
-	{
-		Constructed,
-		Updated,
-		Failed,
-		Good,
-	};
-
-	eShaderState m_state = eShaderState::Constructed;
+	mutable eShaderState m_state = eShaderState::Constructed;
 
 	// If needed, set AVS_RENDER_SIZE and AVS_PIXEL_PARTICLES defines, and subscribe/unsubscribe for resize event accordingly.
 	void setSizeDefines( const CStringA& hlsl, Hlsl::Defines &def );
@@ -46,6 +47,8 @@ public:
 		m_state = eShaderState::Good;
 	}
 
+	eShaderState getState() const { return m_state; }
+
 	bool hasShader() const;
 
 	void dropShader();
@@ -69,6 +72,8 @@ protected:
 template<eStage stage>
 class ShaderBase: public ShaderBase2
 {
+	ShaderPtr<stage> getShader( bool isbeat ) const;
+
 public:
 
 	ShaderBase( const CAtlMap<CStringA, CStringA>& includes ) :
@@ -77,7 +82,5 @@ public:
 	static constexpr eStage shaderStage = stage;
 
 	// Bind the shader. Returns false and does nothing if it's empty.
-	bool bind( bool isBeat ) const;
-
-	ShaderPtr<stage> ptr( bool isBeat ) const;
+	bool bind( bool isBeat = false ) const;
 };

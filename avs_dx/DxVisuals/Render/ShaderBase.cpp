@@ -4,6 +4,8 @@
 #include <Resources/createShader.hpp>
 #include "setSizeDefines.h"
 
+using namespace Hlsl;
+
 void ShaderBase2::setSizeDefines( const CStringA& hlsl, Hlsl::Defines &def )
 {
 	::setSizeDefines( hlsl, def, this );
@@ -19,21 +21,11 @@ ShaderBase2::~ShaderBase2()
 	m_compiler.shutdownWorker();
 }
 
-CComPtr<IUnknown> ShaderBase2::getShader( bool isbeat ) const
-{
-	CSLock __lock{ m_compiler.compilerLock() };
-	return isbeat ? beatShader : shader;
-}
-
-bool ShaderBase2::hasShader() const
-{
-	return m_state == eShaderState::Good;
-}
-
 void ShaderBase2::dropShader()
 {
 	CSLock __lock{ m_compiler.compilerLock() };
 	shader = beatShader = nullptr;
+	m_compiler.cancelPending();
 	m_state = eShaderState::Updated;
 }
 
@@ -53,11 +45,14 @@ namespace
 
 HRESULT ShaderBase2::compile( const char* name, const CStringA& hlsl, Hlsl::Defines &def, bool usesBeat, Hlsl::pfnCompiledShader pfnCompiled, void* compiledArg )
 {
-	if( eShaderState::Failed == m_state )
+	switch( m_state )
+	{
+	case eShaderState::Failed:
+	case eShaderState::Pending:
 		return S_FALSE;
+	}
 
 	setSizeDefines( hlsl, def );
-	using namespace Hlsl;
 
 	if( usesBeat )
 	{
@@ -66,44 +61,74 @@ HRESULT ShaderBase2::compile( const char* name, const CStringA& hlsl, Hlsl::Defi
 			Job{ name, &shader.p, &setBeatMacro<false> },
 			Job{ name, &beatShader.p, &setBeatMacro<true> },
 		};
+
 		jobs[ 0 ].fnCompiledShader = pfnCompiled;
 		jobs[ 0 ].compiledShaderContext = compiledArg;
+
 		m_compiler.submit( hlsl, def, jobs, 2 );
 	}
 	else
 	{
 		Job job{ name, &shader.p, &beatShader.p };
+
 		job.fnCompiledShader = pfnCompiled;
 		job.compiledShaderContext = compiledArg;
+
 		m_compiler.submit( hlsl, def, &job, 1 );
 	}
 
+	m_state = eShaderState::Pending;
+
+	CSLock __lock( m_compiler.compilerLock() );
+	if( shader && beatShader )
+		return S_OK;
+	return S_FALSE;
+}
+
+CComPtr<IUnknown> ShaderBase2::getShader( bool isbeat ) const
+{
+	if( m_state == eShaderState::Failed )
+		return nullptr;
+
+	if( m_state == eShaderState::Pending )
 	{
-		CSLock __lock( m_compiler.compilerLock() );
-		if( shader && beatShader )
+		const eAsyncStatus as = m_compiler.asyncStatus();
+		switch( as )
 		{
-			// We still have the old shaders. Use them for a couple of frames while the new ones are being compiled.
+		case eAsyncStatus::Failed:
+			m_state = eShaderState::Failed;
+			return nullptr;
+		case eAsyncStatus::Completed:
 			m_state = eShaderState::Good;
-			return S_OK;
+			break;
 		}
+		CSLock __lock{ m_compiler.compilerLock() };
+		return isbeat ? beatShader : shader;
 	}
 
-	m_compiler.join();
-	const eAsyncStatus as = m_compiler.asyncStatus();
-	if( as == eAsyncStatus::Failed )
+	return isbeat ? beatShader : shader;
+}
+
+bool ShaderBase2::hasShader() const
+{
+	switch( m_state )
 	{
-		m_state = eShaderState::Failed;
-		return E_FAIL;
+	case eShaderState::Good:
+		return true;
+	case eShaderState::Pending:
+		break;
+	default:
+		return false;
 	}
 
-	m_state = eShaderState::Good;
-	return S_OK;
+	CSLock __lock{ m_compiler.compilerLock() };
+	return shader && beatShader;
 }
 
 template<eStage stage>
 bool ShaderBase<stage>::bind( bool isBeat ) const
 {
-	ShaderPtr<stage> s = ptr( isBeat );
+	ShaderPtr<stage> s = getShader( isBeat );
 	if( !s )
 		return false;
 	bindShader<shaderStage>( s );
@@ -111,9 +136,9 @@ bool ShaderBase<stage>::bind( bool isBeat ) const
 }
 
 template<eStage stage>
-ShaderPtr<stage> ShaderBase<stage>::ptr( bool isBeat ) const
+ShaderPtr<stage> ShaderBase<stage>::getShader( bool isBeat ) const
 {
-	CComPtr<IUnknown> unk = getShader( isBeat );
+	CComPtr<IUnknown> unk = __super::getShader( isBeat );
 	if( nullptr == unk )
 		return nullptr;
 

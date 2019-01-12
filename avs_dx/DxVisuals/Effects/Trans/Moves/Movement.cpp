@@ -115,8 +115,9 @@ HRESULT Movement::renderFullscreen( S& ps, RenderTargets& rt )
 		omBlend( eBlend::None );
 	}
 
-	setShaders( StaticResources::fullScreenTriangle, nullptr, ps.ptr( false ) );
-	drawFullscreenTriangle( false );
+	if( !ps.bind() )
+		return S_FALSE;
+	drawFullscreenTriangle( true );
 	return S_OK;
 }
 

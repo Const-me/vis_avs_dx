@@ -317,6 +317,7 @@
     <ClInclude Include="Hlsl\Async\CompileWorker.h" />
     <ClInclude Include="Render\setSizeDefines.h" />
     <ClInclude Include="Hlsl\Compile\compile.h" />
+    <ClInclude Include="Effects\Render\PolylineShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -450,6 +451,7 @@
     <ClCompile Include="Hlsl\Async\CompileWorker.cpp" />
     <ClCompile Include="Render\setSizeDefines.cpp" />
     <ClCompile Include="Hlsl\Compile\compile.cpp" />
+    <ClCompile Include="Effects\Render\PolylineShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

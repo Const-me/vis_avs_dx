@@ -151,6 +151,18 @@ HRESULT ScopeBase::VsData::updateAvs( const AvsState& avs )
 	return res;
 }
 
+void ScopeBase::LinesRendering::update()
+{
+	updateLineShaders( gs, ps );
+}
+
+HRESULT SuperScope::updateParameters( Binder& binder )
+{
+	if( eastl::holds_alternative<LinesRendering>( m_render ) )
+		eastl::get<LinesRendering>( m_render ).update();
+	return __super::updateParameters( binder );
+}
+
 HRESULT SuperScope::render( bool isBeat, RenderTargets& rt )
 {
 	StaticResources::globalBlendModes.setupBlending( rt );
@@ -163,7 +175,7 @@ HRESULT SuperScope::render( bool isBeat, RenderTargets& rt )
 	if( avs->drawingLines() )
 	{
 		if( !eastl::holds_alternative<LinesRendering>( m_render ) )
-			m_render.emplace<LinesRendering>();
+			m_render.emplace<LinesRendering>().update();
 
 		LinesRendering& lines = eastl::get<LinesRendering>( m_render );
 

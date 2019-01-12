@@ -3,6 +3,7 @@
 
 #ifndef AVS_SHADER
 static const float sizeInPixels = 4;
+#define AVS_PIXEL_PARTICLES 0
 #endif
 
 // Distance between point and segment
@@ -37,5 +38,9 @@ float4 main( sVertex2 vert ) : SV_Target0
     const float mul = -4.158883083 / sizeSq;
     const float alpha = exp( mul * dsq );
 
+#if AVS_PIXEL_PARTICLES
+	return alphaCutoffBlend( vert.color.rgb, alpha );
+#else
     return alphaBlend( vert.color.rgb, alpha );
+#endif
 }

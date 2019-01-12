@@ -56,7 +56,10 @@ HRESULT RootEffect::renderRoot( bool isBeat, RenderTargets& rt, bool rebindResou
 	if( paramsChanged || rebindResources )
 		bindResources();
 
+	g_line_blend_mode = 0;
+
 	CHECK( render( isBeat, rt ) );
+
 	CHECK( completedRendering() );
 
 	return S_OK;

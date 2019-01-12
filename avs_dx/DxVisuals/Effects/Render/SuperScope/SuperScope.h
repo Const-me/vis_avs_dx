@@ -2,6 +2,7 @@
 #include <Effects/Common/EffectImpl.hpp>
 #include "../../../Expressions/CompiledShader.h"
 #include "../PointSpritesRender.hpp"
+#include "../PolylineShader.h"
 #include <EASTL/variant.h>
 using namespace Hlsl::Render::SuperScope;
 
@@ -87,8 +88,10 @@ public:
 
 	struct LinesRendering
 	{
-		Shader<Hlsl::Render::PolylineGS> gs;
-		Shader<Hlsl::Render::PolylinePS> ps;
+		Shader<PolylineShaderGS> gs;
+		Shader<PolylineShaderPS> ps;
+
+		void update();
 	};
 };
 
@@ -100,6 +103,10 @@ public:
 	SuperScope( AvsState *pState ) : EffectBase1( pState ) { }
 
 	DECLARE_EFFECT()
+
+private:
+
+	HRESULT updateParameters( Binder& binder ) override;
 
 	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include <Effects/Common/EffectImpl.hpp>
 #include "../PointSpritesRender.hpp"
+#include "../PolylineShader.h"
 #include <EASTL/variant.h>
 using namespace Hlsl::Render::Simple;
 
@@ -116,9 +117,9 @@ struct LinesRendering
 		HRESULT updateAvs( const AvsState& avs );
 	};
 
-	using GsData = Hlsl::Render::PolylineGS;
+	using GsData = PolylineShaderGS;
 
-	using PsData = Hlsl::Render::PolylinePS;
+	using PsData = PolylineShaderPS;
 };
 class SimpleLinesFx : public SimpleRenderer<LinesRendering>
 {

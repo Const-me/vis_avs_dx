@@ -119,6 +119,7 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 		{
 		case IDC_EDIT1:
 		{
+			CSLock __lock( renderLock );
 			int r, t;
 			r = GetDlgItemInt( hwndDlg, IDC_EDIT1, &t, FALSE );
 			if( t )
@@ -129,12 +130,16 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 		}
 		break;
 		case IDC_CHECK1:
+		{
+			CSLock __lock( renderLock );
 			g_this->newmode &= 0x7fffffff;
 			g_this->newmode |= IsDlgButtonChecked( hwndDlg, IDC_CHECK1 ) ? 0x80000000 : 0;
+		}
 			break;
 		case IDC_COMBO1:
 			if( HIWORD( wParam ) == CBN_SELCHANGE )
 			{
+				CSLock __lock( renderLock );
 				int r = SendDlgItemMessage( hwndDlg, IDC_COMBO1, CB_GETCURSEL, 0, 0 );
 				if( r != CB_ERR )
 				{
@@ -149,6 +154,7 @@ static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 	case WM_NOTIFY:
 		if( LOWORD( wParam ) == IDC_ALPHASLIDE )
 		{
+			CSLock __lock( renderLock );
 			g_this->newmode &= ~0xff00;
 			g_this->newmode |= ( SendDlgItemMessage( hwndDlg, IDC_ALPHASLIDE, TBM_GETPOS, 0, 0 ) & 0xff ) << 8;
 		}

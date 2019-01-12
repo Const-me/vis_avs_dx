@@ -9,6 +9,10 @@
 #include <commdlg.h>
 #include <process.h>
 
+#include <atlbase.h>
+using CSLock = CComCritSecLock<CComAutoCriticalSection>;
+extern CComAutoCriticalSection renderLock;
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <stdint.h>

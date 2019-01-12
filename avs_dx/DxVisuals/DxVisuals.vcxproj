@@ -102,6 +102,7 @@
     <ClCompile Include="Hlsl\Async\Worker.cpp" />
     <ClCompile Include="Interop\AboutDialog.cpp" />
     <ClCompile Include="Interop\Utils\Picture.cpp" />
+    <ClCompile Include="Effects\Render\PolylineShader.cpp" />
     <ClCompile Include="Resources\BlendModes.cpp" />
     <ClCompile Include="Effects\Misc\SetRenderMode.cpp" />
     <ClCompile Include="Effects\Trans\Convolution\convolutionHacks.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="Interop\AboutDialog.h" />
     <ClInclude Include="Effects\List\SavedContext.hpp" />
     <ClInclude Include="Interop\Utils\Picture.h" />
+    <ClInclude Include="Effects\Render\PolylineShader.h" />
     <ClInclude Include="Resources\BlendModes.h" />
     <ClInclude Include="Effects\Trans\Convolution\convolutionHacks.h" />
     <ClInclude Include="Effects\Trans\Convolution\Convolution.h" />

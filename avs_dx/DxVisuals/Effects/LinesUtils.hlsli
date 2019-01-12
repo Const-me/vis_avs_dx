@@ -11,20 +11,25 @@ cbuffer FrameGlobalData : register(b0)
 
 static const float alphaCutoffThreshold = 0.666;
 
+inline float4 alphaCutoffBlend( float3 rgb, float alpha )
+{
+    float4 result;
+    if( alpha >= alphaCutoffThreshold )
+        result = float4( rgb, 1 );
+    else
+    {
+        result = 0;
+        discard;
+    }
+    return result;
+}
+
 inline float4 alphaBlend( float3 rgb, float alpha )
 {
     float4 result;
     if( lineModeAllowAlpha )
         result = float4( rgb * alpha, alpha );
     else
-    {
-        if( alpha >= alphaCutoffThreshold )
-            result = float4( rgb, 1 );
-        else
-        {
-            result = 0;
-            discard;
-        }
-    }
+        result = alphaCutoffBlend( rgb, alpha );
     return result;
 }

@@ -31,9 +31,6 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "r_defs.h"
 #include "resource.h"
 #include "avs_eelif.h"
-#include <atlbase.h>
-
-using CSLock = CComCritSecLock<CComAutoCriticalSection>;
 
 #ifndef LASER
 
@@ -128,7 +125,6 @@ C_RBASE *R_DDM( char *desc )
 }
 
 static C_THISCLASS *g_this;
-extern ATL::CComAutoCriticalSection renderLock;
 
 static BOOL CALLBACK g_DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {

@@ -28,4 +28,5 @@ private:
 	HRESULT updateLineThickness();
 };
 
-HRESULT updateLineShaders( Shader<PolylineShaderGS>& gs, Shader<PolylineShaderPS>& ps );
+// This is for superscope effect. Because of the switchable line/dots modes, normal update workflow doesn't update and therefore doesn't recompile these shaders.
+HRESULT updateLineShaders( Shader<PolylineShaderGS>& geometry, Shader<PolylineShaderPS>& pixel );

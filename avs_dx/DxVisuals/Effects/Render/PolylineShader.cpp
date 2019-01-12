@@ -30,17 +30,19 @@ HRESULT PolylineShaderPS::updateLineThickness()
 	return updateThickness( sizeInPixels );
 }
 
-HRESULT updateLineShaders( Shader<PolylineShaderGS>& gs, Shader<PolylineShaderPS>& ps )
+HRESULT updateLineShaders( Shader<PolylineShaderGS>& geometry, Shader<PolylineShaderPS>& pixel )
 {
 	BoolHr hr;
-	if( S_OK == gs.data().updateAvs( nullptr ) )
+	if( S_OK == geometry.data().updateAvs( nullptr ) )
 	{
-		gs.compile( 0 );
+		geometry.setUpdated();
+		geometry.compile( 0 );
 		hr = true;
 	}
-	if( S_OK == ps.data().updateAvs( nullptr ) )
+	if( S_OK == pixel.data().updateAvs( nullptr ) )
 	{
-		ps.compile( 0 );
+		pixel.setUpdated();
+		pixel.compile( 0 );
 		hr = true;
 	}
 	return hr;

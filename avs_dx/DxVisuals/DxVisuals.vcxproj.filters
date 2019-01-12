@@ -316,6 +316,7 @@
     <ClInclude Include="Interop\AboutDialog.h" />
     <ClInclude Include="Hlsl\Async\Worker.h" />
     <ClInclude Include="Hlsl\Async\CompileWorker.h" />
+    <ClInclude Include="Render\setSizeDefines.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -448,6 +449,7 @@
     <ClCompile Include="Interop\AboutDialog.cpp" />
     <ClCompile Include="Hlsl\Async\Worker.cpp" />
     <ClCompile Include="Hlsl\Async\CompileWorker.cpp" />
+    <ClCompile Include="Render\setSizeDefines.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

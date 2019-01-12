@@ -48,6 +48,12 @@ void CompilerBase::cancelPending()
 	m_version++;
 }
 
+eAsyncStatus CompilerBase::asyncStatus() const
+{
+	// Byte reads are atomic, no need to lock
+	return m_status;
+}
+
 struct CompilerBase::ThreadContext
 {
 	Hlsl::Defines defines;

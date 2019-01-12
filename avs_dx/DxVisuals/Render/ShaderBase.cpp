@@ -2,27 +2,11 @@
 #include "ShaderBase.h"
 #include <Hlsl/compile.h>
 #include <Resources/createShader.hpp>
-
-extern int cfg_fs_d;
+#include "setSizeDefines.h"
 
 void ShaderBase2::setSizeDefines( const CStringA& hlsl, Hlsl::Defines &def )
 {
-	bool shaderNeedsResizeEvent = false;
-	if( hlsl.Find( "AVS_RENDER_SIZE" ) >= 0 )
-	{
-		def.set( "AVS_RENDER_SIZE", getRenderSizeString() );
-		shaderNeedsResizeEvent = true;
-	}
-	if( hlsl.Find( "AVS_PIXEL_PARTICLES" ) >= 0 )
-	{
-		def.set( "AVS_PIXEL_PARTICLES", cfg_fs_d ? "1" : "0" );
-		shaderNeedsResizeEvent = true;
-	}
-
-	if( shaderNeedsResizeEvent )
-		subscribeHandler( this );
-	else
-		unsubscribeHandler( this );
+	::setSizeDefines( hlsl, def, this );
 }
 
 ShaderBase2::~ShaderBase2()

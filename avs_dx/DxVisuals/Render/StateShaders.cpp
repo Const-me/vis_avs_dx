@@ -4,6 +4,7 @@
 #include <Effects/shadersCode.h>
 #include <Resources/createShader.hpp>
 #include <Utils/md4.h>
+#include "setSizeDefines.h"
 
 namespace
 {
@@ -97,7 +98,41 @@ void main()
 		totalStateSize = stateOffset;
 		return hlsl;
 	}
+
+	template<bool init, bool usesBeat, bool onBeat>
+	static void setStateMacros( Hlsl::Defines& def )
+	{
+		if( init )
+		{
+			def.set( "INIT_STATE", "1" );
+			if( usesBeat )
+				def.set( "IS_BEAT", "0" );
+			return;
+		}
+
+		def.set( "INIT_STATE", "0" );
+		if( usesBeat )
+			def.set( "IS_BEAT", onBeat ? "1" : "0" );
+	}
 }
+
+StateShaders::StateShaders() :
+	m_initCompiler( eStage::Compute, Hlsl::includes() ),
+	m_updateCompiler( eStage::Compute, Hlsl::includes() )
+{ }
+
+StateShaders::~StateShaders()
+{
+	m_updateCompiler.shutdown();
+	unsubscribeHandler( this );
+}
+
+StateShaders::operator bool() const
+{
+	return m_init && m_update && m_updateOnBeat;
+}
+
+using namespace Hlsl;
 
 HRESULT StateShaders::compile( const vector<EffectStateShader> &effects, UINT& totalStateSize )
 {
@@ -105,36 +140,84 @@ HRESULT StateShaders::compile( const vector<EffectStateShader> &effects, UINT& t
 	const CStringA hlsl = assembleEffects( effects, anyBeat, totalStateSize );
 
 	const __m128i hash = hashString( hlsl );
-	if( isFailed() && hash == m_hash )
+	if( m_failed && hash == m_hash )
 		return S_FALSE;
 	m_hash = hash;
 
-	dropShader();
-	init = nullptr;
+	dropShaders();
+	Defines def;
+	setSizeDefines( hlsl, def, this );
 
-	vector<uint8_t> dxbc;
-	Hlsl::Defines def;
-	def.set( "INIT_STATE", "0" );
-
-	// Compile two main shaders
-	CHECK( __super::compile( "UpdateState", hlsl, Hlsl::includes(), def, anyBeat, dxbc ) );
-
-	// Compile state initialization shader
-	def.reset( "INIT_STATE", "1" );
 	if( anyBeat )
-		def.reset( "IS_BEAT", "0" );
+	{
+		const Job init{ "InitState", &m_init.p, &setStateMacros<true, true, false> };
+		m_initCompiler.submit( hlsl, def, &init, 1 );
 
-	setFailed();
-	CHECK( Hlsl::compile( eStage::Compute, hlsl, "InitState", Hlsl::includes(), def, dxbc ) );
-	CHECK( createShader( dxbc, init ) );
-	setGood();
+		const Job update[ 2 ] =
+		{
+			Job{ "UpdateState", &m_update.p, &setStateMacros<false, true, false> },
+			Job{ "UpdateStateBeat", &m_updateOnBeat.p, &setStateMacros<false, true, true> },
+		};
+		m_updateCompiler.submit( hlsl, def, update, 2 );
+	}
+	else
+	{
+		const Job init{ "InitState", &m_init.p, &setStateMacros<true, false, false> };
+		m_initCompiler.submit( hlsl, def, &init, 1 );
 
-	logInfo( "Compiled the state shaders" );
+		const Job update{ "UpdateState", &m_update.p, &m_updateOnBeat.p, &setStateMacros<false, false, false> };
+		m_updateCompiler.submit( hlsl, def, &update, 1 );
+	}
+
+	m_pending = true;
+	m_initCompiler.join();
+	const eAsyncStatus as = m_initCompiler.asyncStatus();
+	if( as == eAsyncStatus::Failed )
+	{
+		m_failed = true;
+		return E_FAIL;
+	}
+
+	m_failed = false;
+	logInfo( "Compiled the state init shader" );
+	return S_OK;
+}
+
+HRESULT StateShaders::bindInitShader()
+{
+	if( !m_init )
+		return E_POINTER;
+	bindShader<eStage::Compute>( m_init );
+	return S_OK;
+}
+
+HRESULT StateShaders::bindUpdateShader( bool isbeat )
+{
+	if( m_failed )
+		return E_FAIL;
+
+	if( m_pending )
+	{
+		m_updateCompiler.join();
+		const eAsyncStatus as = m_updateCompiler.asyncStatus();
+		if( as == eAsyncStatus::Failed )
+		{
+			m_failed = true;
+			return E_FAIL;
+		}
+		m_pending = false;
+	}
+
+	bindShader<eStage::Compute>( isbeat ? m_updateOnBeat : m_update );
 	return S_OK;
 }
 
 void StateShaders::onRenderSizeChanged()
 {
-	init = nullptr;
-	__super::onRenderSizeChanged();
+	dropShaders();
+}
+
+void StateShaders::dropShaders()
+{
+	m_init = m_update = m_updateOnBeat = nullptr;
 }

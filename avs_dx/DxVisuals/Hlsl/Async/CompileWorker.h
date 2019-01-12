@@ -74,6 +74,8 @@ namespace Hlsl
 		// Cancel any in-flight requests, if any. It doesn't currently cancel anything just bumps version so the pending results are discarded.
 		void cancelPending();
 
+		eAsyncStatus asyncStatus() const;
+
 	private:
 
 		mutable CComAutoCriticalSection m_cs;

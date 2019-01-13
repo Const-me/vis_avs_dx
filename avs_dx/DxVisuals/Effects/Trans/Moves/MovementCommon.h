@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include <Effects/Common/EffectImpl.hpp>
 #include <Expressions/CompiledShader.h>
 #include "GridMesh.h"

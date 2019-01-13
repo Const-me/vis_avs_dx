@@ -9,3 +9,5 @@ CStringA getPrivateProfileString( const char* lpAppName, const char* lpKeyName, 
 HRESULT msgWaitForSingleObject( HANDLE h, DWORD ms );
 
 constexpr HRESULT E_TIMEOUT = HRESULT_FROM_WIN32( ERROR_TIMEOUT );
+
+void logLoadingPreset( const char* path );

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "avsUtils.h"
+#include <atlpath.h>
 
 CStringA getPrivateProfileString( const char* lpAppName, const char* lpKeyName, const char* lpFileName )
 {
@@ -49,4 +50,12 @@ HRESULT msgWaitForSingleObject( HANDLE h, DWORD ms )
 			return hr;
 		return E_UNEXPECTED;	// Unasked IO_COMPLETION or ABANDONED?
 	}
+}
+
+void logLoadingPreset( const char* path )
+{
+	CPathA dir = path;
+	dir.RemoveFileSpec();
+	dir.RemoveFileSpec();
+	logInfo( "Loading preset %s", path + dir.m_strPath.GetLength() + 1 );
 }

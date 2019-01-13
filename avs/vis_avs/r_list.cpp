@@ -36,6 +36,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "undo.h"
 #include "avs_eelif.h"
 #include <Threads/threadsApi.h>
+#include <Interop/avsUtils.h>
 
 #define PUT_INT(y) data[pos]=(y)&255; data[pos+1]=(y>>8)&255; data[pos+2]=(y>>16)&255; data[pos+3]=(y>>24)&255
 #define GET_INT() (data[pos]|(data[pos+1]<<8)|(data[pos+2]<<16)|(data[pos+3]<<24))
@@ -641,6 +642,7 @@ int C_RenderListClass::__SavePreset( char *filename )
 int C_RenderListClass::__LoadPreset( char *filename, int clear )
 {
 	UPDATE_PRESET();
+	logLoadingPreset( filename );
 	unsigned char *data = (unsigned char *)GlobalAlloc( GPTR, 1024 * 1024 );
 	int success = 1;
 	if( clear ) clearRenders();

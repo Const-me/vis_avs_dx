@@ -185,7 +185,7 @@ const char* levelString( eLogLevel lvl )
 void logMessage( eLogLevel lvl, const CStringA& msg )
 {
 #ifdef DEBUG
-	char buffer[ 1024 ];
+	char buffer[ 4096 ];
 	sprintf_s( buffer, "%s%s\r\n", levelString( lvl ), cstr( msg ) );
 	OutputDebugStringA( buffer );
 #endif

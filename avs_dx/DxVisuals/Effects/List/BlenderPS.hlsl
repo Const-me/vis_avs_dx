@@ -29,9 +29,9 @@ float4 main( float4 screenSpace : SV_Position ) : SV_Target
         case 4: // Additive
             return saturate( s + d );
         case 5: // Subtractive 1
-            return saturate( s - d );
-        case 6: // Subtractive 2
             return saturate( d - s );
+        case 6: // Subtractive 2
+            return saturate( s - d );
         case 7: // Every other line
             return ( 0 == ( (uint) pos.y & 1 ) ) ? s : d;
         case 8: // Every other pixel

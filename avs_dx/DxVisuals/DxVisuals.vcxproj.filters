@@ -320,6 +320,7 @@
     <ClInclude Include="Effects\Render\PolylineShader.h" />
     <ClInclude Include="Hlsl\Async\asyncNotifier.h" />
     <ClInclude Include="Interop\waitCursor.h" />
+    <ClInclude Include="Effects\Trans\DynamicShift\DynamicShift.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -455,6 +456,7 @@
     <ClCompile Include="Hlsl\Compile\compile.cpp" />
     <ClCompile Include="Effects\Render\PolylineShader.cpp" />
     <ClCompile Include="Hlsl\Async\asyncNotifier.cpp" />
+    <ClCompile Include="Effects\Trans\DynamicShift\DynamicShift.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -539,6 +541,7 @@
     <FxCompile Include="Effects\Trans\Convolution\ConvolutionCS.hlsl" />
     <FxCompile Include="Effects\Trans\ColorModifier\ColorModifierCS.hlsl" />
     <FxCompile Include="Effects\Trans\Moves\MovementPS.hlsl" />
+    <FxCompile Include="Effects\Trans\DynamicShift\DynamicShiftVS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

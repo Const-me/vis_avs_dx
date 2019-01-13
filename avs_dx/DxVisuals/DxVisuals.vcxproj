@@ -98,6 +98,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Effects\Trans\DynamicShift\DynamicShift.cpp" />
     <ClCompile Include="Hlsl\Async\asyncNotifier.cpp" />
     <ClCompile Include="Hlsl\Async\CompileWorker.cpp" />
     <ClCompile Include="Hlsl\Async\Worker.cpp" />
@@ -112,6 +113,7 @@
     <ClCompile Include="Effects\Trans\ColorMap\ColorMap.cpp" />
     <ClCompile Include="Effects\Common\ApeEffectBase.cpp" />
     <ClCompile Include="Effects\Render\DotFountain\DotFountain.cpp" />
+    <ClInclude Include="Effects\Trans\DynamicShift\DynamicShift.h" />
     <ClInclude Include="Hlsl\Async\asyncNotifier.h" />
     <ClInclude Include="Hlsl\Async\CompileWorker.h" />
     <ClInclude Include="Hlsl\Async\Worker.h" />
@@ -703,6 +705,10 @@
     <FxCompile Include="Effects\Trans\Convolution\ConvolutionCS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Trans\DynamicShift\DynamicShiftVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Effects\Trans\Interference\InterferencePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>

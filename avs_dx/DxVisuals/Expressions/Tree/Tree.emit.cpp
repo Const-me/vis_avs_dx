@@ -92,7 +92,7 @@ void Tree::emitInternal<eInternalFunc::If>( EmitContext& ec, const Node& node, i
 {
 	if( node.length != 3 )
 		throw std::invalid_argument( "if() must have exactly 3 arguments" );
-	ec += "( ";
+	ec += "( ( ";
 	int i = ind + 1;
 	emitNode( ec, i );
 	ec += " ) ? ";
@@ -101,6 +101,7 @@ void Tree::emitInternal<eInternalFunc::If>( EmitContext& ec, const Node& node, i
 	ec += " : ";
 	nextSibling( i );
 	emitNode( ec, i );
+	ec += " )";
 }
 
 template<>

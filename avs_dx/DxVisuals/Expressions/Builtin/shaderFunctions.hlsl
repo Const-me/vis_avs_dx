@@ -46,19 +46,21 @@ inline float getspec( float band, float width, uint channel )
     const float vVals[ 3 ] = { 0.25, 0.125, 0.375 };
     const float v = vVals[ channel ];
     const float mul = 1.0 / 576.0;
-    if( width < 2.0 * mul )
-        return texVisDataU8.SampleLevel( sampleBilinear, float2( band * mul, v ), 0 );
 
-    width *= 0.5;
-    float2 rangeFloat = saturate( float2( band - width, band + width ) );
-    uint2 rangeInt = (uint2) ( rangeFloat * 576.0 );
+    width = abs( width ) * 0.5;
+    const float2 rangeFloat = saturate( float2( band - width, band + width ) );
+    const uint2 rangeInt = (uint2) ( rangeFloat * 576.0 );
+
+    if( rangeInt.y < rangeInt.x + 4 )
+        return texVisDataU8.SampleLevel( sampleBilinear, float2( (float) ( rangeInt.y + rangeInt.x / 2 ) * mul, v ), 0 );
+
     float res = 0;
     for( uint x = rangeInt.x; x < rangeInt.y; x += 2 )
     {
         float u = (float) x * mul;
         res += texVisDataU8.SampleLevel( sampleBilinear, float2( u, v ), 0 );
     }
-    const uint count = ( rangeInt.y - rangeInt.x ) << 1;
+    const uint count = ( rangeInt.y - rangeInt.x ) / 2;
     return res / (float) count;
 }
 
@@ -69,19 +71,21 @@ inline float getosc( float band, float width, uint channel )
     const float vVals[ 3 ] = { 0.75, 0.625, 0.875 };
     const float v = vVals[ channel ];
     const float mul = 1.0 / 576.0;
-    if( width < 2.0 * mul )
-        return texVisDataS8.SampleLevel( sampleBilinear, float2( band * mul, v ), 0 );
 
-    width *= 0.5;
-    float2 rangeFloat = saturate( float2( band - width, band + width ) );
-    uint2 rangeInt = (uint2) ( rangeFloat * 576.0 );
+    width = abs( width ) * 0.5;
+    const float2 rangeFloat = saturate( float2( band - width, band + width ) );
+    const uint2 rangeInt = (uint2) ( rangeFloat * 576.0 );
+
+    if( rangeInt.y < rangeInt.x + 4 )
+        return texVisDataS8.SampleLevel( sampleBilinear, float2( (float)( rangeInt.y + rangeInt.x / 2 ) * mul, v ), 0 );
+
     float res = 0;
     for( uint x = rangeInt.x; x < rangeInt.y; x += 2 )
     {
         float u = (float) x * mul;
         res += texVisDataS8.SampleLevel( sampleBilinear, float2( u, v ), 0 );
     }
-    const uint count = ( rangeInt.y - rangeInt.x ) * 2;
+    const uint count = ( rangeInt.y - rangeInt.x ) / 2;
     return res / (float) count;
 }
 

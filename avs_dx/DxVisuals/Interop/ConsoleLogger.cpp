@@ -170,23 +170,23 @@ const char* levelString( eLogLevel lvl )
 	switch( lvl )
 	{
 	case eLogLevel::Error:
-		return "[error] ";
+		return "[error]";
 	case eLogLevel::Warning:
-		return "[warning] ";
+		return "[warning]";
 	case eLogLevel::Info:
-		return "[info] ";
+		return "[info]";
 	case eLogLevel::Debug:
 		return "";
 	}
-	return "[BS] ";
+	return "[BS]";
 }
 #endif
 
 void logMessage( eLogLevel lvl, const CStringA& msg )
 {
 #ifdef DEBUG
-	char buffer[ 4096 ];
-	sprintf_s( buffer, "%s%s\r\n", levelString( lvl ), cstr( msg ) );
+	CStringA buffer;
+	buffer.Format( "%s %s\r\n", levelString( lvl ), cstr( msg ) );
 	OutputDebugStringA( buffer );
 #endif
 	logger().add( lvl, msg );

@@ -57,5 +57,5 @@ void logLoadingPreset( const char* path )
 	CPathA dir = path;
 	dir.RemoveFileSpec();
 	dir.RemoveFileSpec();
-	logInfo( "Loading preset %s", path + dir.m_strPath.GetLength() + 1 );
+	logInfo( "Loading preset \"%s\"", path + dir.m_strPath.GetLength() + 1 );
 }

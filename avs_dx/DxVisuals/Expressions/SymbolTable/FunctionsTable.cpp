@@ -66,6 +66,18 @@ bool FunctionsTable::tryLookup( const CStringA& name, int& id, eVarType &vt )
 		return true;
 	}
 
+	// Special case for sqrt, AVS takes absolute value before the root
+	if( name.GetLength() == 4 && name == "sqrt" )
+	{
+		auto avs = lookupShaderFunc( "avs_sqrt" );
+		assert( avs );
+		id = (int)table.size();
+		// Lookup table needs the NSEEL name for caching. The vector needs HLSL name to emit the fixed version.
+		table.emplace_back( Function{ eFunctionKind::Avs, eVarType::f32, "avs_sqrt" } );
+		map[ "sqrt" ] = id;
+		return true;
+	}
+
 	// Search for built-in function in ../Builtin/*.hlsl
 	// These sources are parsed in compile time, and the hash map is initialized in static constructors i.e. when DllMain is called with DLL_PROCESS_ATTACH
 	auto avs = lookupShaderFunc( name );

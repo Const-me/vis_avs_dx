@@ -54,7 +54,7 @@ inline float getspec( float band, float width, uint channel )
     float res;
     if( rangeInt.y < rangeInt.x + 4 )
         res = texVisDataU8.SampleLevel( sampleBilinear, float2( (float) ( rangeInt.y + rangeInt.x / 2 ) * mul, v ), 0 );
-	else
+    else
     {
         res = 0;
         for( uint x = rangeInt.x; x < rangeInt.y; x += 2 )
@@ -82,8 +82,8 @@ inline float getosc( float band, float width, uint channel )
 
     float res;
     if( rangeInt.y < rangeInt.x + 4 )
-        res = texVisDataS8.SampleLevel( sampleBilinear, float2( (float)( rangeInt.y + rangeInt.x / 2 ) * mul, v ), 0 );
-	else
+        res = texVisDataS8.SampleLevel( sampleBilinear, float2( (float) ( rangeInt.y + rangeInt.x / 2 ) * mul, v ), 0 );
+    else
     {
         res = 0;
         for( uint x = rangeInt.x; x < rangeInt.y; x += 2 )
@@ -110,6 +110,11 @@ inline uint bor( float a, float b )
 inline uint bnot( float a )
 {
     return ( a == 0.0 ) ? 1 : 0;
+}
+
+inline float avs_sqrt( float f )
+{
+    return sqrt( abs( f ) );
 }
 
 [numthreads( 1, 1, 1 )]

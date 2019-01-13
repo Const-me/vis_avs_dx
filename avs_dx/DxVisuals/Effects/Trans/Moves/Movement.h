@@ -37,7 +37,7 @@ struct StaticMovementStructs: public MovementStructs
 
 class Movement : public EffectBase1<StaticMovementStructs>, public MovementFx
 {
-	using DynamicShader = Shader<DMovePS>;
+	using DynamicShader = Shader<MovementPS>;
 	using FuzzifyShader = Shader<FuzzifyPS>;
 	using BlockyOutShader = Shader<BlockyOutPS>;
 

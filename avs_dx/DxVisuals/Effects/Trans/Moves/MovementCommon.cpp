@@ -23,27 +23,38 @@ HRESULT MovementStructs::CommonVsData::updateAvs( bool rectCoords )
 	return res;
 }
 
-HRESULT MovementFx::render( RenderTargets& rt, bool bilinear, bool wrap, UINT samplerSlot, bool blend, bool rectCoords )
+HRESULT MovementFx::render( RenderTargets& rt, bool bilinear, bool wrap, UINT samplerSlot, eMovementBlend blend, bool rectCoords )
 {
 	CHECK( m_sampler.update( bilinear, wrap ) );
 	BIND_PS_SAMPLER( samplerSlot, m_sampler );
 
 	BoundPsResource bound;
-	if( blend )
+	switch( blend )
 	{
-		CHECK( rt.blendToNext( bound ) );
-		omCustomBlend( 0.5f );
-	}
-	else
-	{
+	case eMovementBlend::None:
 		CHECK( rt.writeToNext( bound ) );
 		omBlend( eBlend::None );
+		break;
+
+	case eMovementBlend::Fifty:
+		CHECK( rt.blendToNext( bound ) );
+		omCustomBlend( 0.5f );
+		break;
+
+	case eMovementBlend::PerVertex:
+		CHECK( rt.blendToNext( bound ) );
+		omBlend( eBlend::Premultiplied );
+		break;
+
+	default:
+		return E_INVALIDARG;
 	}
+
 	CHECK( m_mesh.draw( rectCoords ) );
 	return S_OK;
 }
 
-HRESULT MovementFx::render( RenderTargets& rt, bool bilinear, bool wrap, UINT samplerSlot, bool blend, bool rectCoords, int sourceBuffer )
+HRESULT MovementFx::render( RenderTargets& rt, bool bilinear, bool wrap, UINT samplerSlot, eMovementBlend blend, bool rectCoords, int sourceBuffer )
 {
 	if( 0 == sourceBuffer )
 		return render( rt, bilinear, wrap, samplerSlot, blend, rectCoords );
@@ -59,11 +70,20 @@ HRESULT MovementFx::render( RenderTargets& rt, bool bilinear, bool wrap, UINT sa
 		sourceSrv = StaticResources::blackTexture;
 	BoundPsResource bound{ 3, sourceSrv };
 
-	if( blend )
-		omCustomBlend( 0.5f );
-	else
+	switch( blend )
+	{
+	case eMovementBlend::None:
 		omBlend( eBlend::None );
-
+		break;
+	case eMovementBlend::Fifty:
+		omCustomBlend( 0.5f );
+		break;
+	case eMovementBlend::PerVertex:
+		omBlend( eBlend::Premultiplied );
+		break;
+	default:
+		return E_INVALIDARG;
+	}
 	CHECK( m_mesh.draw( rectCoords ) );
 	return S_OK;
 }

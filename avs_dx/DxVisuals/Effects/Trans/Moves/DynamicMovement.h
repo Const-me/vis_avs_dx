@@ -15,27 +15,20 @@ struct DynamicMovementStructs: public MovementStructs
 	{
 		StateData( AvsState& ass );
 
-		HRESULT update( AvsState& avs )
-		{
-			BoolHr hr = Compiler::update( avs.effect_exp[ 3 ].get(), avs.effect_exp[ 1 ].get(), avs.effect_exp[ 2 ].get(), avs.effect_exp[ 0 ].get() );
-			hr.combine( updateScreenSize() );
-			return hr;
-		}
-
+		HRESULT update( AvsState& avs );
 		HRESULT defines( Hlsl::Defines& def ) const;
 	};
 
 	struct VsData : public CommonVsData
 	{
-		HRESULT updateAvs( const AvsState& avs )
-		{
-			return CommonVsData::updateAvs( avs.rectcoords );
-		}
-
+		HRESULT updateAvs( const AvsState& avs );
 		HRESULT defines( Hlsl::Defines& def ) const;
 	};
 
-	using PsData = DMovePS;
+	struct PsData : public DMovePS
+	{
+		HRESULT updateAvs( const AvsState& avs );
+	};
 };
 
 class DynamicMovement : public EffectBase1<DynamicMovementStructs>, public MovementFx

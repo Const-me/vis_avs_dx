@@ -16,7 +16,8 @@ struct sInput
 
 struct sOutput
 {
-    float2 tc : TEXCOORD0;
+	// Z component holds per-vertex alpha.
+    float3 tc : TEXCOORD0;
     float4 pos : SV_Position;
 };
 
@@ -28,6 +29,7 @@ sOutput main( sInput inputVertex )
     const float2 centered = scaleToUniform * xy;
     float d = length( centered );
     float r = atan2( centered.y, centered.x ) + ( M_PI / 2 );
+    float alpha = 0.5;
 
 #if NEEDS_RNG
     uint rng_state = avs_rand_init( getRandomSeed( inputVertex.tc ) );
@@ -39,7 +41,7 @@ SHADER_CODE
 
     sOutput res;
     if( rectangularCoords )
-        res.tc = float2( x, y ) * 0.5 + float2( 0.5, 0.5 );
+        res.tc.xy = float2( x, y ) * 0.5 + float2( 0.5, 0.5 );
     else
     {
         r -= ( M_PI / 2 );
@@ -47,8 +49,9 @@ SHADER_CODE
         sincos( r, resultVec.y, resultVec.x );
         resultVec *= d;
         const float2 antiScale = ( float2( 0.5, 0.5 ) / scaleToUniform );
-        res.tc = resultVec * antiScale + float2( 0.5, 0.5 );
+        res.tc.xy = resultVec * antiScale + float2( 0.5, 0.5 );
     }
     res.pos = float4( inputVertex.pos, 0.5, 1 );
+    res.tc.z = saturate( alpha );
     return res;
 }

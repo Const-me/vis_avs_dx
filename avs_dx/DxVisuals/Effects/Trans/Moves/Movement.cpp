@@ -134,7 +134,7 @@ HRESULT Movement::render( bool isBeat, RenderTargets& rt )
 		if( !ps.bind( isBeat ) )
 			return S_FALSE;
 		const UINT psSamplerSlot = ps.data().bindSampler;
-		return MovementFx::render( rt, avs->subpixel, avs->wrap, psSamplerSlot, avs->blend, avs->rectangular );
+		return MovementFx::render( rt, avs->subpixel, avs->wrap, psSamplerSlot, avs->blend ? eMovementBlend::Fifty : eMovementBlend::None, avs->rectangular );
 	}
 	return eastl::visit( [ & ]( auto& s ) { return renderFullscreen( s, rt ); }, m_ps );
 }

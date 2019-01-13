@@ -36,7 +36,7 @@ struct DynamicDistanceStructs : public MovementStructs
 		}
 	};
 
-	using PsData = DMovePS;
+	using PsData = MovementPS;
 };
 
 class DynamicDistance : public EffectBase1<DynamicDistanceStructs>, public MovementFx

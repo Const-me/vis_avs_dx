@@ -28,6 +28,13 @@ struct MovementStructs
 	};
 };
 
+enum struct eMovementBlend : uint8_t
+{
+	None,
+	Fifty,
+	PerVertex,
+};
+
 class MovementFx
 {
 	GridMesh m_mesh;
@@ -35,7 +42,7 @@ class MovementFx
 
 protected:
 
-	HRESULT render( RenderTargets& rt, bool bilinear, bool wrap, UINT samplerSlot, bool blend, bool rectCoords );
+	HRESULT render( RenderTargets& rt, bool bilinear, bool wrap, UINT samplerSlot, eMovementBlend blend, bool rectCoords );
 
-	HRESULT render( RenderTargets& rt, bool bilinear, bool wrap, UINT samplerSlot, bool blend, bool rectCoords, int sourceBuffer );
+	HRESULT render( RenderTargets& rt, bool bilinear, bool wrap, UINT samplerSlot, eMovementBlend blend, bool rectCoords, int sourceBuffer );
 };

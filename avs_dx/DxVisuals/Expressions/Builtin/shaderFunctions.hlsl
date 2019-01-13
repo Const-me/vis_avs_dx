@@ -51,17 +51,21 @@ inline float getspec( float band, float width, uint channel )
     const float2 rangeFloat = saturate( float2( band - width, band + width ) );
     const uint2 rangeInt = (uint2) ( rangeFloat * 576.0 );
 
+    float res;
     if( rangeInt.y < rangeInt.x + 4 )
-        return texVisDataU8.SampleLevel( sampleBilinear, float2( (float) ( rangeInt.y + rangeInt.x / 2 ) * mul, v ), 0 );
-
-    float res = 0;
-    for( uint x = rangeInt.x; x < rangeInt.y; x += 2 )
+        res = texVisDataU8.SampleLevel( sampleBilinear, float2( (float) ( rangeInt.y + rangeInt.x / 2 ) * mul, v ), 0 );
+	else
     {
-        float u = (float) x * mul;
-        res += texVisDataU8.SampleLevel( sampleBilinear, float2( u, v ), 0 );
+        res = 0;
+        for( uint x = rangeInt.x; x < rangeInt.y; x += 2 )
+        {
+            float u = (float) x * mul;
+            res += texVisDataU8.SampleLevel( sampleBilinear, float2( u, v ), 0 );
+        }
+        const uint count = ( rangeInt.y - rangeInt.x ) / 2;
+        res /= (float) count;
     }
-    const uint count = ( rangeInt.y - rangeInt.x ) / 2;
-    return res / (float) count;
+    return res;
 }
 
 // returns waveform data centered at 'band', (0..1), sampled 'width' (0..1) wide.
@@ -76,17 +80,21 @@ inline float getosc( float band, float width, uint channel )
     const float2 rangeFloat = saturate( float2( band - width, band + width ) );
     const uint2 rangeInt = (uint2) ( rangeFloat * 576.0 );
 
+    float res;
     if( rangeInt.y < rangeInt.x + 4 )
-        return texVisDataS8.SampleLevel( sampleBilinear, float2( (float)( rangeInt.y + rangeInt.x / 2 ) * mul, v ), 0 );
-
-    float res = 0;
-    for( uint x = rangeInt.x; x < rangeInt.y; x += 2 )
+        res = texVisDataS8.SampleLevel( sampleBilinear, float2( (float)( rangeInt.y + rangeInt.x / 2 ) * mul, v ), 0 );
+	else
     {
-        float u = (float) x * mul;
-        res += texVisDataS8.SampleLevel( sampleBilinear, float2( u, v ), 0 );
+        res = 0;
+        for( uint x = rangeInt.x; x < rangeInt.y; x += 2 )
+        {
+            float u = (float) x * mul;
+            res += texVisDataS8.SampleLevel( sampleBilinear, float2( u, v ), 0 );
+        }
+        const uint count = ( rangeInt.y - rangeInt.x ) / 2;
+        res /= (float) count;
     }
-    const uint count = ( rangeInt.y - rangeInt.x ) / 2;
-    return res / (float) count;
+    return res;
 }
 
 inline uint band( float a, float b )

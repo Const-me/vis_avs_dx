@@ -1,6 +1,5 @@
 #include "VisCommon.hlsli"
 #ifndef AVS_SHADER
-// <macro-resource name="bindPrevFrame" macro="BIND_PREV_FRAME" />
 static const float3 values = float3( 1, 1, 1 );
 static const bool exclude = false;
 static const float3 excludeColor = float3( 1, 1, 1 );

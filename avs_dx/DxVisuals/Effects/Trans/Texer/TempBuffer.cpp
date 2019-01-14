@@ -8,7 +8,7 @@ HRESULT TempBuffer::create()
 
 	constexpr UINT capacity = 1024;
 
-	CD3D11_BUFFER_DESC bufferDesc{ sizeof( Vector2 ) * capacity, D3D11_BIND_UNORDERED_ACCESS };
+	CD3D11_BUFFER_DESC bufferDesc{ sizeof( Vector2 ) * capacity, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS };
 	bufferDesc.StructureByteStride = sizeof( Vector2 );
 	bufferDesc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
 
@@ -21,5 +21,12 @@ HRESULT TempBuffer::create()
 	uavDesc.Buffer.Flags = D3D11_BUFFER_UAV_FLAG_APPEND;
 
 	CHECK( device->CreateUnorderedAccessView( buffer, &uavDesc, &m_uav ) );
+
+	CD3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{ D3D11_SRV_DIMENSION_BUFFER, DXGI_FORMAT_UNKNOWN };
+	srvDesc.Buffer.FirstElement = 0;
+	srvDesc.Buffer.NumElements = capacity;
+
+	CHECK( device->CreateShaderResourceView( buffer, &srvDesc, &m_srv ) );
+
 	return S_OK;
 }

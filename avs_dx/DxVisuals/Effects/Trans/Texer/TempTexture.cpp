@@ -4,8 +4,7 @@
 
 HRESULT TempTexture::update()
 {
-	const CSize rt = getRenderSize();
-	const CSize size = { ( rt.cx + 7 ) / 8, ( rt.cy + 7 ) / 8 };
+	const CSize size = getRenderSize();
 	if( size == m_size )
 		return S_FALSE;
 
@@ -13,7 +12,7 @@ HRESULT TempTexture::update()
 	m_srv = nullptr;
 	m_uav = nullptr;
 
-	constexpr DXGI_FORMAT fmt = DXGI_FORMAT_R16G16B16A16_UINT;
+	constexpr DXGI_FORMAT fmt = DXGI_FORMAT_R8_UINT;
 	CComPtr<ID3D11Texture2D> tex;
 	const CD3D11_TEXTURE2D_DESC texDesc{ fmt, (UINT)size.cx, (UINT)size.cy, 1, 1, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS };
 	CHECK( device->CreateTexture2D( &texDesc, nullptr, &tex ) );

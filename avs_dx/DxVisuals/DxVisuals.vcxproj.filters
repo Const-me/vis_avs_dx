@@ -555,9 +555,9 @@
     <FxCompile Include="Effects\Trans\Texer\TexerVS.hlsl" />
     <FxCompile Include="Effects\Trans\Texer\TexerGS.hlsl" />
     <FxCompile Include="Effects\Trans\Texer\TexerPS.hlsl" />
-    <FxCompile Include="Effects\Trans\Texer\TexerReduceCS.hlsl" />
     <FxCompile Include="Effects\Trans\Texer\TexerProduceCS.hlsl" />
     <FxCompile Include="Effects\Trans\Texer\TexerState.hlsl" />
+    <FxCompile Include="Effects\Trans\Texer\LocalMaximaCS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

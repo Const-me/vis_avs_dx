@@ -45,7 +45,7 @@ class Texer : public EffectBase1<TexerStructs, ApeEffectBase>
 	CComPtr<ID3D11UnorderedAccessView> m_reducedUav;
 	CComPtr<ID3D11ShaderResourceView> m_reducedSrv;
 
-	Shader<Hlsl::Trans::Texer::TexerReduceCS> m_reduce;
+	Shader<Hlsl::Trans::Texer::LocalMaximaCS> m_maxima;
 	Shader<Hlsl::Trans::Texer::TexerProduceCS> m_produce;
 
 	TempTexture m_tmpTexture;

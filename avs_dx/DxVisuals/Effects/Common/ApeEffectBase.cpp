@@ -4,7 +4,7 @@
 #include <Utils/DynamicArray.hpp>
 #include <atlpath.h>
 
-constexpr uint8_t apeEffectsCount = 3;
+constexpr uint8_t apeEffectsCount = 4;
 
 namespace
 {
@@ -15,7 +15,11 @@ namespace
 		ApeEffectBase::pfnCreateEffect pfnCreate;
 	};
 
-	static DynamicArray<sApeEffect, apeEffectsCount> s_factories;
+	DynamicArray<sApeEffect, apeEffectsCount> &factories()
+	{
+		static DynamicArray<sApeEffect, apeEffectsCount> s_factories;
+		return s_factories;
+	}
 
 	HRESULT getModuleFileName( HINSTANCE hDllInstance, CStringA& result )
 	{
@@ -40,7 +44,7 @@ ApeEffectBase::Metadata::Metadata( const char* name, const char* apeName, pfnCre
 {
 	// __debugbreak();
 	sApeEffect fx{ apeName, name, classFactory };
-	s_factories.add( fx );
+	factories().add( fx );
 }
 
 HRESULT ApeEffectBase::create( HINSTANCE hDllInstance, const char* nameEffect, C_RBASE* pThis )
@@ -48,11 +52,11 @@ HRESULT ApeEffectBase::create( HINSTANCE hDllInstance, const char* nameEffect, C
 	CStringA nameDll;
 	CHECK( getModuleFileName( hDllInstance, nameDll ) );
 
-	for( const sApeEffect &f : s_factories )
+	for( const sApeEffect &f : factories() )
 	{
 		if( 0 != nameDll.CompareNoCase( f.ape ) )
 			continue;
-		if( 0 != lstrcmpiA( nameEffect, f.name ) )
+		if( nullptr != f.name && 0 != lstrcmpiA( nameEffect, f.name ) )
 			continue;
 		return f.pfnCreate( pThis );
 	}

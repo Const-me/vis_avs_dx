@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "RenderTarget.h"
 #include <Interop/interop.h>
-#include <Render/Binder.h>
+#include <Resources/staticResources.h>
 
 HRESULT RenderTarget::create( const CSize& size, bool rt, bool unorderedAccess )
 {
@@ -108,8 +108,10 @@ HRESULT RenderTarget::createUav()
 	return S_OK;
 }
 
-BoundSrv<eStage::Pixel> RenderTarget::psView() const
+BoundSrv<eStage::Pixel> RenderTarget::psView( UINT slot ) const
 {
-	assert( nullptr != m_srv );
-	return eastl::move( BoundSrv<eStage::Pixel>{ Binder::psPrevFrame, m_srv } );
+	ID3D11ShaderResourceView* srv = m_srv;
+	if( !srv )
+		srv = StaticResources::blackTexture;
+	return eastl::move( BoundSrv<eStage::Pixel>{ slot, srv } );
 }

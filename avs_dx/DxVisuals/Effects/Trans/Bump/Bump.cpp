@@ -93,36 +93,29 @@ Bump::Bump( AvsState *pState ) :
 	EffectBase1( pState )
 { }
 
+
 HRESULT Bump::render( bool isBeat, RenderTargets& rt )
 {
 	if( !avs->enabled )
 		return S_FALSE;
 
-	if( !m_blend )
-	{
-		CD3D11_BLEND_DESC blendDesc{ D3D11_DEFAULT };
-		D3D11_RENDER_TARGET_BLEND_DESC& rt = blendDesc.RenderTarget[ 0 ];
-		rt.BlendEnable = TRUE;
-		rt.SrcBlend = D3D11_BLEND_DEST_COLOR;
-		rt.BlendOp = D3D11_BLEND_OP_ADD;
-		rt.DestBlend = D3D11_BLEND_ONE;
-		rt.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_RED | D3D11_COLOR_WRITE_ENABLE_GREEN | D3D11_COLOR_WRITE_ENABLE_BLUE;
-		CHECK( device->CreateBlendState( &blendDesc, &m_blend ) );
-	}
-
 	if( !renderer.bindShaders( isBeat ) )
 		return S_FALSE;
 
-	BoundPsResource bound;
+	omClearTargets();
+
+	BoundPsResource boundDepth, boundColor;
 	if( avs->buffern > 0 )
 	{
-		bound = StaticResources::globalBuffers[ avs->buffern - 1 ].lastWritten().psView();
-		CHECK( rt.writeToLast( false ) );
+		RenderTargets& rtDepth = StaticResources::globalBuffers[ avs->buffern - 1 ];
+		boundDepth = rtDepth.lastWritten().psView( renderer.pixel().depthTexture );
 	}
 	else
-		CHECK( rt.blendToNext( bound ) );
+		boundDepth = rt.lastWritten().psView( renderer.pixel().depthTexture );
 
-	context->OMSetBlendState( m_blend, nullptr, UINT_MAX );
+	CHECK( rt.writeToNext( boundColor ) );
+
+	omBlend( eBlend::None );
 	drawFullscreenTriangle( false );
 	return S_OK;
 }

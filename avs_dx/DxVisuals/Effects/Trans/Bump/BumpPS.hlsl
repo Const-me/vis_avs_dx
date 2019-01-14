@@ -3,12 +3,15 @@
 #define AVS_RENDER_SIZE float2( 1280, 720 )
 static const bool invertDepth = false;
 static const float pxRadius = 200.0f;
+#define BIND_DEPTH t4
+// <macro-resource name="depthTexture" macro="BIND_DEPTH" />
 #endif
-Texture2D<float4> texPrevFrame : register(t3);
+Texture2D<float4> texColor : register(t3);
+Texture2D<float4> texDepth : register(BIND_DEPTH);
 
 inline float depthOf( int2 pos )
 {
-    float3 rgb = texPrevFrame.Load( int3( pos, 0 ) ).rgb;
+    float3 rgb = texDepth.Load( int3( pos, 0 ) ).rgb;
     float res = max( max( rgb.r, rgb.g ), rgb.b );
     return invertDepth ? 1.0 - res : res;
 }
@@ -27,21 +30,21 @@ float4 main( float4 screenSpace : SV_Position ) : SV_Target
     const float2 offset = screenSpace.xy - pxCenter;
     const float len = length( offset );
 
+    const int2 px = (int2) screenSpace.xy;
+    const float4 origColor = texColor.Load( int3( px, 0 ) );
     if( len > pxRadius )
-        return 0; // Saves a lot of texture bandwidth
+        return origColor;
 
     value *= smoothstep( pxRadius, 0, len );
 
 	// Debug code below, only adjust brightness
     // return value;
 
-    const int2 px = (int2) screenSpace.xy;
-
     float2 norm;
     norm.x = depthOf( px + int2( -1, 0 ) ) - depthOf( px + int2( +1, 0 ) );
     norm.y = depthOf( px + int2( 0, -1 ) ) - depthOf( px + int2( 0, +1 ) );
-    norm *= 0.5;
-    float light = 1 + norm.x + norm.y;
+    float light = 1 + ( norm.x + norm.y ) * 1.5;
+    light *= value;
     
-    return saturate( light * value );
+    return saturate( origColor + origColor * light * 2 );
 }

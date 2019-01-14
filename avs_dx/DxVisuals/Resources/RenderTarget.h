@@ -1,4 +1,5 @@
 #pragma once
+#include <Render/Binder.h>
 
 // RGB texture with two views, read only shader view, and write-only render target view.
 class RenderTarget
@@ -41,7 +42,7 @@ public:
 
 	ID3D11ShaderResourceView* srv() const { return m_srv; }
 
-	BoundSrv<eStage::Pixel> psView() const;
+	BoundSrv<eStage::Pixel> psView( UINT slot = Binder::psPrevFrame ) const;
 
 	// UAVs are only required by some effects and aren't created automatically. This method creates them.
 	HRESULT createUav();

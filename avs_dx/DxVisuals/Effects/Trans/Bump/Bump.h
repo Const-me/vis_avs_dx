@@ -89,8 +89,6 @@ struct BumpStructs
 
 class Bump : public EffectBase1<BumpStructs>
 {
-	CComPtr<ID3D11BlendState> m_blend;
-
 public:
 	Bump( AvsState *pState );
 

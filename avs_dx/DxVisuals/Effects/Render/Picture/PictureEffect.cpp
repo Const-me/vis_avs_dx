@@ -3,7 +3,7 @@
 #include <Utils/DXTK/WICTextureLoader.h>
 #include <Utils/findAssets.h>
 
-static bool isPictureExt( const CString& ext )
+bool isPictureExt( const CString& ext )
 {
 	return ext == L".jpg" || ext == L".jpeg" || ext == L".png" || ext == L".dds" || ext == L".bmp" || ext == L".gif";
 }

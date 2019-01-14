@@ -5,8 +5,6 @@
 
 IMPLEMENT_APE_EFFECT( AddBorder, "Virtual Effect: Addborders", "AddBorder.ape" );
 
-
-
 AddBorder::AddBorder( C_RBASE* pThis ) :
 	EffectBase1( pThis )
 { }

@@ -105,7 +105,7 @@ HRESULT Bump::render( bool isBeat, RenderTargets& rt )
 		rt.BlendEnable = TRUE;
 		rt.SrcBlend = D3D11_BLEND_DEST_COLOR;
 		rt.BlendOp = D3D11_BLEND_OP_ADD;
-		rt.DestBlend = D3D11_BLEND_ZERO;
+		rt.DestBlend = D3D11_BLEND_ONE;
 		rt.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_RED | D3D11_COLOR_WRITE_ENABLE_GREEN | D3D11_COLOR_WRITE_ENABLE_BLUE;
 		CHECK( device->CreateBlendState( &blendDesc, &m_blend ) );
 	}

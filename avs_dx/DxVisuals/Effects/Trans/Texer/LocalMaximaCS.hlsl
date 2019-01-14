@@ -16,14 +16,15 @@ inline void update( inout bool isMax, float val, uint3 tid, int dx, int dy )
 }
 
 [numthreads( 16, 16, 1 )]
-void main( uint3 groupIndex : SV_GroupID, uint3 tid : SV_GroupThreadID, uint3 globalThread : SV_DispatchThreadID )
+void main( uint3 groupIndex : SV_GroupID, uint3 tid : SV_GroupThreadID )
 {
-    const uint2 dest = groupIndex.xy * uint2( 14, 14 );
+    const uint2 blockWritePos = groupIndex.xy * uint2( 14, 14 );
+    const uint2 locPixel = blockWritePos + tid.xy - 1;
 
     float val;
-    if( all( dest + tid.xy - 1 < sizeImage ) )
+    if( all( locPixel < sizeImage ) )
     {
-        const float3 src = texSource[ globalThread.xy ].rgb;
+        const float3 src = texSource[ locPixel ].rgb;
         val = src.r + src.g + src.b;
     }
     else
@@ -33,12 +34,12 @@ void main( uint3 groupIndex : SV_GroupID, uint3 tid : SV_GroupThreadID, uint3 gl
 
     GroupMemoryBarrierWithGroupSync();
 
-    if( any( dest >= sizeImage ) )
+    if( any( locPixel >= sizeImage || tid.xy - 1 >= 14 ) )
         return;
 
     if( val < 0.01 )
     {
-        texDest[ dest ] = 0;
+        texDest[ locPixel ] = 0;
         return;
     }
 
@@ -55,5 +56,5 @@ void main( uint3 groupIndex : SV_GroupID, uint3 tid : SV_GroupThreadID, uint3 gl
     update( isMax, val, tid, 0, +1 );
     update( isMax, val, tid, +1, +1 );
 
-    texDest[ dest ] = isMax;
+    texDest[ locPixel ] = isMax;
 }

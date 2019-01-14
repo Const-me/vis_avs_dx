@@ -325,6 +325,7 @@
     <ClInclude Include="Effects\Trans\Texer\SpriteTexture.h" />
     <ClInclude Include="Effects\Trans\Texer\texerHacks.h" />
     <ClInclude Include="Effects\Trans\Texer\TempBuffer.h" />
+    <ClInclude Include="Effects\Trans\Bump\Bump.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -465,6 +466,7 @@
     <ClCompile Include="Effects\Trans\Texer\SpriteTexture.cpp" />
     <ClCompile Include="Effects\Trans\Texer\texerHacks.cpp" />
     <ClCompile Include="Effects\Trans\Texer\TempBuffer.cpp" />
+    <ClCompile Include="Effects\Trans\Bump\Bump.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -555,6 +557,8 @@
     <FxCompile Include="Effects\Trans\Texer\TexerPS.hlsl" />
     <FxCompile Include="Effects\Trans\Texer\TexerState.hlsl" />
     <FxCompile Include="Effects\Trans\Texer\LocalMaximaCS.hlsl" />
+    <FxCompile Include="Effects\Trans\Bump\BumpPS.hlsl" />
+    <FxCompile Include="Effects\Trans\Bump\BumpState.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

@@ -4,11 +4,11 @@
 
 using namespace Expressions;
 
-HRESULT Prototype::addState( const CStringA& name, uint32_t def )
+HRESULT Prototype::addState( const CStringA& name, uint32_t def, bool dontStore )
 {
 	CStringA str;
 	str.Format( "%i", def );
-	return addState( name, eVarType::u32, str );
+	return addState( name, eVarType::u32, str, dontStore );
 }
 
 HRESULT Prototype::addState( const CStringA& name, float def )
@@ -18,7 +18,7 @@ HRESULT Prototype::addState( const CStringA& name, float def )
 	return addState( name, eVarType::f32, str );
 }
 
-HRESULT Prototype::addState( const CStringA& name, eVarType vt, const CStringA& initVal )
+HRESULT Prototype::addState( const CStringA& name, eVarType vt, const CStringA& initVal, bool dontStore )
 {
 	for( const auto& s : m_fixedState )
 		if( s.name == name )
@@ -27,7 +27,7 @@ HRESULT Prototype::addState( const CStringA& name, eVarType vt, const CStringA& 
 			return E_INVALIDARG;
 		}
 
-	m_fixedState.emplace_back( FixedStateVar{ vt, name, initVal, m_size } );;
+	m_fixedState.emplace_back( FixedStateVar{ vt, name, initVal, m_size, dontStore } );;
 	m_size += variableSize( vt );
 	return S_OK;
 }
@@ -86,6 +86,8 @@ CStringA Prototype::stateStore( int offset ) const
 	CStringA hlsl;
 	for( const auto& s : m_fixedState )
 	{
+		if( s.dontStore )
+			continue;
 		const CStringA store = Expressions::stateStore( s.vt, s.offset + offset, s.name );
 		hlsl.AppendFormat( "		%s;\r\n", cstr( store ) );
 	}

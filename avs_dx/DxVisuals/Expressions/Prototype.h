@@ -10,15 +10,16 @@ namespace Expressions
 		// Count of uint variables in the state block
 		int m_size = 0;
 
-		HRESULT addState( const CStringA& name, eVarType vt, const CStringA& initVal );
+		HRESULT addState( const CStringA& name, eVarType vt, const CStringA& initVal, bool dontStore = false );
 
 		struct FixedStateVar : public VariableDecl
 		{
 			CStringA initVal;
 			int offset = -1;
+			bool dontStore = false;
 			FixedStateVar() = default;
-			FixedStateVar( eVarType t, const CStringA& n, const CStringA& iv, int off ) :
-				VariableDecl( eVarLocation::stateStatic, t, n ), initVal( iv ), offset( off ) { }
+			FixedStateVar( eVarType t, const CStringA& n, const CStringA& iv, int off, bool ds ) :
+				VariableDecl( eVarLocation::stateStatic, t, n ), initVal( iv ), offset( off ), dontStore( ds ) { }
 		};
 
 		vector<FixedStateVar> m_fixedState;
@@ -40,7 +41,7 @@ namespace Expressions
 	public:
 
 		// Statically allocate `uint` state variable. State variables are read/write in state shader, read-only in fragment expression.
-		HRESULT addState( const CStringA& name, uint32_t def );
+		HRESULT addState( const CStringA& name, uint32_t def, bool dontStore = false );
 
 		// Statically allocate `float` state variable. State variables are read/write in state shader, read-only in fragment expression.
 		HRESULT addState( const CStringA& name, float def );

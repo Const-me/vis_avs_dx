@@ -98,6 +98,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Effects\Trans\Bump\Bump.cpp" />
     <ClCompile Include="Effects\Trans\DynamicShift\DynamicShift.cpp" />
     <ClCompile Include="Hlsl\Async\asyncNotifier.cpp" />
     <ClCompile Include="Hlsl\Async\CompileWorker.cpp" />
@@ -113,6 +114,7 @@
     <ClCompile Include="Effects\Trans\ColorMap\ColorMap.cpp" />
     <ClCompile Include="Effects\Common\ApeEffectBase.cpp" />
     <ClCompile Include="Effects\Render\DotFountain\DotFountain.cpp" />
+    <ClInclude Include="Effects\Trans\Bump\Bump.h" />
     <ClInclude Include="Effects\Trans\DynamicShift\DynamicShift.h" />
     <ClInclude Include="Hlsl\Async\asyncNotifier.h" />
     <ClInclude Include="Hlsl\Async\CompileWorker.h" />
@@ -605,6 +607,14 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Effects\Trans\Blur\KernelValues.cpp</Outputs>
     </CustomBuild>
     <None Include="Effects\LinesUtils.hlsli" />
+    <FxCompile Include="Effects\Trans\Bump\BumpPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Effects\Trans\Bump\BumpState.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+    </FxCompile>
     <FxCompile Include="Effects\Trans\Texer\TexerGS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>

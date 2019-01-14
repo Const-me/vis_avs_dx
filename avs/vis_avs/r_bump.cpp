@@ -124,6 +124,8 @@ C_THISCLASS::C_THISCLASS() // set up default configuration
 	initted = 0;
 
 	need_recompile = 1;
+
+	CREATE_DX_EFFECT( enabled );
 }
 
 #define GET_INT() (data[pos]|(data[pos+1]<<8)|(data[pos+2]<<16)|(data[pos+3]<<24))

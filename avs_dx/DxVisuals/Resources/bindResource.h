@@ -49,8 +49,12 @@ namespace DxUtils
 
 	public:
 		BoundResource() : m_slot( UINT_MAX ) { }
-		BoundResource( BoundResource &that ) = delete;
-		void operator=( BoundResource &that ) = delete;
+		BoundResource( const BoundResource &that ) = delete;
+		void operator=( const BoundResource &that ) = delete;
+		void operator=( BoundResource &&that )
+		{
+			swap( that );
+		}
 		BoundResource( BoundResource &&that ) : m_slot( that.m_slot )
 		{
 			that.m_slot = UINT_MAX;

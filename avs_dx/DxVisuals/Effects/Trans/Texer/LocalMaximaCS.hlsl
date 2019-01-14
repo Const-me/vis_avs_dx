@@ -9,9 +9,14 @@ RWTexture2D<uint> texDest : register(BIND_DEST);
 
 groupshared float s_cache[ 16 ][ 16 ];
 
-inline void update( inout bool isMax, float val, uint3 tid, int dx, int dy )
+inline void updateGe( inout bool isMax, float val, uint3 tid, int dx, int dy )
 {
     const bool res = val >= s_cache[ tid.y + dy ][ tid.x + dx ];
+    isMax = isMax && res;
+}
+inline void updateG( inout bool isMax, float val, uint3 tid, int dx, int dy )
+{
+    const bool res = val > s_cache[ tid.y + dy ][ tid.x + dx ];
     isMax = isMax && res;
 }
 
@@ -45,16 +50,16 @@ void main( uint3 groupIndex : SV_GroupID, uint3 tid : SV_GroupThreadID )
 
     bool isMax = true;
 
-    update( isMax, val, tid, -1, -1 );
-    update( isMax, val, tid, 0, -1 );
-    update( isMax, val, tid, +1, -1 );
+    updateG( isMax, val, tid, -1, -1 );
+    updateG( isMax, val, tid, 0, -1 );
+    updateG( isMax, val, tid, +1, -1 );
 
-    update( isMax, val, tid, -1, 0 );
-    update( isMax, val, tid, +1, 0 );
+    updateG( isMax, val, tid, -1, 0 );
+    updateGe( isMax, val, tid, +1, 0 );
 
-    update( isMax, val, tid, -1, +1 );
-    update( isMax, val, tid, 0, +1 );
-    update( isMax, val, tid, +1, +1 );
+    updateGe( isMax, val, tid, -1, +1 );
+    updateGe( isMax, val, tid, 0, +1 );
+    updateGe( isMax, val, tid, +1, +1 );
 
     texDest[ locPixel ] = isMax;
 }

@@ -144,7 +144,6 @@
     <ClInclude Include="Effects\Trans\Texer\Texer.h" />
     <ClInclude Include="Effects\Trans\Texer\SpriteTexture.h" />
     <ClInclude Include="Effects\Trans\Texer\texerHacks.h" />
-    <ClInclude Include="Effects\Trans\Texer\TempTexture.h" />
     <ClInclude Include="Effects\Trans\Texer\TempBuffer.h" />
     <ClInclude Include="Utils\EABase\config\eacompiler.h" />
     <ClInclude Include="Utils\EABase\config\eacompilertraits.h" />
@@ -456,7 +455,6 @@
     <ClCompile Include="Effects\Trans\Texer\Texer.cpp" />
     <ClCompile Include="Effects\Trans\Texer\SpriteTexture.cpp" />
     <ClCompile Include="Effects\Trans\Texer\texerHacks.cpp" />
-    <ClCompile Include="Effects\Trans\Texer\TempTexture.cpp" />
     <ClCompile Include="Effects\Trans\Texer\TempBuffer.cpp" />
     <ClCompile Include="Utils\EABase\EastlWindows.cpp" />
     <ClCompile Include="Utils\FpsCalc.cpp" />
@@ -610,10 +608,6 @@
     <FxCompile Include="Effects\Trans\Texer\TexerGS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
-    </FxCompile>
-    <FxCompile Include="Effects\Trans\Texer\TexerProduceCS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
     </FxCompile>
     <FxCompile Include="Effects\Trans\Texer\TexerPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>

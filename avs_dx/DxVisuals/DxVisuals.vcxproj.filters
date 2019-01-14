@@ -324,7 +324,6 @@
     <ClInclude Include="Effects\Trans\Texer\Texer.h" />
     <ClInclude Include="Effects\Trans\Texer\SpriteTexture.h" />
     <ClInclude Include="Effects\Trans\Texer\texerHacks.h" />
-    <ClInclude Include="Effects\Trans\Texer\TempTexture.h" />
     <ClInclude Include="Effects\Trans\Texer\TempBuffer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -465,7 +464,6 @@
     <ClCompile Include="Effects\Trans\Texer\Texer.cpp" />
     <ClCompile Include="Effects\Trans\Texer\SpriteTexture.cpp" />
     <ClCompile Include="Effects\Trans\Texer\texerHacks.cpp" />
-    <ClCompile Include="Effects\Trans\Texer\TempTexture.cpp" />
     <ClCompile Include="Effects\Trans\Texer\TempBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -555,7 +553,6 @@
     <FxCompile Include="Effects\Trans\Texer\TexerVS.hlsl" />
     <FxCompile Include="Effects\Trans\Texer\TexerGS.hlsl" />
     <FxCompile Include="Effects\Trans\Texer\TexerPS.hlsl" />
-    <FxCompile Include="Effects\Trans\Texer\TexerProduceCS.hlsl" />
     <FxCompile Include="Effects\Trans\Texer\TexerState.hlsl" />
     <FxCompile Include="Effects\Trans\Texer\LocalMaximaCS.hlsl" />
   </ItemGroup>

@@ -2,7 +2,6 @@
 #include <Effects/Common/EffectImpl.hpp>
 #include <Effects/Common/ApeEffectBase.h>
 #include "SpriteTexture.h"
-#include "TempTexture.h"
 #include "TempBuffer.h"
 
 struct TexerStructs
@@ -23,6 +22,8 @@ struct TexerStructs
 		uint32_t m_nParticles = 0;
 	};
 
+	using CsData = Hlsl::Trans::Texer::LocalMaximaCS;
+
 	struct VsData : Hlsl::Trans::Texer::TexerVS
 	{
 		HRESULT updateDx( const StateData& sd );
@@ -38,17 +39,6 @@ struct TexerStructs
 
 class Texer : public EffectBase1<TexerStructs, ApeEffectBase>
 {
-	CComPtr<ID3D11Buffer> m_verts;
-	CComPtr<ID3D11UnorderedAccessView> m_vertsView;
-
-	CComPtr<ID3D11Texture2D> m_reducedTex;
-	CComPtr<ID3D11UnorderedAccessView> m_reducedUav;
-	CComPtr<ID3D11ShaderResourceView> m_reducedSrv;
-
-	Shader<Hlsl::Trans::Texer::LocalMaximaCS> m_maxima;
-	Shader<Hlsl::Trans::Texer::TexerProduceCS> m_produce;
-
-	TempTexture m_tmpTexture;
 	TempBuffer m_tmpBuffer;
 
 public:
@@ -58,10 +48,6 @@ public:
 	DECLARE_EFFECT()
 
 private:
-
-	CSize prevSize;
-
-	HRESULT updateParameters( Binder& binder ) override;
 
 	HRESULT render( bool isBeat, RenderTargets& rt ) override;
 };

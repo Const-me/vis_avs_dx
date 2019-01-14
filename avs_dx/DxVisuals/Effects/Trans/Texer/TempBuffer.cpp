@@ -7,9 +7,10 @@ HRESULT TempBuffer::create()
 		return S_FALSE;
 
 	constexpr UINT capacity = 1024;
+	constexpr UINT sizeItem = sizeof( Vector2 ) + sizeof( Vector3 );
 
-	CD3D11_BUFFER_DESC bufferDesc{ sizeof( Vector2 ) * capacity, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS };
-	bufferDesc.StructureByteStride = sizeof( Vector2 );
+	CD3D11_BUFFER_DESC bufferDesc{ sizeItem * capacity, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS };
+	bufferDesc.StructureByteStride = sizeItem;
 	bufferDesc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
 
 	CComPtr<ID3D11Buffer> buffer;

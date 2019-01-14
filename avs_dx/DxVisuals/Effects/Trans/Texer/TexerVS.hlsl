@@ -4,11 +4,32 @@
 static const uint vertsToDraw = 1024;
 #endif
 
-StructuredBuffer<float2> sourceBuffer : register(BIND_SOURCE);
-
-float4 main( uint id : SV_VertexID ) : SV_Position
+struct sSprite
 {
+    float2 position;
+    float3 color;
+};
+struct sVertex
+{
+    float4 position : SV_Position;
+    float3 color : COLOR0;
+};
+StructuredBuffer<sSprite> sourceBuffer : register(BIND_SOURCE);
+
+sVertex main( uint id : SV_VertexID )
+{
+    sVertex vert;
+
     if( id >= vertsToDraw )
-        return float4( 0, 0, 1, -0.1 );
-    return float4( sourceBuffer[ id ], 0.5, 1 );
+    {
+        vert.position = float4( 0, 0, 1, -0.1 );
+        vert.color = 0;
+    }
+	else
+    {
+        sSprite s = sourceBuffer[ id ];
+        vert.position = float4( s.position, 0.5, 1 );
+        vert.color = s.color;
+    }
+    return vert;
 }

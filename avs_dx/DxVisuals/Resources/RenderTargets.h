@@ -41,6 +41,11 @@ public:
 	}
 
 	HRESULT computeToNext( UINT readSlot, BoundSrv<eStage::Compute>& boundRead, UINT writeSlot, BoundUav& boundWrite );
+
+	void advance()
+	{
+		m_lastTarget ^= 1;
+	}
 };
 
 // Same as above but also automatically destroys itself when rendering window is resized.

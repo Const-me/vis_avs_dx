@@ -321,6 +321,11 @@
     <ClInclude Include="Hlsl\Async\asyncNotifier.h" />
     <ClInclude Include="Interop\waitCursor.h" />
     <ClInclude Include="Effects\Trans\DynamicShift\DynamicShift.h" />
+    <ClInclude Include="Effects\Trans\Texer\Texer.h" />
+    <ClInclude Include="Effects\Trans\Texer\SpriteTexture.h" />
+    <ClInclude Include="Effects\Trans\Texer\texerHacks.h" />
+    <ClInclude Include="Effects\Trans\Texer\TempTexture.h" />
+    <ClInclude Include="Effects\Trans\Texer\TempBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -457,6 +462,11 @@
     <ClCompile Include="Effects\Render\PolylineShader.cpp" />
     <ClCompile Include="Hlsl\Async\asyncNotifier.cpp" />
     <ClCompile Include="Effects\Trans\DynamicShift\DynamicShift.cpp" />
+    <ClCompile Include="Effects\Trans\Texer\Texer.cpp" />
+    <ClCompile Include="Effects\Trans\Texer\SpriteTexture.cpp" />
+    <ClCompile Include="Effects\Trans\Texer\texerHacks.cpp" />
+    <ClCompile Include="Effects\Trans\Texer\TempTexture.cpp" />
+    <ClCompile Include="Effects\Trans\Texer\TempBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -542,6 +552,12 @@
     <FxCompile Include="Effects\Trans\ColorModifier\ColorModifierCS.hlsl" />
     <FxCompile Include="Effects\Trans\Moves\MovementPS.hlsl" />
     <FxCompile Include="Effects\Trans\DynamicShift\DynamicShiftVS.hlsl" />
+    <FxCompile Include="Effects\Trans\Texer\TexerVS.hlsl" />
+    <FxCompile Include="Effects\Trans\Texer\TexerGS.hlsl" />
+    <FxCompile Include="Effects\Trans\Texer\TexerPS.hlsl" />
+    <FxCompile Include="Effects\Trans\Texer\TexerReduceCS.hlsl" />
+    <FxCompile Include="Effects\Trans\Texer\TexerProduceCS.hlsl" />
+    <FxCompile Include="Effects\Trans\Texer\TexerState.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Effects\IncludeShadersCpp.tt" />

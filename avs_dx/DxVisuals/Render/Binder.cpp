@@ -29,6 +29,7 @@ Binder::BindingsData Binder::staticallyBoundSlots()
 
 	// RWByteAddressBuffer effectStates : register(u0);
 	res[ (uint32_t)eStage::Compute ].uav++;
+	res[ (uint32_t)eStage::Compute ].srv++;
 
 	// Texture2D<float4> prevFrameTexture : register(t3);
 	res[ (uint32_t)eStage::Pixel ].srv++;

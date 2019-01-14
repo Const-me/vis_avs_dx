@@ -91,5 +91,7 @@ inline void bindSampler( UINT slot, ID3D11SamplerState* sampler = nullptr )
 // UAVs are only supported by compute shaders
 inline void bindUav( UINT slot, ID3D11UnorderedAccessView* uav = nullptr )
 {
-	context->CSSetUnorderedAccessViews( slot, 1, &uav, nullptr );
+	UINT counter = 0;
+	// pUAVInitialCounts is only relevant for UAVs that were created with either D3D11_BUFFER_UAV_FLAG_APPEND or D3D11_BUFFER_UAV_FLAG_COUNTER specified when the UAV was created; otherwise, the argument is ignored.
+	context->CSSetUnorderedAccessViews( slot, 1, &uav, &counter );
 }

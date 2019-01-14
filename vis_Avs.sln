@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vis_avs", "avs\vis_avs\vis_avs.vcxproj", "{73652E08-183F-40C1-BD4A-01733C9DA502}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vis_avs_dx", "avs\vis_avs\vis_avs.vcxproj", "{73652E08-183F-40C1-BD4A-01733C9DA502}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DxVisualsShaders", "avs_dx\DxVisualsShaders\DxVisualsShaders.vcxproj", "{ECD3BA77-59D4-47DC-B2EF-C343E675C30A}"
 EndProject
@@ -15,6 +15,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "avs_dx", "avs_dx", "{6046E26E-5044-4C4C-880C-CD9AC12D9409}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CompilerTest", "avs_dx\CompilerTest\CompilerTest.vcxproj", "{57F687AE-D934-4C9F-A153-0583F00A57BA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CCB65B5E-8012-4C31-82FD-247BC6989E36}"
+	ProjectSection(SolutionItems) = preProject
+		legal.txt = legal.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

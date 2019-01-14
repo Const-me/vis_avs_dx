@@ -40,6 +40,7 @@ struct TexerStructs
 class Texer : public EffectBase1<TexerStructs, ApeEffectBase>
 {
 	TempBuffer m_tmpBuffer;
+	CComPtr<ID3D11BlendState> m_blend;
 
 public:
 

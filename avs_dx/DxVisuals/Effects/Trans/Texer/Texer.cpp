@@ -44,6 +44,18 @@ HRESULT Texer::render( bool isBeat, RenderTargets& rt )
 	if( !renderer.bindShaders( false ) )
 		return S_FALSE;
 
+	if( !m_blend )
+	{
+		CD3D11_BLEND_DESC blendDesc{ D3D11_DEFAULT };
+		D3D11_RENDER_TARGET_BLEND_DESC& rt = blendDesc.RenderTarget[ 0 ];
+		rt.BlendEnable = TRUE;
+		rt.SrcBlend = D3D11_BLEND_ONE;	// Already premultiplied
+		rt.BlendOp = D3D11_BLEND_OP_MAX;
+		rt.DestBlend = D3D11_BLEND_ONE;
+		rt.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_RED | D3D11_COLOR_WRITE_ENABLE_GREEN | D3D11_COLOR_WRITE_ENABLE_BLUE;
+		CHECK( device->CreateBlendState( &blendDesc, &m_blend ) );
+	}
+
 	{
 		ID3D11ShaderResourceView* input = rt.lastWritten().srv();
 		if( nullptr == input )
@@ -66,7 +78,7 @@ HRESULT Texer::render( bool isBeat, RenderTargets& rt )
 	rt.advance();
 	CHECK( rt.writeToLast( true ) );
 
-	omBlend( eBlend::Premultiplied );
+	context->OMSetBlendState( m_blend, nullptr, UINT_MAX );
 	context->IASetPrimitiveTopology( D3D_PRIMITIVE_TOPOLOGY_POINTLIST );
 	context->DrawInstancedIndirect( stateBuffer(), stateOffset() * 4 );
 	return S_OK;

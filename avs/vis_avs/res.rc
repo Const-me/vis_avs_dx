@@ -1702,7 +1702,7 @@ BEGIN
             VALUE "FileDescription", "Based on AVS 2.7.9.2 © 2003 Nullsoft, Inc."
             VALUE "FileVersion", "0.8.0.0"
             VALUE "InternalName", "AVS DX"
-            VALUE "LegalCopyright", "Copyright © 2018 const.me"
+            VALUE "LegalCopyright", "Copyright © 2018-2019 const.me"
             VALUE "OriginalFilename", "vis_avs_dx.dll"
             VALUE "ProductName", "vis_avs_dx"
             VALUE "ProductVersion", "0.8.0.0"

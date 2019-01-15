@@ -36,7 +36,7 @@ namespace Expressions
 
 	ShaderFunctions::ShaderFunctions()
 	{
-		const uint8_t compressedData[] =
+		static const uint8_t compressedData[] =
 <#
 	byte[] buffer;
 	int origLength;

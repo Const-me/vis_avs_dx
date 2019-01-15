@@ -37,7 +37,6 @@ using eastl::vector;
 using eastl::array;
 using eastl::unique_ptr;
 using eastl::make_unique;
-#include <functional>
 
 #include <mfobjects.h>	// IMFDXGIDeviceManager
 

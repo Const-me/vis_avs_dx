@@ -57,7 +57,7 @@ namespace Expressions
 		// Set by hardcoded part of the fragment code, and used by another hardcoded part to produce the output vertex/pixel.
 		fragmentOutput,
 
-		// Local variables that doesn't go anywhere
+		// Local variables that don't go anywhere
 		stateLocal,
 		fragmentLocal,
 

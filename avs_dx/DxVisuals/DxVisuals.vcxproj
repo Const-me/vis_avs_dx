@@ -418,7 +418,6 @@
     <ClInclude Include="Effects\shadersCode.h" />
     <ClInclude Include="Effects\Trans\ColorModifier\ColorModifier.h" />
     <ClInclude Include="Effects\Trans\Moves\DynamicMovement.h" />
-    <ClInclude Include="Hlsl\FunctionBuilder.h" />
     <ClInclude Include="Render\Stage.h" />
     <ClInclude Include="Resources\RenderTarget.h" />
     <ClInclude Include="Resources\createShader.hpp" />
@@ -434,7 +433,6 @@
     <ClInclude Include="Effects\Common\EffectListBase.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Hlsl\Variable.h" />
     <ClInclude Include="Utils\MiscUtils.h" />
     <ClInclude Include="Expressions\SymbolTable\VariablesTable.h" />
     <ClInclude Include="Effects\Video\VideoEffect.h" />
@@ -557,7 +555,6 @@
     <ClCompile Include="Effects\shadersCode.cpp" />
     <ClCompile Include="Effects\Trans\ColorModifier\ColorModifier.cpp" />
     <ClCompile Include="Effects\Trans\Moves\DynamicMovement.cpp" />
-    <ClCompile Include="Hlsl\FunctionBuilder.cpp" />
     <ClCompile Include="Hlsl\Compile\compile.cpp" />
     <ClCompile Include="Effects\Common\EffectListBase.cpp" />
     <ClCompile Include="Resources\RenderTarget.cpp" />
@@ -567,7 +564,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Hlsl\Variable.cpp" />
     <ClCompile Include="Utils\DirectXErrors\DirectXErrors.cpp" />
     <ClCompile Include="Utils\DirectXErrors\formatCString.cpp" />
     <ClCompile Include="Expressions\SymbolTable\VariablesTable.cpp" />

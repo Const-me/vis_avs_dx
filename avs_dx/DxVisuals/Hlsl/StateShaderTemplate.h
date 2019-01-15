@@ -1,6 +1,6 @@
 #pragma once
 
-// Template of an HLSL shader. To convert it into the real one, it needs to be compiled with some effect-specific preprocessor defines.
+// Template of an HLSL state compute shader. State shaders are assembled in runtime form per-effect pieces. This way we only need a single ID3D11DeviceContext::Dispatch() call to update state of all effects.
 struct StateShaderTemplate
 {
 	// Name is only used for log messages.
@@ -15,6 +15,8 @@ struct StateShaderTemplate
 	// Some part of the shader uses IS_BEAT macro. The runtime will compile two different versions of the shader.
 	// This way it's slightly faster than runtime branching on `beat` from FrameGlobalData cbuffer
 	bool hasBeat = false;
+
+	// True if the template uses random numbers
 	bool hasRandomNumbers = false;
 
 	StateShaderTemplate( const char *n ) : name( n ) { }

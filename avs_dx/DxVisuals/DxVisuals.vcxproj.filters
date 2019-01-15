@@ -3,8 +3,6 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Hlsl\Variable.h" />
-    <ClInclude Include="Hlsl\FunctionBuilder.h" />
     <ClInclude Include="Utils\logger.h" />
     <ClInclude Include="Utils\DirectXErrors\codes.h" />
     <ClInclude Include="Utils\DirectXErrors\DirectXErrors.h" />
@@ -329,8 +327,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="Hlsl\Variable.cpp" />
-    <ClCompile Include="Hlsl\FunctionBuilder.cpp" />
     <ClCompile Include="Utils\DirectXErrors\DirectXErrors.cpp" />
     <ClCompile Include="Utils\DirectXErrors\formatCString.cpp" />
     <ClCompile Include="Effects\shadersCode.cpp" />

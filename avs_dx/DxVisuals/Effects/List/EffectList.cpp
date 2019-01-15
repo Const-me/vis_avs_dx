@@ -38,9 +38,16 @@ HRESULT EffectList::updateParameters( Binder& binder )
 
 HRESULT EffectList::render( bool isBeat, RenderTargets& rt )
 {
-	const int enabled = ( avs->mode & 2 ) ^ 2;
+	if( isBeat && avs->beat_render )
+		avs->fake_enabled = avs->beat_render_frames;
+
+	const int enabled = ( ( avs->mode & 2 ) ^ 2 ) || avs->fake_enabled > 0;
+
 	if( !enabled )
 		return S_FALSE;
+
+	if( avs->beat_render && avs->fake_enabled > 0 )
+		avs->fake_enabled--;
 
 	SavedBlendMode __context;
 

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GridMesh.h"
 
-// Example mesh topology, for 3x2 grid, without center tessellation:
+// Example mesh topology, for 3x2 grid
 //  x---x---x---x
 //  |\ / \ / \ /|
 //  x-x---x---x-x

@@ -325,6 +325,7 @@
     <ClInclude Include="Effects\Trans\Texer\TempBuffer.h" />
     <ClInclude Include="Effects\Trans\Bump\Bump.h" />
     <ClInclude Include="Effects\Common\EmptyStateData.hpp" />
+    <ClInclude Include="Expressions\SymbolTable\isHlslKeyword.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -464,6 +465,7 @@
     <ClCompile Include="Effects\Trans\Texer\texerHacks.cpp" />
     <ClCompile Include="Effects\Trans\Texer\TempBuffer.cpp" />
     <ClCompile Include="Effects\Trans\Bump\Bump.cpp" />
+    <ClCompile Include="Expressions\SymbolTable\keywords.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />
@@ -491,6 +493,7 @@
     <None Include="Effects\Render\Starfield\Star.hlsli" />
     <None Include="Effects\Render\DotFountain\Fountain.hlsli" />
     <None Include="Effects\LinesUtils.hlsli" />
+    <None Include="Expressions\SymbolTable\keywords.tt" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Effects\Render\Simple\SimpleDotsVS.hlsl" />
@@ -566,5 +569,8 @@
   <ItemGroup>
     <Natvis Include="Utils\EASTL\EASTL.natvis" />
     <Natvis Include="Utils\DXTK\SimpleMath.natvis" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Expressions\SymbolTable\keywords.txt" />
   </ItemGroup>
 </Project>

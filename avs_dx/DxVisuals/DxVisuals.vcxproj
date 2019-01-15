@@ -100,6 +100,7 @@
   <ItemGroup>
     <ClCompile Include="Effects\Trans\Bump\Bump.cpp" />
     <ClCompile Include="Effects\Trans\DynamicShift\DynamicShift.cpp" />
+    <ClCompile Include="Expressions\SymbolTable\keywords.cpp" />
     <ClCompile Include="Hlsl\Async\asyncNotifier.cpp" />
     <ClCompile Include="Hlsl\Async\CompileWorker.cpp" />
     <ClCompile Include="Hlsl\Async\Worker.cpp" />
@@ -117,6 +118,7 @@
     <ClInclude Include="Effects\Common\EmptyStateData.hpp" />
     <ClInclude Include="Effects\Trans\Bump\Bump.h" />
     <ClInclude Include="Effects\Trans\DynamicShift\DynamicShift.h" />
+    <ClInclude Include="Expressions\SymbolTable\isHlslKeyword.h" />
     <ClInclude Include="Hlsl\Async\asyncNotifier.h" />
     <ClInclude Include="Hlsl\Async\CompileWorker.h" />
     <ClInclude Include="Hlsl\Async\Worker.h" />
@@ -632,6 +634,15 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
     </FxCompile>
     <None Include="Expressions\Builtin\includeFunctions.t4" />
+    <CustomBuild Include="Expressions\SymbolTable\keywords.tt">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(VSAPPIDDIR)TextTransform.exe" "%(FullPath)" -a !!SOURCE!$(ProjectDir)Expressions/SymbolTable/keywords.txt -out $(ProjectDir)Expressions/SymbolTable/keywords.cpp</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(VSAPPIDDIR)TextTransform.exe" "%(FullPath)" -a !!SOURCE!$(ProjectDir)Expressions/SymbolTable/keywords.txt -out $(ProjectDir)Expressions/SymbolTable/keywords.cpp</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Expressions/SymbolTable/keywords.cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Expressions/SymbolTable/keywords.txt</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Expressions/SymbolTable/keywords.cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Expressions/SymbolTable/keywords.txt</AdditionalInputs>
+    </CustomBuild>
     <None Include="Render\EffectRenderer.inl" />
     <None Include="Utils\DirectXErrors\data\d2d.inl" />
     <None Include="Utils\DirectXErrors\data\d3d10-11.inl" />
@@ -908,6 +919,9 @@
   <ItemGroup>
     <Natvis Include="Utils\DXTK\SimpleMath.natvis" />
     <Natvis Include="Utils\EASTL\EASTL.natvis" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Expressions\SymbolTable\keywords.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

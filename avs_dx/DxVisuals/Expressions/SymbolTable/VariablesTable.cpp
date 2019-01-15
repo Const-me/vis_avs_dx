@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "VariablesTable.h"
 #include "../utils.hpp"
+#include "isHlslKeyword.h"
 using namespace Expressions;
 
 VariablesTable::VariablesTable() = default;
@@ -18,16 +19,25 @@ VariablesTable::VariablesTable( const Prototype& proto )
 	prototypeSize = (int)table.size();
 }
 
+int VariablesTable::addNewVariable( const CStringA& name, eVarType& vt )
+{
+	assert( nullptr == map.Lookup( name ) );
+	const int id = (int)table.size();
+
+	if( isHlslKeyword( name ) )
+		table.emplace_back( VariableDecl{ eVarLocation::unknown, vt, "_var_" + name } );
+	else
+		table.emplace_back( VariableDecl{ eVarLocation::unknown, vt, name } );
+
+	map[ name ] = id;
+	return id;
+}
+
 int VariablesTable::lookup( const CStringA& name, eVarType& vt )
 {
 	auto p = map.Lookup( name );
 	if( nullptr == p )
-	{
-		const int id = (int)table.size();
-		table.emplace_back( VariableDecl{ eVarLocation::unknown, vt, name } );
-		map[ name ] = id;
-		return id;
-	}
+		return addNewVariable( name, vt );
 
 	VariableDecl& var = table[ p->m_value ];
 	int flag = 0;

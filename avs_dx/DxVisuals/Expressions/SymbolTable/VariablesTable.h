@@ -11,6 +11,8 @@ namespace Expressions
 		int prototypeSize = 0;
 		int m_beatMacro = -1;
 
+		int addNewVariable( const CStringA& name, eVarType& vt );
+
 	public:
 
 		VariablesTable();

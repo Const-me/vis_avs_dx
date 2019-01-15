@@ -90,6 +90,13 @@ void Expressions::preprocess( CStringA& nseel )
 			}
 			return true;
 		}
+
+		void append( char c )
+		{
+			assert( nullptr == blockRead );
+			*write = c;
+			write++;
+		}
 	};
 
 	Context ctx{ nseel };
@@ -148,7 +155,11 @@ void Expressions::preprocess( CStringA& nseel )
 		}
 
 		if( c == ' ' || c == '\t' || c == '\r' || c == '\n' )
+		{
 			ctx.exclude();
+			if( c == '\n' )
+				ctx.append( ';' );
+		}
 		else
 			ctx.include();
 

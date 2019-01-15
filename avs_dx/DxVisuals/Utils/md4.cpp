@@ -2,7 +2,7 @@
 #include "md4.h"
 #include <bcrypt.h>
 #pragma comment( lib, "Bcrypt.lib" )
-#include "preciseTickCount.h"
+#include "PerfMeasure.h"
 
 namespace
 {
@@ -50,23 +50,25 @@ namespace
 
 	static AlgHandle s_algo;
 
-	class HashHandle
+	class HashHandleBase
 	{
 		BCRYPT_HASH_HANDLE h = nullptr;
 
-	public:
+	protected:
 
-		HRESULT create()
+		HRESULT create( bool reusable )
 		{
 			if( !s_algo )
 				CHECK( s_algo.open() );
-			NTSTATUS res = BCryptCreateHash( s_algo, &h, (PUCHAR)s_algo.hashObjBuffer.data(), (ULONG)s_algo.hashObjBuffer.size(), nullptr, 0, 0 );
+			NTSTATUS res = BCryptCreateHash( s_algo, &h, (PUCHAR)s_algo.hashObjBuffer.data(), (ULONG)s_algo.hashObjBuffer.size(), nullptr, 0, reusable ? BCRYPT_HASH_REUSABLE_FLAG : 0 );
 			if( !NT_SUCCESS( res ) )
 				return HRESULT_FROM_NT( res );
 			return S_OK;
 		}
 
-		~HashHandle()
+	public:
+
+		~HashHandleBase()
 		{
 			if( nullptr != h )
 			{
@@ -92,9 +94,33 @@ namespace
 		}
 	};
 
+	class HashHandle : public HashHandleBase
+	{
+	public:
+		HRESULT create()
+		{
+			return HashHandleBase::create( false );
+		}
+	};
+
+	class ReusableHash: public HashHandleBase
+	{
+	public:
+		HRESULT create()
+		{
+			if( !IsWindows8OrGreater() )
+			{
+				__debugbreak();
+				return HRESULT_FROM_WIN32( ERROR_OLD_WIN_VERSION );
+			}
+			return HashHandleBase::create( true );
+		}
+	};
+
 	HRESULT md4( const void *pv, size_t cb, __m128i* pResult )
 	{
-		HashHandle hh;
+		// HashHandle hh;
+		static ReusableHash hh;
 		CHECK( hh.create() );
 		CHECK( hh.hashData( pv, cb ) );
 		CHECK( hh.finishHash( pResult ) );
@@ -104,7 +130,7 @@ namespace
 
 __m128i hashString( const CStringA& str )
 {
-	// PerfMeasure _pm{ "hashString" };	// This is fast enough, less than 10 us
+	// PerfMeasure _pm{ "hashString" };
 	__m128i result;
 	if( FAILED( md4( str.operator const char*( ), (size_t)str.GetLength(), &result ) ) )
 		return _mm_setzero_si128();
@@ -113,6 +139,7 @@ __m128i hashString( const CStringA& str )
 
 __m128i hashBuffer( const void* pv, size_t cb )
 {
+	// PerfMeasure _pm{ "hashBuffer" };
 	__m128i result;
 	if( FAILED( md4( pv, cb, &result ) ) )
 		return _mm_setzero_si128();

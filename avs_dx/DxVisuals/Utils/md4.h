@@ -1,7 +1,7 @@
 #pragma once
 
-// For this application, we don't actually need a cryptography-grade hash algorithm. So far, it's only used to detect changes in the shader code.
-// However, MD4 is quite fast: it takes less than 10us (microseconds) to hash a string, even without Win8+ BCRYPT_HASH_REUSABLE_FLAG.
+// For this application, we don't actually need a cryptography-grade hash algorithm. It's used to detect changes in shader codes, or in color map's data.
+// However, MD4 is quite fast, it takes about 5-6us (microseconds) to hash a string or a small buffer.
 // It's included in Windows so we don't have to develop nor support a custom implementation.
 
 // Calculate MD4 hash of a string. This function is not thread safe.

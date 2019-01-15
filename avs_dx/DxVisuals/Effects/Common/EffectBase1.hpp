@@ -1,6 +1,7 @@
 #pragma once
 #include "EffectBase.h"
 #include "../Render/EffectRenderer.hpp"
+#include "EmptyStateData.hpp"
 
 // A base class for effects that implements a few required virtual methods by delegating the work to the EffectRenderer template class.
 // This is optional, if you don't need what it offers you can inherit from EffectBase directly.
@@ -61,15 +62,4 @@ protected:
 			return hr;
 		return renderer.compileShaders( TBase::stateOffset() );
 	}
-};
-
-struct EmptyStateData
-{
-	EmptyStateData() = default;
-	template<class A>
-	EmptyStateData( const A& ) { }
-	const StateShaderTemplate* shaderTemplate() { return nullptr; }
-	UINT stateSize() { return 0; }
-	HRESULT defines( Hlsl::Defines& def ) const { return S_FALSE; }
-	bool operator==( const EmptyStateData& ) { return true; }
 };

@@ -5,7 +5,7 @@ __interface iPlayer : IUnknown
 	// Open a video. Called on the GUI thread.
 	HRESULT open( LPCTSTR pathToVideo );
 
-	// Closes a video. Called on the GUI thread.
+	// Close a video. Called on the GUI thread.
 	HRESULT close();
 
 	// Shutdown the player. Just releasing is not enough, it contains a circular COM reference due to the stupid IMFMediaEngineNotify requirement.

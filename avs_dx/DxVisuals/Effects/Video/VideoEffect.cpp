@@ -13,12 +13,13 @@ int initVideoCombobox( HWND wndDialog, HWND wndComboBox, char *selectedName )
 	return initAssetsCombobox( wndDialog, wndComboBox, selectedName, &isVideoFileExtension );
 }
 
+// Get full path from the combobox selection
 HRESULT getVideoFilePath( const char *selection, CString& result )
 {
 	return getAssetFilePath( selection, &isVideoFileExtension, result );
 }
 
-IMPLEMENT_EFFECT( VideoEffect, C_AVIClass );
+IMPLEMENT_EFFECT( VideoEffect, C_AVIClass )
 
 // Start playing the video
 HRESULT videoOpen( const C_RBASE* pRBase, const char *selection )
@@ -37,9 +38,6 @@ HRESULT videoClose( const C_RBASE* pRBase )
 		return E_INVALIDARG;
 	return pfx->close();
 }
-
-// Get full path from the combobox selection
-HRESULT getVideoFilePath( const char *selection, CString& result );
 
 HRESULT VideoEffect::open( const char* selection )
 {

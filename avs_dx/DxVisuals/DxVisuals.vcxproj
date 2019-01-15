@@ -114,6 +114,7 @@
     <ClCompile Include="Effects\Trans\ColorMap\ColorMap.cpp" />
     <ClCompile Include="Effects\Common\ApeEffectBase.cpp" />
     <ClCompile Include="Effects\Render\DotFountain\DotFountain.cpp" />
+    <ClInclude Include="Effects\Common\EmptyStateData.hpp" />
     <ClInclude Include="Effects\Trans\Bump\Bump.h" />
     <ClInclude Include="Effects\Trans\DynamicShift\DynamicShift.h" />
     <ClInclude Include="Hlsl\Async\asyncNotifier.h" />

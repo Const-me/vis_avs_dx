@@ -86,7 +86,7 @@ namespace Hlsl
 		const auto macros = def.data();
 
 		CComPtr<ID3DBlob> blobBinary, blobErrors;
-#ifdef NDEBUG
+#ifdef DEBUG
 		constexpr UINT flags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #else
 		constexpr UINT flags = D3DCOMPILE_OPTIMIZATION_LEVEL3;

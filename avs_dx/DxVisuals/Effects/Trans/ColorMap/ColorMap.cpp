@@ -31,11 +31,13 @@ HRESULT ColorMap::render( bool isBeat, RenderTargets& rt )
 {
 	const C_RBASE* const pfx = m_pNative;
 	const uint8_t idMap = MapHacks::getCurrentMapId( pfx );
-	if( !MapHacks::isEnabled( pfx, idMap ) )
-		return S_FALSE;
+
+	// Apparently, that "Enabled" checkbox only applies to random map transitions, the current map is applied regardless.
+	// if( !MapHacks::isEnabled( pfx, idMap ) )
+	//	return S_FALSE;
 
 	int fb = 0xCCCCCC, fbOut = 0;
-	// Run the native update for beat randomization.
+	// Run the native update method for beat randomization, passing dummy 1x1 frame buffer.
 	const int res = m_pNative->render( nullptr, isBeat ? 1 : 0, &fb, &fbOut, 1, 1 );
 
 	const uint32_t* pTable = MapHacks::getTablePointer( pfx, idMap );

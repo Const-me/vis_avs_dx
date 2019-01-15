@@ -97,7 +97,6 @@
     <ClInclude Include="Render\SimpleShaderTypes.hpp" />
     <ClInclude Include="Effects\Trans\Moves\DynamicMovement.h" />
     <ClInclude Include="Effects\Trans\Moves\GridMesh.h" />
-    <ClInclude Include="Effects\Trans\Moves\GridMesh.tesselate.hpp" />
     <ClInclude Include="Effects\Trans\Moves\Movement.h" />
     <ClInclude Include="Effects\Trans\Moves\MovementCommon.h" />
     <ClInclude Include="Effects\Trans\Moves\Sampler.h" />
@@ -326,6 +325,18 @@
     <ClInclude Include="Effects\Trans\Bump\Bump.h" />
     <ClInclude Include="Effects\Common\EmptyStateData.hpp" />
     <ClInclude Include="Expressions\SymbolTable\isHlslKeyword.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteAlignedBox.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteIntrSegment2AlignedBox2.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteSegment.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteFIQuery.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteIntrIntervals.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteIntrLine2AlignedBox2.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteLine.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteMath.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteTIQuery.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteVector.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteVector2.h" />
+    <ClInclude Include="Utils\GTEngine\GTEngineDEF.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -466,6 +477,8 @@
     <ClCompile Include="Effects\Trans\Texer\TempBuffer.cpp" />
     <ClCompile Include="Effects\Trans\Bump\Bump.cpp" />
     <ClCompile Include="Expressions\SymbolTable\keywords.cpp" />
+    <ClCompile Include="Effects\Trans\Moves\GridMesh.rect.cpp" />
+    <ClCompile Include="Effects\Trans\Moves\GridMesh.radial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\DirectXErrors\includeData.inl" />

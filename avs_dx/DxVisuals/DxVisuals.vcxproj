@@ -100,6 +100,11 @@
   <ItemGroup>
     <ClCompile Include="Effects\Trans\Bump\Bump.cpp" />
     <ClCompile Include="Effects\Trans\DynamicShift\DynamicShift.cpp" />
+    <ClCompile Include="Effects\Trans\Moves\GridMesh.radial.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Utils\GTEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Utils\GTEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="Effects\Trans\Moves\GridMesh.rect.cpp" />
     <ClCompile Include="Expressions\SymbolTable\keywords.cpp" />
     <ClCompile Include="Hlsl\Async\asyncNotifier.cpp" />
     <ClCompile Include="Hlsl\Async\CompileWorker.cpp" />
@@ -206,7 +211,6 @@
     <ClInclude Include="Effects\Render\Picture\PictureEffect.h" />
     <ClInclude Include="Effects\Common\ShaderUpdatesSimple.hpp" />
     <ClInclude Include="Effects\Trans\Blur\KernelValues.h" />
-    <ClInclude Include="Effects\Trans\Moves\GridMesh.tesselate.hpp" />
     <ClInclude Include="Effects\Trans\Moves\Sampler.h" />
     <ClInclude Include="Effects\Trans\Moves\Movement.h" />
     <ClInclude Include="Effects\Trans\Moves\MovementCommon.h" />
@@ -376,6 +380,18 @@
     <ClInclude Include="Expressions\preprocess.h" />
     <ClInclude Include="Effects\Video\interop.h" />
     <ClInclude Include="Effects\Video\MF\Player.h" />
+    <ClInclude Include="Utils\GTEngine\GTEngineDEF.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteAlignedBox.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteFIQuery.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteIntrIntervals.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteIntrLine2AlignedBox2.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteIntrSegment2AlignedBox2.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteLine.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteMath.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteSegment.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteTIQuery.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteVector.h" />
+    <ClInclude Include="Utils\GTEngine\Mathematics\GteVector2.h" />
     <ClInclude Include="Utils\LinearTransition.hpp" />
     <ClInclude Include="Utils\md4.h" />
     <ClInclude Include="Render\ShaderBase.h" />

@@ -6,6 +6,7 @@ class GridMesh: public ResizeHandler
 	UINT m_indexCount;
 	CComPtr<ID3D11Buffer> m_vb, m_ib;
 	CSize m_cells;
+	float m_triSize;
 	bool m_rectangular;
 
 	void onRenderSizeChanged() override;
@@ -16,11 +17,19 @@ class GridMesh: public ResizeHandler
 	CSize pickSize( const CSize &screen, int triangle );
 
 	// Generate the grid mesh. It uses 16 bit indices so this will fail if the size is too large.
-	HRESULT create();
+	HRESULT createRectangular();
+
+	HRESULT createRadial();
 
 	void destroy();
 
 public:
+
+	struct sInput
+	{
+		Vector2 pos, tc;
+	};
+	using Ind3 = array<uint32_t, 3>;
 
 	HRESULT draw( bool rectangularCoords );
 };

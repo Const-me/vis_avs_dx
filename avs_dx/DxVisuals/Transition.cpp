@@ -76,7 +76,7 @@ HRESULT Transition::renderSingle( uint16_t visdata[ 2 ][ 2 ][ 576 ], int isBeat,
 		CSLock __lock( renderLock );
 		CHECK( prepare( visdata, isBeat ) );
 
-		CHECK( p->renderRoot( 0 != isBeat, m_targets1, false ) );
+		SILENT_CHECK( p->renderRoot( 0 != isBeat, m_targets1, false ) );
 	}
 
 	m_rendered.mark();
@@ -106,8 +106,8 @@ HRESULT Transition::renderTransition( uint16_t visdata[ 2 ][ 2 ][ 576 ], int isB
 		if( nullptr == p1 || nullptr == p2 )
 			return E_POINTER;
 
-		CHECK( p1->renderRoot( beat, m_targets1, true ) );
-		CHECK( p2->renderRoot( beat, m_targets2, true ) );
+		SILENT_CHECK( p1->renderRoot( beat, m_targets1, true ) );
+		SILENT_CHECK( p2->renderRoot( beat, m_targets2, true ) );
 	}
 
 	m_rendered.mark();

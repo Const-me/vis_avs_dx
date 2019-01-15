@@ -17,7 +17,7 @@ HRESULT RootEffect::renderRoot( bool isBeat, RenderTargets& rt, bool rebindResou
 		return stateChanged;
 	if( listChanged || stateChanged.value() || !m_stateShaders )
 	{
-		CHECK( buildState() );
+		SILENT_CHECK( buildState() );
 		paramsChanged = true;
 	}
 

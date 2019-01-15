@@ -11,6 +11,10 @@ Mesh optimization library
 https://github.com/zeux/meshoptimizer
 (c) Arseny Kapoulkine, MIT license
 
+Geometric Tools Engine (GTEngine)
+https://www.geometrictools.com/
+(c) David Eberly, Boost License
+
 Intel Intrinsics
 https://github.com/Const-me/IntelIntrinsics
 (c) const.me, MIT license

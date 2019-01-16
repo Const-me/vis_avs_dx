@@ -654,6 +654,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
     </FxCompile>
+    <None Include="Effects\Trans\Blur\readme.md" />
     <None Include="Expressions\Builtin\includeFunctions.t4" />
     <CustomBuild Include="Expressions\SymbolTable\keywords.tt">
       <FileType>Document</FileType>

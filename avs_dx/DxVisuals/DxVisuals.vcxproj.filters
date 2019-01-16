@@ -506,7 +506,8 @@
     <None Include="Effects\Render\Starfield\Star.hlsli" />
     <None Include="Effects\Render\DotFountain\Fountain.hlsli" />
     <None Include="Effects\LinesUtils.hlsli" />
-    <None Include="Expressions\SymbolTable\keywords.tt" />
+    <None Include="Expressions\SymbolTable\keywords.txt" />
+    <None Include="Effects\Trans\Blur\readme.md" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Effects\Render\Simple\SimpleDotsVS.hlsl" />
@@ -578,12 +579,10 @@
     <CustomBuild Include="Effects\IncludeShadersH.tt" />
     <CustomBuild Include="Expressions\Builtin\includeFunctions.tt" />
     <CustomBuild Include="Effects\Trans\Blur\KernelValues.tt" />
+    <CustomBuild Include="Expressions\SymbolTable\keywords.tt" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="Utils\EASTL\EASTL.natvis" />
     <Natvis Include="Utils\DXTK\SimpleMath.natvis" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Expressions\SymbolTable\keywords.txt" />
   </ItemGroup>
 </Project>

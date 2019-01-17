@@ -47,6 +47,7 @@ namespace
 		vector<array<uint32_t, 3>> ib;
 		const Vector2 pixelSize;
 
+		float cellArea;
 		float rPrev;
 		uint32_t countPrev;
 
@@ -83,6 +84,7 @@ namespace
 		ib.push_back( { 0, 1, 2 } );
 
 		rPrev = radius;
+		cellArea = radius * radius;
 		countPrev = 3;
 	}
 
@@ -177,19 +179,30 @@ namespace
 		return any;
 	}
 
+	using DirectX::XM_2PI;
+	using DirectX::XM_PI;
+
+	float calcNextRadius( float rInner, float area )
+	{
+		// area = pi * rNext^2 - pi * rInner^2
+		return sqrtf( area / XM_PI + rInner * rInner );
+	}
+
 	bool RadialConext::expand()
 	{
-		float doubleRadius = rPrev * 3;
-		float addedRadius = rPrev + triangleMaxPx;
-		if( doubleRadius < addedRadius )
-			return pushDoubling( doubleRadius );	// Still near the center, doubling the size
+		constexpr float maxArea = triangleMaxPx * triangleMaxPx;
+		constexpr float areaMul = 1.25f;
 
-		float sizeSame = DirectX::XM_2PI * addedRadius / countPrev;
-		if( sizeSame < triangleMaxPx )
-			return pushSameCount( addedRadius );	// Can expand with the same count of vertices in the ring, the triangle size is still within limits
+		cellArea = std::min( cellArea * areaMul, maxArea );
 
-		// Need to double vertices count in the ring to stay within the limit
-		return pushDoubling( addedRadius );
+		// Try with the same triangles count
+		float nextRadius = calcNextRadius( rPrev, cellArea * countPrev );
+		const float thickness = nextRadius - rPrev;
+		const float width = nextRadius * XM_2PI / countPrev;
+		if( width < thickness )
+			return pushSameCount( nextRadius );
+		else
+			return pushDoubling( nextRadius );
 	}
 
 	void RadialConext::produceResult( vector<sInput> &resultVerts, vector<Ind3> &resultIndices )
@@ -205,7 +218,7 @@ namespace
 		// Iterate triangles
 		for( const auto tri : ib )
 		{
-			Ind3 tri16;
+			Ind3 newTri;
 			// Iterate triangle's vertex
 			for( int v = 0; v < 3; v++ )
 			{
@@ -217,11 +230,10 @@ namespace
 					indicesRemap[ ind32 ] = remap;
 					nextIndex++;
 				}
-				tri16[ v ] = remap;
+				newTri[ v ] = remap;
 			}
-			resultIndices.push_back( tri16 );
+			resultIndices.push_back( newTri );
 		}
-		// assert( nextIndex < 0xFFFF );
 
 		// Produce the vertex buffer
 		resultVerts.resize( nextIndex );

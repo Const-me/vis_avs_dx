@@ -19,14 +19,16 @@ static extern bool Compress( IntPtr CompressorHandle, [In] byte[] UncompressedDa
 
 static byte[] compressBuffer( byte[] src )
 {
+	if( src.Length <= 0 )
+		throw new ArgumentException( "The source buffer is empty" );
 	if( hCompressor == IntPtr.Zero )
 		if( !CreateCompressor( algo, IntPtr.Zero, out hCompressor ) )
-			throw new Win32Exception();
+			throw new Win32Exception( "Unable to create the compressor" );
 	byte[] dest = new byte[ src.Length * 2 ];
 	IntPtr srcSize = new IntPtr( src.Length );
 	IntPtr destSize = new IntPtr( src.Length * 2 );
 	if( !Compress( hCompressor, src, srcSize, dest, destSize, out destSize ) )
-		throw new Win32Exception();
+		throw new Win32Exception( "Compress failed" );
 	Array.Resize( ref dest, (int)destSize );
 	return dest;
 }

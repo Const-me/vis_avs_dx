@@ -44,3 +44,10 @@ inline HRESULT getLastHr() { return HRESULT_FROM_WIN32( GetLastError() ); }
 #include <Threads/threadsApi.h>
 
 const CStringA& getWinampIniPath();
+
+// The original code is very old, like 1998-2006 old. Disabling some warnings here. Might be a good idea to actually fix them, not just disable.
+#pragma warning( disable: 4244 )	// 'argument': conversion from 'float' to 'int', possible loss of data
+#pragma warning( disable: 4996 )	// 'GetVersion': was declared deprecated
+#pragma warning( disable: 4302 )	// 'type cast': truncation from 'LPSTR' to 'WORD'
+#pragma warning( disable: 4838 )	// conversion from 'int' to 'COLORREF' requires a narrowing conversion
+#pragma warning( disable: 5033 )	// 'register' is no longer a supported storage class

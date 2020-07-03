@@ -137,9 +137,12 @@ LRESULT RenderWindow::wmPresent( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	return TRUE;
 }
 
+enum struct eFrameLimitMode : uint8_t;
+extern eFrameLimitMode cfg_frame_limit_mode;
+
 HRESULT RenderWindow::doPresent()
 {
-	HRESULT hr = swapChain->Present( 1, 0 );
+	HRESULT hr = swapChain->Present( 1 + (uint8_t)cfg_frame_limit_mode, 0 );
 	if( SUCCEEDED( hr ) )
 		return S_OK;
 	if( DXGI_ERROR_DEVICE_REMOVED == hr )

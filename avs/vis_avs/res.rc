@@ -1683,8 +1683,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,8,0,0
- PRODUCTVERSION 0,8,0,0
+ FILEVERSION 0,8,1,0
+ PRODUCTVERSION 0,8,1,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -1701,12 +1701,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "const.me"
             VALUE "FileDescription", "Based on AVS 2.7.9.2 © 2003 Nullsoft, Inc."
-            VALUE "FileVersion", "0.8.0.0"
+            VALUE "FileVersion", "0.8.1.0"
             VALUE "InternalName", "AVS DX"
             VALUE "LegalCopyright", "Copyright © 2018-2019 const.me"
             VALUE "OriginalFilename", "vis_avs_dx.dll"
             VALUE "ProductName", "vis_avs_dx"
-            VALUE "ProductVersion", "0.8.0.0"
+            VALUE "ProductVersion", "0.8.1.0"
         END
     END
     BLOCK "VarFileInfo"

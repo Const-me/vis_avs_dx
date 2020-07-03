@@ -471,7 +471,7 @@ int Wnd_Init( struct winampVisModule *this_mod )
 		cfg_fs_height = GetPrivateProfileInt( AVS_SECTION, "cfg_fs_height", cfg_fs_height, INI_FILE );
 		cfg_fs_use_overlay = GetPrivateProfileInt( AVS_SECTION, "cfg_fs_use_overlay", cfg_fs_use_overlay, INI_FILE );
 		cfg_cancelfs_on_deactivate = GetPrivateProfileInt( AVS_SECTION, "cfg_fs_cancelondeactivate", cfg_cancelfs_on_deactivate, INI_FILE );
-		cfg_speed = GetPrivateProfileInt( AVS_SECTION, "cfg_speed", cfg_speed, INI_FILE );
+		// cfg_speed = GetPrivateProfileInt( AVS_SECTION, "cfg_speed", cfg_speed, INI_FILE );
 		cfg_trans = GetPrivateProfileInt( AVS_SECTION, "cfg_trans", cfg_trans, INI_FILE );
 		cfg_dont_min_avs = GetPrivateProfileInt( AVS_SECTION, "cfg_dont_min_avs", cfg_dont_min_avs, INI_FILE );
 		cfg_smartbeat = GetPrivateProfileInt( AVS_SECTION, "cfg_smartbeat", cfg_smartbeat, INI_FILE );
@@ -636,7 +636,7 @@ void Wnd_Quit( void )
 		WriteInt( "cfg_fs_height", cfg_fs_height );
 		WriteInt( "cfg_fs_use_overlay", cfg_fs_use_overlay );
 		WriteInt( "cfg_fs_cancelondeactivate", cfg_cancelfs_on_deactivate );
-		WriteInt( "cfg_speed", cfg_speed );
+		// WriteInt( "cfg_speed", cfg_speed );
 		WriteInt( "cfg_trans", cfg_trans );
 		WriteInt( "cfg_dont_min_avs", cfg_dont_min_avs );
 		WriteInt( "cfg_smartbeat", cfg_smartbeat );

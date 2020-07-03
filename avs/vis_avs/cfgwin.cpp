@@ -79,7 +79,7 @@ cfg_fs_flip = 6,
 #else
 cfg_fs_flip = 0,
 #endif
-cfg_fs_height = 80, cfg_speed = 5, cfg_fs_rnd_time = 10, cfg_fs_use_overlay = 0;
+cfg_fs_height = 80, cfg_fs_rnd_time = 10, cfg_fs_use_overlay = 0;
 CStringA cfg_fs_monitor;
 int cfg_trans = 0, cfg_trans_amount = 128;
 int cfg_dont_min_avs = 0;
@@ -373,11 +373,11 @@ static BOOL CALLBACK DlgProc_Disp( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 	CheckDlgButton( hwndDlg, IDC_CHECK2, config_reuseonresize ? BST_CHECKED : BST_UNCHECKED );
 	CheckDlgButton( hwndDlg, IDC_BKGND_RENDER, ( cfg_bkgnd_render & 1 ) ? BST_CHECKED : BST_UNCHECKED );
 	CheckDlgButton( hwndDlg, IDC_SETDESKTOPCOLOR, ( cfg_bkgnd_render & 2 ) ? BST_CHECKED : BST_UNCHECKED );
-	SendDlgItemMessage( hwndDlg, IDC_SLIDER1, TBM_SETRANGEMIN, 0, 0 );
+	/* SendDlgItemMessage( hwndDlg, IDC_SLIDER1, TBM_SETRANGEMIN, 0, 0 );
 	SendDlgItemMessage( hwndDlg, IDC_SLIDER1, TBM_SETRANGEMAX, 0, 80 );
 	SendDlgItemMessage( hwndDlg, IDC_SLIDER1, TBM_SETPOS, 1, cfg_speed & 0xff );
 
-	/* SendDlgItemMessage( hwndDlg, IDC_THREAD_PRIORITY, CB_ADDSTRING, 0, ( int )"Same as winamp" );
+	SendDlgItemMessage( hwndDlg, IDC_THREAD_PRIORITY, CB_ADDSTRING, 0, ( int )"Same as winamp" );
 	SendDlgItemMessage( hwndDlg, IDC_THREAD_PRIORITY, CB_ADDSTRING, 0, ( int )"Idle" );
 	SendDlgItemMessage( hwndDlg, IDC_THREAD_PRIORITY, CB_ADDSTRING, 0, ( int )"Lowest" );
 	SendDlgItemMessage( hwndDlg, IDC_THREAD_PRIORITY, CB_ADDSTRING, 0, ( int )"Normal" );
@@ -399,11 +399,11 @@ static BOOL CALLBACK DlgProc_Disp( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 	{
 		HWND swnd = (HWND)lParam;
 		int t = (int)SendMessage( swnd, TBM_GETPOS, 0, 0 );
-		if( swnd == GetDlgItem( hwndDlg, IDC_SLIDER1 ) )
+		/* if( swnd == GetDlgItem( hwndDlg, IDC_SLIDER1 ) )
 		{
 			cfg_speed &= ~0xff;
 			cfg_speed |= t;
-		}
+		} */
 		if( swnd == GetDlgItem( hwndDlg, IDC_TRANS_SLIDER ) )
 		{
 			cfg_trans_amount = t;
@@ -543,13 +543,13 @@ static BOOL CALLBACK DlgProc_FS( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 		CheckDlgButton( hwndDlg, IDC_CHECK8, ( cfg_cancelfs_on_deactivate ) ? BST_UNCHECKED : BST_CHECKED );
 		CheckDlgButton( hwndDlg, IDC_BPP_CONV, ( cfg_fs_flip & 8 ) ? BST_UNCHECKED : BST_CHECKED );
 		SetDlgItemInt( hwndDlg, IDC_EDIT1, cfg_fs_height, FALSE );
-		SendDlgItemMessage( hwndDlg, IDC_SLIDER1, TBM_SETRANGEMIN, 0, 0 );
+		/* SendDlgItemMessage( hwndDlg, IDC_SLIDER1, TBM_SETRANGEMIN, 0, 0 );
 		SendDlgItemMessage( hwndDlg, IDC_SLIDER1, TBM_SETRANGEMAX, 0, 80 );
-		SendDlgItemMessage( hwndDlg, IDC_SLIDER1, TBM_SETPOS, 1, ( cfg_speed >> 8 ) & 0xff );
+		SendDlgItemMessage( hwndDlg, IDC_SLIDER1, TBM_SETPOS, 1, ( cfg_speed >> 8 ) & 0xff ); */
 		CheckDlgButton( hwndDlg, IDC_CHECK6, cfg_fs_dblclk ? BST_CHECKED : BST_UNCHECKED );
 	}
 	return 1;
-	case WM_HSCROLL:
+	/* case WM_HSCROLL:
 	{
 		HWND swnd = (HWND)lParam;
 		int t = (int)SendMessage( swnd, TBM_GETPOS, 0, 0 );
@@ -559,7 +559,7 @@ static BOOL CALLBACK DlgProc_FS( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 			cfg_speed |= ( t << 8 );
 		}
 	}
-	return 0;
+	return 0; */
 	case WM_COMMAND:
 		switch( LOWORD( wParam ) )
 		{

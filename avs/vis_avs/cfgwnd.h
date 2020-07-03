@@ -37,6 +37,14 @@ void CfgWnd_Unpopulate( int force = 0 );
 void CfgWnd_RePopIfNeeded( void );
 
 extern int cfg_fs_w, cfg_fs_h, cfg_fs_d, cfg_fs_bpp, cfg_fs_fps, cfg_fs_rnd, cfg_fs_flip, cfg_fs_height, cfg_fs_rnd_time;
+enum struct eFrameLimitMode : uint8_t
+{
+	MonitorRefresh = 0,
+	SkipHalf = 1,
+	SkipTwoThird = 2,
+	SkipThreeQuarters = 3,
+};
+extern eFrameLimitMode cfg_frame_limit_mode;
 extern CStringA cfg_fs_monitor;
 extern int cfg_cfgwnd_x, cfg_cfgwnd_y, cfg_cfgwnd_open;
 extern int cfg_trans, cfg_trans_amount;

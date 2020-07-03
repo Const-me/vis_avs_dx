@@ -228,6 +228,8 @@ BEGIN
     GROUPBOX        "Overlay mode",IDC_STATIC,140,0,93,91
     CONTROL         "Overlay mode",IDC_BKGND_RENDER,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,145,9,82,11
     LTEXT           "Note that the overlay color must be carefully selected at non-32bpp color depths.",IDC_STATIC,148,41,75,33
+    GROUPBOX        "Frame Rate Limiter",IDC_STATIC,141,93,92,40
+    COMBOBOX        IDC_FRAME_RATE_LIMIT,146,104,82,70,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
 END
 
 IDD_CFG_PARTS DIALOGEX 0, 0, 137, 137

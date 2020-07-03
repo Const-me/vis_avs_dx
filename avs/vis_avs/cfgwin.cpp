@@ -80,6 +80,8 @@ cfg_fs_flip = 6,
 cfg_fs_flip = 0,
 #endif
 cfg_fs_height = 80, cfg_fs_rnd_time = 10, cfg_fs_use_overlay = 0;
+eFrameLimitMode cfg_frame_limit_mode = eFrameLimitMode::MonitorRefresh;
+
 CStringA cfg_fs_monitor;
 int cfg_trans = 0, cfg_trans_amount = 128;
 int cfg_dont_min_avs = 0;
@@ -383,6 +385,11 @@ static BOOL CALLBACK DlgProc_Disp( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 	SendDlgItemMessage( hwndDlg, IDC_THREAD_PRIORITY, CB_ADDSTRING, 0, ( int )"Normal" );
 	SendDlgItemMessage( hwndDlg, IDC_THREAD_PRIORITY, CB_ADDSTRING, 0, ( int )"Highest" );
 	SendDlgItemMessage( hwndDlg, IDC_THREAD_PRIORITY, CB_SETCURSEL, cfg_render_prio, 0 ); */
+	SendDlgItemMessageW( hwndDlg, IDC_FRAME_RATE_LIMIT, CB_ADDSTRING, 0, (LPARAM)L"Monitor Refresh" );
+	SendDlgItemMessageW( hwndDlg, IDC_FRAME_RATE_LIMIT, CB_ADDSTRING, 0, (LPARAM)L"Skip 50%" );
+	SendDlgItemMessageW( hwndDlg, IDC_FRAME_RATE_LIMIT, CB_ADDSTRING, 0, (LPARAM)L"Skip 67%" );
+	SendDlgItemMessageW( hwndDlg, IDC_FRAME_RATE_LIMIT, CB_ADDSTRING, 0, (LPARAM)L"Skip 75%" );
+	SendDlgItemMessage( hwndDlg, IDC_FRAME_RATE_LIMIT, CB_SETCURSEL, (uint8_t)cfg_frame_limit_mode, 0 );
 	return 1;
 	case WM_DRAWITEM:
 	{
@@ -445,8 +452,20 @@ static BOOL CALLBACK DlgProc_Disp( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 		case IDC_CHECK2:
 			config_reuseonresize = !!IsDlgButtonChecked( hwndDlg, IDC_CHECK2 );
 			return 0;
-			//				case IDC_DONT_MIN_AVS:
-				//				cfg_dont_min_avs=IsDlgButtonChecked(hwndDlg,IDC_DONT_MIN_AVS)?1:0;
+		case IDC_FRAME_RATE_LIMIT:
+			if( HIWORD( wParam ) == CBN_SELCHANGE )
+			{
+				const int cs = SendDlgItemMessage( hwndDlg, IDC_FRAME_RATE_LIMIT, CB_GETCURSEL, 0, 0 );
+				if( cs < 0 )
+				{
+					cfg_frame_limit_mode = eFrameLimitMode::MonitorRefresh;
+					SendDlgItemMessage( hwndDlg, IDC_FRAME_RATE_LIMIT, CB_SETCURSEL, 0, 0 );
+				}
+				else
+					cfg_frame_limit_mode = (eFrameLimitMode)cs;
+			}
+			// case IDC_DONT_MIN_AVS:
+			//	cfg_dont_min_avs=IsDlgButtonChecked(hwndDlg,IDC_DONT_MIN_AVS)?1:0;
 		case IDC_DEFOVERLAYCOLOR:
 			cfg_bkgnd_render_color = 0x1F000F;
 			InvalidateRect( GetDlgItem( hwndDlg, IDC_OVERLAYCOLOR ), NULL, FALSE );
@@ -547,6 +566,7 @@ static BOOL CALLBACK DlgProc_FS( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 		SendDlgItemMessage( hwndDlg, IDC_SLIDER1, TBM_SETRANGEMAX, 0, 80 );
 		SendDlgItemMessage( hwndDlg, IDC_SLIDER1, TBM_SETPOS, 1, ( cfg_speed >> 8 ) & 0xff ); */
 		CheckDlgButton( hwndDlg, IDC_CHECK6, cfg_fs_dblclk ? BST_CHECKED : BST_UNCHECKED );
+		// SendDlgItemMessage( hwndDlg, IDC_FRAME_RATE_LIMIT, CB_SETCURSEL, (uint8_t)cfg_frame_limit_mode, 0 );
 	}
 	return 1;
 	/* case WM_HSCROLL:
